@@ -6,10 +6,8 @@
  * Time: 4:16 PM
  */
 
-namespace models;
 
-
-class Internal_user_model
+class Internal_user_model extends CI_Model
 {
     public function __construct(){
         parent::__construct();
@@ -23,6 +21,16 @@ class Internal_user_model
             }
         }
         return null;
+    }
+    public function retrieveAll($only_active=true,$limit=0,$offset=0){
+        $where = [];
+        if(isset($input_c_id)){
+            if($only_active){
+                $where["is_active"]=1;
+            }
+        }
+        $query = $this->db->get_where("internal_user",$where,$limit,$offset);
+        return $query->result_array();
     }
 
     /**
@@ -48,7 +56,7 @@ class Internal_user_model
      * @param $input_c_id
      * @return affected rows
      */
-    public function deactive($input_c_id){
+    public function deactivate($input_c_id){
         $this->db->update('customer', ["is_active"=>0], array('c_id' => $input_c_id));
         return $this->db->affected_rows();
     }

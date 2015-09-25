@@ -6,7 +6,7 @@
  * Date: 9/25/2015
  * Time: 10:00 AM
  */
-class Internal_users
+class Internal_users extends CI_Controller
 {
     public function __construct() {
         parent::__construct();
@@ -23,13 +23,13 @@ class Internal_users
 
     public function list_all($include_hidden=false){
         if($include_hidden=="include_hidden"){
-            $customers = $this->Internal_user_model->retrieveAll(false);
+            $users = $this->Internal_user_model->retrieveAll(false);
         }else {
-            $customers = $this->Internal_user_model->retrieveAll();
+            $users = $this->Internal_user_model->retrieveAll();
         }
-        $data = array("customers"=> $customers);
+        $data = array("users"=> $users);
 
-        $this->load->view('customer/all',$data);
+        $this->load->view('internal_user/all',$data);
     }
     public function insert(){
         //$this->load->library('input');
@@ -38,7 +38,7 @@ class Internal_users
         $update_array["bb_username"]=$this->input->get("bb_username");
         $update_array["type"]=$this->input->get("type");
         //echo var_dump($update_array);
-        $affected_rows = $this->Customer_model->insert($update_array);
+        $affected_rows = $this->Internal_user_model->insert($update_array);
         echo $affected_rows;
     }
     public function add(){
@@ -55,10 +55,10 @@ class Internal_users
         $update_array["other_number"]=(trim($this->input->get("other_number"))!="-")?
             ($this->input->get("other_number")):null;
         //echo var_dump($update_array);
-        $affected_rows = $this->Customer_model->update($update_array);
+        $affected_rows = $this->Internal_user_model->update($update_array);
         echo $affected_rows;
     }
-    public function customer($id){
-        $this->load->view('customer/details',$data=["customer"=>$this->Customer_model->retrieve($id)]);
+    public function user($id){
+        $this->load->view('internal_user/details',$data=["user"=>$this->Internal_user_model->retrieve($id)]);
     }
 }

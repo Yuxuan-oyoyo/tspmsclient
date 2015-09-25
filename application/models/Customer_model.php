@@ -58,7 +58,7 @@ class Customer_model extends CI_Model
         return $this->db->insert('customer', $insert_array);
     }
     //not in use
-    public function deactive($input_c_id){
+    public function deactivate($input_c_id){
         $this->db->update('customer', ["is_active"=>0], array('c_id' => $input_c_id));
         return $this->db->affected_rows();
     }
