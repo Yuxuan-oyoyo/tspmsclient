@@ -45,6 +45,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                 </p>
                 <a id="edit" href="#">Edit..</a>
+                <a id="delete" href="#">Delete..</a>
                 <p>Projects</p>
                 <ol>
                     <li>Project 1</li>
@@ -102,9 +103,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             data:$(this).closest("form").serialize(),
             async:false,
             success(response){
-            if(response!=0){location.reload();}
+                if(response!=0){
+                    location.reload();
+                }
+            }
+        });
+    })
+    $("#info-container").on("click","#delete", function(e){
+        e.preventDefault();
+        if(confirm("Are you sure to delete this customer from system")){
+            $.ajax({
+                url:"<?=base_url().'Customers/delete/'.(isset($c['c_id'])?$c['c_id']:null)?>",
+                async:false,
+                success(response){
+                    if(response==1){
+                        window.location.replace("<?=base_url().'Customers/'?>");
+                    }
+                }
+            });
         }
-    });
     })
 
 
