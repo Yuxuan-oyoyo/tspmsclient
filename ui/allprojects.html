@@ -55,10 +55,21 @@
 
         }
     </style>
+    <script>
+        function updateCustomer(){
+            if($('#customer_type').val()=="existing"){
+                $('.new_group').hide();
+                $('.existing_group').show();
+            }else{
+                $('.new_group').show();
+                $('.existing_group').hide();
+            }
+        }
+    </script>
 
 </head>
 
-<body>
+<body onload="updateCustomer()">
 
 <div id="wrapper">
 
@@ -354,53 +365,86 @@
 
 </div>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">New Project</h4>
-            </div>
-            <div class="modal-body">
-                <form role="form">
-                    <div class="form-group">
-                        <label for="email">Title:</label>
-                        <input type="text" class="form-control" >
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Desccription:</label>
-                        <textarea rows="3" class="form-control"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Project Value:</label>
-                        <input type="email" class="form-control" >
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Tags:</label>
-                        <input type="email" class="form-control" placeholder="please separate with #">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Remarks:</label>
-                        <textarea rows="3" class="form-control"></textarea>
-                    </div>
-                    <hr>
-                    <h4>Customer Info</h4>
-                    <div class="form-group">
-                        <label for="email">Customer type:</label>
-                        <select class="form-control">
-                            <option>Existing</option>
-                            <option>New Customer</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Save</button>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">New Project</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label >Title:</label>
+                            <input type="text" class="form-control" >
+                        </div>
+                        <div class="form-group">
+                            <label >Description:</label>
+                            <textarea rows="3" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label >Project Value:</label>
+                            <input type="email" class="form-control" >
+                        </div>
+                        <div class="form-group">
+                            <label >Tags:</label>
+                            <input type="email" class="form-control" placeholder="please separate with #">
+                        </div>
+                        <div class="form-group">
+                            <label >Remarks:</label>
+                            <textarea rows="3" class="form-control"></textarea>
+                        </div>
+                        <hr>
+                        <h4>Customer Info</h4>
+                        <hr>
+                        <div class="form-group">
+                            <label >Customer type:</label>
+                            <select class="form-control" id ="customer_type" onchange="updateCustomer()">
+                                <option value="existing">Existing</option>
+                                <option value="new">New Customer</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group existing_group">
+                            <label >Choose Customer:</label>
+                            <select class="form-control">
+                                <option>Gary Lee - CoachReg</option>
+                                <option>Amanda Ng- ABC pte.Ltd</option>
+                                <option>Leo Tan- EEE pte.Ltd</option>
+                            </select>
+                        </div>
+                        <div class="new_group">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text">
+                                <label>Name</label>
+                                <input type="text">
+                            </div>
+                            <div class="form-group">
+
+                            </div>
+                            <div class="form-group">
+                                <label>Company</label>
+                                <input type="text">
+                                <label>Email</label>
+                                <input type="text">
+                            </div>
+                            <div class="form-group">
+                                <label>hp Number</label>
+                                <input type="text">
+                                <label>other Number</label>
+                                <input type="text">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 <!-- /#wrapper -->
 
 <!-- jQuery -->
