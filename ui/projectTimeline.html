@@ -20,12 +20,17 @@
 
     <!-- Custom Fonts -->
     <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+
     <![endif]-->
     <style>
         .no-gutter [class*="-2"] {
@@ -41,7 +46,11 @@
             height:70px;
         }
     </style>
-
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
 </head>
 
 <body>
@@ -182,9 +191,9 @@
 
             <!-- /.row -->
             <div class="row no-gutter">
-                <div class="test col-sm-2 col-sm-offset-1" align="center">Lead<br><img src="img/done.png" class="img-responsive"></div>
-                <div  class="test col-sm-2" align="center">Requirement<br><img src="img/done.png" class="img-responsive"></div>
-                <div class="test col-sm-2" align="center" >Build<br><img src="img/current.png" class="img-responsive"></div>
+                <div class="test col-sm-2 col-sm-offset-1" align="center" data-toggle="tooltip" data-placement="bottom" title="02-15,2015 to 03-03,2015 ">Lead<br><img src="img/done.png" class="img-responsive"></div>
+                <div  class="test col-sm-2" align="center" data-toggle="tooltip" data-placement="bottom" title="03-04,2015 to 04-20,2015 ">Requirement<br><img src="img/done.png" class="img-responsive"></div>
+                <div class="test col-sm-2" align="center" data-toggle="tooltip" data-placement="bottom" title="04-21,2015 to now " >Build<br><img src="img/current.png" class="img-responsive"></div>
                 <div class="test col-sm-2" align="center">Testing<br><img src="img/future.png" class="img-responsive"></div>
                 <div  class="test col-sm-2" align="center">Deploy<br><img src="img/future.png" class="img-responsive"></div>
 
@@ -279,11 +288,8 @@
     </div>
 </div>
 
-<!-- jQuery -->
-<script src="js/jquery.js"></script>
 
-<!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script>
+
 
 <!-- Morris Charts JavaScript -->
 <script src="js/plugins/morris/raphael.min.js"></script>
