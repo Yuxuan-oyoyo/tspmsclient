@@ -24,10 +24,12 @@ class Internal_users extends CI_Controller
     public function list_all($include_hidden=false){
         if($include_hidden=="include_hidden"){
             $users = $this->Internal_user_model->retrieveAll(false);
+            $data["show_all"] = false;
         }else {
             $users = $this->Internal_user_model->retrieveAll();
+            $data["show_all"] = true;
         }
-        $data = array("users"=> $users);
+        $data["users"] = $users;
 
         $this->load->view('internal_user/all',$data);
     }
@@ -37,12 +39,22 @@ class Internal_users extends CI_Controller
         $update_array["username"]=$this->input->get("username");
         $update_array["bb_username"]=$this->input->get("bb_username");
         $update_array["type"]=$this->input->get("type");
+        $update_array["is_active"]=$this->input->get("is_active");
+        $update_array["password_hash"]=password_hash($this->input->get("password"),PASSWORD_DEFAULT);
         //echo var_dump($update_array);
         $affected_rows = $this->Internal_user_model->insert($update_array);
         echo $affected_rows;
     }
     public function add(){
         $this->load->view('internal_user/add');
+    }
+
+    public function update_password($cid){
+        //$this->load->library('encrypt');
+        $update_array["c_id"] = $cid;
+        $update_array["password_hash"]=password_hash($this->input->get("password"),PASSWORD_DEFAULT);
+        $affected_rows = $this->Internal_user_model->update($update_array);
+        echo $affected_rows;
     }
     public function edit($cid){
         //$this->load->library('input');
@@ -59,7 +71,10 @@ class Internal_users extends CI_Controller
         echo $affected_rows;
     }
     public function user($id){
-        $this->load->view('internal_user/details',$data=["user"=>$this->Internal_user_model->retrieve($id)]);
+        $data["user"]=$this->Internal_user_model->retrieve($id);
+        //echo var_dump($id);
+
+        $this->load->view('internal_user/details',$data);
     }
     public function delete($cid){
         $this->Internal_user_model->delete($cid);

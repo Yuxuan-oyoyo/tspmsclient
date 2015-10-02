@@ -25,8 +25,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <div class="row">
         <?php  $u = $user?>
-        <?php if(!isset($c)):?>
-            <div>The customer your are looking for does not exist</div>
+        <?php if(!isset($u)):?>
+            <div>The user you are looking for does not exist</div>
         <?php else:?>
             <div id="info-container" user-id="<?=$u['u_id']?>">
                 <div class="col-xs-10 col-xs-offset-1">
@@ -37,10 +37,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         Username:
                         <span user-attr="username"><?=$u['username']?></span></br>
                         BitBucket Username:
-                        <span user-attr="bb_username"><?=$c['bb_username']?></span></br>
+                        <span user-attr="bb_username"><?=$u['bb_username']?></span></br>
                         Account Type
-                        <span user-attr="type"><?=$c['type']==1?"PM":"Dev"?></span>
-                        <span user-attr="is_active"><?=$c['is_active']==1?"Active":"Inactive"?></span>
+                        <span user-attr="type"><?=$u['type']==1?"PM":"Dev"?></span></br>
+                        <span user-attr="is_active"><?=$u['is_active']==1?"Active":"Inactive"?></span>
 
                     </p>
                     <a id="edit" href="#">Edit..</a>
@@ -56,22 +56,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <?php endif?>
 
     </div>
-    <a href="<?= base_url() . 'Customers' ?>">back..</a>
+    <a href="<?= base_url() . 'Internal_users' ?>">back..</a>
 </div>
 </body>
 <script>
     $("#info-container").on("click","#edit",function(e){
         e.preventDefault();
         $("#info-container").wrap("<form" + ">");
-        $('span[cus-attr]').each(function(){
+        $('span[user-attr]').each(function(){
             var $original = $(this).text();
             var $length = 20;
             var $attr = $(this).attr("user-attr");
-            if($attr=="first_name" ||$attr=="last_name"){
-                $(this).closest("p").removeClass("cus-name");
-                $length = 10;
-            }
-            if($attr=="is_active"){
+            if($attr=="type"){
+                if($(this).text().toUpperCase()=="DEV"){
+                    $(this).html('<input type="radio" name="'+$attr+'" value="0" checked>Dev'
+                        +'<input type="radio" name="'+$attr+'" value="1">PM');
+                }else{
+                    $(this).html('<input type="radio" name="'+$attr+'" value="0" >Dev'
+                        +'<input type="radio" name="'+$attr+'" value="1" checked>PM');
+                }
+            }else if($attr=="is_active"){
                 if($(this).text().toUpperCase()=="ACTIVE"){
                     $(this).html('<input type="radio" name="'+$attr+'" value="1" checked>Active'
                         +'<input type="radio" name="'+$attr+'" value="0">Inactive');

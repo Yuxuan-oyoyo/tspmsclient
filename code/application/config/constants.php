@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+define('DEFAULT_PASSWORD',"000000");
 /*
 |--------------------------------------------------------------------------
 | File and Directory Modes

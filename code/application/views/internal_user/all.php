@@ -24,10 +24,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="row">
         <h1>Customers</h1>
         <a href="<?=base_url().'Internal_users/add'?>" class="btn btn-success">Add</a>
-        <a href="<?=base_url().'Internal_users/list_all/include_hidden'?>" class="btn btn-primary">View All</a>
+        <?php if($show_all):?>
+            <a href="<?=base_url().'Internal_users/list_all/include_hidden'?>" class="btn btn-primary">View All</a>
+        <?php else:?>
+            <a href="<?=base_url().'Internal_users/list_all'?>" class="btn btn-primary">View Active</a>
+        <?php endif?>
+
         <div class="col-xs-10 col-xs-offset-1">
             <table class="table table-bordered">
-                <tr><th>Name</th><th>Company</th><th>Number</th><th>Email</th><th></th></tr>
+                <tr><th>Name</th><th>Username</th><th>Bitbucket Username</th><th>Type</th><th></th></tr>
                 <?php if($users==false):?>
                     <tr><td colspan="5">Weird thing happens.</td></tr>
                 <?php else:?>
@@ -36,7 +41,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <tr><td><?=$u['name']?></td>
                                 <td><?=$u['username']?></td>
                                 <td><?=$u['bb_username']?></td>
-                                <td><?=$u['type']?></td>
+                                <td><?=$u['type']==1?"PM":"Dev"?></td>
                                 <td><a href="<?=base_url().'Internal_users/user/'.$u["u_id"]?>">More..</a></td>
                             </tr>
                         <?php endif?>
@@ -46,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <tr><td><?=$u['name']?></td>
                                 <td><?=$u['username']?></td>
                                 <td><?=$u['bb_username']?></td>
-                                <td><?=$u['type']?></td>
+                                <td><?=$u['type']==1?"PM":"Dev"?></td>
                                 <td><a href="<?=base_url().'Internal_users/user/'.$u["u_id"]?>">More..</a></td>
                             </tr>
                         <?php endif?>

@@ -77,9 +77,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             data:$(this).closest("form").serialize(),
             async:false,
             success(response){
-            //if(response!=0){location.reload();}
-        }
-    });
+                if(response!=0){window.location.replace("<?=base_url().'Customers/'?>");}
+            }
+        });
     })
 
 

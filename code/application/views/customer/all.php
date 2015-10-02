@@ -25,7 +25,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="row">
             <h1>Customers</h1>
             <a href="<?=base_url().'Customers/add'?>" class="btn btn-success">Add</a>
-            <a href="<?=base_url().'Customers/list_all/include_hidden'?>" class="btn btn-primary">View All</a>
+            <?php if($show_all):?>
+                <a href="<?=base_url().'Customers/list_all/include_hidden'?>" class="btn btn-primary">View All</a>
+            <?php else:?>
+                <a href="<?=base_url().'Customers/list_all'?>" class="btn btn-primary">View Active</a>
+            <?php endif?>
             <div class="col-xs-10 col-xs-offset-1">
                 <table class="table table-bordered">
                     <tr><th>Name</th><th>Company</th><th>Number</th><th>Email</th><th></th></tr>

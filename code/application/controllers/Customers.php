@@ -20,15 +20,19 @@ class Customers extends CI_Controller {
     public function list_all($include_hidden=false){
         if($include_hidden=="include_hidden"){
             $customers = $this->Customer_model->retrieveAll(false);
+            $data["show_all"] = false;
         }else {
             $customers = $this->Customer_model->retrieveAll();
+            $data["show_all"] = true;
         }
-        $data = array("customers"=> $customers);
+        $data["customers"]= $customers;
 
         $this->load->view('customer/all',$data);
     }
     public function insert(){
         //$this->load->library('input');
+        //$this->load->library('encrypt');
+
         $update_array["first_name"]=$this->input->get("first_name");
         $update_array["last_name"]=$this->input->get("last_name");
         $update_array["company_name"]=$this->input->get("company_name");
@@ -36,12 +40,20 @@ class Customers extends CI_Controller {
         $update_array["hp_number"]=$this->input->get("hp_number");
         $update_array["other_number"]=(trim($this->input->get("other_number"))!="-")?
             ($this->input->get("other_number")):null;
-        //echo var_dump($update_array);
+        $update_array["password_hash"]=password_hash($this->input->get("password"),PASSWORD_DEFAULT);
+
         $affected_rows = $this->Customer_model->insert($update_array);
         echo $affected_rows;
     }
     public function add(){
         $this->load->view('customer/add');
+    }
+    public function update_password($cid){
+        //$this->load->library('encrypt');
+        $update_array["c_id"] = $cid;
+        $update_array["password_hash"]=password_hash($this->input->get("password"),PASSWORD_DEFAULT);
+        $affected_rows = $this->Customer_model->update($update_array);
+        echo $affected_rows;
     }
     public function edit($cid){
         //TODO: edit title and username/password

@@ -14,10 +14,11 @@ class Internal_user_model extends CI_Model
         $this->load->helper("date");
     }
     public function retrieve($input_u_id){
-        if(isset($input_c_id)){
+
+        if(isset($input_u_id)){
             $query = $this->db->get_where("internal_user",["u_id"=>$input_u_id]);
-            if($row= $query->num_rows()>0){
-                return $query->row_array;
+            if($query->num_rows()>0){
+                return $query->row_array();
             }
         }
         return null;
@@ -50,6 +51,7 @@ class Internal_user_model extends CI_Model
     public function insert($insert_array){
         $this->db->set('last_updated', mdate());
         return $this->db->insert('internal_user', $insert_array);
+        //echo var_dump($this->db->error());
     }
 
     /**
