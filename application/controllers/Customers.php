@@ -62,9 +62,8 @@ class Customers extends CI_Controller {
         $this->load->view('customer/details',$data=["customer"=>$this->Customer_model->retrieve($id)]);
     }
 
-    public function _set_validation_rules_for_new_additional_video_form(){
-        $this->form_validation->set_rules('title','Title','trim|required|max_length[512]');
-        $this->form_validation->set_rules('embed_code','Embed Code','trim|required');
+    public function delete($cid){
+        echo $this->Customer_model->delete($cid);
     }
 
 }
