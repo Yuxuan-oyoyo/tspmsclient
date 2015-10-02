@@ -61,4 +61,7 @@ class Internal_users extends CI_Controller
     public function user($id){
         $this->load->view('internal_user/details',$data=["user"=>$this->Internal_user_model->retrieve($id)]);
     }
+    public function delete($cid){
+        $this->Internal_user_model->delete($cid);
+    }
 }

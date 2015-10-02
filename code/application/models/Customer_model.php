@@ -72,4 +72,8 @@ class Customer_model extends CI_Model
         }
         return true;
     }
+    public function delete($input_c_id){
+        $this->db->delete("customer",['c_id'=>$input_c_id]);
+        return $this->db->affected_rows();
+    }
 }
