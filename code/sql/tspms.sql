@@ -219,13 +219,16 @@ CREATE TABLE IF NOT EXISTS `notification` (
 CREATE TABLE IF NOT EXISTS `phase` (
   `phase_id` int(11) NOT NULL,
   `phase_name` varchar(50) NOT NULL,
-  `description` varchar(225) DEFAULT NULL,
-  `last_updated` timestamp NOT NULL,
   PRIMARY KEY (`phase_id`),
   UNIQUE KEY `unique_phase_id` (`phase_id`),
   UNIQUE KEY `unique_phase_name` (`phase_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `phase`
+--
+
+INSERT INTO `phase`(`phase_id`, `phase_name`) VALUES (1,'Lead'),(2,'Requirement'),(3,'Build'),(4,'Testing'),(5,'Deploy');
 -- --------------------------------------------------------
 
 --
