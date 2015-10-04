@@ -1,1 +1,0 @@
-Documentation -> http://wintercounter.me/docs/ui-pro-plugin
