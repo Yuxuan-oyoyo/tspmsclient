@@ -8,8 +8,10 @@
 
 body {
     margin-top: 100px;
+    font-family: Francois One;
 
 }
+
 
 @media(min-width:768px) {
     body {
@@ -302,7 +304,25 @@ ul.alert-dropdown {
         background-color: #32b9b1;
         border-color: #32b9b1; }
 
-    .panel-body{
-        margin-top:10px;
+    .info-panel{
+        border: solid 2px #1abc9c;
+        -webkit-box-shadow: 0 1px 12px rgba(0, 0, 0, 0.175);
+        box-shadow: 0 1px 12px rgba(0, 0, 0, 0.175)
     }
+    .info-panel> .panel-heading{
+        color:#1abc9c;
+        text-align: center;
+        font-size: 18px;
+        border-bottom: solid 2px;
+    }
+    #issueTable> .th{
+        border: solid 2px #1abc9c;
+        -webkit-box-shadow: 0 1px 12px rgba(0, 0, 0, 0.175);
+        box-shadow: 0 1px 12px rgba(0, 0, 0, 0.175)
+
+    }
+
+
+
+
 }

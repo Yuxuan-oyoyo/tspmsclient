@@ -37,10 +37,12 @@
 .timeline > li > .timeline-panel {
     width: calc( 100% - 55px );
     float: right;
-
+    border: 2px solid #1abc9c;
     padding: 10px;
     position: relative;
-    background-color:#D5E5DE;
+    background-color:#FFFFFF;
+    -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.175);
 
 }
 .timeline > li > .timeline-panel:before {
@@ -54,6 +56,12 @@
     top: 27px;
     left: -14px;
     display: inline-block;
+}
+.timeline > li > .timeline-panel> .timeline-heading {
+    border-bottom: 1px solid #1abc9c;
+    color:#16a085;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
 }
 .timeline > li > .timeline-badge {
     color: #FFFF99;
@@ -115,13 +123,16 @@
     color:#837E7C;
 }
 .calendar-month{
-    text-align:center;
-    background:#cd5c5c;
-    color:white
+    text-align:center !important;
+    background:#e74c3c !important;
+    color:white !important
 }
 .calendar{
     height:120px;
-    width:120px
+    width:120px;
+    border-radius: 0 0 0 0;
+    -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.175);
 }
 
 .calendar-date{
