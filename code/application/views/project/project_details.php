@@ -36,7 +36,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </p>
                     <p class="well-body">
                         Customer ID:
-                        <span project-attr="customer_id"><?=$p['customer_id']?></span></br>
+                        <span project-attr="customer_id"><?=$p['c_id']?></span></br>
                         Project Description:
                         <span project-attr="project_description"><?=$p['project_description']?></span></br>
                         Project Value:
@@ -60,7 +60,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         Status:
                         <span project-attr="is_ongoing"><?=$p['is_ongoing']==1?"Ongoing":"Closed"?></span>
                      </p>
-                    <a id="edit" href="#" class="btn btn-info">Edit..</a>
+                    <a href="<?=base_url().'Projects/edit_div/'.$p['project_id']?>" class="btn btn-info">Edit..</a>
                 </div>
             </div>
         <?php endif?>
@@ -69,53 +69,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <a href="<?= base_url() . 'Projects' ?>">back..</a>
 </div>
 </body>
-<script>
-    $("#info-container").on("click","#edit",function(e){
-        e.preventDefault();
-        $("#info-container").wrap("<form" + ">");
-        $('span[project-attr]').each(function(){
-            var $original = $(this).text();
-            var $length = 20;
-            var $attr = $(this).attr("project-attr");
-            if($attr=="project_title"){
-                $(this).closest("p").removeClass("cus-name");
-                $length = 10;
-            }
-            if($attr=="is_ongoing"){
-                if($(this).text()=="Ongoing"){
-                    $(this).html('<input type="radio" name="'+$attr+'" value="1" checked>Ongoing'
-                        +'<input type="radio" name="'+$attr+'" value="0">Closed');
-                }else{
-                    $(this).html('<input type="radio" name="'+$attr+'" value="1" >Ongoing'
-                        +'<input type="radio" name="'+$attr+'" value="0" checked>Closed');
-                }
-
-            }else{
-                $(this).html('<input name="' + $attr + '" value="' + $original
-                    + '" size="' + $length + '" placeholder="'+$attr.replace('_',' ')+'">');
-            }
-
-        })
-        $(this).hide();
-        $(this).after("<a id='cancel' href='#' class='btn btn-warning'>Cancel</a>")
-            .after("<a id='submit' href='#' class='btn btn-success'>Submit</a>");
-    })
-    $("#info-container").on("click","#cancel",function(e){
-        e.preventDefault();
-        location.reload();
-    });
-    $("#info-container").on("click","#submit",function(e){
-        e.preventDefault();
-        $.ajax({
-            url:"<?=base_url().'Projects/edit/'.(isset($p['project_id'])?$p['project_id']:null)?>",
-            data:$(this).closest("form").serialize(),
-            async:false,
-            success($response){
-            if($response!=0){location.reload();}
-        }
-    });
-    })
-
-
-</script>
 </html>
