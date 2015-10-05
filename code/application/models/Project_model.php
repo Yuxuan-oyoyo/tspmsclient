@@ -20,10 +20,9 @@ class Project_model extends CI_Model {
     }
     public function retrieve_by_id($input_p_id){
         if(isset($input_p_id)){
-            $query = $this->db->get_where("project",["project_id"=>$input_p_id]);
-            if( $query->num_rows()>0){
-                return $query->row_array();
-            }
+            $sql = "SELECT project_phase.*,phase.phase_name,project.* FROM `project_phase`,`phase`,`project` WHERE project_phase.project_id = project.project_id and phase.phase_id=project_phase.phase_id and project.project_id =?";
+            $query = $this->db->query($sql, array($input_p_id));
+            return $query->row_array();
         }
         return null;
     }
@@ -59,7 +58,9 @@ class Project_model extends CI_Model {
         //$date = date('Y-m-d H:i:s'); 
         //$this->db->set('last_updated', $date);
         $this->db->set('last_updated', mdate());
-        return $this->db->insert('project', $insert_array);
+        $affected = $this->db->insert('project', $insert_array);
+        $this->db->_error_message();
+        return $affected;
     }
     //not in use
     public function deactivate($input_p_id){

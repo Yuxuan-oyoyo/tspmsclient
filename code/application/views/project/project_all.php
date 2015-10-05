@@ -42,7 +42,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <?php foreach($projects as $p):?>
                         <tr>
                             <td><?=$p['project_title']?></td>
-                            <td><?=$p['customer_id']?></td>
+                            <td><?=$p['c_id']?></td>
                             <td><?=$p['project_value']?></td>
                             <td><?=$p['start_time']?></td>
                             <td><?=$p['current_project_phase_id']?></td>

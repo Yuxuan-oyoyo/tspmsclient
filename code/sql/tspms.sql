@@ -299,7 +299,7 @@ CREATE TABLE IF NOT EXISTS `project_phase` (
   `project_id` int(11) NOT NULL,
   `phase_id` int(11) NOT NULL,
   `start_time` timestamp NOT NULL,
-  `end_time` timestamp NOT NULL,
+  `end_time` timestamp,
   `estimated_end_time` timestamp NULL DEFAULT NULL,
   `last_updated` timestamp NOT NULL,
   PRIMARY KEY (`project_phase_id`),

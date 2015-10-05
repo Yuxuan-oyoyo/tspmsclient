@@ -20,6 +20,7 @@ class Projects extends CI_Controller {
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->model("Project_model");
+        $this->load->model("Customer_model");
        // $this->load->model('User_log_model');
     }
 
@@ -55,8 +56,9 @@ class Projects extends CI_Controller {
         $update_array["last_updated"]=$this->input->get("start_time");
         
         //echo var_dump($update_array);
-        $this->Project_model->insert($update_array);
-        project_by_title($update_array["project_title"]);
+        $affected_rows = $this->Project_model->insert($update_array);
+        $this->db->_error_message();
+        echo $affected_rows;
     }
     public function add(){
         $this->load->view('project/project_add');
@@ -69,6 +71,10 @@ class Projects extends CI_Controller {
         $this->load->view('project/project_details',$data=["project"=>$this->Project_model->retrieve($project_id)]);
     }
      */
+
+    public function edit_div($project_id){
+        $this->load->view('project/edit_div',$data=["project"=>$this->Project_model->retrieve_by_id($project_id),"customers"=>$this->Customer_model->retrieveAll()]);
+    }
     public function edit($project_id){
         //TODO: edit title and username/password
         $update_array["project_id"]=$project_id;
