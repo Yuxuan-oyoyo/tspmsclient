@@ -2,6 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 define('DEFAULT_PASSWORD',"000000");
+
+define('BB_OAUTH_KEY','8vXufhWDTtZzABhm9F');
+define('BB_OAUTH_SECRET','QVmgEWjVfzCCkkxCNZe7GBZGBrn8wTAz');
 /*
 |--------------------------------------------------------------------------
 | File and Directory Modes

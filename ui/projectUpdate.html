@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/sb-admin.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/sidebar-left.css">
+    <!-- Custom Fonts -->
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="css/timeline.css" media="all" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.1/modernizr.min.js"></script>
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+
+    <![endif]-->
+
+    <style>
+        .no-gutter [class*="-2"] {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+    </style>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+        $(function () {
+
+            var links = $('.sidebar-links > a');
+
+            links.on('click', function () {
+
+                links.removeClass('selected');
+                $(this).addClass('selected');
+            })
+        });
+    </script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">The Shipyard </a>
+    </div>
+    <!-- Top Menu Items -->
+    <ul class="nav navbar-nav">
+        <li>
+            <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+        </li>
+        <li  class="active">
+            <a href="allprojects.html"><i class="fa fa-fw fa-bar-chart-o"></i> Projects</a>
+        </li>
+        <li>
+            <a href="chat.html"><i class="fa fa-fw fa-comment"></i> Message</a>
+        </li>
+        <li>
+            <a href="customers.html"><i class="fa fa-fw fa-users"></i>Customer</a>
+        </li>
+        <li>
+            <a href="forms.html"><i class="fa fa-fw fa-edit"></i> Issue Tracker</a>
+        </li>
+        <li>
+            <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> File Repo</a>
+        </li>
+        <li>
+            <a href="bootstrap-grid.html"><i class="fa fa-fw fa-wrench"></i> Tasks</a>
+        </li>
+    </ul>
+</nav>
+<aside class="sidebar-left">
+    <div class="sidebar-links">
+        <a class="link-blue" href="projectDashboard.html"><i class="fa fa-tasks"></i>Dashboard</a>
+        <a class="link-blue selected" href="projectUpdate.html"><i class="fa fa-flag"></i>Update & Milestone</a>
+        <a class="link-blue " href="#"><i class="fa fa-wrench"></i>Issues</a>
+        <a class="link-blue" href="#"><i class="fa fa-map-marker"></i>Places</a>
+    </div>
+
+</aside>
+<br>
+<br>
+<br>
+<div class="col-lg-offset-1">
+    <!-- Page Content -->
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    #1. Inventory Management System
+                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil-square-o"></i>&nbsp;Update phase</button>
+                </h1>
+            </div>
+
+        <!-- /.row -->
+        <div class="row no-gutter">
+            <div class="test col-sm-2 col-sm-offset-1" align="center" data-toggle="tooltip" data-placement="bottom" title="02-15,2015 to 03-03,2015 ">Lead<br><img src="img/done.png" class="img-responsive"></div>
+            <div  class="test col-sm-2" align="center" data-toggle="tooltip" data-placement="bottom" title="03-04,2015 to 04-20,2015 ">Requirement<br><img src="img/done.png" class="img-responsive"></div>
+            <div class="test col-sm-2" align="center" data-toggle="tooltip" data-placement="bottom" title="04-21,2015 to now " >Build<br><img src="img/current.png" class="img-responsive"></div>
+            <div class="test col-sm-2" align="center">Testing<br><img src="img/future.png" class="img-responsive"></div>
+            <div  class="test col-sm-2" align="center">Deploy<br><img src="img/future.png" class="img-responsive"></div>
+
+        </div>
+        <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-lg-7">
+                <h3>Client Updates - <small>Build</small><button class="btn btn-primary pull-right"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <ul class="timeline">
+                    <li><!---Time Line Element--->
+                        <div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="timeline-title">Customer Update 1</h4>
+                            </div>
+                            <div class="timeline-body"><!---Time Line Body&Content--->
+                                <p>Update content is placed here...</p>
+                                <div class="pull-right timeline-info">
+                                    <i class="fa fa-user"></i>&nbsp;Andrew &nbsp;
+                                    <i class="fa fa-calendar-check-o"></i>&nbsp;Sep,19,2015</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li><!---Time Line Element--->
+                        <div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="timeline-title">Customer Update #2</h4>
+                            </div>
+                            <div class="timeline-body"><!---Time Line Body&Content--->
+                                <p>Time line content is placed here...</p>
+                                <p>And some more Time line content </p>
+                                <div class="pull-right timeline-info">
+                                    <i class="fa fa-user"></i>&nbsp;Andrew &nbsp;
+                                    <i class="fa fa-calendar-check-o"></i>&nbsp;Oct,19,2015
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li><!---Time Line Element--->
+                        <div class="timeline-badge neutral"><i class="fa fa-navicon"></i></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="timeline-title">Customer Update #3</h4>
+                            </div>
+                            <div class="timeline-body"><!---Time Line Body&Content--->
+                                <p>Time line content is placed here...</p>
+                                <p>This appears to be a neutral time line enty...</p>
+                                <div class="pull-right timeline-info">
+                                    <i class="fa fa-user"></i>&nbsp;Andrew&nbsp;
+                                    <i class="fa fa-calendar-check-o"></i>&nbsp;Oct,19,2015
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li><!---Time Line Element--->
+                        <div class="timeline-badge neutral"><i class="fa fa-navicon"></i></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="timeline-title">Customer Update #3</h4>
+                            </div>
+                            <div class="timeline-body"><!---Time Line Body&Content--->
+                                <p>Time line content is placed here...</p>
+                                <p>This appears to be a neutral time line enty...</p>
+                                <div class="pull-right timeline-info">
+                                    <i class="fa fa-user"></i>&nbsp;Andrew&nbsp;
+                                    <i class="fa fa-calendar-check-o"></i>&nbsp;Oct,19,2015
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+
+                <h3>Milestones - <small>Build</small><button class="btn btn-primary pull-right"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="panel panel-default calendar">
+                            <div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>October</strong></div>
+                            <div class="panel-body">
+                                <div class="thumbnail calendar-date" >
+                                  03
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <strong>Title Of Milestone</strong><br>
+                        This is  a short description of milestone.
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"> Done
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="panel panel-default calendar">
+                            <div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>October</strong></div>
+                            <div class="panel-body">
+                                <div class="thumbnail calendar-date" >
+                                    24
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <strong>Title Of Milestone</strong><br>
+                        This is  a short description of milestone.
+                        This is  a short description of milestone.
+                        This is  a short description of milestone.
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"> Done
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- /#page-content-wrapper -->
+
+</div>
+</body>
+</html>
