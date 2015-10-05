@@ -13,8 +13,7 @@
  */
 class Project_model extends CI_Model {
     //put your code here
-    public function __construct()
-    {
+    public function __construct(){
         // Call the CI_Model constructor
         parent::__construct();
         $this->load->helper("date");
