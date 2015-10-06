@@ -38,6 +38,18 @@
                 $(this).addClass('selected');
             })
         });
+        $('#done').on('change', function(e){
+            if(e.target.checked){
+                alert("Ss");
+                $('#newUpdateModal').modal();
+            }
+        });
+        function showModal(){
+            if ($('#done').checked) {
+                $('#newUpdateModal').modal();
+            }
+        }
+
 
     </script>
 </head>
@@ -208,7 +220,7 @@
                         This is  a short description of milestone.
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" > Done
+                                <input type="checkbox" id="done" onchange="showModal()"> Done
                             </label>
                         </div>
                     </div>
@@ -263,6 +275,10 @@
                     <div class="form-group">
                         <label for="title">Title:</label>
                         <input type="text" class="form-control"  id="milestone_title" >
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Deadline:</label>
+                        <input type="text" class="form-control"  id="deadline" >
                     </div>
                     <div class="form-group">
                         <label for="milestone_description">Description:</label>
