@@ -298,7 +298,7 @@ CREATE TABLE IF NOT EXISTS `project_phase` (
   `project_phase_id` int(11) NOT NULL AUTO_INCREMENT,
   `project_id` int(11) NOT NULL,
   `phase_id` int(11) NOT NULL,
-  `start_time` timestamp NOT NULL,
+  `start_time` timestamp,
   `end_time` timestamp,
   `estimated_end_time` timestamp NULL DEFAULT NULL,
   `last_updated` timestamp NOT NULL,

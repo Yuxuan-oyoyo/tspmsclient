@@ -49,10 +49,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <input type="text" name="tags" class="form-control" aria-describedby="basic-addon1">
                         </div>
                         <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon1" project-attr="start_time">Start Time</span>
-                            <input type="datetime" name="start_time" class="form-control" aria-describedby="basic-addon1" placeholder="e.g. 2015-09-26 08:00:00">
-                        </div>
-                        <div class="input-group">
                             <span class="input-group-addon" id="basic-addon1" project-attr="file_repo_name">File Repo Name</span>
                             <input type="text" name="file_repo_name" class="form-control" aria-describedby="basic-addon1">
                         </div>
@@ -88,7 +84,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $("#info-container").on("click","#submit",function(e){
         e.preventDefault();
         $.ajax({
-            url:"<?=base_url().'Projects/insert'?>",
+            url:"<?=base_url().'Projects/create_new_project'?>",
             data:$(this).closest("form").serialize(),
             async:false,
             success(response){

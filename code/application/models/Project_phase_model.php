@@ -53,7 +53,6 @@ class Project_phase_model extends CI_Model {
         //$this->load->helper('date');
         //$date = date('Y-m-d H:i:s');
         //$this->db->set('last_updated', $date);
-        $this->db->set('last_updated', mdate());
         return $this->db->insert('project_phase', $insert_array);
     }
 }
