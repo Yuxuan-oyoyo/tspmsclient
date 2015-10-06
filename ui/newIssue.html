@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
-
-
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="css/sb-admin.css" rel="stylesheet">
@@ -14,6 +12,7 @@
     <link rel="stylesheet" href="css/sidebar-left.css">
     <!-- Custom Fonts -->
     <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
     <!-- Bootstrap Core JavaScript -->
@@ -27,24 +26,8 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
     <![endif]-->
-    <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-        $(function () {
+    <script src="//cdn.ckeditor.com/4.5.3/standard/ckeditor.js"></script>
 
-            var links = $('.sidebar-links > a');
-
-            links.on('click', function () {
-
-                links.removeClass('selected');
-                $(this).addClass('selected');
-            })
-        });
-        $(document).ready(function(){
-            $('#issueTable').dataTable();
-        });
-    </script>
 </head>
 <body>
 
@@ -70,7 +53,7 @@
         <li>
             <a href="chat.html"><i class="fa fa-fw fa-comment"></i> Message</a>
         </li>
-        <li>
+        <li >
             <a href="customers.html"><i class="fa fa-fw fa-users"></i>Customer</a>
         </li>
         <li>
@@ -144,89 +127,93 @@
         </li>
     </ul>
 </nav>
-<aside class="sidebar-left">
-    <div class="sidebar-links">
-        <a class="link-blue" href="projectDashboard.html"><i class="fa fa-tasks"></i>Dashboard</a>
-        <a class="link-blue " href="projectUpdate.html"><i class="fa fa-flag"></i>Update & Milestone</a>
-        <a class="link-blue selected" href="projectIssues.html"><i class="fa fa-wrench"></i>Issues</a>
-        <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
-    </div>
 
-</aside>
-
-<div class="col-lg-offset-1 content">
+<div class="col-lg-offset-1 col-lg-6 content">
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-            #1. Inventory Management System<small> - Issues</small>
-            <a href="newIssue.html" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Create Issue</a>
+            New Issue
         </h1>
     </div>
 
-
-    <hr>
     <div class="row">
-        <div class=" col-lg-9">
-            <table class="table table-hover" id="issueTable">
-                <thead>
-                <tr>
-                    <th style="border-bottom: 2px solid #1abc9c;">Stage</th>
-                    <th>Title</th>
-                    <th>Type</th>
-                    <th>Priority</th>
-                    <th>Status</th>
-                    <th>Assignee</th>
-                    <th>Created</th>
-                    <th>Updated</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>To develop</td>
-                        <td><a href="issueDetail.html" >This is the title of Issue bbbbb</a></td>
-                        <td>Bug</td>
-                        <td>minor</td>
-                        <td>new</td>
-                        <td>Wil</td>
-                        <td>02-05-2015</td>
-                        <td>08-05-2015</td>
-                    </tr>
-                    <tr>
-                        <td>To verify</td>
-                        <td><a href="issueDetail.html" >Hsds aoeuhed dalasd wekeo dhdbcbj</a></td>
-                        <td>Task</td>
-                        <td>major</td>
-                        <td>open</td>
-                        <td>Wil</td>
-                        <td>03-05-2015</td>
-                        <td>03-05-2015</td>
-                    </tr>
-                    <tr>
-                        <td>To develop</td>
-                        <td><a href="issueDetail.html" >ssdbcdmasowie dcklndclaj saldowod kdcl dcc</a></td>
-                        <td>Task</td>
-                        <td>major</td>
-                        <td>resolved</td>
-                        <td>Andrew</td>
-                        <td>02-05-2015</td>
-                        <td>23-05-2015</td>
-                    </tr>
-                    <tr>
-                        <td>To develop</td>
-                        <td><a href="issueDetail.html" >dnmef cwecew wefcbg hjuij kkv rsdc uioip xdee sefc</a></td>
-                        <td>Task</td>
-                        <td>major</td>
-                        <td>resolved</td>
-                        <td>Andrew</td>
-                        <td>13-08-2015</td>
-                        <td>23-08-2015</td>
-                    </tr>
-                </tbody>
-            </table>
+            <form role="form">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label>Stage:</label>
+                        <select class="form-control">
+                            <option>To Develop</option>
+                            <option>To Verify</option>
+                            <option>To Deploy</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label>Title:</label>
+                        <input type="text" class="form-control" >
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <textarea rows="4" class="form-control" id="description"></textarea>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Assignee:</label>
+                        <select class="form-control">
+                            <option>Andrew</option>
+                            <option>Wil</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Type:</label>
+                        <select class="form-control">
+                            <option>Bug</option>
+                            <option>Enhancement</option>
+                            <option>Task</option>
+                            <option>Proposal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="form-group">
+                    <label>Priority:</label>
+                    <select class="form-control">
+                        <option>trivial</option>
+                        <option>minor</option>
+                        <option>major</option>
+                        <option>critical</option>
+                        <option>block</option>
+                    </select>
+                 </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <button class="btn btn-default"><i class="fa fa-plus"></i> Attachment</button>
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <a href="projectIssues.html" class="btn btn-primary">Create</a>
+                    <a href="projectIssues.html" class="btn btn-default">Cancel</a>
+                </div>
+            </form>
         </div>
 
 
     </div>
+    <script>
+        $(document).ready(function(){
+            $('#customerTable').dataTable();
+        });
+        CKEDITOR.replace( 'description' );
+    </script>
+
 
     <!-- /#page-content-wrapper -->
 
