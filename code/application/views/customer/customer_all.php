@@ -63,7 +63,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <a href="chat.html"><i class="fa fa-fw fa-comment"></i> Message</a>
         </li>
         <li  class="active">
-            <a href="customers.html"><i class="fa fa-fw fa-users"></i>Customer</a>
+            <a href="<?=base_url().'Customers/list_all'?>"><i class="fa fa-fw fa-users"></i>Customer</a>
         </li>
         <li>
             <a href="customers.html"><i class="fa fa-fw fa-line-chart"></i>Analytics</a>
