@@ -27,7 +27,7 @@ class Customers extends CI_Controller {
         }
         $data["customers"]= $customers;
 
-        $this->load->view('customer/all',$data);
+        $this->load->view('customer/customer_all',$data);
     }
     public function insert(){
         //$this->load->library('input');
@@ -55,18 +55,27 @@ class Customers extends CI_Controller {
         $affected_rows = $this->Customer_model->update($update_array);
         echo $affected_rows;
     }
+
+    public function update_customer($c_id){
+        $this->load->view('customer/customer_edit',$data=["customer"=>$this->Customer_model->retrieve($c_id)]);
+    }
+
     public function edit($cid){
         //TODO: edit title and username/password
-        $update_array["c_id"]=$cid;
-        $update_array["first_name"]=$this->input->get("first_name");
-        $update_array["last_name"]=$this->input->get("last_name");
-        $update_array["company_name"]=$this->input->get("company_name");
-        $update_array["email"]=$this->input->get("email");
-        $update_array["hp_number"]=$this->input->get("hp_number");
-        $update_array["other_number"]=(trim($this->input->get("other_number"))!="-")?
-            ($this->input->get("other_number")):null;
+        $update_array = $this->Customer_model->retrieve($cid);
+        $update_array["c_id"]=(int)$cid;
+        $update_array["title"]=$this->input->post("title");
+        $update_array["first_name"]=$this->input->post("first_name");
+        $update_array["last_name"]=$this->input->post("last_name");
+        $update_array["company_name"]=$this->input->post("company_name");
+        $update_array["email"]=$this->input->post("email");
+        $update_array["hp_number"]=$this->input->post("hp_number");
+        $update_array["other_number"]=(trim($this->input->post("other_number"))!="-")?
+            ($this->input->post("other_number")):null;
+        $update_array["is_active"]=(int)$this->input->post("status");
         //echo var_dump($update_array);
         $affected_rows = $this->Customer_model->update($update_array);
+        $this->list_all();
         echo $affected_rows;
     }
     public function customer($id){

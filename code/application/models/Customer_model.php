@@ -47,7 +47,6 @@ class Customer_model extends CI_Model
     }
 
     public function update($update_array){
-
         //$now = now();
         $this->db->set('last_updated', mdate());
         $this->db->update('customer', $update_array, array('c_id' => $update_array['c_id']));
