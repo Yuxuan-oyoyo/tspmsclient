@@ -153,6 +153,10 @@ class Projects extends CI_Controller {
         $this->load->view('project/project_details',$data=["project"=>$this->Project_model->retrieve_by_id($project_id)]);
     }
 
+    public function project_update($project_id){
+        $this->load->view('project/project_update',$data=["project"=>$this->Project_model->retrieve_by_id($project_id)]);
+    }
+
     public function _set_validation_rules_for_new_additional_video_form(){
         $this->form_validation->set_rules('title','Title','trim|required|max_length[512]');
         $this->form_validation->set_rules('embed_code','Embed Code','trim|required');
