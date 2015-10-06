@@ -12,14 +12,8 @@
     <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Francois+One" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.1/modernizr.min.js"></script>
+    <script src="<?=base_url()?>js/plugins/bootstrap-tokenfield.min.js"></script>
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-
-    <![endif]-->
 
     <script>
         $("#customer-option").on("change",function(){
@@ -41,7 +35,12 @@
             var value= $(this).val();
             $("phase-end-"+next_id).val(value);
         });
-
+        $('.tokenfield').tokenfield({
+                    autocomplete: {
+                        source: <?= $tags ?>
+                    },
+                    showAutocompleteOnFocus: false
+        })
     </script>
 </head>
 <body>
@@ -160,19 +159,19 @@
                 <div class="col-lg-12">
                     <div class="form-group">
                         <label for="project_title">Title*</label>
-                        <input class="form-control" id="project_title" name="project_title" value="">
+                        <input class="form-control" id="project_title" name="project_title" value="<?=$p['project_title']?>">
                     </div>
                 </div>
                 <div class="col-lg-12">
                     <div class="form-group">
                         <label for="project_description">Description</label>
-                        <textarea class="form-control" id="project_description" name="project_description" ></textarea>
+                        <textarea class="form-control" id="project_description" name="project_description" ><?=$p['project_description']?></textarea>
                     </div>
                 </div>
                 <div class="col-lg-5">
                     <div class="form-group">
                         <label for="file_repo_name">File repo name</label>
-                        <input class="form-control" name="file_repo_name" value="">
+                        <input class="form-control" name="file_repo_name" value="<?=$p['file_repo_name']?>">
                     </div>
                 </div>
                 <div class="col-lg-offset-1 col-lg-6">
@@ -223,7 +222,11 @@
                             <label >Choose Customer:</label>
                             <select class="form-control">
                                 <?php foreach($customers as $c):?>
-                                <option <?=$c['c_id']?>><?=$c['first_name']?>&nbsp;<?=$c['last_name']?></option>
+                                    <?php if($c['c_id']==$p['c_id']):?>
+                                        <option <?=$c['c_id']?> selected><?=$c['first_name']?>&nbsp;<?=$c['last_name']?></option>
+                                    <?php else:?>
+                                        <option <?=$c['c_id']?>><?=$c['first_name']?>&nbsp;<?=$c['last_name']?></option>
+                                    <?php endif?>
                                 <?php endforeach?>
                             </select>
                         </div>
@@ -285,13 +288,35 @@
                             <input type="password" class="form-control" name="username" id="password">
                         </div>
                     </div>
-
-
-                </div>
+                    <div class="form-group">
+                        <label for="remarks">Remarks</label>
+                        <input class="form-control" name="remarks" value="<?=$p['remarks']?>">
+                    </div>
+                    <hl></hl>
+                    <?php foreach($phases as $phs):?>
+                        <?=$phs["name"]?>
+                        <?php $start='phase-start-'.$phs["id"]?>
+                        <?php $end='phase-end-'.$phs["id"]?>
+                        <div class="form-group">
+                            <label for="<?=$start?>">Start date for <?=$phs["name"]?></label>
+                            <input class="form-control date-start datetimepicker" id="<?=$start?>" name='<?=$start?>' value="<?=$p['remarks']?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="<?=$end?>">End date for <?=$phs["name"]?></label>
+                            <input class="form-control date-end datetimepicker" id="<?=$end?>" name='<?=$end?>' value="<?=$p['remarks']?>">
+                        </div>
+                    <?php endforeach?>
+                    <div class="pull-right">
+                        <a href="projectDashboard.html" class="btn btn-default">Cancel</a>&nbsp;
+                        <a href="projectDashboard.html" class="btn btn-primary">Submit</a>&nbsp;
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
+        </div>
+
+
     </div>
-    <!--will generate components based on the selection input above-->
 
 <!-- /#page-content-wrapper -->
 <!-- jQuery -->

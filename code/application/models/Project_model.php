@@ -55,6 +55,7 @@ class Project_model extends CI_Model {
         $date = date('Y-m-d H:i:s'); 
         $this->db->set('last_updated', $date);
         $this->db->update('project', $update_array, array('project_id' => $update_array['project_id']));
+        //echo var_dump($this->db->error());
         return $this->db->affected_rows();
     }
     public function insert($insert_array){
@@ -80,10 +81,11 @@ class Project_model extends CI_Model {
         }else{
             $query = $this->db->query("select tags, last_updated from project where project_id=? order by last_updated desc",[$project_id]);
         }
-        foreach ($query->result_array() as $row) {
-            array_merge($tag_array, explode($delimiter,$row['tags']));
-        }
 
+        foreach ($query->result_array() as $row) {
+            $tag_array = array_merge($tag_array, explode($delimiter,$row['tags']));
+        }
+        //echo var_dump($tag_array);
         return array_unique($tag_array);
     }
     /*

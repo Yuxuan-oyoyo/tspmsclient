@@ -55,7 +55,8 @@ class Customer_model extends CI_Model
     }
     public function insert($insert_array){
         $this->db->set('last_updated', mdate());
-        return $this->db->insert('customer', $insert_array);
+        $this->db->insert('customer', $insert_array);
+        return $this->db->insert_id();
     }
     //not in use
     public function deactivate($input_c_id){
