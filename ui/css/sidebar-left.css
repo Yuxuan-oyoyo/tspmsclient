@@ -103,75 +103,7 @@
 }
 
 
-/* Making the sidebar responsive */
 
-@media (max-width: 900px) {
-
-	.main-content{
-		max-width: none;
-		padding: 40px 20px;
-		margin: 0 0 40px;
-	}
-
-	.sidebar-left {
-		width: auto;
-		height: auto;
-		position: inherit;
-		padding: 20px 0 0;
-	}
-
-	.sidebar-left .sidebar-links {
-		text-align: center;
-		margin: 20px auto 0;
-	}
-
-	.sidebar-left .sidebar-links a {
-		display: inline-block;
-		width: 100px;
-		margin: 0;
-		padding: 14px 0;
-		border-left: none;
-		border-top-width: 2px;
-		border-top-style: solid;
-	}
-
-}
-
-/* Mobile phone layout */
-
-@media (max-width: 450px) {
-
-	.sidebar-left {
-		padding: 20px 0;
-	}
-
-	.sidebar-left .sidebar-links {
-		text-align: center;
-		margin: 20px auto 0;
-	}
-
-	.sidebar-left .sidebar-links a {
-		display: block;
-		max-width: 240px;
-		width: auto;
-		vertical-align: middle;
-		text-align: left;
-		margin: 0 auto 5px;
-		padding: 10px 25px;
-		border-top: none;
-		border-left-width: 2px;
-		border-left-style: solid;
-	}
-
-	.sidebar-left .sidebar-links a i.fa {
-		display: inline-block;
-		font-size: 20px;
-		width: 20px;
-		margin: 0 20px 0 0;
-		vertical-align: middle;
-	}
-
-}
 
 /*	Removing margins and paddings from the body, so that
     the sidebar takes the full height of the page */
@@ -179,4 +111,7 @@
 body {
 	margin: 0;
 	padding: 0;
+}
+.content{
+    margin-left: 130px;
 }

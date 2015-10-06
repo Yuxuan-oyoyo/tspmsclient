@@ -7,14 +7,38 @@
  * Time: 2:00 PM
  */
 class BB_issues {
-    public $issues_endpoint = "https://api.bitbucket.org/1.0/repositories/smuremix/tspms/issues";
     //TODO: count hourly count
     //TODO: no re auth before it expires
-    public function retrieveIssues(array $parameters=null){
-        $this->CI->load->libraries("BB_shared");
-        $token = $this->BB_shared->getDefaultOauthToken();
+    public  $oauth_endpoint = 'https://bitbucket.org/site/oauth2/access_token';
 
-        $r = new HttpRequest($this->issues_endpoint, HttpRequest::METH_GET);
+    public function getDefaultOauthToken(){
+        $r = new \HttpRequest($this->oauth_endpoint, \HttpRequest::METH_POST);
+        $r->addPostFields(['grant_type' => 'client_credentials']);
+        try {
+            $reply = $r->send()->getBody();
+            if($reply_array = json_decode($reply)!=null){
+                if(isset($reply_array['error'])){
+                    echo var_dump($reply_array);
+                }else if(isset($reply_array["access_token"])){
+                    return $reply_array["access_token"];
+                }
+            }
+        } catch (\HttpException $ex) {
+            echo $ex;
+        }
+        return null;
+    }
+
+    private function setEndpoint($repo_slug){
+        return "https://api.bitbucket.org/1.0/repositories/".BB_ACCOUNT_NAME."/".$repo_slug."/issues";
+    }
+
+    public function retrieveIssues($repo_slug, array $parameters=null){
+        $token = $this->getDefaultOauthToken();
+
+        $endpoint = $this->setEndpoint($repo_slug);
+
+        $r = new \HttpRequest($endpoint, \HttpRequest::METH_GET);
         $r->addQueryData(['access_token' => $token]);
         if($parameters!=null) {
             $r->addQueryData($parameters);
@@ -29,17 +53,17 @@ class BB_issues {
                 }
             }
 
-        } catch (HttpException $ex) {
+        } catch (\HttpException $ex) {
             echo $ex;
         }
         return null;
 
     }
-    public function retrieveIssue($issue_id){
-        $this->CI->load->libraries("BB_shared");
-        $token = $this->BB_shared->getDefaultOauthToken();
+    public function retrieveIssue($repo_slug, $issue_id){
+        $token = $this->getDefaultOauthToken();
+        $endpoint = $this->setEndpoint($repo_slug);
 
-        $r = new HttpRequest($this->issues_endpoint, HttpRequest::METH_GET);
+        $r = new HttpRequest($endpoint, HttpRequest::METH_GET);
         $r->addQueryData(['access_token' => $token]);
         $r->addQueryData($issue_id);
         try {
@@ -56,20 +80,24 @@ class BB_issues {
         }
         return null;
     }
-    public function postNewIssue(array $issue_array){
+    public function postNewIssue($repo_slug, array $issue_array){
         $this->sendIssueRequest($issue_array,HttpRequest::METH_POST);
     }
-    public function updateIssue(array $issue_array){
+    public function updateIssue($repo_slug, array $issue_array){
         $this->sendIssueRequest($issue_array, HttpRequest::METH_PUT);
     }
-    public function getCommentsForAnIssue($issue_id){
-        //
+    public function getCommentsForAnIssue($repo_slug, $issue_id){
+        //TODO:retrieve comments
     }
-    private function sendIssueRequest($issue_array, $flag=HttpRequest::METH_POST){
-        $this->CI->load->libraries("BB_shared");
-        $token = $this->BB_shared->getDefaultOauthToken();
+    public function postCommentsForAnIssue($repo_slug, $issue_id, $comment){
+        //TODO: post comment
+        //question: $comment string only? how do we know who posts it?
+    }
+    private function sendIssueRequest($repo_slug, $issue_array, $flag=HttpRequest::METH_POST){
+        $token = $this->getDefaultOauthToken();
+        $endpoint = $this->setEndpoint($repo_slug);
 
-        $r = new HttpRequest($this->oauth_endpoint, HttpRequest::METH_POST);
+        $r = new HttpRequest($endpoint, HttpRequest::METH_POST);
         $r->addPostFields($issue_array);
         $r->addPostFields(['access_token' => $token]);
         try {
@@ -84,6 +112,7 @@ class BB_issues {
         } catch (HttpException $ex) {
             echo $ex;
         }
+        return null;
     }
 
 }

@@ -12,12 +12,12 @@
     <link rel="stylesheet" href="css/sidebar-left.css">
     <!-- Custom Fonts -->
     <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="css/timeline.css" media="all" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.1/modernizr.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -28,18 +28,8 @@
     <![endif]-->
 
     <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-        $(function () {
-
-            var links = $('.sidebar-links > a');
-
-            links.on('click', function () {
-
-                links.removeClass('selected');
-                $(this).addClass('selected');
-            })
+        $(document).ready(function(){
+            $('#customerTable').dataTable();
         });
     </script>
 </head>
@@ -61,13 +51,13 @@
         <li>
             <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
         </li>
-        <li  class="active">
+        <li>
             <a href="projects.html"><i class="fa fa-fw fa-bar-chart-o"></i> Projects</a>
         </li>
         <li>
             <a href="chat.html"><i class="fa fa-fw fa-comment"></i> Message</a>
         </li>
-        <li>
+        <li  class="active">
             <a href="customers.html"><i class="fa fa-fw fa-users"></i>Customer</a>
         </li>
         <li>
@@ -141,95 +131,63 @@
         </li>
     </ul>
 </nav>
-<aside class="sidebar-left">
-    <div class="sidebar-links">
-        <a class="link-blue selected" href="projectDashboard.html"><i class="fa fa-tasks"></i>Dashboard</a>
-        <a class="link-blue " href="projectUpdate.html"><i class="fa fa-flag"></i>Update & Milestone</a>
-        <a class="link-blue " href="projectIssues.html"><i class="fa fa-wrench"></i>Issues</a>
-        <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
-    </div>
 
-</aside>
-<div class="col-lg-offset-1 content">
+<div class="col-lg-offset-1 col-lg-5 content">
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-            #1. Inventory Management System
-            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil-square-o"></i>&nbsp;Update phase</button>
+            Edit Customer
         </h1>
     </div>
 
-    <!-- /.row -->
-    <div class="row no-gutter">
-        <div class="test col-sm-2 col-sm-offset-1" align="center" data-toggle="tooltip" data-placement="bottom" title="02-15,2015 to 03-03,2015 ">Lead<br><img src="img/done.png" class="img-responsive"></div>
-        <div  class="test col-sm-2" align="center" data-toggle="tooltip" data-placement="bottom" title="03-04,2015 to 04-20,2015 ">Requirement<br><img src="img/done.png" class="img-responsive"></div>
-        <div class="test col-sm-2" align="center" data-toggle="tooltip" data-placement="bottom" title="04-21,2015 to now " >Build<br><img src="img/current.png" class="img-responsive"></div>
-        <div class="test col-sm-2" align="center">Testing<br><img src="img/future.png" class="img-responsive"></div>
-        <div  class="test col-sm-2" align="center">Deploy<br><img src="img/future.png" class="img-responsive"></div>
-
-    </div>
-    <hr>
     <div class="row">
         <div class="col-lg-12">
-            <div class="col-lg-offset-7 col-lg-4">
-                <div class="panel info-panel">
-                    <div class="panel-heading">Project Detail</div>
-                    <div class="panel-body" style="font-size:15px" >
-                        <table class="table table-condensed">
-                            <tr>
-                                <td><strong>No. of use case</strong></td>
-                                <td>18</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Project Value</strong></td>
-                                <td>18</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Staging link </strong></td>
-                                <td> <a href="http://fortawesome.github.io/Font-Awesome/icon/link/">Click here</a></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Customer </strong></td>
-                                <td> <a href="#">Gary Lee</a> (Click to edit)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Bitbucket Repo Name </strong></td>
-                                <td> asdjf_fdj</td>
-                            </tr>
-                            <tr>
-                                <td><strong>File Repo Name </strong></td>
-                                <td> dsf</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Status </strong></td>
-                                <td> ongoing</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Tags </strong></td>
-                                <td>#Inventory,#ManagementSystem</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Description </strong></td>
-                                <td>This is a description field for the project, it may be longer than this.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Remarks </strong></td>
-                                <td>This is a remark field for the project.</td>
-                            </tr>
-                        </table>
-
-                        <a href="editProject.html" class="btn pull-right btn-primary"><i class="fa fa-pencil-square-o"></i> &nbsp;Edit</a>
-
-                    </div>
+            <form role="form">
+                <div class="form-group">
+                    <label>Title:</label>
+                    <input type="text" class="form-control" value="Mr" >
                 </div>
-            </div>
-          </div>
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="email" class="form-control" value="Gary Goh">
+                </div>
+                <div class="form-group">
+                    <label>Company:</label>
+                    <input type="email" class="form-control" value="CoachReg">
+                </div>
+                <div class="form-group">
+                    <label>hp number:</label>
+                    <input type="email" class="form-control" value="81234664">
+                </div>
+                <div class="form-group">
+                    <label>other number:</label>
+                    <input type="email" class="form-control" value="5312321">
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" class="form-control" value="gary@coachReg.com">
+                </div>
+                <div class="form-group">
+                    <label>Status:</label>
+                    <select class="form-control">
+                        <option>Active</option>
+                        <option>Deactivated</option>
+                    </select>
+                </div>
+                <div class="pull-right">
+                    <a href="customers.html" class="btn btn-primary">Submit</a>
+                    <a href="customers.html" class="btn btn-default">Cancel</a>
+                </div>
+            </form>
+        </div>
 
 
     </div>
+
+
 
     <!-- /#page-content-wrapper -->
 
-    </div>
+</div>
 </body>
 </html>

@@ -5,6 +5,8 @@ define('DEFAULT_PASSWORD',"000000");
 
 define('BB_OAUTH_KEY','8vXufhWDTtZzABhm9F');
 define('BB_OAUTH_SECRET','QVmgEWjVfzCCkkxCNZe7GBZGBrn8wTAz');
+
+define('BB_ACCOUNT_NAME','smuremix');
 /*
 |--------------------------------------------------------------------------
 | File and Directory Modes
