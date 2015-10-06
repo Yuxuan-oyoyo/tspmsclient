@@ -76,7 +76,7 @@ class Customers extends CI_Controller {
         //echo var_dump($update_array);
         $affected_rows = $this->Customer_model->update($update_array);
         $this->list_all();
-        echo $affected_rows;
+        //echo $affected_rows;
     }
     public function customer($id){
         //TODO: edit title and username/password
