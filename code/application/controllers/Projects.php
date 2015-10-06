@@ -22,11 +22,12 @@ class Projects extends CI_Controller {
         $this->load->model("Project_model");
         $this->load->model("Customer_model");
         $this->load->model("Project_phase_model");
-       // $this->load->model('User_log_model');
     }
 
     public function index()
     {
+        //This is for testing project_update, please comment the next line and uncomment next next line
+        //$this->view_upadtes(123);
         $this->list_all();
     }
 
@@ -160,5 +161,13 @@ class Projects extends CI_Controller {
     public function _set_validation_rules_for_new_additional_video_form(){
         $this->form_validation->set_rules('title','Title','trim|required|max_length[512]');
         $this->form_validation->set_rules('embed_code','Embed Code','trim|required');
+    }
+
+    public function view_upadtes($project_id){
+        $project = $this->Project_model->retrieve_by_id($project_id);
+        $current_project_phase_id = $project['current_project_phase_id'];
+        $current_phase_array = $this->Project_phase_model->retrieve_phase_by_id($current_project_phase_id);
+        $current_phase = $current_phase_array['phase_id'];
+        $this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
     }
 }

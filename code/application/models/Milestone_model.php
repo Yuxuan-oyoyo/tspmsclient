@@ -1,12 +1,72 @@
 <?php
-
 /**
  * Created by PhpStorm.
  * User: WANG Tiantong
- * Date: 10/3/2015
- * Time: 8:07 PM
+ * Date: 10/6/2015
+ * Time: 5:52 PM
  */
-class Milestone_model
-{
 
+//namespace model;
+
+
+class Milestone_model extends CI_Model
+{
+    public function __construct()
+    {
+        // Call the CI_Model constructor
+        parent::__construct();
+        $this->load->helper("date");
+    }
+    public function retrieve($milestone_id){
+        if(isset($input_c_id)){
+            $query = $this->db->get_where("customer",["c_id"=>$input_c_id]);
+            if( $query->num_rows()>0){
+                return $query->row_array();
+            }
+        }
+        return null;
+    }
+    public function retrieveAll($only_active=true,$limit=0,$offset=0){
+        $where = [];
+        if(isset($input_c_id)){
+            if($only_active){
+                $where["is_active"]=1;
+            }
+        }
+        $query = $this->db->get_where("customer",$where,$limit,$offset);
+        return $query->result_array();
+    }
+
+    public function update($update_array){
+        $date = date('Y-m-d H:i:s');
+        $update_array['last_updated'] = $date;
+        $this->db->update('customer', $update_array, array('c_id' => $update_array['c_id']));
+        return $this->db->affected_rows();
+    }
+    public function insert($insert_array){
+        $date = date('Y-m-d H:i:s');
+        $update_array['last_updated'] = $date;
+        return $this->db->insert('customer', $insert_array);
+    }
+    //not in use
+    public function deactivate($input_c_id){
+        $date = date('Y-m-d H:i:s');
+        $update_array['last_updated'] = $date;
+        $this->db->update('customer', ["is_active"=>0], array('c_id' => $input_c_id));
+        return $this->db->affected_rows();
+    }
+    private function field_check($customer_array){
+        $fields=['c_id','title','first_name','last_name','company_name','password_hash'
+            ,'hp_number','email','is_active'];
+        foreach( $fields as $field){
+            if(!array_key_exists($field,$customer_array)){
+                return false;
+            }
+        }
+        return true;
+    }
+    public function delete($input_c_id){
+        $this->db->delete("customer",['c_id'=>$input_c_id]);
+        return $this->db->affected_rows();
+    }
 }
