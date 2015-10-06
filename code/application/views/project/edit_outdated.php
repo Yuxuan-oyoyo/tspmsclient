@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+
+    <?php $this->load->view('common/common_header');?>
+    <link href="<?=base_url()?>css/plugins/bootstrap-tokenfield.min.css" rel="stylesheet">
+    <link href="<?=base_url()?>css/plugins/tokenfield-typeahead.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="css/sb-admin.css" rel="stylesheet">
-    <link href="css/bootstrap-tokenfield.min.css" rel="stylesheet">
-    <link href="css/tokenfield-typeahead.min.css" rel="stylesheet">
+    <link href="<?=base_url()?>css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Francois+One" />
+    <link rel="stylesheet" href="<?=base_url()?>css/sidebar-left.css">
     <!-- Custom Fonts -->
-    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Francois+One" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.1/modernizr.min.js"></script>
     <script src="<?=base_url()?>js/plugins/bootstrap-tokenfield.min.js"></script>
 
 
     <script>
+
+
         $("#customer-option").on("change",function(){
             if($(this).value()=="from-existing"){
                 $('#existing_customer').css("display","inherit");
@@ -141,83 +143,50 @@
         </li>
     </ul>
 </nav>
+<aside class="sidebar-left">
+    <div class="sidebar-links">
+        <a class="link-blue selected" href="projectDashboard.html"><i class="fa fa-tasks"></i>Dashboard</a>
+        <a class="link-blue " href="projectUpdate.html"><i class="fa fa-flag"></i>Update & Milestone</a>
+        <a class="link-blue " href="projectIssues.html"><i class="fa fa-wrench"></i>Issues</a>
+        <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
+    </div>
 
+</aside>
+<div class="col-lg-offset-1 content">
     <!-- Page Content -->
-
-    <div class="container">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            #1. Inventory Management System <small>- Edit Detail</small>
+        </h1>
+    </div>
+    <?php $p=$project;
+    echo var_dump($p);
+    ?>
+    <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">
-                Edit Project&nbsp;
-                <a href="projectDashboard.html" class="btn btn-default">Cancel</a>&nbsp;
-                <a href="projectDashboard.html" class="btn btn-primary">Submit</a>
-            </h1>
-        </div>
-        <form class="form-horizontal">
-            <div class="col-lg-6 project-info">
-                <h3>Project Information</h3>
-                <hr>
-                <div class="col-lg-12">
+            <div class="col-lg-8 col-lg-offset-1">
+                <form class="form-horizontal">
                     <div class="form-group">
-                        <label for="project_title">Title*</label>
+                        <label for="project_title">Title</label>
                         <input class="form-control" id="project_title" name="project_title" value="<?=$p['project_title']?>">
                     </div>
-                </div>
-                <div class="col-lg-12">
                     <div class="form-group">
                         <label for="project_description">Description</label>
                         <textarea class="form-control" id="project_description" name="project_description" ><?=$p['project_description']?></textarea>
                     </div>
-                </div>
-                <div class="col-lg-5">
                     <div class="form-group">
                         <label for="file_repo_name">File repo name</label>
                         <input class="form-control" name="file_repo_name" value="<?=$p['file_repo_name']?>">
                     </div>
-                </div>
-                <div class="col-lg-offset-1 col-lg-6">
-                    <div class="form-group">
-                        <label for="bitbucket_repo_name">Bitbucket repo name</label>
-                        <input class="form-control" name="bitbucket_repo_name" value="">
-                    </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="form-group">
-                        <label for="no_of_use_cases">Number of usecases</label>
-                        <input class="form-control" name="no_of_use_cases" value="">
-                    </div>
-                </div>
-                <div class="col-lg-offset-1 col-lg-6">
-                    <div class="form-group">
-                        <label for="project_value">Project value</label>
-                        <input class="form-control" name="project_value" value="">
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <div class="form-group">
-                        <label for="tags">Tags</label>
-                        <input class="form-control tokenfield" name="tags" value="">
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <div class="form-group">
-                        <label for="remarks">Remarks</label>
-                        <input class="form-control" name="remarks" value="">
-                    </div>
-                </div>
-                <hr>
-            </div>
-            <div class="col-lg-5 customer-info">
-                <h3>Customer Information</h3>
-                <hr>
-                <div class="col-lg-12">
+                    <hl></hl>
                     <div class="form-group">
                         <label for="customer-option"> Customer</label>
                         <select class="form-control" id="customer-option" name="customer-option">
-                            <option value="create-new">Create new</option>
                             <option value="from-existing">From existing</option>
+                            <option value="create-new">Create new</option>
                         </select>
                     </div>
-                    <div class="existing_customer">
+                    <div id="existing_customer">
                         <div class="form-group">
                             <label >Choose Customer:</label>
                             <select class="form-control">
@@ -231,62 +200,57 @@
                             </select>
                         </div>
                     </div>
-                </div>
-
-                <div class="new_customer">
-                    <div class="col-lg-4">
+                    <div id="new_customer"  style="display:none">
                         <div class="form-group">
                             <label for="title">Title</label>
-                            <input type="text" class="form-control" name="title" id="title">
+                            <input type="text" name="title" id="title">
                         </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="form-group ">
+                        <div class="form-group">
                             <label for="first_name">First name</label>
-                            <input type="text" class="form-control" name="first_name" id="first_name">
+                            <input type="text" name="first_name" id="first_name">
                         </div>
-                    </div>
-                    <div class="col-lg-4">
                         <div class="form-group">
                             <label for="last_name">Last name</label>
-                            <input type="text" class="form-control"  name="last_name" id="last_name">
+                            <input type="text" name="last_name" id="last_name">
                         </div>
-                    </div>
-                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="company_name">Company name</label>
-                            <input type="text" class="form-control" name="company_name" id="company_name">
+                            <input type="text" name="company_name" id="company_name">
                         </div>
-                    </div>
-                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" name="email" id="email">
+                            <input type="text" name="email" id="email">
                         </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="hp_number">HP Number</label>
-                            <input type="text" class="form-control" name="hp_number" id="hp_number">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="other_number">Other Number</label>
-                            <input type="text" class="form-control" name="other_number" id="other_number">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input type="text" class="form-control" name="username" id="username">
+                            <input type="text" name="username" id="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="hp_number">HP Number</label>
+                            <input type="text" name="hp_number" id="hp_number">
+                        </div>
+                        <div class="form-group">
+                            <label for="other_number">Other Number</label>
+                            <input type="text" name="other_number" id="other_number">
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="username">Password</label>
-                            <input type="password" class="form-control" name="username" id="password">
-                        </div>
+                    <!--will generate components based on the selection input above-->
+                    <hl></hl>
+                    <div class="form-group">
+                        <label for="no_of_use_cases">Number of usecases</label>
+                        <input class="form-control" name="no_of_use_cases" value="<?=$p['no_of_use_cases']?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="bitbucket_repo_name">Bitbucket repo name</label>
+                        <input class="form-control" name="bitbucket_repo_name" value="<?=$p['bitbucket_repo_name']?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="project_value">Project value</label>
+                        <input class="form-control" name="project_value" value="<?=$p['project_value']?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="tags">Tags</label>
+                        <input class="form-control tokenfield" name="tags" value="<?=$p['tags']?>">
                     </div>
                     <div class="form-group">
                         <label for="remarks">Remarks</label>
@@ -318,10 +282,8 @@
 
     </div>
 
-<!-- /#page-content-wrapper -->
-<!-- jQuery -->
-<script src="js/jquery.js"></script>
-<!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script>
+    <!-- /#page-content-wrapper -->
+
+</div>
 </body>
 </html>

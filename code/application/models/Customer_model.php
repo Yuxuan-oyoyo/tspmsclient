@@ -53,6 +53,7 @@ class Customer_model extends CI_Model
         return $this->db->affected_rows();
     }
     public function insert($insert_array){
+
         $date = date('Y-m-d H:i:s');
         $update_array['last_updated'] = $date;
         return $this->db->insert('customer', $insert_array);

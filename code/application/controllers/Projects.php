@@ -117,23 +117,36 @@ class Projects extends CI_Controller {
     /*changed function name to process_edit*/
     public function process_edit($project_id){
         //TODO: edit title and username/password
-        $update_array["project_id"]=$project_id;
-        $update_array["customer_id"]=$this->input->get("customer_id");
-        $update_array["project_title"]=$this->input->get("project_title");
-        $update_array["project_description"]=$this->input->get("project_description");
-        $update_array["tags"]=$this->input->get("tags");
-        $update_array["remarks"]=$this->input->get("remarks");
-        $update_array["start_time"]=$this->input->get("start_time");
-        $update_array["current_project_phase_id"]=$this->input->get("current_project_phase_id");
-        $update_array["file_repo_name"]=$this->input->get("file_repo_name");
-        $update_array["no_of_use_cases"]=$this->input->get("no_of_use_cases");
-        $update_array["bitbucket_repo_name"]=$this->input->get("bitbucket_repo_name");
-        $update_array["project_value"]=$this->input->get("project_value");
-        $update_array["last_updated"]=$this->input->get("last_updated");
-        $update_array["is_ongoing"]=$this->input->get("is_ongoing");
-        //echo var_dump($update_array);
-        $affected_rows = $this->Project_model->update($update_array);
-        echo $affected_rows;
+        $original_array = $this->Project_model->retrieve_by_id($project_id);
+        $name_array = ["c_id","project_title"
+            ,"project_description","tags","remarks"
+            ,"file_repo_name","no_of_use_cases"
+            ,"bitbucket_repo_name","project_value"];
+        $input = $this->input->post($name_array,true);
+        if($input['c_id']==null){
+            $customer_name_array=["title","first_name"
+                ,"last_name","company_name","hp_number"
+                ,"other_number","email","username","password"];
+
+            $new_customer_input = $this->input->post($customer_name_array,true);
+            $new_customer_id = $this->Customer_model->insert($new_customer_input);
+            if($new_customer_id==false){
+                echo "something wrong happen when creating customer";
+            }else{
+                $input['c_id'] = $new_customer_id;
+            }
+        }
+
+        foreach($input as $key=>$value){
+            if($value!=null){
+                $original_array[$key] = $value;
+            }
+        }
+
+        $affected_rows = $this->Project_model->update($original_array);
+        $this->edit($original_array["project_id"]);
+        //TODO:input validation
+        //TODO:prompt user on success/failure
     }
     public function project_by_id($project_id){
         //TODO: edit title and username/password
