@@ -70,6 +70,23 @@ class Project_model extends CI_Model {
         return $this->db->affected_rows();
     }
     /*
+     * returns [tag1, tag2, tag3...]
+     */
+    public function getTags($project_id=null){
+        $tag_array = [];
+        $delimiter = ",";
+        if($project_id==null){
+            $query = $this->db->query("select tags, last_updated from project order by last_updated desc");
+        }else{
+            $query = $this->db->query("select tags, last_updated from project where project_id=? order by last_updated desc",[$project_id]);
+        }
+        foreach ($query->result_array() as $row) {
+            array_merge($tag_array, explode($delimiter,$row['tags']));
+        }
+
+        return array_unique($tag_array);
+    }
+    /*
     private function field_check($project_array){
         $fields=['c_id','title','first_name','last_name','company_name','password_hash'
             ,'hp_number','email','is_active'];

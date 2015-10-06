@@ -55,4 +55,8 @@ class Project_phase_model extends CI_Model {
         //$this->db->set('last_updated', $date);
         return $this->db->insert('project_phase', $insert_array);
     }
+    public function retrievePhaseDef(){
+        $query = $this->db->query("select phase_name from phase order by phase_id");
+        return $query->result_array();
+    }
 }

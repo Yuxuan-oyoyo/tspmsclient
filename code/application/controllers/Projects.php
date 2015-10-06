@@ -105,11 +105,17 @@ class Projects extends CI_Controller {
         $this->load->view('project/project_details',$data=["project"=>$this->Project_model->retrieve($project_id)]);
     }
      */
-
-    public function edit_div($project_id){
-        $this->load->view('project/edit_div',$data=["project"=>$this->Project_model->retrieve_by_id($project_id),"customers"=>$this->Customer_model->retrieveAll()]);
-    }
+    /*changed function name to edit*/
     public function edit($project_id){
+        $this->load->view('project/edit',
+            $data=["project"=>$this->Project_model->retrieve_by_id($project_id),
+                "customers"=>$this->Customer_model->retrieveAll(),
+                "tags"=>json_encode($this->Project_model->getTags()),
+                "phases"=>$this->Project_phase_model->retrievePhaseDef()
+            ]);
+    }
+    /*changed function name to process_edit*/
+    public function process_edit($project_id){
         //TODO: edit title and username/password
         $update_array["project_id"]=$project_id;
         $update_array["customer_id"]=$this->input->get("customer_id");
