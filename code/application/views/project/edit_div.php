@@ -112,6 +112,19 @@
             <input class="form-control" name="remarks" value="<?=$p['remarks']?>">
         </div>
         <hl></hl>
+        <?php foreach($phases as $phs):?>
+            <?=$phs["name"]?>
+            <?php $start='phase-start-'.$phs["id"]?>
+            <?php $end='phase-end-'.$phs["id"]?>
+            <div class="form-group">
+                <label for="<?=$start?>">Start date for <?=$phs["name"]?></label>
+                <input class="form-control date-start datetimepicker" id="<?=$start?>" name='<?=$start?>' value="<?=$p['remarks']?>">
+            </div>
+            <div class="form-group">
+                <label for="<?=$end?>">End date for <?=$phs["name"]?></label>
+                <input class="form-control date-end datetimepicker" id="<?=$end?>" name='<?=$end?>' value="<?=$p['remarks']?>">
+            </div>
+        <?php endforeach?>
     </form>
     </div>
 </div>
