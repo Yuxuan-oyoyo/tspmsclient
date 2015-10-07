@@ -342,30 +342,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Next Phase</h4>
             </div>
-            <div class="modal-body">
 
-                <!--This part is for testing while the before pages are not done!!!-->
-                <?php
-                    $data=array(
-                        'project_id' => $p["project_id"],
-                        'current_project_phase_id' => $current_project_phase_id
-                    );
-                ?>
-                <form role="form" action="<?=base_url().'Project_phase/update_phase/'.$data?>" method="post">
-                    <div class="form-group">
+            <form role="form" action="<?=base_url().'Project_phase/update_phase/'.$p["project_id"].'/'.$current_project_phase_id?>" method="post">
+
+            <div class="modal-body">
+                <div class="form-group">
                         <label for="title">Title:</label>
                         <input type="text" class="form-control" disabled value="<?=$next_phase?>" id="title" >
                     </div>
                     <div class="form-group">
                         <label for="estimated_end_time">Estimated End Date:</label>
-                        <input type="text" class="form-control" id="estimated_end_time">
+                        <input name="estimated_end_time" type="text" class="form-control" id="estimated_end_time">
                     </div>
-                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Update">
             </div>
+            </form>
         </div>
     </div>
 </div>

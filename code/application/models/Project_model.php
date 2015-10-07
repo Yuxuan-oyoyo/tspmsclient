@@ -51,9 +51,8 @@ class Project_model extends CI_Model {
     }
 
     public function update($update_array){
-        $this->load->helper('date');
-        $date = date('Y-m-d H:i:s'); 
-        $this->db->set('last_updated', $date);
+        $date = date('Y-m-d H:i:s');
+        $update_array['last_updated'] = $date;
         $this->db->update('project', $update_array, array('project_id' => $update_array['project_id']));
         //echo var_dump($this->db->error());
         return $this->db->affected_rows();
@@ -88,6 +87,7 @@ class Project_model extends CI_Model {
         //echo var_dump($tag_array);
         return array_unique($tag_array);
     }
+
     /*
     private function field_check($project_array){
         $fields=['c_id','title','first_name','last_name','company_name','password_hash'

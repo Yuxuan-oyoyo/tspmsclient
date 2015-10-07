@@ -23,10 +23,20 @@ class Project_phase_model extends CI_Model {
         }
         return null;
     }
-
+/*
     public function retrieve_phase_by_id($current_project_phase_id){
         $query = $this->db->query("select phase_id from project_phase where project_phase_id=?",[$current_project_phase_id]);
         return $query->result_array();
+    }
+*/
+    public function retrieve__by_id($current_project_phase_id){
+        if(isset($current_project_phase_id)){
+            $query = $this->db->get_where("project_phase",["project_phase_id"=>$current_project_phase_id]);
+            if( $query->num_rows()>0){
+                return $query->row_array();
+            }
+        }
+        return null;
     }
 
     public function retrieveAll($is_ongoing){
@@ -50,11 +60,16 @@ class Project_phase_model extends CI_Model {
         $date = date('Y-m-d H:i:s');
         $update_array['last_updated'] = $date;
         $update_array['end_time'] = $date;
-        $this->db->update('project_phase', $update_array, array('project_phase_id' => $update_array['current_project_phase_id']));
-        $next_project_phase_id =$update_array['current_project_phase_id']+1;
+        $affected_rows1 = $this->db->update('project_phase', $update_array, array('project_phase_id' => $update_array['project_phase_id']));
+
+        $next_project_phase_id =$update_array['project_phase_id']+1;
+        $start_next_phase_array = $this->retrieve__by_id($next_project_phase_id);
         $start_next_phase_array['start_time'] = $date;
-        $start_next_phase_array['last_update'] = $date;
-        $this->db->update('project_phase', $start_next_phase_array, array('project_phase_id' => $update_array['next_project_phase_id']));
+        $start_next_phase_array['last_updated'] = $date;
+        $start_next_phase_array['estimated_end_time'] = $update_array['estimated_end_time'];
+        $affected_rows2 = $this->db->update('project_phase', $start_next_phase_array, array('project_phase_id' => $next_project_phase_id));
+        echo $affected_rows1;
+        echo $affected_rows2;
     }
 
     public function insert($insert_array){

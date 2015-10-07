@@ -166,7 +166,7 @@ class Projects extends CI_Controller {
     public function view_upadtes($project_id){
         $project = $this->Project_model->retrieve_by_id($project_id);
         $current_project_phase_id = $project['current_project_phase_id'];
-        $current_phase_array = $this->Project_phase_model->retrieve_phase_by_id($current_project_phase_id);
+        $current_phase_array = $this->Project_phase_model->retrieve__by_id($current_project_phase_id);
         $current_phase = $current_phase_array['phase_id'];
         $this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
     }

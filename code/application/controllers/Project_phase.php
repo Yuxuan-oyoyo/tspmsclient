@@ -14,6 +14,7 @@ class Project_phase extends CI_Controller{
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->model("Project_phase_model");
+        $this->load->model("Project_model");
     }
 /*
     public function index(){
@@ -37,12 +38,19 @@ class Project_phase extends CI_Controller{
         }
     }
 
-    public function update_phase($data){
-        $project_id = $data['project_id'];
-        $current_project_phase_id = $data['current_project_phase_id'];
-        $update_array['estimated_end_time']=$this->input->get("estimated_end_time");
-        $update_array['current_project_phase_id'] = $current_project_phase_id;
+    public function update_phase($project_id,$current_project_phase_id){
+        //echo $project_id;
+        //echo $current_project_phase_id;
+        $update_array = $this->Project_phase_model->retrieve__by_id($current_project_phase_id);
+        $current_phase_id = $update_array['phase_id'];
+        $next_phase = $current_phase_id+1;
+        $update_array['estimated_end_time']=$this->input->post("estimated_end_time");
         $this->Project_phase_model->update($update_array);
-        $this->Project_model->update_current_project_phase();
+
+        $update_array_project = $this->Project_model->retrieve_by_id($project_id);
+        $next_project_phase_id = $current_project_phase_id+1;
+        $update_array_project['current_project_phase_id'] = $next_project_phase_id;
+        $this->Project_model->update($update_array_project);
+        $this->load->view('project/project_update',$data=["project"=>$this->Project_model->retrieve_by_id($project_id),"current_phase"=>$next_phase,"current_project_phase_id"=>$next_project_phase_id]);
     }
 }
