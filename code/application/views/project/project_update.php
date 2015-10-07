@@ -175,14 +175,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-            #1. Inventory Management System
+            <?php $p = $project;?>
+            <?='#'.$p['project_id'].' '.$p['project_title']?>
             <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#updatePhaseModal"><i class="fa fa-pencil-square-o"></i>&nbsp;Update phase</button>
         </h1>
     </div>
 
     <!-- /.row -->
     <?php
-        $p = $project;
         $src1 = "/tspms/ui/img/current.png";
         $src2 = "/tspms/ui/img/future.png";
         $src3 = "/tspms/ui/img/future.png";
