@@ -289,22 +289,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" >New Update</h4>
             </div>
-            <div class="modal-body">
-                <form role="form">
+            <form role="form" action="<?=base_url().'Updates/add_new_update/'.$p['project_id'].'/'.$current_project_phase_id.'/'.$current_phase?>" method="post">
+                <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Title:</label>
-                        <input type="text" class="form-control"  id="update_title" >
+                        <input name="update_header" type="text" class="form-control"  id="update_title" >
                     </div>
                     <div class="form-group">
                         <label for="description">Content:</label>
-                        <textarea class="form-control" rows="4" id="description"></textarea>
+                        <textarea name="update_body" class="form-control" rows="4" id="description"></textarea>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Submit</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
+                </div>
+            </form>
+
         </div>
     </div>
 </div>

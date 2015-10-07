@@ -338,7 +338,6 @@ CREATE TABLE IF NOT EXISTS `update` (
   `update_id` int(11) NOT NULL AUTO_INCREMENT,
   `post_id` int(11) NOT NULL,
   `posted_by` varchar(50) NOT NULL,
-  `last_updated` timestamp NOT NULL,
   `status` tinyint(4) NOT NULL,
   PRIMARY KEY (`update_id`),
   UNIQUE KEY `unique_update_id` (`update_id`),

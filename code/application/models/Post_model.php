@@ -15,11 +15,11 @@ class Post_model extends CI_Model{
         $this->load->helper("date");
     }
 
-    public function insert_milestone($insert_array){
+    public function insert($insert_array,$type){
         $date = date('Y-m-d H:i:s');
         $insert_array['last_updated'] = $date;
         $insert_array['datetime_created'] = $date;
-        $insert_array['type'] = 'milestone';
+        $insert_array['type'] = $type;
         $this->db->insert('post', $insert_array);
         $post_id = $this->db->insert_id();
         return $post_id;
