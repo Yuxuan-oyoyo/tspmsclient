@@ -9,64 +9,37 @@
 //namespace model;
 
 
-class Milestone_model extends CI_Model
-{
+class Milestone_model extends CI_Model{
     public function __construct()
     {
         // Call the CI_Model constructor
         parent::__construct();
         $this->load->helper("date");
     }
-    public function retrieve($milestone_id){
-        if(isset($input_c_id)){
-            $query = $this->db->get_where("customer",["c_id"=>$input_c_id]);
+    public function retrieve_by_id($milestone_id){
+        if(isset($milestone_id)){
+            $query = $this->db->get_where("milestone",["milestone_id"=>$milestone_id]);
             if( $query->num_rows()>0){
                 return $query->row_array();
             }
         }
         return null;
     }
-    public function retrieveAll($only_active=true,$limit=0,$offset=0){
-        $where = [];
-        if(isset($input_c_id)){
-            if($only_active){
-                $where["is_active"]=1;
-            }
-        }
-        $query = $this->db->get_where("customer",$where,$limit,$offset);
-        return $query->result_array();
-    }
+    /*
+    public function retrieve_by_project($project_id){
 
-    public function update($update_array){
-        $date = date('Y-m-d H:i:s');
-        $update_array['last_updated'] = $date;
-        $this->db->update('customer', $update_array, array('c_id' => $update_array['c_id']));
-        return $this->db->affected_rows();
+    }
+    */
+    public function retrieve_by_project_phase_id($project_phase_id){
+        if(isset($project_phase_id)){
+            $query = $this->db->query("select * from post p,milestone m where p.post_id=m.post_id and p.project_phase_id=?",[$project_phase_id]);
+            return $query->result_array();
+        }
+        return null;
     }
     public function insert($insert_array){
-        $date = date('Y-m-d H:i:s');
-        $update_array['last_updated'] = $date;
-        return $this->db->insert('customer', $insert_array);
+        $insert_array['if_missed'] = 0;
+        return $this->db->insert('milestone', $insert_array);
     }
-    //not in use
-    public function deactivate($input_c_id){
-        $date = date('Y-m-d H:i:s');
-        $update_array['last_updated'] = $date;
-        $this->db->update('customer', ["is_active"=>0], array('c_id' => $input_c_id));
-        return $this->db->affected_rows();
-    }
-    private function field_check($customer_array){
-        $fields=['c_id','title','first_name','last_name','company_name','password_hash'
-            ,'hp_number','email','is_active'];
-        foreach( $fields as $field){
-            if(!array_key_exists($field,$customer_array)){
-                return false;
-            }
-        }
-        return true;
-    }
-    public function delete($input_c_id){
-        $this->db->delete("customer",['c_id'=>$input_c_id]);
-        return $this->db->affected_rows();
-    }
+
 }

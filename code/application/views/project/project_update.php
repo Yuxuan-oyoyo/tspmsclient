@@ -188,21 +188,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         $src3 = "/tspms/ui/img/future.png";
         $src4 = "/tspms/ui/img/future.png";
         $src5 = "/tspms/ui/img/future.png";
+        $current_phase_name = "Lead";
         $next_phase = "Requirement";
         if($current_phase==2){
             $src1 = "/tspms/ui/img/done.png";
             $src2 = "/tspms/ui/img/current.png";
+            $current_phase_name = "Requirement";
             $next_phase = "Build";
         }elseif($current_phase==3){
             $src1 = "/tspms/ui/img/done.png";
             $src2 = "/tspms/ui/img/done.png";
             $src3 = "/tspms/ui/img/current.png";
+            $current_phase_name = "Build";
             $next_phase = "Testing";
         }elseif($current_phase==4){
             $src1 = "/tspms/ui/img/done.png";
             $src2 = "/tspms/ui/img/done.png";
             $src3 = "/tspms/ui/img/done.png";
             $src4 = "/tspms/ui/img/current.png";
+            $current_phase_name = "Testing";
             $next_phase = "Deploy";
         }elseif($current_phase==5){
             $src1 = "/tspms/ui/img/done.png";
@@ -210,6 +214,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             $src3 = "/tspms/ui/img/done.png";
             $src4 = "/tspms/ui/img/done.png";
             $src5 = "/tspms/ui/img/current.png";
+            $current_phase_name = "Deploy";
         }
     ?>
     <div class="row no-gutter">
@@ -244,7 +249,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
             <div class="col-lg-4">
 
-                <h3>Milestones - <small>Build</small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <h3>Milestones - <small><?=$current_phase_name?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="panel panel-default calendar">
@@ -311,26 +316,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" >New Milestone</h4>
             </div>
-            <div class="modal-body">
-                <form role="form">
+
+            <form role="form" action="<?=base_url().'Milestones/add_new_milestone/'.$p['project_id'].'/'.$current_project_phase_id.'/'.$current_phase?>" method="post">
+                <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Title:</label>
-                        <input type="text" class="form-control"  id="milestone_title" >
+                        <input name="header" type="text" class="form-control"  id="milestone_title" >
                     </div>
                     <div class="form-group">
                         <label for="title">Deadline:</label>
-                        <input type="text" class="form-control"  id="deadline" >
+                        <input name="deadline" type="text" class="form-control"  id="deadline" >
                     </div>
                     <div class="form-group">
                         <label for="milestone_description">Description:</label>
-                        <textarea class="form-control" rows="4" id="milestone_description"></textarea>
+                        <textarea name="body" class="form-control" rows="4" id="milestone_description"></textarea>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Submit</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
+                </div>
+            </form>
         </div>
     </div>
 </div>
