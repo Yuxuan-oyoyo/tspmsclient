@@ -35,6 +35,14 @@ class Customer_model extends CI_Model
         }
         return null;
     }
+    public function retrieve_by_username($username){
+        if(isset($username)){
+            $query = $this->db->get_where("customer",["username"=>$username]);
+            return $query->row_array();
+        }
+        return null;
+    }
+
     public function retrieveAll($only_active=true,$limit=0,$offset=0){
         $where = [];
         if(isset($input_c_id)){

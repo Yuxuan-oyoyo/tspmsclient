@@ -152,6 +152,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <th>Title</th>
                 <th>First Name</th>
                 <th>Last Name</th>
+                <th>Username</th>
                 <th>Company</th>
                 <th>hp number</th>
                 <th>Other number</th>
@@ -166,6 +167,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <tr><td><?=$c['title']?></td>
                             <td><?=$c['first_name']?></td>
                             <td><?=$c['last_name']?></td>
+                            <td><?=$c['username']?></td>
                             <td><?=$c['company_name']?></td>
                             <td><?=$c['hp_number']?></td>
                             <td><?=$c['other_number']?></td>
