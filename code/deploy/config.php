@@ -19,7 +19,7 @@
 /*{{{ Auxiliary variables, used only for constructing $CONFIG and $PROJECTS  */
 
 //$HOME_PATH = '/home/g/goldenjeru/golden/';
-$REPOSITORIES_PATH ='/home/ec2-user/tspms.git';
+$REPOSITORIES_PATH ='/home/ec2-user/';
 $PROJECTS_PATH = '/var/app/current/tspms';
 
 /*}}}*/

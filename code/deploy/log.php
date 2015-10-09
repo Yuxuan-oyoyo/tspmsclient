@@ -14,7 +14,7 @@
 /*{{{ Global variables */
 
 $_LOG_FILE = 'log.txt'; // log file name
-$_LOG_ENABLED = false; // set to 'true' for enabling logging
+$_LOG_ENABLED = true; // set to 'true' for enabling logging
 
 /*}}}*/
 
@@ -36,9 +36,11 @@ function _LOG ($s)/*{{{*/
 }/*}}}*/
 function _LOG_VAR ($s,$p)/*{{{*/
 {
+    echo $s.": ".print_r($p,true);
     _LOG($s.": ".print_r($p,true));
 }/*}}}*/
 function _ERROR ($s)/*{{{*/
 {
+    echo $s;
     _LOG('ERROR: '.$s);
 }/*}}}*/
