@@ -172,14 +172,15 @@ class Projects extends CI_Controller {
         if($customer_project){
             //customer has more than one project
             if(sizeof($customer_project)>1){
-
+                $this->load->view('customer/project_list',$data=["projects"=>$customer_project]);
             }else{
-                $this->customer_view($customer_project[0]);
+                $this->customer_view($customer_project[0]['project_id']);
             }
         }
     }
 
-    public function customer_view($project){
+    public function customer_view($project_id){
+        $project = $this->Project_model->retrieve_by_id($project_id);
         if($project){
             $data=array("project"=>$project,
                     "phases"=>$this->Project_phase_model->retrieve_by_project_id($project['project_id'])

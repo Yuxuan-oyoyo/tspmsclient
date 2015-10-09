@@ -63,7 +63,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             $img_tag='img/future.png';
                 if(isset($phase['project_phase_id'])){
                     $img_tag = 'img/done.png';
-                    if ($phase['project_phase_id'] == $project['current_project_phase_id']){
+                    if ($phase['phase_id'] == $project['current_project_phase_id']){
                         $img_tag = 'img/current.png';
                     }
 

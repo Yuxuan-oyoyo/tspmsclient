@@ -7,7 +7,7 @@
     <!-- Top Menu Items -->
     <ul class="nav navbar-nav">
         <li  class="active">
-            <a href="customerMainpage.html"><i class="fa fa-fw fa-bar-chart-o"></i>My Project</a>
+            <a href="<?=base_url()?>projects/customer_overview/<?=$this->session->userdata('Customer_cid')?>"><i class="fa fa-fw fa-tasks"></i>My Projects</a>
         </li>
         <li>
             <a href="chat.html"><i class="fa fa-fw fa-comment"></i>Message</a>
