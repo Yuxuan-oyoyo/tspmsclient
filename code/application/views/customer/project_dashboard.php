@@ -52,6 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="col-lg-12">
         <h1 class="page-header">
            <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>
+            <a href="<?=$project['staging_link']?>" class="btn btn-primary"><i class="fa fa-external-link"></i>&nbsp;Project Preview</a>
         </h1>
         <h4 style="color:darkgrey">Click each phase on timeline to check updates for each phase.</h4>
     </div>
