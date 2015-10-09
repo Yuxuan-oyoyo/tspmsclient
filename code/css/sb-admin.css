@@ -154,9 +154,44 @@ ul.alert-dropdown {
         border-radius: 0;
     }
     .customer-info textarea{
-        border:2px solid;
+        border:2px solid #1abc9c;
         border-radius: 0;
     }
+    .ongoing-panel{
+        margin-top: 10px;
+        border: 2px solid #1abc9c;
+        border-radius: 0;
+    }
+
+
+    .ongoing-panel>.panel-heading span {
+        font-size: 15px;
+    }
+    .ongoing-panel >.panel-heading {
+        background: #1abc9c;
+        color: #FFFFFF;
+        height:72px;
+        font-size:18px;
+
+    }
+    .past-panel{
+        margin-top: 10px;
+        border: 2px solid #7f8c8d;
+        border-radius: 0;
+    }
+
+
+    .past-panel>.panel-heading span {
+        font-size: 15px;
+    }
+    .past-panel >.panel-heading {
+        background: #7f8c8d;
+        color: #FFFFFF;
+        height:72px;
+        font-size:18px;
+
+    }
+
 
 
 
