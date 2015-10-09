@@ -1,36 +1,33 @@
 <?php
-$repo_dir = '/home/ec2-user/tspms.git';
-$web_root_dir = '/var/app/current/tspms';
 
-// Full path to git binary is required if git is not in your PHP user's path. Otherwise just use 'git'.
-$git_bin_path = 'git';
+/*{{{ v.150906.001 (0.0.1)
 
-$update = false;
+	Bitbucket webhook interface.
 
-// Parse data from Bitbucket hook payload
-$payload = json_decode($_POST['payload']);
+	Based on 'Automated git deployment' script by Jonathan Nicoal:
+	http://jonathannicol.com/blog/2013/11/19/automated-git-deployments-from-bitbucket/
 
-if (empty($payload->commits)){
-    // When merging and pushing to bitbucket, the commits array will be empty.
-    // In this case there is no way to know what branch was pushed to, so we will do an update.
-    $update = true;
-} else {
-    foreach ($payload->commits as $commit) {
-        $branch = $commit->branch;
-        if ($branch === 'production' || isset($commit->branches) && in_array('production', $commit->branches)) {
-            $update =	true;
-            break;
-        }
-    }
-}
+	See README.md and CONFIG.php
 
-if ($update) {
-    // Do a git checkout to the web root
-    exec('cd ' . $repo_dir . ' && ' . $git_bin_path  . ' fetch');
-    exec('cd ' . $repo_dir . ' && GIT_WORK_TREE=' . $web_root_dir . ' ' . $git_bin_path  . ' checkout -f');
+	---
+	Igor Lilliputten
+	mailto: igor at lilliputten dot ru
+	http://lilliputtem.ru/
 
-    // Log the deployment
-    $commit_hash = shell_exec('cd ' . $repo_dir . ' && ' . $git_bin_path  . ' rev-parse --short HEAD');
-    file_put_contents('deploy.log', date('m/d/Y h:i:s a') . " Deployed branch: " .  $branch . " Commit: " . $commit_hash . "\n", FILE_APPEND);
-}
-?>
+}}}*/
+
+// Initalize:
+require_once('log.php');
+require_once('bitbucket.php');
+
+// Load config:
+include('CONFIG.php');
+
+// Let's go:
+initLog(); // Initalize log variables
+initPayload(); // Get posted data
+fetchParams(); // Get parameters from bitbucket payload (REPO)
+checkPaths(); // Check repository and project paths; create them if neccessary
+placeVerboseInfo(); // Place verbose log information if specified in config
+fetchRepository(); // Fetch or clone repository
+checkoutProject(); // Checkout project into target folder
