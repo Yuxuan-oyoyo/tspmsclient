@@ -40,7 +40,9 @@ class Customers extends CI_Controller {
         $update_array["hp_number"]=$this->input->get("hp_number");
         $update_array["other_number"]=(trim($this->input->get("other_number"))!="-")?
             ($this->input->get("other_number")):null;
+        $update_array["username"]=$this->input->get("username");
         $update_array["password_hash"]=password_hash($this->input->get("password"),PASSWORD_DEFAULT);
+
 
         $affected_rows = $this->Customer_model->insert($update_array);
         echo $affected_rows;

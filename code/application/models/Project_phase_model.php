@@ -29,7 +29,7 @@ class Project_phase_model extends CI_Model {
         return $query->result_array();
     }
 */
-    public function retrieve__by_id($current_project_phase_id){
+    public function retrieve_by_id($current_project_phase_id){
         if(isset($current_project_phase_id)){
             $query = $this->db->get_where("project_phase",["project_phase_id"=>$current_project_phase_id]);
             if( $query->num_rows()>0){
@@ -37,6 +37,12 @@ class Project_phase_model extends CI_Model {
             }
         }
         return null;
+    }
+
+    public function retrieve_by_project_id($project_id){
+        $sql = 'SELECT * from phase left join project_phase on project_phase.phase_id = phase.phase_id and project_phase.project_id=? order by phase.phase_id ';
+        $query=$this->db->query($sql,array($project_id));
+        return $query->result_array();
     }
 
     public function retrieveAll($is_ongoing){

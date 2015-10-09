@@ -30,6 +30,20 @@ class Project_model extends CI_Model {
         }
         return null;
     }
+
+    public function retrieve_by_c_id($input_c_id){
+        if(isset($input_c_id)){
+            /*$sql = "SELECT project_phase.*,phase.phase_name,project.* FROM `project_phase`,`phase`,`project` WHERE project_phase.project_id = project.project_id and phase.phase_id=project_phase.phase_id and project.project_id =?";
+            $query = $this->db->query($sql, array($input_p_id));
+            return $query->row_array();*/
+            $query = $this->db->get_where("project",["c_id"=>$input_c_id]);
+            if( $query->num_rows()>0){
+                return $query->result_array();
+            }
+        }
+        return null;
+    }
+
     public function retrieve_by_title($input_p_title){
         if(isset($input_p_title)){
             $query = $this->db->get_where("project",["project_title"=>$input_p_title]);

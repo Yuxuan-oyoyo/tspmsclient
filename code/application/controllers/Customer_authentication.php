@@ -25,41 +25,39 @@ class Customer_authentication extends CI_Controller {
             $this->session->sess_destroy();
             $this->session->set_userdata('message','You have been logged out.');
         }
-        /*
+
         $this->load->library('form_validation');
         $this->form_validation->set_rules('username', 'Username', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
 
-        if ($this->form_validation->run())
-        {
-         */
+        if ($this->form_validation->run()) {
             //first, get the staff user object
-            if($user = $this->Customer_model->retrieve_by_username($this->input->post('username'))){
+            if ($user = $this->Customer_model->retrieve_by_username($this->input->post('username'))) {
                 //next, match the password hashes
-                if($user['status']=='Active') {
+                if ($user['is_active'] == 1) {
                     $this->load->library('encrypt');
                     if (password_verify($this->input->post('password'), $user['password_hash'])) {
                         //set session data
                         $this->session->set_userdata('Customer_cid', $user['c_id']);
                         //redirect to successpage
-                        redirect('/customer_authentication/login/');
+                         redirect('/projects/customer_overview/'.$user['c_id']);
 
                     } else {
                         $this->session->set_userdata('message', 'Username/password mismatch.');
                     }
-                }else{
-                    $this->session->set_userdata('message','Your account has been deactivated, please contact admin.');
+                } else {
+                    $this->session->set_userdata('message', 'Your account has been deactivated, please contact admin.');
                 }
-            }else{
-                $this->session->set_userdata('message','Invalid username/password.');
+            } else {
+                $this->session->set_userdata('message', 'hello' . $user['username']);
             }
-        $this->load->view('customer/login');
-       /* }
-        else
+            $this->load->view('customer/login');
+
+        }else
         {
-            $this->load->view('authenticate/login');
+            $this->load->view('customer/login');
         }
-       */
+
     }
 
 /*

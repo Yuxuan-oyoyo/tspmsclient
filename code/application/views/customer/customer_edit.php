@@ -6,9 +6,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <head lang="en">
     <?php $this->load->view('common/common_header');?>
     <meta charset="UTF-8">
-    <!-- Bootstrap Core CSS -->
-    <link href="<?=base_url().'css/bootstrap.min.css'?>" rel="stylesheet">
-    <link href="<?=base_url().'css/bootstrap.min.css'?>" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="<?=base_url().'css/sb-admin.css'?>" rel="stylesheet">

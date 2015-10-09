@@ -158,16 +158,34 @@ class Projects extends CI_Controller {
         $this->load->view('project/project_update',$data=["project"=>$this->Project_model->retrieve_by_id($project_id)]);
     }
 
-    public function _set_validation_rules_for_new_additional_video_form(){
-        $this->form_validation->set_rules('title','Title','trim|required|max_length[512]');
-        $this->form_validation->set_rules('embed_code','Embed Code','trim|required');
-    }
 
     public function view_upadtes($project_id){
         $project = $this->Project_model->retrieve_by_id($project_id);
         $current_project_phase_id = $project['current_project_phase_id'];
-        $current_phase_array = $this->Project_phase_model->retrieve__by_id($current_project_phase_id);
+        $current_phase_array = $this->Project_phase_model->retrieve_by_id($current_project_phase_id);
         $current_phase = $current_phase_array['phase_id'];
         $this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
+    }
+
+    public function customer_overview($c_id){
+        $customer_project = $this->Project_model->retrieve_by_c_id($c_id);
+        if($customer_project){
+            //customer has more than one project
+            if(sizeof($customer_project)>1){
+
+            }else{
+                $this->customer_view($customer_project[0]);
+            }
+        }
+    }
+
+    public function customer_view($project){
+        if($project){
+            $data=array("project"=>$project,
+                    "phases"=>$this->Project_phase_model->retrieve_by_project_id($project['project_id'])
+
+            );
+            $this->load->view('customer/project_dashboard',$data);
+        }
     }
 }
