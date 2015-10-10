@@ -56,6 +56,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <input type="radio" name="is_active" value="1" checked>Active
                             <input type="radio" name="is_active" value="0">Inactive
                         </span>
+                         <span cus-attr="password">
+                            <input name="password" value="" size="20" placeholder="password">
+                        </span>
+                        <span cus-attr="password">
+                            <input name="password" value="" size="20" placeholder="password">
+                        </span>
 
                     </p>
                         <a href="#" id="submit">submit</a>
