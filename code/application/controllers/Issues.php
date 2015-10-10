@@ -17,22 +17,32 @@ class Issues extends CI_Controller {
     public function index() {
         $this->list_all();
     }
-    public function list_all(){
+    public function list_all($repo_slug=null){
         $this->load->library('BB_issues');
-        $search = $this->input->get("search");
-        $sort   = $this->input->get("sort");
-        $limit  = $this->input->get("limit");
-        $start  = $this->input->get("start");
-        $repo_slug = $this->input->get("repo_slug");
-        $repo_slug="tspms";
-        //TODO:add filters
-        $para['search'] = isset($search)? $search:null;
-        $para['sort'] = isset($sort)? $sort:null;
-        $para['limit'] = isset($limit)? $limit:null;
-        $para['start'] = isset($start)? $start:null;
 
+        $opt_params = ["search","sort","limit","start"];
+        $para_input = $this->input->get($opt_params,true);
+        foreach($para_input as $key=>$value){
+            if(!empty($value)){
+                $para[$key] = $value;
+            }
+        }
+        if(empty($repo_slug)){
+            die("repo_slug is unset");
+            //TODO:may need to implement global selection
+        }else{
+            $para['repo_slug'] = $repo_slug;
+        }
+        $repo_slug="tspms";
+        //TODO:validate parameters
         $issues = $this->bb_issues->retrieveIssues($repo_slug, $para);
         echo var_dump($issues);
 
+    }
+    public function test(){
+        $this->load->library("BB_shared");
+        $this->load->library("BB_issues");
+        echo var_dump($this->bb_issues->retrieveIssues('tspms'));
+        //echo var_dump($this->bb_shared->getDefaultOauthToken());
     }
 }

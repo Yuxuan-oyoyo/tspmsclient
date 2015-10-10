@@ -5,8 +5,11 @@ define('DEFAULT_PASSWORD',"000000");
 
 define('BB_OAUTH_KEY','8vXufhWDTtZzABhm9F');
 define('BB_OAUTH_SECRET','QVmgEWjVfzCCkkxCNZe7GBZGBrn8wTAz');
+//define('BB_OAUTH_KEY','XveH53vHkVSZ2vu473');
+//define('BB_OAUTH_SECRET','MBCwpRSXX5H2xJYgsk58vNhRnqepsJr5');
 
 define('BB_ACCOUNT_NAME','smuremix');
+//define('BB_ACCOUNT_NAME','luning1994');
 /*
 |--------------------------------------------------------------------------
 | File and Directory Modes

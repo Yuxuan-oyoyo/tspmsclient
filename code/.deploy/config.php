@@ -32,7 +32,7 @@ $CONFIG = array(
     'log' => true, // Enable logging, optional
     'logFile' => 'bitbucket.log', // Logging file name, optional
     // 'logClear' => true, // clear log each time, optional
-    // 'verbose' => true, // show debug info in log, optional
+     'verbose' => true, // show debug info in log, optional
     // 'folderMode' => 0700, // creating folder mode, optional
 );
 
