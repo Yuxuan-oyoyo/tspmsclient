@@ -6,9 +6,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <head lang="en">
     <?php $this->load->view('common/common_header');?>
     <meta charset="UTF-8">
-    <!-- Bootstrap Core CSS -->
-    <link href="<?=base_url().'css/bootstrap.min.css'?>" rel="stylesheet">
-    <link href="<?=base_url().'css/bootstrap.min.css'?>" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="<?=base_url().'css/sb-admin.css'?>" rel="stylesheet">
@@ -136,7 +133,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </ul>
 </nav>
 
-<div class="col-lg-offset-1 col-lg-5 content">
+<div class="col-lg-offset-1 col-lg-10 content">
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
@@ -146,8 +143,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <?php $c=$customer;?>
     <div class="row">
-        <div class="col-lg-12">
-            <form role="form" action="<?=base_url().'Customers/edit/'.$c["c_id"]?>" method="post">
+        <form role="form" action="<?=base_url().'Customers/edit/'.$c["c_id"]?>" method="post">
+        <div class="col-lg-5 customer-info">
                 <div class="form-group">
 
                     <label for="title">Title:</label>
@@ -189,11 +186,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <?php endif?>
                     </select>
                 </div>
+            </div>
+            <div class="col-lg-offset-1 col-lg-5 customer-info">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input name="username" id="username" disabled type="text" class="form-control" value=<?=$c['username']?>>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label><br>
+                    <button class="btn btn-default">Click here to reset</button>
+                </div>
                 <div class="pull-right">
                     <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
                     <!--<a href="//?base_url().'Customers/edit/'.$c["c_id"]?" class="btn btn-primary">Submit</a>-->
                     <a href="<?=base_url().'Customers/list_all'?>" class="btn btn-default">Cancel</a>
                 </div>
+            </div>
+
             </form>
         </div>
 

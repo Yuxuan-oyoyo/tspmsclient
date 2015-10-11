@@ -1,27 +1,23 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-?>
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head lang="en">
-    <?php $this->load->view('common/common_header');?>
     <meta charset="UTF-8">
     <!-- Bootstrap Core CSS -->
-    <link href="<?=base_url().'css/bootstrap.min.css'?>" rel="stylesheet">
-    <link href="<?=base_url().'css/bootstrap.min.css'?>" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+
+
 
     <!-- Custom CSS -->
-    <link href="<?=base_url().'css/sb-admin.css'?>" rel="stylesheet">
+    <link href="css/sb-admin.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Francois+One" />
-    <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
+    <link rel="stylesheet" href="css/sidebar-left.css">
     <!-- Custom Fonts -->
-    <link href="<?=base_url().'css/font-awesome.min.css'?>" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <!-- jQuery -->
-    <script src="<?=base_url().'js/jquery.js'?>"></script>
+    <script src="js/jquery.js"></script>
     <!-- Bootstrap Core JavaScript -->
-    <script src="<?=base_url().'js/bootstrap.min.js'?>"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -31,15 +27,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
     <![endif]-->
-
     <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+        $(function () {
+
+            var links = $('.sidebar-links > a');
+
+            links.on('click', function () {
+
+                links.removeClass('selected');
+                $(this).addClass('selected');
+            })
+        });
         $(document).ready(function(){
-            $('#customerTable').dataTable();
+            $('#issueTable').dataTable();
         });
     </script>
 </head>
-
 <body>
+
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -56,14 +64,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <li>
             <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
         </li>
-        <li>
+        <li  class="active">
             <a href="projects.html"><i class="fa fa-fw fa-bar-chart-o"></i> Projects</a>
         </li>
         <li>
             <a href="chat.html"><i class="fa fa-fw fa-comment"></i> Message</a>
         </li>
-        <li  class="active">
-            <a href="<?=base_url().'Customers/list_all'?>"><i class="fa fa-fw fa-users"></i>Customer</a>
+        <li>
+            <a href="customers.html"><i class="fa fa-fw fa-users"></i>Customer</a>
         </li>
         <li>
             <a href="customers.html"><i class="fa fa-fw fa-line-chart"></i>Analytics</a>
@@ -137,56 +145,95 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </ul>
 </nav>
 
-<div class="col-lg-offset-1 col-lg-10 content">
+
+<div class="col-lg-offset-1 content">
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-            Customers
+            Projects
+            <a href="newProject.html" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Project</a>
         </h1>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            <table class="table table-striped" id="customerTable">
-                <thead>
-                <th>Title</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-                <th>Company</th>
-                <th>hp number</th>
-                <th>Other number</th>
-                <th>Email</th>
-                <th>Status</th>
-                <th>Projects</th>
-                <th></th>
-                </thead>
-
-                <?php if(!false == $customers):?>
-                    <?php foreach($customers as $c):?>
-                        <tr><td><?=$c['title']?></td>
-                            <td><?=$c['first_name']?></td>
-                            <td><?=$c['last_name']?></td>
-                            <td><?=$c['username']?></td>
-                            <td><?=$c['company_name']?></td>
-                            <td><?=$c['hp_number']?></td>
-                            <td><?=$c['other_number']?></td>
-                            <td><?=$c['email']?></td>
-                            <td>
-                                <?php if($c['is_active']==1):?>
-                                    Active
-                                <?php else:?>
-                                    Deactivated
-                                <?php endif?>
-                            </td>
-                            <td>Projects</td>
-                            <td><a href="<?=base_url().'Customers/update_customer/'.$c["c_id"]?>" class="btn btn-primary" type="button" ><i class="fa fa-pencil-square-o"></i></a></td>
+        <ul class="nav nav-tabs">
+            <li ><a href="projects.html">Ongoing Projects</a></li>
+            <li class="active"><a href="#">Past Projects</a></li>
+        </ul>
+        <div class=" col-lg-4">
+            <div class="panel past-panel">
+                <div class="panel-heading" style="text-align:center" ><strong>#1 Project Inventory Management System</strong></div>
+                <div class="panel-body" style="font-size:15px" >
+                    <table class="table table-condensed">
+                        <tr>
+                            <td><i class="fa fa-calendar-check-o"></i>&nbsp;<strong>End Date </strong></td>
+                            <td>08-09-2015</td>
                         </tr>
-                    <?php endforeach?>
-                <?php endif?>
-            </table>
+                        <tr>
+                            <td> <i class="fa fa-link"></i>&nbsp;<strong>Staging link </strong></td>
+                            <td> <a href="http://fortawesome.github.io/Font-Awesome/icon/link/">Click here</a></td>
+                        </tr>
+                        <tr>
+                            <td>  <i class="fa fa-user"></i>&nbsp;<strong>Customer </strong></td>
+                            <td> <a href="#">Gary Lee</a></td>
+                        </tr>
+                    </table>
+
+                    <a href="projectDashboard.html" class="btn pull-right btn-info"><i class="fa fa-eye"></i> &nbsp;View</a>
+
+                </div>
+            </div>
+        </div>
+        <div class=" col-lg-4">
+            <div class="panel past-panel">
+                <div class="panel-heading" style="text-align:center" ><strong>#2 Taxi Booking System</strong></div>
+                <div class="panel-body" style="font-size:15px" >
+                    <table class="table table-condensed">
+                        <tr>
+                            <td><i class="fa fa-calendar-check-o"></i>&nbsp;<strong>End Date </strong></td>
+                            <td>08-09-2015</td>
+                        </tr>
+                        <tr>
+                            <td> <i class="fa fa-link"></i>&nbsp;<strong>Staging link </strong></td>
+                            <td> <a href="http://fortawesome.github.io/Font-Awesome/icon/link/">Click here</a></td>
+                        </tr>
+                        <tr>
+                            <td>  <i class="fa fa-user"></i>&nbsp;<strong>Customer </strong></td>
+                            <td> <a href="#">Gary Lee</a></td>
+                        </tr>
+                    </table>
+
+                    <a href="projectDashboard.html" class="btn pull-right btn-info"><i class="fa fa-eye"></i> &nbsp;View</a>
+                </div>
+            </div>
+        </div>
+
+        <div class=" col-lg-4">
+            <div class="panel past-panel">
+                <div class="panel-heading" style="text-align:center" ><strong>#3 Account Management System at Liniwd Sjff</strong></div>
+                <div class="panel-body" style="font-size:15px" >
+                    <table class="table table-condensed">
+                        <tr>
+                            <td><i class="fa fa-calendar-check-o"></i>&nbsp;<strong>End Date </strong></td>
+                            <td>08-09-2015</td>
+                        </tr>
+                        <tr>
+                            <td> <i class="fa fa-link"></i>&nbsp;<strong>Staging link </strong></td>
+                            <td> <a href="http://fortawesome.github.io/Font-Awesome/icon/link/">Click here</a></td>
+                        </tr>
+                        <tr>
+                            <td>  <i class="fa fa-user"></i>&nbsp;<strong>Customer </strong></td>
+                            <td> <a href="#">Gary Lee</a></td>
+                        </tr>
+                    </table>
+
+                    <a href="projectDashboard.html" class="btn pull-right btn-info"><i class="fa fa-eye"></i> &nbsp;View</a>
+
+                </div>
+            </div>
         </div>
     </div>
+
+
+    <!-- /#page-content-wrapper -->
+
 </div>
 </body>
 </html>
