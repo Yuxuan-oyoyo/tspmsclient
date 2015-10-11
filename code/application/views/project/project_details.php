@@ -60,7 +60,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         Status:
                         <span project-attr="is_ongoing"><?=$p['is_ongoing']==1?"Ongoing":"Closed"?></span>
                      </p>
-                    <a href="<?=base_url().'Projects/edit_div/'.$p['project_id']?>" class="btn btn-info">Edit..</a>
+                    <a href="<?=base_url().'Projects/edit/'.$p['project_id']?>" class="btn btn-info">Edit..</a>
                 </div>
             </div>
         <?php endif?>
