@@ -22,12 +22,14 @@ class Projects extends CI_Controller {
         $this->load->model("Project_model");
         $this->load->model("Customer_model");
         $this->load->model("Project_phase_model");
+        $this->load->model("Milestone_model");
+        $this->load->model("Update_model");
     }
 
     public function index()
     {
         //This is for testing project_update, please comment the next line and uncomment next next line
-        //$this->view_upadtes(123);
+        //$this->view_upadtes(2);
         $this->list_all();
     }
 
@@ -160,13 +162,33 @@ class Projects extends CI_Controller {
         $this->load->view('project/project_update',$data=["project"=>$this->Project_model->retrieve_by_id($project_id)]);
     }
 
-
-    public function view_upadtes($project_id){
+    public function retrieveDataForProjectUpdatePage($project_id){
+        //phase
         $project = $this->Project_model->retrieve_by_id($project_id);
         $current_project_phase_id = $project['current_project_phase_id'];
         $current_phase_array = $this->Project_phase_model->retrieve_by_id($current_project_phase_id);
         $current_phase = $current_phase_array['phase_id'];
-        $this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
+
+        //milestones
+        $milestones = $this->Milestone_model-> retrieve_by_project_phase_id($current_project_phase_id);
+
+        //updates
+        $updates = $this->Update_model-> retrieve_by_project_phase_id($current_project_phase_id);
+
+        $data = [
+            "project"=>$project,
+            "current_phase"=>$current_phase,
+            "current_project_phase_id"=>$current_project_phase_id,
+            "milestones"=>$milestones,
+            "updates"=>$updates
+        ];
+        return $data;
+    }
+
+    public function view_upadtes($project_id){
+        $data = $this->retrieveDataForProjectUpdatePage($project_id);
+        $this->load->view('project/project_update',$data);
+        //$this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
     }
 
     public function customer_overview($c_id){

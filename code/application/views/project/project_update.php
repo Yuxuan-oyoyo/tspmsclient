@@ -229,48 +229,65 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="row">
         <div class="col-lg-12">
             <div class="col-lg-7">
-                <h3>Client Updates - <small>Build</small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <h3>Client Updates - <small><?=$current_phase_name?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
                 <ul class="timeline">
-                    <li><!---Time Line Element--->
-                        <div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4 class="timeline-title">Customer Update 1</h4>
-                            </div>
-                            <div class="timeline-body"><!---Time Line Body&Content--->
-                                <p>Update content is placed here...</p>
-                                <div class="pull-right timeline-info">
-                                    <i class="fa fa-user"></i>&nbsp;Andrew &nbsp;
-                                    <i class="fa fa-calendar-check-o"></i>&nbsp;Sep,19,2015</div>
-                            </div>
-                        </div>
-                    </li>
+                    <?php
+                        foreach($updates as $u){
+                    ?>
+                            <li><!---Time Line Element--->
+                                <div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>
+                                <div class="timeline-panel">
+                                    <div class="timeline-heading">
+                                        <h4 class="timeline-title"><?=$u['header']?></h4>
+                                    </div>
+                                    <div class="timeline-body"><!---Time Line Body&Content--->
+                                        <p><?=$u['body']?></p>
+                                        <div class="pull-right timeline-info">
+                                            <i class="fa fa-user"></i>&nbsp;<?=$u['posted_by']?> &nbsp;
+                                            <i class="fa fa-calendar-check-o"></i>&nbsp;<?=$u['last_updated']?></div>
+                                    </div>
+                                </div>
+                            </li>
+                    <?php
+                        }
+                    ?>
+
                 </ul>
             </div>
             <div class="col-lg-4">
 
                 <h3>Milestones - <small><?=$current_phase_name?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="panel panel-default calendar">
-                            <div class="panel-heading calendar-month"><strong>October</strong></div>
-                            <div class="panel-body">
-                                <div class="thumbnail calendar-date" >
-                                    03
+                <?php
+                    foreach($milestones as $m){
+                        $monthName = date('F', strtotime($m['deadline']));
+                        $dateNumber = date('j', strtotime($m['deadline']));
+                ?>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="panel panel-default calendar">
+                                    <div class="panel-heading calendar-month"><strong><?=$monthName?></strong></div>
+                                    <div class="panel-body">
+                                        <div class="thumbnail calendar-date" >
+                                            <?=$dateNumber?>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-7">
-                        <strong>Title Of Milestone</strong><br>
-                        This is  a short description of milestone.
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" id="done" onchange="showModal()"> Done
-                            </label>
-                        </div>
-                    </div>
-                </div>
+                            <div class="col-lg-7">
+                                <strong><?=$m['header']?></strong><br>
+                                <?=$m['body']?>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="done" onchange="showModal()"> Done
+                                    </label>
+                                </div>
+                            </div>
+                         </div>
+                <?php
+                    }
+                ?>
+
+            </div>
             </div>
         </div>
 

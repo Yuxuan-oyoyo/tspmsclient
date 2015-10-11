@@ -16,6 +16,7 @@ class Milestones extends CI_Controller{
         $this->load->model("Milestone_model");
         $this->load->model("Project_model");
         $this->load->model("Post_model");
+        $this->load->model("Update_model");
     }
 
     public function add_new_milestone($project_id,$current_project_phase_id,$current_phase){
@@ -27,7 +28,22 @@ class Milestones extends CI_Controller{
         $insert_milestone_array['deadline']=$this->input->post("deadline");
         $insert_milestone_array['post_id'] =$post_id;
         $affected_rows2 = $this->Milestone_model->insert($insert_milestone_array);
-        $this->load->view('project/project_update',$data=["project"=>$this->Project_model->retrieve_by_id($project_id),"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
+
+        //milestones
+        $milestones = $this->Milestone_model-> retrieve_by_project_phase_id($current_project_phase_id);
+
+        //updates
+        $updates = $this->Update_model-> retrieve_by_project_phase_id($current_project_phase_id);
+
+        $data = [
+            "project"=>$this->Project_model->retrieve_by_id($project_id),
+            "current_phase"=>$current_phase,
+            "current_project_phase_id"=>$current_project_phase_id,
+            "milestones"=>$milestones,
+            "updates"=>$updates
+        ];
+
+        $this->load->view('project/project_update',$data);
     }
 
     public function all_milestone_in_current_phase($current_project_phase_id){
