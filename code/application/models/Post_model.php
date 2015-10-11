@@ -24,4 +24,16 @@ class Post_model extends CI_Model{
         $post_id = $this->db->insert_id();
         return $post_id;
     }
+
+    public function retrieveAll(){
+        $query = $this->db->query("select * from post");
+        return $query->result_array();
+    }
+
+    public function update($update_array){
+        $date = date('Y-m-d H:i:s');
+        $update_array['last_updated'] = $date;
+        $this->db->update('post', $update_array, array('post_id' => $update_array['post_id']));
+        return $this->db->affected_rows();
+    }
 }
