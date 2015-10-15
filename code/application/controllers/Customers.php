@@ -29,6 +29,14 @@ class Customers extends CI_Controller {
 
         $this->load->view('customer/customer_all',$data);
     }
+
+    public function list_one($c_id){
+            $customers = $this->Customer_model->retrieve($c_id);
+            $data["show_all"] = true;
+        $data["customers"]= $customers;
+
+        $this->load->view('customer/customer_all',$data);
+    }
     public function insert(){
         //$this->load->library('input');
         //$this->load->library('encrypt');

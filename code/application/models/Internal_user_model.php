@@ -62,4 +62,15 @@ class Internal_user_model extends CI_Model
         $this->db->update('customer', ["is_active"=>0], array('c_id' => $input_c_id));
         return $this->db->affected_rows();
     }
+
+    public function retrieve_by_username($username){
+
+        if(isset($username)){
+            $query = $this->db->get_where("internal_user",["username"=>$username]);
+            if($query->num_rows()>0){
+                return $query->row_array();
+            }
+        }
+        return null;
+    }
 }

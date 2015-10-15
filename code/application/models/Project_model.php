@@ -113,4 +113,11 @@ class Project_model extends CI_Model {
         }
         return true;
     }*/
+
+    public function retrieve_all_with_phase(){
+        $sql = 'SELECT project.*,phase_name,customer.first_name,customer.last_name from project,project_phase,phase,customer
+                where project.current_project_phase_id=project_phase.project_phase_id and project_phase.phase_id = phase.phase_id and customer.c_id=project.c_id';
+        $query=$this->db->query($sql);
+        return $query->result_array();
+    }
 }

@@ -65,102 +65,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <body>
 
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="index.html">The Shipyard </a>
-    </div>
-    <!-- Top Menu Items -->
-    <ul class="nav navbar-nav">
-        <li>
-            <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
-        </li>
-        <li  class="active">
-            <a href="projects.html"><i class="fa fa-fw fa-bar-chart-o"></i> Projects</a>
-        </li>
-        <li>
-            <a href="chat.html"><i class="fa fa-fw fa-comment"></i> Message</a>
-        </li>
-        <li>
-            <a href="customers.html"><i class="fa fa-fw fa-users"></i>Customers</a>
-        </li>
-        <li>
-            <a href="customers.html"><i class="fa fa-fw fa-line-chart"></i>Analytics</a>
-        </li>
-        <!---
-        <li>
-            <a href="forms.html"><i class="fa fa-fw fa-edit"></i> Issue Tracker</a>
-        </li>
-        <li>
-            <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> File Repo</a>
-        </li>
-        <li>
-            <a href="bootstrap-grid.html"><i class="fa fa-fw fa-wrench"></i> Tasks</a>
-        </li>
-        --->
-    </ul>
-    <ul class="nav navbar-right top-nav">
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
-            <ul class="dropdown-menu message-dropdown">
-                <li class="message-preview">
-                    <a href="#">
-                        <div class="media">
-                                    <span class="pull-left">
-                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
-                                    </span>
-                            <div class="media-body">
-                                <h5 class="media-heading"><strong>John Smith</strong>
-                                </h5>
-                                <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur...</p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                <li class="message-footer">
-                    <a href="#">Read All New Messages</a>
-                </li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
-            <ul class="dropdown-menu alert-dropdown">
-                <li>
-                    <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                    <a href="#">View All</a>
-                </li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                </li>
-            </ul>
-        </li>
-    </ul>
-</nav>
+<?php $this->load->view('common/pm_nav');?>
 <aside class="sidebar-left">
     <div class="sidebar-links">
         <a class="link-blue" href="projectDashboard.html"><i class="fa fa-tasks"></i>Dashboard</a>
@@ -175,102 +80,98 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-            <?php $p = $project;?>
-            <?='#'.$p['project_id'].' '.$p['project_title']?>
-            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#updatePhaseModal"><i class="fa fa-pencil-square-o"></i>&nbsp;Update phase</button>
+            <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>
+            <a href="<?=$project['staging_link']?>" class="btn btn-primary"><i class="fa fa-external-link"></i>&nbsp;Project Preview</a>
         </h1>
+        <h4 style="color:darkgrey">Click each phase on timeline to check updates for each phase.</h4>
     </div>
 
     <!-- /.row -->
-    <?php
-        $src1 = "/tspms/ui/img/current.png";
-        $src2 = "/tspms/ui/img/future.png";
-        $src3 = "/tspms/ui/img/future.png";
-        $src4 = "/tspms/ui/img/future.png";
-        $src5 = "/tspms/ui/img/future.png";
-        $current_phase_name = "Lead";
-        $next_phase = "Requirement";
-        if($current_phase==2){
-            $src1 = "/tspms/ui/img/done.png";
-            $src2 = "/tspms/ui/img/current.png";
-            $current_phase_name = "Requirement";
-            $next_phase = "Build";
-        }elseif($current_phase==3){
-            $src1 = "/tspms/ui/img/done.png";
-            $src2 = "/tspms/ui/img/done.png";
-            $src3 = "/tspms/ui/img/current.png";
-            $current_phase_name = "Build";
-            $next_phase = "Testing";
-        }elseif($current_phase==4){
-            $src1 = "/tspms/ui/img/done.png";
-            $src2 = "/tspms/ui/img/done.png";
-            $src3 = "/tspms/ui/img/done.png";
-            $src4 = "/tspms/ui/img/current.png";
-            $current_phase_name = "Testing";
-            $next_phase = "Deploy";
-        }elseif($current_phase==5){
-            $src1 = "/tspms/ui/img/done.png";
-            $src2 = "/tspms/ui/img/done.png";
-            $src3 = "/tspms/ui/img/done.png";
-            $src4 = "/tspms/ui/img/done.png";
-            $src5 = "/tspms/ui/img/current.png";
-            $current_phase_name = "Deploy";
-        }
-    ?>
-    <div class="row no-gutter">
-        <div class="test col-sm-2 col-sm-offset-1" align="center" data-toggle="tooltip" data-placement="bottom" title="02-15,2015 to 03-03,2015 ">Lead<br><img src="<?=$src1?>" class="img-responsive"></div>
-        <div  class="test col-sm-2" align="center" data-toggle="tooltip" data-placement="bottom" title="03-04,2015 to 04-20,2015 ">Requirement<br><img src="<?=$src2?>" class="img-responsive"></div>
-        <div class="test col-sm-2" align="center" data-toggle="tooltip" data-placement="bottom" title="04-21,2015 to now " >Build<br><img src="<?=$src3?>" class="img-responsive"></div>
-        <div class="test col-sm-2" align="center">Testing<br><img src="<?=$src4?>" class="img-responsive"></div>
-        <div  class="test col-sm-2" align="center">Deploy<br><img src="<?=$src5?>" class="img-responsive"></div>
+    <div class="row">
+        <div class="col-lg-offset-1 no-gutter">
 
+            <?php
+            $current_phase;
+            foreach($phases as $phase){
+                $img_tag='img/future.png';
+                if(isset($phase['project_phase_id'])){
+                    $img_tag = 'img/done.png';
+                    if ($phase['phase_id'] == $project['current_project_phase_id']){
+                        $img_tag = 'img/current.png';
+                        $current_phase=$phase;
+                    }
+
+                    echo'<div class="test col-sm-2 " align="center" data-toggle="tooltip"
+                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase['end_time'].'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+                }else{
+                    echo' <div  class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+                } }?>
+
+        </div>
     </div>
     <hr>
     <div class="row">
         <div class="col-lg-12">
             <div class="col-lg-7">
-                <h3>Client Updates - <small>Build</small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <h3>Client Updates - <small><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
                 <ul class="timeline">
-                    <li><!---Time Line Element--->
-                        <div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4 class="timeline-title">Customer Update 1</h4>
-                            </div>
-                            <div class="timeline-body"><!---Time Line Body&Content--->
-                                <p>Update content is placed here...</p>
-                                <div class="pull-right timeline-info">
-                                    <i class="fa fa-user"></i>&nbsp;Andrew &nbsp;
-                                    <i class="fa fa-calendar-check-o"></i>&nbsp;Sep,19,2015</div>
-                            </div>
-                        </div>
-                    </li>
+                    <?php
+                        foreach($updates as $u){
+                    ?>
+                            <li><!---Time Line Element--->
+                                <div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>
+                                <div class="timeline-panel">
+                                    <div class="timeline-heading">
+                                        <h4 class="timeline-title"><?=$u['header']?></h4>
+                                    </div>
+                                    <div class="timeline-body"><!---Time Line Body&Content--->
+                                        <p><?=$u['body']?></p>
+                                        <div class="pull-right timeline-info">
+                                            <i class="fa fa-user"></i>&nbsp;<?=$u['posted_by']?> &nbsp;
+                                            <i class="fa fa-calendar-check-o"></i>&nbsp;<?=$u['last_updated']?></div>
+                                    </div>
+                                </div>
+                            </li>
+                    <?php
+                        }
+                    ?>
+
                 </ul>
             </div>
             <div class="col-lg-4">
 
-                <h3>Milestones - <small><?=$current_phase_name?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="panel panel-default calendar">
-                            <div class="panel-heading calendar-month"><strong>October</strong></div>
-                            <div class="panel-body">
-                                <div class="thumbnail calendar-date" >
-                                    03
+                <h3>Milestones - <small><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <?php
+                    foreach($milestones as $m){
+                        $monthName = date('F', strtotime($m['deadline']));
+                        $dateNumber = date('j', strtotime($m['deadline']));
+                ?>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="panel panel-default calendar">
+                                    <div class="panel-heading calendar-month"><strong><?=$monthName?></strong></div>
+                                    <div class="panel-body">
+                                        <div class="thumbnail calendar-date" >
+                                            <?=$dateNumber?>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-7">
-                        <strong>Title Of Milestone</strong><br>
-                        This is  a short description of milestone.
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" id="done" onchange="showModal()"> Done
-                            </label>
-                        </div>
-                    </div>
-                </div>
+                            <div class="col-lg-7">
+                                <strong><?=$m['header']?></strong><br>
+                                <?=$m['body']?>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="done" onchange="showModal()"> Done
+                                    </label>
+                                </div>
+                            </div>
+                         </div>
+                <?php
+                    }
+                ?>
+
+            </div>
             </div>
         </div>
 
@@ -289,7 +190,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" >New Update</h4>
             </div>
-            <form role="form" action="<?=base_url().'Updates/add_new_update/'.$p['project_id'].'/'.$current_project_phase_id.'/'.$current_phase?>" method="post">
+            <form role="form" action="<?=base_url().'Updates/add_new_update/'.$project['project_id'].'/'.$project['current_project_phase_id'].'/'.$current_phase?>" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Title:</label>
@@ -318,7 +219,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <h4 class="modal-title" >New Milestone</h4>
             </div>
 
-            <form role="form" action="<?=base_url().'Milestones/add_new_milestone/'.$p['project_id'].'/'.$current_project_phase_id.'/'.$current_phase?>" method="post">
+            <form role="form" action="<?=base_url().'Milestones/add_new_milestone/'.$project['project_id'].'/'.$project['current_project_phase_id'].'/'.$current_phase?>" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Title:</label>
