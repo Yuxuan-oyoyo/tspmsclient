@@ -80,61 +80,40 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-            <?php $p = $project;?>
-            <?='#'.$p['project_id'].' '.$p['project_title']?>
-            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#updatePhaseModal"><i class="fa fa-pencil-square-o"></i>&nbsp;Update phase</button>
+            <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>
+            <a href="<?=$project['staging_link']?>" class="btn btn-primary"><i class="fa fa-external-link"></i>&nbsp;Project Preview</a>
         </h1>
+        <h4 style="color:darkgrey">Click each phase on timeline to check updates for each phase.</h4>
     </div>
 
     <!-- /.row -->
-    <?php
-        $src1 = "/tspms/ui/img/current.png";
-        $src2 = "/tspms/ui/img/future.png";
-        $src3 = "/tspms/ui/img/future.png";
-        $src4 = "/tspms/ui/img/future.png";
-        $src5 = "/tspms/ui/img/future.png";
-        $current_phase_name = "Lead";
-        $next_phase = "Requirement";
-        if($current_phase==2){
-            $src1 = "/tspms/ui/img/done.png";
-            $src2 = "/tspms/ui/img/current.png";
-            $current_phase_name = "Requirement";
-            $next_phase = "Build";
-        }elseif($current_phase==3){
-            $src1 = "/tspms/ui/img/done.png";
-            $src2 = "/tspms/ui/img/done.png";
-            $src3 = "/tspms/ui/img/current.png";
-            $current_phase_name = "Build";
-            $next_phase = "Testing";
-        }elseif($current_phase==4){
-            $src1 = "/tspms/ui/img/done.png";
-            $src2 = "/tspms/ui/img/done.png";
-            $src3 = "/tspms/ui/img/done.png";
-            $src4 = "/tspms/ui/img/current.png";
-            $current_phase_name = "Testing";
-            $next_phase = "Deploy";
-        }elseif($current_phase==5){
-            $src1 = "/tspms/ui/img/done.png";
-            $src2 = "/tspms/ui/img/done.png";
-            $src3 = "/tspms/ui/img/done.png";
-            $src4 = "/tspms/ui/img/done.png";
-            $src5 = "/tspms/ui/img/current.png";
-            $current_phase_name = "Deploy";
-        }
-    ?>
-    <div class="row no-gutter">
-        <div class="test col-sm-2 col-sm-offset-1" align="center" data-toggle="tooltip" data-placement="bottom" title="02-15,2015 to 03-03,2015 ">Lead<br><img src="<?=$src1?>" class="img-responsive"></div>
-        <div  class="test col-sm-2" align="center" data-toggle="tooltip" data-placement="bottom" title="03-04,2015 to 04-20,2015 ">Requirement<br><img src="<?=$src2?>" class="img-responsive"></div>
-        <div class="test col-sm-2" align="center" data-toggle="tooltip" data-placement="bottom" title="04-21,2015 to now " >Build<br><img src="<?=$src3?>" class="img-responsive"></div>
-        <div class="test col-sm-2" align="center">Testing<br><img src="<?=$src4?>" class="img-responsive"></div>
-        <div  class="test col-sm-2" align="center">Deploy<br><img src="<?=$src5?>" class="img-responsive"></div>
+    <div class="row">
+        <div class="col-lg-offset-1 no-gutter">
 
+            <?php
+            $current_phase;
+            foreach($phases as $phase){
+                $img_tag='img/future.png';
+                if(isset($phase['project_phase_id'])){
+                    $img_tag = 'img/done.png';
+                    if ($phase['phase_id'] == $project['current_project_phase_id']){
+                        $img_tag = 'img/current.png';
+                        $current_phase=$phase;
+                    }
+
+                    echo'<div class="test col-sm-2 " align="center" data-toggle="tooltip"
+                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase['end_time'].'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+                }else{
+                    echo' <div  class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+                } }?>
+
+        </div>
     </div>
     <hr>
     <div class="row">
         <div class="col-lg-12">
             <div class="col-lg-7">
-                <h3>Client Updates - <small><?=$current_phase_name?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <h3>Client Updates - <small><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
                 <ul class="timeline">
                     <?php
                         foreach($updates as $u){
@@ -161,7 +140,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
             <div class="col-lg-4">
 
-                <h3>Milestones - <small><?=$current_phase_name?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <h3>Milestones - <small><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
                 <?php
                     foreach($milestones as $m){
                         $monthName = date('F', strtotime($m['deadline']));
@@ -211,7 +190,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" >New Update</h4>
             </div>
-            <form role="form" action="<?=base_url().'Updates/add_new_update/'.$p['project_id'].'/'.$current_project_phase_id.'/'.$current_phase?>" method="post">
+            <form role="form" action="<?=base_url().'Updates/add_new_update/'.$project['project_id'].'/'.$project['current_project_phase_id'].'/'.$current_phase?>" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Title:</label>
@@ -240,7 +219,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <h4 class="modal-title" >New Milestone</h4>
             </div>
 
-            <form role="form" action="<?=base_url().'Milestones/add_new_milestone/'.$p['project_id'].'/'.$current_project_phase_id.'/'.$current_phase?>" method="post">
+            <form role="form" action="<?=base_url().'Milestones/add_new_milestone/'.$project['project_id'].'/'.$project['current_project_phase_id'].'/'.$current_phase?>" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Title:</label>

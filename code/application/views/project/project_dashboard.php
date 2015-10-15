@@ -55,60 +55,34 @@
     </div>
 
 </aside>
-<?php
-$p = $project;
-$src1 = "/tspms/ui/img/current.png";
-$src2 = "/tspms/ui/img/future.png";
-$src3 = "/tspms/ui/img/future.png";
-$src4 = "/tspms/ui/img/future.png";
-$src5 = "/tspms/ui/img/future.png";
-$current_phase_name = "Lead";
-$next_phase = "Requirement";
-if($current_phase==2){
-    $src1 = "/tspms/ui/img/done.png";
-    $src2 = "/tspms/ui/img/current.png";
-    $current_phase_name = "Requirement";
-    $next_phase = "Build";
-}elseif($current_phase==3){
-    $src1 = "/tspms/ui/img/done.png";
-    $src2 = "/tspms/ui/img/done.png";
-    $src3 = "/tspms/ui/img/current.png";
-    $current_phase_name = "Build";
-    $next_phase = "Testing";
-}elseif($current_phase==4){
-    $src1 = "/tspms/ui/img/done.png";
-    $src2 = "/tspms/ui/img/done.png";
-    $src3 = "/tspms/ui/img/done.png";
-    $src4 = "/tspms/ui/img/current.png";
-    $current_phase_name = "Testing";
-    $next_phase = "Deploy";
-}elseif($current_phase==5){
-    $src1 = "/tspms/ui/img/done.png";
-    $src2 = "/tspms/ui/img/done.png";
-    $src3 = "/tspms/ui/img/done.png";
-    $src4 = "/tspms/ui/img/done.png";
-    $src5 = "/tspms/ui/img/current.png";
-    $current_phase_name = "Deploy";
-}
-?>
-
 <div class="col-lg-offset-1 content">
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-            #<?=$p['project_id']?>.&nbsp; <?=$p['project_title']?>
-            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil-square-o"></i>&nbsp;Update phase</button>
+            <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>
+            <a href="<?=$project['staging_link']?>" class="btn btn-primary"><i class="fa fa-external-link"></i>&nbsp;Project Preview</a>
         </h1>
+        <h4 style="color:darkgrey">Click each phase on timeline to check updates for each phase.</h4>
     </div>
 
     <!-- /.row -->
-    <div class="row no-gutter">
-        <div class="test col-sm-2 col-sm-offset-1" align="center" data-toggle="tooltip" data-placement="bottom" title="02-15,2015 to 03-03,2015 ">Lead<br><img src="<?=$src1?>" class="img-responsive"></div>
-        <div  class="test col-sm-2" align="center" data-toggle="tooltip" data-placement="bottom" title="03-04,2015 to 04-20,2015 ">Requirement<br><img src="<?=$src2?>" class="img-responsive"></div>
-        <div class="test col-sm-2" align="center" data-toggle="tooltip" data-placement="bottom" title="04-21,2015 to now " >Build<br><img src="<?=$src3?>" class="img-responsive"></div>
-        <div class="test col-sm-2" align="center">Testing<br><img src="<?=$src4?>" class="img-responsive"></div>
-        <div  class="test col-sm-2" align="center">Deploy<br><img src="<?=$src5?>" class="img-responsive"></div>
+    <div class="row">
+        <div class="col-lg-offset-1 no-gutter">
+            <?php foreach($phases as $phase){
+                $img_tag='img/future.png';
+                if(isset($phase['project_phase_id'])){
+                    $img_tag = 'img/done.png';
+                    if ($phase['phase_id'] == $project['current_project_phase_id']){
+                        $img_tag = 'img/current.png';
+                    }
 
+                    echo'<div class="test col-sm-2 " align="center" data-toggle="tooltip"
+                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase['end_time'].'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+                }else{
+                    echo' <div  class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+                } }?>
+
+        </div>
     </div>
     <hr>
     <div class="row">
@@ -120,11 +94,11 @@ if($current_phase==2){
                         <table class="table table-condensed">
                             <tr>
                                 <td><strong>No. of use case</strong></td>
-                                <td><?=$p['no_of_use_cases']?></td>
+                                <td><?=$project['no_of_use_cases']?></td>
                             </tr>
                             <tr>
                                 <td><strong>Project Value</strong></td>
-                                <td><?=$p['project_value']?></td>
+                                <td><?=$project['project_value']?></td>
                             </tr>
                             <tr>
                                 <td><strong>Staging link </strong></td>
@@ -136,16 +110,16 @@ if($current_phase==2){
                             </tr>
                             <tr>
                                 <td><strong>Bitbucket Repo Name </strong></td>
-                                <td><?=$p['bitbucket_repo_name']?></td>
+                                <td><?=$project['bitbucket_repo_name']?></td>
                             </tr>
                             <tr>
                                 <td><strong>File Repo Name </strong></td>
-                                <td><?=$p['file_repo_name']?></td>
+                                <td><?=$project['file_repo_name']?></td>
                             </tr>
                             <tr>
                                 <td><strong>Status </strong></td>
                                 <td><?php
-                                if($p['is_ongoing']==1){
+                                if($project['is_ongoing']==1){
                                     ?>
                                     Ongoing
                                     <?php
@@ -158,19 +132,19 @@ if($current_phase==2){
                             </tr>
                             <tr>
                                 <td><strong>Tags </strong></td>
-                                <td><?=$p['tags']?></td>
+                                <td><?=$project['tags']?></td>
                             </tr>
                             <tr>
                                 <td><strong>Description </strong></td>
-                                <td><?=$p['project_description']?></td>
+                                <td><?=$project['project_description']?></td>
                             </tr>
                             <tr>
                                 <td><strong>Remarks </strong></td>
-                                <td><?=$p['remarks']?></td>
+                                <td><?=$project['remarks']?></td>
                             </tr>
                         </table>
 
-                        <a href="<?=base_url().'Projects/edit/'.$p["project_id"]?>" class="btn pull-right btn-primary"><i class="fa fa-pencil-square-o"></i> &nbsp;Edit</a>
+                        <a href="<?=base_url().'Projects/edit/'.$project["project_id"]?>" class="btn pull-right btn-primary"><i class="fa fa-pencil-square-o"></i> &nbsp;Edit</a>
 
                     </div>
                 </div>

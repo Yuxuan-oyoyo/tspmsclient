@@ -175,30 +175,29 @@ class Projects extends CI_Controller {
     }
     public function project_by_id($project_id){
         //TODO: edit title and username/password
-        $this->load->view('project/project_details',$data=["project"=>$this->Project_model->retrieve_by_id($project_id)]);
+        $this->load->view('project/project_details',$data=["project"=>$this->Project_model->retrieve_by_id($project_id),
+        ]);
     }
 
     public function project_update($project_id){
-        $this->load->view('project/project_update',$data=["project"=>$this->Project_model->retrieve_by_id($project_id)]);
+        $this->load->view('project/project_update',$data=["project"=>$this->Project_model->retrieve_by_id($project_id),
+        ]);
     }
 
     public function retrieveDataForProjectUpdatePage($project_id){
         //phase
         $project = $this->Project_model->retrieve_by_id($project_id);
-        $current_project_phase_id = $project['current_project_phase_id'];
-        $current_phase_array = $this->Project_phase_model->retrieve_by_id($current_project_phase_id);
-        $current_phase = $current_phase_array['phase_id'];
+        $phases=$this->Project_phase_model->retrieve_by_project_id($project_id);
 
         //milestones
-        $milestones = $this->Milestone_model-> retrieve_by_project_phase_id($current_project_phase_id);
+        $milestones = $this->Milestone_model-> retrieve_by_project_phase_id($project['current_project_phase_id']);
 
         //updates
-        $updates = $this->Update_model-> retrieve_by_project_phase_id($current_project_phase_id);
+        $updates = $this->Update_model-> retrieve_by_project_phase_id($project['current_project_phase_id']);
 
         $data = [
             "project"=>$project,
-            "current_phase"=>$current_phase,
-            "current_project_phase_id"=>$current_project_phase_id,
+            "phases"=>$phases,
             "milestones"=>$milestones,
             "updates"=>$updates
         ];
@@ -208,9 +207,7 @@ class Projects extends CI_Controller {
     public function view_dashboard($project_id){
         //phase
         $project = $this->Project_model->retrieve_by_id($project_id);
-        $current_project_phase_id = $project['current_project_phase_id'];
-        $current_phase_array = $this->Project_phase_model->retrieve_by_id($current_project_phase_id);
-        $current_phase = $current_phase_array['phase_id'];
+        $phases=$this->Project_phase_model->retrieve_by_project_id($project_id);
         //customer_name
         $c_id = $project['c_id'];
         $customer = $this->Customer_model->retrieve($c_id);
@@ -219,8 +216,7 @@ class Projects extends CI_Controller {
         $customer_name = $first_name.' '.$last_name;
         $data = [
             "project"=>$project,
-            "current_phase"=>$current_phase,
-            "current_project_phase_id"=>$current_project_phase_id,
+            "phases"=>$phases,
             "customer_name"=>$customer_name
         ];
         $this->load->view('project/project_dashboard',$data);
