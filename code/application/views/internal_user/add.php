@@ -27,7 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
         <div id="info-container">
             <div class="col-xs-10 col-xs-offset-1">
-                <form>
+                <form action="<?=base_url()?>internal_users/insert" method="post">
                     <p class="well-body user-name">
                         Name: <span cus-attr="name">
                             <input name="name" value="" size="10" placeholder="name">
@@ -55,7 +55,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </span>
 
                     </p>
-                    <a href="#" id="submit">submit</a>
+                    <input type="submit" class="btn">submit
                 </form>
             </div>
         </div>

@@ -59,12 +59,8 @@ class Projects extends CI_Controller {
     }
 
     public function list_all($include_hidden=false){
-        if($include_hidden=="include_hidden"){
-            $projects = $this->Project_model->retrieveAll(false);
-        }else {
-            $projects = $this->Project_model->retrieveAll();
-            return $projects;
-        }
+        $projects = $this->Project_model->retrieve_all_with_phase();
+        $this->load->view('project/all_projects',$data=array('projects'=>$projects));
     }
     public function insert(){
         //$this->load->library('input');

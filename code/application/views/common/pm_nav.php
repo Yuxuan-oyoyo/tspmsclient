@@ -13,7 +13,7 @@
     <!-- Top Menu Items -->
     <ul class="nav navbar-nav">
         <li>
-            <a href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+            <a href="#"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
         </li>
         <li  class="active">
             <a href="projects.html"><i class="fa fa-fw fa-bar-chart-o"></i> Projects</a>

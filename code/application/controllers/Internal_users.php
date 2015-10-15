@@ -35,12 +35,12 @@ class Internal_users extends CI_Controller
     }
     public function insert(){
         //$this->load->library('input');
-        $update_array["name"]=$this->input->get("name");
-        $update_array["username"]=$this->input->get("username");
-        $update_array["bb_username"]=$this->input->get("bb_username");
-        $update_array["type"]=$this->input->get("type");
-        $update_array["is_active"]=$this->input->get("is_active");
-        $update_array["password_hash"]=password_hash($this->input->get("password"),PASSWORD_DEFAULT);
+        $update_array["name"]=$this->input->post("name");
+        $update_array["username"]=$this->input->post("username");
+        $update_array["bb_username"]=$this->input->post("bb_username");
+        $update_array["type"]=$this->input->post("type");
+        $update_array["is_active"]=$this->input->post("is_active");
+        $update_array["password_hash"]=password_hash($this->input->post("password"),PASSWORD_DEFAULT);
         //echo var_dump($update_array);
         $affected_rows = $this->Internal_user_model->insert($update_array);
         echo $affected_rows;
@@ -52,20 +52,20 @@ class Internal_users extends CI_Controller
     public function update_password($cid){
         //$this->load->library('encrypt');
         $update_array["c_id"] = $cid;
-        $update_array["password_hash"]=password_hash($this->input->get("password"),PASSWORD_DEFAULT);
+        $update_array["password_hash"]=password_hash($this->input->post("password"),PASSWORD_DEFAULT);
         $affected_rows = $this->Internal_user_model->update($update_array);
         echo $affected_rows;
     }
     public function edit($cid){
         //$this->load->library('input');
         $update_array["c_id"]=$cid;
-        $update_array["first_name"]=$this->input->get("first_name");
-        $update_array["last_name"]=$this->input->get("last_name");
-        $update_array["company_name"]=$this->input->get("company_name");
-        $update_array["email"]=$this->input->get("email");
-        $update_array["hp_number"]=$this->input->get("hp_number");
-        $update_array["other_number"]=(trim($this->input->get("other_number"))!="-")?
-            ($this->input->get("other_number")):null;
+        $update_array["first_name"]=$this->input->post("first_name");
+        $update_array["last_name"]=$this->input->post("last_name");
+        $update_array["company_name"]=$this->input->post("company_name");
+        $update_array["email"]=$this->input->post("email");
+        $update_array["hp_number"]=$this->input->post("hp_number");
+        $update_array["other_number"]=(trim($this->input->post("other_number"))!="-")?
+            ($this->input->post("other_number")):null;
         //echo var_dump($update_array);
         $affected_rows = $this->Internal_user_model->update($update_array);
         echo $affected_rows;
