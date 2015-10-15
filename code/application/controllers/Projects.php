@@ -227,7 +227,7 @@ class Projects extends CI_Controller {
         //$this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
     }
 
-    public function view_upadtes($project_id){
+    public function view_updates($project_id){
         $data = $this->retrieveDataForProjectUpdatePage($project_id);
         $this->load->view('project/project_update',$data);
         //$this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
