@@ -45,4 +45,14 @@ class Updates extends CI_Controller{
         $this->load->view('project/project_update',$data);
     }
 
+    public function get_update_by_project_phase($project_phase_id){
+       $updates = $this->Update_model->retrieve_by_project_phase_id($project_phase_id);
+       echo (json_encode($updates));
+       //return json_encode($updates);
+
+    }
+
+
+
+
 }

@@ -101,7 +101,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         $current_phase=$phase;
                     }
 
-                    echo'<div class="test col-sm-2 " align="center" data-toggle="tooltip"
+                    echo'<div id="<?=$phase[\'phase_name\']?>" class="test col-sm-2 " align="center" data-toggle="tooltip"
                 data-placement="bottom" title="'.$phase['start_time'].' to '.$phase['end_time'].'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
                 }else{
                     echo' <div  class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
@@ -113,7 +113,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="row">
         <div class="col-lg-12">
             <div class="col-lg-7">
-                <h3>Client Updates - <small><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <h3>Client Updates - <small id="phase"><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
                 <ul class="timeline">
                     <?php
                         foreach($updates as $u){

@@ -34,8 +34,34 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             $('[data-toggle="tooltip"]').tooltip()
         });
         $(document).ready(function(){
-            $('#customerTable').dataTable();
+            $("#Lead" ).click(function() {
+                // this change title
+                $(".phase").each(function(){
+                    $(this).text("Lead");
+                });
+
+                var project_phase_id=($(this).data().id);
+
+                // this changes updates
+                $("#timeline").text('');
+
+                $.get("<?=base_url('updates/get_update_by_project_phase/')?>"+'/'+project_phase_id, function(data, status){
+                    var updates = jQuery.parseJSON(data);
+                    updates.forEach(function(element){
+                        var htmlText = '<li>'+
+                            '<div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>'+
+                            '<div class="timeline-panel"> <div class="timeline-heading"> <h4 class="timeline-title">'+element.header+'</h4> </div>'+
+                            '<div class="timeline-body"> <p>'+element.body+'</p> <div class="pull-right timeline-info">'+
+                            '<i class="fa fa-user"></i>&nbsp;'+element.posted_by+' &nbsp;'+
+                            '<i class="fa fa-calendar-check-o"></i>&nbsp;'+element.last_updated+'</div>'+
+                            ' </div> </div> </li>';
+                        $('#timeline').append( htmlText );
+                    });
+                 });
+            });
+
         });
+
     </script>
 </head>
 <body>
@@ -68,10 +94,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         $img_tag = 'img/current.png';
                     }
 
-                echo'<div class="test col-sm-2 " align="center" data-toggle="tooltip"
+                echo'<div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2 " align="center" data-toggle="tooltip"
                 data-placement="bottom" title="'.$phase['start_time'].' to '.$phase['end_time'].'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
       }else{
-                    echo' <div  class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+                    echo' <div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
      } }?>
 
     </div>
@@ -81,8 +107,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
         <div class="col-lg-12">
             <div class="col-lg-7">
-                <h3>Recent Updates - <small>Build</small></h3><hr>
-                <ul class="timeline">
+                <h3>Recent Updates - <small class="phase">Build</small></h3><hr>
+                <ul class="timeline" id="timeline">
                     <li><!---Time Line Element--->
                         <div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>
                         <div class="timeline-panel">
@@ -149,7 +175,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
             <div class="col-lg-4">
 
-                <h3>Milestones - <small>Build</small></h3><hr>
+                <h3>Milestones - <small class="phase">Build</small></h3><hr>
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="panel panel-default calendar">
