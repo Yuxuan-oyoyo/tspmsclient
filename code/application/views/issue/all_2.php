@@ -160,7 +160,7 @@
                     <th>Milestone</th>
                     <th>Reported by</th>
                     <th>utc_last_updated</th>
-                    <th>Responsible</th>
+                    <!--th>Responsible</th-->
                 </tr>
                 </thead
             </table>

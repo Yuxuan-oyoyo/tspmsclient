@@ -39,7 +39,7 @@ class BB_Shared {
 
         /*process response*/
         if (($response_array = json_decode($response, true)) != null) {
-            echo var_dump($response_array);
+           // echo var_dump($response_array);
             if (isset($response_array['error'])) {
             }
             if (isset($response_array["access_token"])) {

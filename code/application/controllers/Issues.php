@@ -54,6 +54,7 @@ class Issues extends CI_Controller {
                     <th>Responsible</th>
          */
         $issues = $this->bb_issues->retrieveIssues($repo_slug, $para);
+        //echo var_dump($issues);
         $reformatted = ['data'=>[]];
         foreach($issues['issues'] as $i){
             $row = [$i['title']
@@ -62,7 +63,8 @@ class Issues extends CI_Controller {
                 ,$i['metadata']['milestone']
                 ,$i['reported_by']['display_name']
                 ,$i['utc_last_updated']
-                ,$i['responsible']['display_name']];
+                //,$i['responsible']['display_name']
+            ];
             array_push($reformatted["data"], $row);
         }
         foreach($reformatted['data'] as $k=>$v){
