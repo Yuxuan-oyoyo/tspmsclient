@@ -1,0 +1,4 @@
+#personal ide specific folder
+.idea/
+#the oauth token generated
+code/application/libraries/oauth_token.txt
