@@ -32,6 +32,7 @@ class Projects extends CI_Controller {
         //This is for testing project_update, please comment the next line and uncomment next next line
         //$this->view_upadtes(2);
         $project = $this->list_all($include_hidden=false);
+        /*
         $projects = array();
         foreach($project as $p){
             //phase_name
@@ -55,6 +56,7 @@ class Projects extends CI_Controller {
             "projects"=>$projects
         ];
         $this->load->view('project/projects',$data);
+        */
         //$this->list_all();
     }
 
@@ -217,7 +219,7 @@ class Projects extends CI_Controller {
         $data = [
             "project"=>$project,
             "phases"=>$phases,
-            "customer_name"=>$customer_name
+            "customer"=>$customer
         ];
         $this->load->view('project/project_dashboard',$data);
         //$this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);

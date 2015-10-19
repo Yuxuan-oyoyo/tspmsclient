@@ -18,11 +18,12 @@ class Updates extends CI_Controller{
         $this->load->model("Milestone_model");
     }
 
-    public function add_new_update($project_id,$current_project_phase_id,$current_phase){
+    public function add_new_update($project_id,$current_project_phase_id){
         $insert_post_array['header']=$this->input->post("update_header");
         $insert_post_array['body']=$this->input->post("update_body");
         $insert_post_array['project_phase_id']=$current_project_phase_id;
         $post_id = $this->Post_model->insert($insert_post_array,'update');
+        $phases = $this->Project_phase_model->retrieve_by_project_id($project_id);
 
         //post_by will be changed to user name useing session data
         $insert_update_array['posted_by']='TT';
@@ -37,10 +38,10 @@ class Updates extends CI_Controller{
 
         $data = [
             "project"=>$this->Project_model->retrieve_by_id($project_id),
-            "current_phase"=>$current_phase,
             "current_project_phase_id"=>$current_project_phase_id,
             "milestones"=>$milestones,
-            "updates"=>$updates
+            "updates"=>$updates,
+            "phases"=>$phases
         ];
         $this->load->view('project/project_update',$data);
     }
@@ -51,8 +52,4 @@ class Updates extends CI_Controller{
        //return json_encode($updates);
 
     }
-
-
-
-
 }

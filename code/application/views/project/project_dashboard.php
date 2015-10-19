@@ -1,60 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <!-- Bootstrap Core CSS -->
-    <link href="<?=base_url().'css/bootstrap.min.css'?>" rel="stylesheet">
-    <link href="<?=base_url().'css/bootstrap.min.css'?>" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="<?=base_url().'css/sb-admin.css'?>" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Francois+One" />
-    <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
-    <!-- Custom Fonts -->
-    <link href="<?=base_url().'css/font-awesome.min.css'?>" rel="stylesheet" type="text/css">
-    <link href="<?=base_url().'css/timeline.css'?>" media="all" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.1/modernizr.min.js"></script>
-    <!-- jQuery -->
-    <script src="<?=base_url().'js/jquery.js'?>"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="<?=base_url().'js/bootstrap.min.js'?>"></script>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-
-    <![endif]-->
-
-    <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-        $(function () {
-
-            var links = $('.sidebar-links > a');
-
-            links.on('click', function () {
-
-                links.removeClass('selected');
-                $(this).addClass('selected');
-            })
-        });
-    </script>
-</head>
-<body>
 
 <?php $this->load->view('common/pm_nav');?>
 <aside class="sidebar-left">
     <div class="sidebar-links">
-        <a class="link-blue selected" href="projectDashboard.html"><i class="fa fa-tasks"></i>Dashboard</a>
+        <a class="link-blue selected" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Dashboard</a>
         <a class="link-blue " href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
         <a class="link-blue " href="projectIssues.html"><i class="fa fa-wrench"></i>Issues</a>
         <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
     </div>
-
 </aside>
+
 <div class="col-lg-offset-1 content">
     <!-- Page Content -->
     <div class="col-lg-12">
@@ -106,7 +60,7 @@
                             </tr>
                             <tr>
                                 <td><strong>Customer </strong></td>
-                                <td> <a href="#"><?=$customer_name?></a> (Click to edit)</td>
+                                <td> <a href="<?=base_url().'Customers/update_customer/'.$customer["c_id"]?>"><?=$customer['last_name'].' '.$customer['first_name']?></a> (Click to edit)</td>
                             </tr>
                             <tr>
                                 <td><strong>Bitbucket Repo Name </strong></td>

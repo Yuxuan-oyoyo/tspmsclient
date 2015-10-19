@@ -1,79 +1,11 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-/**
- * Created by PhpStorm.
- * User: WANG Tiantong
- * Date: 10/6/2015
- * Time: 6:53 PM
- */
-?>
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <?php $this->load->view('common/common_header');?>
-    <meta charset="UTF-8">
-    <!-- Bootstrap Core CSS -->
-    <link href="<?=base_url().'css/bootstrap.min.css'?>" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Francois+One" />
-    <link href="<?=base_url().'css/sb-admin.css'?>" rel="stylesheet">
-    <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
-    <!-- Custom Fonts -->
-    <link href="<?=base_url().'css/font-awesome.min.css'?>" rel="stylesheet" type="text/css">
-    <link href="<?=base_url().'css/timeline.css'?>" media="all" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.1/modernizr.min.js"></script>
-    <!-- jQuery -->
-    <script src="<?=base_url().'js/jquery.js'?>"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="<?=base_url().'js/bootstrap.min.js'?>"></script>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-
-    <![endif]-->
-
-    <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-        $(function () {
-
-            var links = $('.sidebar-links > a');
-
-            links.on('click', function () {
-
-                links.removeClass('selected');
-                $(this).addClass('selected');
-            })
-        });
-        $('#done').on('change', function(e){
-            if(e.target.checked){
-                alert("Ss");
-                $('#newUpdateModal').modal();
-            }
-        });
-        function showModal(){
-            if ($('#done').checked) {
-                $('#newUpdateModal').modal();
-            }
-        }
-
-
-    </script>
-</head>
-<body>
-
 <?php $this->load->view('common/pm_nav');?>
 <aside class="sidebar-left">
     <div class="sidebar-links">
-        <a class="link-blue" href="projectDashboard.html"><i class="fa fa-tasks"></i>Dashboard</a>
-        <a class="link-blue selected" href="projectUpdate.html"><i class="fa fa-flag"></i>Update & Milestone</a>
+        <a class="link-blue " href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Dashboard</a>
+        <a class="link-blue selected" href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
         <a class="link-blue " href="projectIssues.html"><i class="fa fa-wrench"></i>Issues</a>
         <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
     </div>
-
 </aside>
 
 <div class="col-lg-offset-1 content">
@@ -190,7 +122,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" >New Update</h4>
             </div>
-            <form role="form" action="<?=base_url().'Updates/add_new_update/'.$project['project_id'].'/'.$project['current_project_phase_id'].'/'.$current_phase?>" method="post">
+
+            <form role="form" action="<?=base_url().'Updates/add_new_update/'.$project['project_id'].'/'.$project['current_project_phase_id']?>" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Title:</label>
@@ -219,7 +152,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <h4 class="modal-title" >New Milestone</h4>
             </div>
 
-            <form role="form" action="<?=base_url().'Milestones/add_new_milestone/'.$project['project_id'].'/'.$project['current_project_phase_id'].'/'.$current_phase?>" method="post">
+            <form role="form" action="<?=base_url().'Milestones/add_new_milestone/'.$project['project_id'].'/'.$project['current_project_phase_id']?>" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Title:</label>
