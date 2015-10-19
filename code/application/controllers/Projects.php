@@ -145,7 +145,7 @@ class Projects extends CI_Controller {
      */
     /*changed function name to edit*/
     public function edit($project_id){
-        $this->load->view('project/edit',
+        $this->load->view('project/project_edit',
             $data=["project"=>$this->Project_model->retrieve_by_id($project_id),
                 "customers"=>$this->Customer_model->retrieveAll(),
                 "tags"=>json_encode($this->Project_model->getTags()),
@@ -161,10 +161,13 @@ class Projects extends CI_Controller {
             ,"file_repo_name","no_of_use_cases"
             ,"bitbucket_repo_name","project_value"];
         $input = $this->input->post($name_array,true);
-        if($input['c_id']==null){
+        $customer_option =  $this->input->post('customer-option');
+        if($customer_option=='from-existing'){
+            $input['c_id'] = $this->input->post('c_id');
+        }else{
             $customer_name_array=["title","first_name"
                 ,"last_name","company_name","hp_number"
-                ,"other_number","email","username","password"];
+                ,"other_number","email","username","password_hash"];
 
             $new_customer_input = $this->input->post($customer_name_array,true);
             $new_customer_id = $this->Customer_model->insert($new_customer_input);
@@ -182,10 +185,10 @@ class Projects extends CI_Controller {
         }
 
         $affected_rows = $this->Project_model->update($original_array);
-        $this->edit($original_array["project_id"]);
+        //$this->edit($original_array["project_id"]);
         //TODO:input validation
         //TODO:prompt user on success/failure
-        $this->load->view('project/project_details',$project_id);
+        $this->view_dashboard($project_id);
     }
     public function project_by_id($project_id){
         //TODO: edit title and username/password
