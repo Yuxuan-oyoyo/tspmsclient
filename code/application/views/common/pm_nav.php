@@ -62,16 +62,16 @@
         <li>
             <a href="#"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
         </li>
-        <li  class="active">
+        <li  class="<?=$projects_class?>">
             <a href="<?=base_url().'Projects/list_all'?>"><i class="fa fa-fw fa-bar-chart-o"></i> Projects</a>
         </li>
-        <li>
+        <li class="<?=$message_class?>">
             <a href="chat.html"><i class="fa fa-fw fa-comment"></i> Message</a>
         </li>
-        <li>
-            <a href="customers.html"><i class="fa fa-fw fa-users"></i>Customers</a>
+        <li class="<?=$customers_class?>">
+            <a href="<?=base_url().'Customers/list_all'?>"><i class="fa fa-fw fa-users"></i>Customers</a>
         </li>
-        <li>
+        <li class="<?=$analytics_class?>">
             <a href="customers.html"><i class="fa fa-fw fa-line-chart"></i>Analytics</a>
         </li>
         <!---

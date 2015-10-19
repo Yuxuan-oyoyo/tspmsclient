@@ -62,13 +62,20 @@ class Project_phase_model extends CI_Model {
         return $result;
     }
 
+
+    public function retrieve_last_project_phase_id(){
+        $sql = 'select project_phase_id from project_phase order by project_phase_id desc LIMIT 1';
+        $query=$this->db->query($sql);
+        return $query->result_array();
+    }
+
     public function update($update_array){
         $date = date('Y-m-d H:i:s');
         $update_array['last_updated'] = $date;
         $update_array['end_time'] = $date;
         $affected_rows1 = $this->db->update('project_phase', $update_array, array('project_phase_id' => $update_array['project_phase_id']));
 
-        $next_project_phase_id =$update_array['project_phase_id']+1;
+        $next_project_phase_id =$this->retrieve_last_project_phase_id()+1;
         $start_next_phase_array = $this->retrieve__by_id($next_project_phase_id);
         $start_next_phase_array['start_time'] = $date;
         $start_next_phase_array['last_updated'] = $date;
@@ -78,18 +85,22 @@ class Project_phase_model extends CI_Model {
         echo $affected_rows2;
     }
 
+
+    public function create_phase_upon_new_project($project_id){
+        $new_project_phase["project_id"]=$project_id;
+        $new_project_phase["phase_id"]=0;
+        $new_project_phase["end_time"]=null;
+        $new_project_phase["estimated_end_time"]=null;
+        $current_project_phase_id = $this->insert($new_project_phase);
+        return $current_project_phase_id;
+    }
+
     public function insert($insert_array){
         $date = date('Y-m-d H:i:s');
         $insert_array['last_updated'] = $date;
-        $this->db->insert('project_phase', $insert_array);
-        if($insert_array['phase_id'] = 1){
-            $prohject_phase_id = $this->db->insert_id();
-            $start_first = array(
-                "start_time" => $date,
-                "prohject_phase_id" =>$prohject_phase_id
-            );
-            $this->update($start_first);
-        }
+        $insert_array['start_time'] = $date;
+        $this->db->insert('project_phase',$insert_array);
+        return $this->db->insert_id();
     }
     public function retrievePhaseDef(){
         $query = $this->db->query("select phase_name from phase order by phase_id");

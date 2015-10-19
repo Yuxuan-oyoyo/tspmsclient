@@ -72,11 +72,11 @@ class Project_model extends CI_Model {
         return $this->db->affected_rows();
     }
     public function insert($insert_array){
-        //$this->load->helper('date');
-        //$date = date('Y-m-d H:i:s'); 
-        //$this->db->set('last_updated', $date);
-        var_dump($insert_array);
+        $date = date('Y-m-d H:i:s');
+        $insert_array['start_time'] =  $date;
+        $insert_array['last_updated'] =  $date;
         $this->db->insert('project', $insert_array);
+        return $this->db->insert_id();
     }
     //not in use
     public function deactivate($input_p_id){
@@ -119,5 +119,12 @@ class Project_model extends CI_Model {
                 where project.current_project_phase_id=project_phase.project_phase_id and project_phase.phase_id = phase.phase_id and customer.c_id=project.c_id';
         $query=$this->db->query($sql);
         return $query->result_array();
+    }
+
+    public function update_new_project_phase_id($project_id,$current_project_phase_id){
+        $project = $this->retrieve_by_id($project_id);
+        $project['project_id'] = $project_id;
+        $project['current_project_phase_id'] = $current_project_phase_id;
+        $this->update($project);
     }
 }

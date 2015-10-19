@@ -64,31 +64,13 @@ class Projects extends CI_Controller {
         $projects = $this->Project_model->retrieve_all_with_phase();
         $this->load->view('project/all_projects',$data=array('projects'=>$projects));
     }
-    public function insert(){
-        //$this->load->library('input');
-        //customer id?
+    public function insert($insert_array){
         /*
-        $data = array(
-            'customer_id' =>$this->input->get("customer_id"),
-            'project_title' => $this->input->get("project_title"),
-            'project_description' => $this->input->get("project_description"),
-            'tags' => $this->input->get("tags"),
-            'remarks' => $this->input->get("remarks"),
-            'file_repo_name' => $this->input->get("file_repo_name"),
-            'staging_link' => $this->input->get("staging_link"),
-            'production_link' => $this->input->get("file_repo_name"),
-            'no_of_use_cases' =>$this->input->get("production_link"),
-            'bitbucket_repo_name' => $this->input->get("bitbucket_repo_name"),
-            'project_value' => $this->input->get("project_value"),
-            'start_time' => (new \DateTime())->format('Y-m-d H:i:s'),
-            'last_updated' => (new \DateTime())->format('Y-m-d H:i:s'),
-            'current_project_phase_id' => 1
-        );
-        */
         $data = array(
             'phase_id' =>$this->input->get("customer_id"),
             'project_name' => $this->input->get("project_title")
         );
+        */
         /*
         $update_array["customer_id"]=$this->input->get("customer_id");
         $update_array["project_title"]=$this->input->get("project_title");
@@ -105,23 +87,53 @@ class Projects extends CI_Controller {
         $update_array["current_project_phase_id"]=1;
         */
         //echo var_dump($update_array);
-        $this->Project_model->insert($data);
-        //$this->db->_error_message();
-        //echo $affected_rows;
+        $this->Project_model->insert($insert_array);
         return $this->db->insert_id();
+        //$this->Project_phase_model->create_phases_upon_new_project($project_id);
+
     }
 
     public function create_new_project(){
-        $project_id =$this->insert();
-        for ($p = 1; $p <= 5; $p++) {
-            $update_array["project_id"]=$project_id;
-            $update_array["phase_id"]=$p;
-            $update_array["last_updated"]=(new \DateTime())->format('Y-m-d H:i:s');
-            $this->Project_phase_model->insert($update_array);
+        $customer_option = $this->input->post("customer_option");
+        $c_id = '';
+        if($customer_option=="from-existing"){
+            $c_id = $this->input->post("c_id");
+        }else{
+            $new_customer = array(
+                'title'=>$this->input->post("title"),
+                'first_name'=>$this->input->post("first_name"),
+                'last_name'=>$this->input->post("last_name"),
+                'company_name'=>$this->input->post("company_name"),
+                'email'=>$this->input->post("email"),
+                'hp_number'=>$this->input->post("hp_number"),
+                'other_number'=>$this->input->post("other_number"),
+                'username'=>$this->input->post("username"),
+                'password_hash'=>$this->input->post("password"),
+            );
+            $c_id = $this->Customer_model->insert($new_customer);
         }
+        //$current_project_phase_id = $this->Project_phase_model->retrieve_last_project_phase_id()+1;
+        $insert_array = array(
+            'c_id' =>$c_id,
+            'project_title' => $this->input->post("project_title"),
+            'project_description' => $this->input->post("project_description"),
+            'tags' => $this->input->post("tags"),
+            'remarks' => $this->input->post("remarks"),
+            'file_repo_name' => $this->input->post("file_repo_name"),
+            'staging_link' => null,
+            'production_link' => null,
+            'no_of_use_cases' =>$this->input->post("no_of_use_cases"),
+            'bitbucket_repo_name' => $this->input->post("bitbucket_repo_name"),
+            'project_value' => $this->input->post("project_value"),
+            'current_project_phase_id' => 0
+        );
+        $project_id = $this->insert($insert_array);
+        $current_project_phase_id = $this->Project_phase_model->create_phase_upon_new_project($project_id);
+        $this->Project_model->update_new_project_phase_id($project_id, $current_project_phase_id);
+        $this->list_all();
     }
     public function add(){
-        $this->load->view('project/project_add');
+        $this->load->view('project/new_project', $data = ["customers"=>$this->Customer_model->retrieveAll()]);
     }
     /*
     public function close($project_id){
@@ -180,12 +192,12 @@ class Projects extends CI_Controller {
         $this->load->view('project/project_details',$data=["project"=>$this->Project_model->retrieve_by_id($project_id),
         ]);
     }
-
+/*
     public function project_update($project_id){
         $this->load->view('project/project_update',$data=["project"=>$this->Project_model->retrieve_by_id($project_id),
         ]);
     }
-
+*/
     public function retrieveDataForProjectUpdatePage($project_id){
         //phase
         $project = $this->Project_model->retrieve_by_id($project_id);
