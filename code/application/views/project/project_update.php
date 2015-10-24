@@ -8,6 +8,41 @@ $class = [
 $this->load->view('common/pm_nav', $class);
 ?>
 
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+    $(document).ready(function(){
+        $("#Lead" ).click(function() {
+            // this change title
+            $(".phase").each(function(){
+                $(this).text("Lead");
+            });
+
+            var project_phase_id=($(this).data().id);
+
+            // this changes updates
+            $("#timeline").text('');
+
+            $.get("<?=base_url('updates/get_update_by_project_phase/')?>"+'/'+project_phase_id, function(data, status){
+                var updates = jQuery.parseJSON(data);
+                updates.forEach(function(element){
+                    var htmlText = '<li>'+
+                        '<div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>'+
+                        '<div class="timeline-panel"> <div class="timeline-heading"> <h4 class="timeline-title">'+element.header+'</h4> </div>'+
+                        '<div class="timeline-body"> <p>'+element.body+'</p> <div class="pull-right timeline-info">'+
+                        '<i class="fa fa-user"></i>&nbsp;'+element.posted_by+' &nbsp;'+
+                        '<i class="fa fa-calendar-check-o"></i>&nbsp;'+element.last_updated+'</div>'+
+                        ' </div> </div> </li>';
+                    $('#timeline').append( htmlText );
+                });
+            });
+        });
+
+    });
+
+</script>
+
 <aside class="sidebar-left">
     <div class="sidebar-links">
         <a class="link-blue " href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Dashboard</a>
@@ -36,18 +71,24 @@ $this->load->view('common/pm_nav', $class);
             foreach($phases as $phase){
                 $img_tag='img/future.png';
                 if(isset($phase['project_phase_id'])){
-                    $img_tag = 'img/done.png';
+                    if(!$phase['phase_id']==0) {
+                        $img_tag = 'img/done.png';
 
-                    if ($phase['project_phase_id'] == $project['current_project_phase_id']){
-                        $img_tag = 'img/current.png';
+                        if ($phase['project_phase_id'] == $project['current_project_phase_id']) {
+                            $img_tag = 'img/current.png';
+                            $current_phase=$phase;
+                        }
+                        $jump_to = base_url() . 'Projects/view_updates/' . $project["project_id"];
+                        echo '<div id="<?=$phase[\'phase_name\']?>" class="test col-sm-2 " align="center" data-toggle="tooltip"
+            data-placement="bottom" title="' . $phase['start_time'] . ' to ' . $phase['end_time'] . '">' . $phase['phase_name'] . '<br><img src="' . base_url() . $img_tag . '" class="img-responsive"></div>';
+                    }else{
                         $current_phase=$phase;
                     }
-                    $jump_to = base_url().'Projects/view_updates/'.$project["project_id"];
-                    echo'<div id="<?=$phase[\'phase_name\']?>" class="test col-sm-2 " align="center" data-toggle="tooltip" onclick="location='.$jump_to.'"
-                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase['end_time'].'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
                 }else{
                     echo' <div  class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
-                } }?>
+                }
+            }
+            ?>
 
         </div>
     </div>
