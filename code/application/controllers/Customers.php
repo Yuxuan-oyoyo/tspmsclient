@@ -93,6 +93,11 @@ class Customers extends CI_Controller {
         $this->load->view('customer/details',$data=["customer"=>$this->Customer_model->retrieve($id)]);
     }
 
+    //allow customer to edit their own profile
+    public function edit_profile($id){
+
+    }
+
     public function delete($cid){
         echo $this->Customer_model->delete($cid);
     }

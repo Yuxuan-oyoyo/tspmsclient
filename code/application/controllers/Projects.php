@@ -262,8 +262,9 @@ class Projects extends CI_Controller {
         $project = $this->Project_model->retrieve_by_id($project_id);
         if($project){
             $data=array("project"=>$project,
-                    "phases"=>$this->Project_phase_model->retrieve_by_project_id($project['project_id'])
-
+                    "phases"=>$this->Project_phase_model->retrieve_by_project_id($project['project_id']),
+                    "updates"=>$this->Update_model->retrieve_by_project_phase_id($project['current_project_phase_id']),
+                    "milestones"=>$this->Milestone_model->retrieve_by_project_phase_id($project['current_project_phase_id'])
             );
             $this->load->view('customer/project_dashboard',$data);
         }
