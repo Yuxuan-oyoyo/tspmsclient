@@ -52,4 +52,9 @@ class Milestones extends CI_Controller{
         $affected_rows = $this->Milestone_model->retrieve_by_project_phase_id($current_project_phase_id);
         return $affected_rows;
     }
+
+    public function get_by_project_phase_id($project_phase_id){
+        $affected_rows = $this->Milestone_model->retrieve_by_project_phase_id($project_phase_id);
+        echo json_encode($affected_rows);
+    }
 }

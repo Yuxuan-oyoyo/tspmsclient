@@ -22,6 +22,7 @@ class Customer_authentication extends CI_Controller {
         if($this->session->userdata('Customer_cid')){
             //if there is, log the user out first.
             $this->session->unset_userdata('Customer_cid');
+            $this->session->unset_userdata('Customer_username');
             $this->session->sess_destroy();
             $this->session->set_userdata('message','You have been logged out.');
         }
