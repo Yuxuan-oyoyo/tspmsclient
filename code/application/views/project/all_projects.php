@@ -1,54 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <!-- Bootstrap Core CSS -->
-    <link href="<?=base_url().'css/bootstrap.min.css'?>" rel="stylesheet">
-    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
-
-
-
-    <!-- Custom CSS -->
-    <link href="<?=base_url().'css/sb-admin.css'?>" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Francois+One" />
-    <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
-    <!-- Custom Fonts -->
-    <link href="<?=base_url().'css/font-awesome.min.css'?>" rel="stylesheet" type="text/css">
-    <!-- jQuery -->
-    <script src="<?=base_url().'js/jquery.js'?>"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="<?=base_url().'js/bootstrap.min.js'?>"></script>
-    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-
-    <![endif]-->
-    <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-        $(function () {
-
-            var links = $('.sidebar-links > a');
-
-            links.on('click', function () {
-
-                links.removeClass('selected');
-                $(this).addClass('selected');
-            })
-        });
-        $(document).ready(function(){
-            $('#issueTable').dataTable();
-        });
-    </script>
-</head>
-<body>
-
-<?php $this->load->view('common/pm_nav');?>
+<?php
+$class = [
+    'projects_class'=>'active',
+    'message_class'=>'',
+    'customers_class'=>'',
+    'analytics_class'=>''
+];
+$this->load->view('common/pm_nav', $class);
+?>
 
 
 <div class="col-lg-offset-1 content">

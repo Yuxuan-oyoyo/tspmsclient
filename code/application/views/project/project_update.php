@@ -1,79 +1,124 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-/**
- * Created by PhpStorm.
- * User: WANG Tiantong
- * Date: 10/6/2015
- * Time: 6:53 PM
- */
+$class = [
+    'projects_class'=>'active',
+    'message_class'=>'',
+    'customers_class'=>'',
+    'analytics_class'=>''
+];
+$this->load->view('common/pm_nav', $class);
 ?>
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <?php $this->load->view('common/common_header');?>
-    <meta charset="UTF-8">
-    <!-- Bootstrap Core CSS -->
-    <link href="<?=base_url().'css/bootstrap.min.css'?>" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Francois+One" />
-    <link href="<?=base_url().'css/sb-admin.css'?>" rel="stylesheet">
-    <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
-    <!-- Custom Fonts -->
-    <link href="<?=base_url().'css/font-awesome.min.css'?>" rel="stylesheet" type="text/css">
-    <link href="<?=base_url().'css/timeline.css'?>" media="all" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.1/modernizr.min.js"></script>
-    <!-- jQuery -->
-    <script src="<?=base_url().'js/jquery.js'?>"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="<?=base_url().'js/bootstrap.min.js'?>"></script>
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
-    <![endif]-->
 
-    <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+    $(document).ready(function(){
+        $("#Lead" ).click(function() {
+            // this change title
+            $(".phase").each(function(){
+                $(this).text("Lead");
+            });
+            var project_phase_id=($(this).data().id);
+            // this changes updates
+            refillUpdates(project_phase_id,"Lead");
+            refillMilestones(project_phase_id,"Lead");
         });
-        $(function () {
-
-            var links = $('.sidebar-links > a');
-
-            links.on('click', function () {
-
-                links.removeClass('selected');
-                $(this).addClass('selected');
-            })
+        $("#Requirement" ).click(function() {
+            // this change title
+            $(".phase").each(function(){
+                $(this).text("Requirement");
+            });
+            var project_phase_id=($(this).data().id);
+            // this changes updates
+            refillUpdates(project_phase_id,"Requirement");
+            refillMilestones(project_phase_id,"Requirement");
         });
-        $('#done').on('change', function(e){
-            if(e.target.checked){
-                alert("Ss");
-                $('#newUpdateModal').modal();
-            }
+        $("#Build" ).click(function() {
+            // this change title
+            $(".phase").each(function(){
+                $(this).text("Build");
+            });
+            var project_phase_id=($(this).data().id);
+            // this changes updates
+            refillUpdates(project_phase_id,"Build");
+            refillMilestones(project_phase_id,"Build");
         });
-        function showModal(){
-            if ($('#done').checked) {
-                $('#newUpdateModal').modal();
-            }
-        }
+        $("#Testing" ).click(function() {
+            // this change title
+            $(".phase").each(function(){
+                $(this).text("Testing");
+            });
+            var project_phase_id=($(this).data().id);
+            // this changes updates
+            refillUpdates(project_phase_id,"Testing");
+            refillMilestones(project_phase_id,"Testing");
+        });
+        $("#Deploy" ).click(function() {
+            // this change title
+            $(".phase").each(function(){
+                $(this).text("Deploy");
+            });
+            var project_phase_id=($(this).data().id);
+            // this changes updates
+            refillUpdates(project_phase_id,"Deploy");
+            refillMilestones(project_phase_id,"Deploy");
+        });
 
+    });
 
-    </script>
-</head>
-<body>
+    function refillUpdates(project_phase_id,phase_name){
+        $("#timeline").text('');
+        $.get("<?=base_url('Updates/get_update_by_project_phase/')?>"+'/'+project_phase_id,function(data,status){
+            $('#updates-phase').replaceWith('<small>'+phase_name+'</small>');
+            var updates = jQuery.parseJSON(data);
+            updates.forEach(function(element){
+                var htmlText =
+                    '<li>'+
+                    '<div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>'+
+                    '<div class="timeline-panel"> <div class="timeline-heading"> <h4 class="timeline-title">'+element.header+'</h4> </div>'+
+                    '<div class="timeline-body"> <p>'+element.body+'</p> <div class="pull-right timeline-info">'+
+                    '<i class="fa fa-user"></i>&nbsp;'+element.posted_by+' &nbsp;'+
+                    '<i class="fa fa-calendar-check-o"></i>&nbsp;'+element.last_updated+'</div>'+
+                    ' </div> </div> </li>';
+                $('#timeline').append( htmlText );
+            });
+        });
+    }
 
-<?php $this->load->view('common/pm_nav');?>
+    function refillMilestones(project_phase_id,phase_name){
+        $("#milestone").text('');
+        var monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        $.get("<?=base_url('Milestones/get_by_project_phase_id/')?>"+'/'+project_phase_id, function(data, status){
+            $('#milestones-phase').replaceWith('<small>'+phase_name+'</small>');
+            var updates = jQuery.parseJSON(data);
+            updates.forEach(function(element){
+                var ddl=new Date(element.deadline);
+                var day = ddl.getDate();
+                var month=monthNames[ddl.getMonth()];
+                var htmlText = ' <div class="row"> <div class="col-lg-4"> <div class="panel panel-default calendar"> ' +
+                    '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'</strong></div>'+
+                    '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-lg-7">'+
+                    '<strong>'+element.header+'</strong><br>'+element.body+
+                    ' </div> </div>';
+
+                $('#milestone').append( htmlText );
+            });
+        });
+    }
+
+</script>
+
 <aside class="sidebar-left">
     <div class="sidebar-links">
-        <a class="link-blue" href="projectDashboard.html"><i class="fa fa-tasks"></i>Dashboard</a>
-        <a class="link-blue selected" href="projectUpdate.html"><i class="fa fa-flag"></i>Update & Milestone</a>
+        <a class="link-blue " href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Dashboard</a>
+        <a class="link-blue selected" href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
         <a class="link-blue " href="projectIssues.html"><i class="fa fa-wrench"></i>Issues</a>
         <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
     </div>
-
 </aside>
 
 <div class="col-lg-offset-1 content">
@@ -95,17 +140,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             foreach($phases as $phase){
                 $img_tag='img/future.png';
                 if(isset($phase['project_phase_id'])){
-                    $img_tag = 'img/done.png';
-                    if ($phase['phase_id'] == $project['current_project_phase_id']){
-                        $img_tag = 'img/current.png';
+                    if(!$phase['phase_id']==0) {
+                        $img_tag = 'img/done.png';
+
+                        if ($phase['project_phase_id'] == $project['current_project_phase_id']) {
+                            $img_tag = 'img/current.png';
+                            $current_phase=$phase;
+                        }
+                        echo'<div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2 " align="center" data-toggle="tooltip"
+                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase['end_time'].'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+                    }else{
                         $current_phase=$phase;
                     }
-
-                    echo'<div class="test col-sm-2 " align="center" data-toggle="tooltip"
-                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase['end_time'].'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
                 }else{
                     echo' <div  class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
-                } }?>
+                }
+            }
+            ?>
 
         </div>
     </div>
@@ -113,11 +164,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="row">
         <div class="col-lg-12">
             <div class="col-lg-7">
-                <h3>Client Updates - <small><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
-                <ul class="timeline">
-                    <?php
+
+                <h3>Client Updates - <small id="updates-phase"><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                     <?php
                         foreach($updates as $u){
                     ?>
+                        <ul class="timeline" id="timeline">
                             <li><!---Time Line Element--->
                                 <div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>
                                 <div class="timeline-panel">
@@ -140,7 +192,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
             <div class="col-lg-4">
 
-                <h3>Milestones - <small><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <h3>Milestones - <small id="milestones-phase"><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <div id="milestone">
                 <?php
                     foreach($milestones as $m){
                         $monthName = date('F', strtotime($m['deadline']));
@@ -170,7 +223,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <?php
                     }
                 ?>
-
+                </div>
             </div>
             </div>
         </div>
@@ -190,7 +243,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" >New Update</h4>
             </div>
-            <form role="form" action="<?=base_url().'Updates/add_new_update/'.$project['project_id'].'/'.$project['current_project_phase_id'].'/'.$current_phase?>" method="post">
+
+            <form role="form" action="<?=base_url().'Updates/add_new_update/'.$project['project_id'].'/'.$project['current_project_phase_id']?>" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Title:</label>
@@ -219,7 +273,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <h4 class="modal-title" >New Milestone</h4>
             </div>
 
-            <form role="form" action="<?=base_url().'Milestones/add_new_milestone/'.$project['project_id'].'/'.$project['current_project_phase_id'].'/'.$current_phase?>" method="post">
+            <form role="form" action="<?=base_url().'Milestones/add_new_milestone/'.$project['project_id'].'/'.$project['current_project_phase_id']?>" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Title:</label>

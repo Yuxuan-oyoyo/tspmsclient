@@ -16,9 +16,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link href="<?=base_url().'css/font-awesome.min.css'?>" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
     <!-- jQuery -->
-    <script src="<?=base_url().'js/jquery.js'?>"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="<?=base_url().'js/bootstrap.min.js'?>"></script>
+    <script src="<?= base_url() . 'js/jquery.min.js' ?>"></script>
+    <script src="<?= base_url() . 'js/bootstrap.min.js' ?>"></script>
     <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -34,8 +33,98 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             $('[data-toggle="tooltip"]').tooltip()
         });
         $(document).ready(function(){
-            $('#customerTable').dataTable();
+            $("#Lead" ).click(function() {
+                // this change title
+                $(".phase").each(function(){
+                    $(this).text("Lead");
+                });
+                var project_phase_id=($(this).data().id);
+                // this changes updates
+                refillUpdates(project_phase_id);
+                refillMilestones(project_phase_id);
+            });
+            $("#Requirement" ).click(function() {
+                // this change title
+                $(".phase").each(function(){
+                    $(this).text("Requirement");
+                });
+                var project_phase_id=($(this).data().id);
+                // this changes updates
+                refillUpdates(project_phase_id);
+                refillMilestones(project_phase_id);
+            });
+            $("#Build" ).click(function() {
+                // this change title
+                $(".phase").each(function(){
+                    $(this).text("Build");
+                });
+                var project_phase_id=($(this).data().id);
+                // this changes updates
+                refillUpdates(project_phase_id);
+                refillMilestones(project_phase_id);
+            });
+            $("#Testing" ).click(function() {
+                // this change title
+                $(".phase").each(function(){
+                    $(this).text("Testing");
+                });
+                var project_phase_id=($(this).data().id);
+                // this changes updates
+                refillUpdates(project_phase_id);
+                refillMilestones(project_phase_id);
+            });
+            $("#Deploy" ).click(function() {
+                // this change title
+                $(".phase").each(function(){
+                    $(this).text("Deploy");
+                });
+                var project_phase_id=($(this).data().id);
+                // this changes updates
+                refillUpdates(project_phase_id);
+                refillMilestones(project_phase_id);
+            });
+
         });
+
+        function refillUpdates(project_phase_id){
+            $("#timeline").text('');
+            $.get("<?=base_url('updates/get_update_by_project_phase/')?>"+'/'+project_phase_id, function(data, status){
+                var updates = jQuery.parseJSON(data);
+                updates.forEach(function(element){
+                    var htmlText = '<li>'+
+                        '<div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>'+
+                        '<div class="timeline-panel"> <div class="timeline-heading"> <h4 class="timeline-title">'+element.header+'</h4> </div>'+
+                        '<div class="timeline-body"> <p>'+element.body+'</p> <div class="pull-right timeline-info">'+
+                        '<i class="fa fa-user"></i>&nbsp;'+element.posted_by+' &nbsp;'+
+                        '<i class="fa fa-calendar-check-o"></i>&nbsp;'+element.last_updated+'</div>'+
+                        ' </div> </div> </li>';
+                    $('#timeline').append( htmlText );
+                });
+            });
+        }
+
+        function refillMilestones(project_phase_id){
+            $("#milestone").text('');
+            var monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            $.get("<?=base_url('milestones/get_by_project_phase_id/')?>"+'/'+project_phase_id, function(data, status){
+                var updates = jQuery.parseJSON(data);
+                updates.forEach(function(element){
+                    var ddl=new Date(element.deadline);
+                    var day = ddl.getDate();
+                    var month=monthNames[ddl.getMonth()];
+                    var htmlText = ' <div class="row"> <div class="col-lg-4"> <div class="panel panel-default calendar"> ' +
+                        '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'</strong></div>'+
+                    '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-lg-7">'+
+                    '<strong>'+element.header+'</strong><br>'+element.body+
+                   ' </div> </div>';
+
+                    $('#milestone').append( htmlText );
+                });
+            });
+        }
+
     </script>
 </head>
 <body>
@@ -68,10 +157,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         $img_tag = 'img/current.png';
                     }
 
-                echo'<div class="test col-sm-2 " align="center" data-toggle="tooltip"
+                echo'<div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2 " align="center" data-toggle="tooltip"
                 data-placement="bottom" title="'.$phase['start_time'].' to '.$phase['end_time'].'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
       }else{
-                    echo' <div  class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+                    echo' <div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
      } }?>
 
     </div>
@@ -81,110 +170,56 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
         <div class="col-lg-12">
             <div class="col-lg-7">
-                <h3>Recent Updates - <small>Build</small></h3><hr>
-                <ul class="timeline">
+                <h3>Recent Updates - <small class="phase">Build</small></h3><hr>
+                <ul class="timeline" id="timeline">
+                    <?php foreach($updates as $update):?>
                     <li><!---Time Line Element--->
                         <div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
-                                <h4 class="timeline-title">Customer Update 1</h4>
+                                <h4 class="timeline-title"><?=$update['header']?></h4>
                             </div>
                             <div class="timeline-body"><!---Time Line Body&Content--->
-                                <p>Update content is placed here...</p>
+                                <p><?=$update['body']?></p>
                                 <div class="pull-right timeline-info">
-                                    <i class="fa fa-user"></i>&nbsp;Andrew &nbsp;
-                                    <i class="fa fa-calendar-check-o"></i>&nbsp;Sep,19,2015</div>
+                                    <i class="fa fa-user"></i>&nbsp;<?=$update['posted_by']?> &nbsp;
+                                    <i class="fa fa-calendar-check-o"></i>&nbsp;<?=$update['last_updated']?></div>
                             </div>
                         </div>
                     </li>
-                    <li><!---Time Line Element--->
-                        <div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4 class="timeline-title">Customer Update #2</h4>
-                            </div>
-                            <div class="timeline-body"><!---Time Line Body&Content--->
-                                <p>Time line content is placed here...</p>
-                                <p>And some more Time line content </p>
-                                <div class="pull-right timeline-info">
-                                    <i class="fa fa-user"></i>&nbsp;Andrew &nbsp;
-                                    <i class="fa fa-calendar-check-o"></i>&nbsp;Oct,19,2015
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li><!---Time Line Element--->
-                        <div class="timeline-badge neutral"><i class="fa fa-navicon"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4 class="timeline-title">Customer Update #3</h4>
-                            </div>
-                            <div class="timeline-body"><!---Time Line Body&Content--->
-                                <p>Time line content is placed here...</p>
-                                <p>This appears to be a neutral time line enty...</p>
-                                <div class="pull-right timeline-info">
-                                    <i class="fa fa-user"></i>&nbsp;Andrew&nbsp;
-                                    <i class="fa fa-calendar-check-o"></i>&nbsp;Oct,19,2015
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li><!---Time Line Element--->
-                        <div class="timeline-badge neutral"><i class="fa fa-navicon"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4 class="timeline-title">Customer Update #3</h4>
-                            </div>
-                            <div class="timeline-body"><!---Time Line Body&Content--->
-                                <p>Time line content is placed here...</p>
-                                <p>This appears to be a neutral time line enty...</p>
-                                <div class="pull-right timeline-info">
-                                    <i class="fa fa-user"></i>&nbsp;Andrew&nbsp;
-                                    <i class="fa fa-calendar-check-o"></i>&nbsp;Oct,19,2015
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                    <?php endforeach?>
                 </ul>
             </div>
             <div class="col-lg-4">
 
-                <h3>Milestones - <small>Build</small></h3><hr>
+                <h3>Milestones - <small class="phase">Build</small></h3><hr>
+                <div id="milestone">
+                    <?php foreach($milestones as $milestone):
+                        /*$months=["January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December"
+                        ];*/
+                        $month = date('F',strtotime($milestone['deadline']));
+                        $date =  date('d',strtotime($milestone['deadline']));
+                    ?>
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="panel panel-default calendar">
-                            <div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>October</strong></div>
+                            <div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong><?=$month?></strong></div>
                             <div class="panel-body">
                                 <div class="thumbnail calendar-date" >
-                                    03
+                                    <?=$date?>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-7">
-                        <strong>Title Of Milestone</strong><br>
-                        This is  a short description of milestone.
+                        <strong><?=$milestone['header']?></strong><br>
+                        <?=$milestone['body']?>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="panel panel-default calendar">
-                            <div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>October</strong></div>
-                            <div class="panel-body">
-                                <div class="thumbnail calendar-date" >
-                                    24
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-7">
-                        <strong>Title Of Milestone</strong><br>
-                        This is  a short description of milestone.
-                        This is  a short description of milestone.
-                        This is  a short description of milestone.
-                    </div>
-                </div>
+                    <?php endforeach?>
             </div>
+                </div>
         </div>
 
 

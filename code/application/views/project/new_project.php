@@ -1,63 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <!-- Bootstrap Core CSS -->
-
-    <link href="<?=base_url().'css/bootstrap.min.css'?>" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link href="<?=base_url().'css/sb-admin.css'?>" rel="stylesheet">
-    <link href="<?=base_url().'css/bootstrap-tokenfield.min.css'?>" rel="stylesheet">
-    <link href="<?=base_url().'css/tokenfield-typeahead.min.css'?>" rel="stylesheet">
-    <!-- Custom Fonts -->
-    <link href="<?=base_url().'css/font-awesome.min.css'?>" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Francois+One" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.1/modernizr.min.js"></script>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-
-    <![endif]-->
-
-    <script>
-        $("#customer-option").on("change",function(){
-            if($(this).value()=="from-existing"){
-                $('#existing_customer').css("display","inherit");
-                $('#new_customer').css("display","none");
-            }else{
-                $('#existing_customer').css("display","none");
-                $('#new_customer').css("display","inherit");
-            }
-        });
-        $(".date-start").on("blur",function(){
-            var prev_id = $(this).attr("id").split("-")[2] - 1;
-            var value= $(this).val();
-            $("phase-end-"+prev_id).val(value);
-        });
-        $(".date-end").on("blur",function(){
-            var next_id = $(this).attr("id").split("-")[2] + 1;
-            var value= $(this).val();
-            $("phase-end-"+next_id).val(value);
-        });
-
-    </script>
-</head>
-<body>
-
 <?php $this->load->view('common/pm_nav');?>
 <!-- Page Content -->
+<p></p>
 <div class="container">
+
+    <form class="form-horizontal" action="<?=base_url().'Projects/create_new_project'?>" method="post">
+
     <div class="col-lg-12">
         <h1 class="page-header">
             New Project&nbsp;
-            <a href="projects.html" class="btn btn-default">Cancel</a>&nbsp;
-            <a href="projects.html" class="btn btn-primary">Submit</a>
+            <a href="<?=base_url().'Projects/list_all'?>" class="btn btn-default">Cancel</a>&nbsp;
+            <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
         </h1>
     </div>
-    <form class="form-horizontal">
+
         <div class="col-lg-6 project-info">
             <h3>Project Information</h3>
             <hr>
@@ -116,8 +71,8 @@
             <hr>
             <div class="col-lg-12">
                 <div class="form-group">
-                    <label for="customer-option"> Customer</label>
-                    <select class="form-control" id="customer-option" name="customer-option">
+                    <label for="customer_option"> Customer</label>
+                    <select class="form-control" id="customer_option" name="customer_option">
                         <option value="create-new">Create new</option>
                         <option value="from-existing">From existing</option>
                     </select>
@@ -125,9 +80,10 @@
                 <div class="existing_customer">
                     <div class="form-group">
                         <label >Choose Customer:</label>
-                        <select class="form-control">
+                        <select class="form-control" name="c_id">
+
                             <?php foreach($customers as $c):?>
-                                <option <?=$c['c_id']?>><?=$c['first_name']?>&nbsp;<?=$c['last_name']?></option>
+                                <option value="<?=$c['c_id']?>"><?=$c['first_name']?>&nbsp;<?=$c['last_name']?></option>
                             <?php endforeach?>
                         </select>
                     </div>
@@ -186,11 +142,9 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="username">Password</label>
-                        <input type="password" class="form-control" name="username" id="password">
+                        <input type="password" class="form-control" name="password" id="password">
                     </div>
                 </div>
-
-
             </div>
         </div>
     </form>

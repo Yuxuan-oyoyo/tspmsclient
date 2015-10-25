@@ -29,28 +29,25 @@ class Project_phase extends CI_Controller{
         $this->load->view('customer/customer_all',$data);
     }
 */
-    public function create_phases_upon_new_project($project_id){
-        for ($p = 1; $p <= 5; $p++) {
-            $new_project_phase["project_id"]=$project_id;
-            $new_project_phase["phase_id"]=$p;
-            $affected_rows = $this->Project_phase_model->insert($new_project_phase);
-            echo $affected_rows;
-        }
-    }
 
     public function update_phase($project_id,$current_project_phase_id){
         //echo $project_id;
         //echo $current_project_phase_id;
-        $update_array = $this->Project_phase_model->retrieve__by_id($current_project_phase_id);
-        $current_phase_id = $update_array['phase_id'];
-        $next_phase = $current_phase_id+1;
-        $update_array['estimated_end_time']=$this->input->post("estimated_end_time");
-        $this->Project_phase_model->update($update_array);
+        if(!$current_project_phase_id==0) {
+            $update_array = $this->Project_phase_model->retrieve__by_id($current_project_phase_id);
+            $current_phase_id = $update_array['phase_id'];
+            $next_phase = $current_phase_id + 1;
+            $update_array['estimated_end_time'] = $this->input->post("estimated_end_time");
+            $this->Project_phase_model->update($update_array);
 
-        $update_array_project = $this->Project_model->retrieve_by_id($project_id);
-        $next_project_phase_id = $current_project_phase_id+1;
-        $update_array_project['current_project_phase_id'] = $next_project_phase_id;
-        $this->Project_model->update($update_array_project);
-        $this->load->view('project/project_update',$data=["project"=>$this->Project_model->retrieve_by_id($project_id),"current_phase"=>$next_phase,"current_project_phase_id"=>$next_project_phase_id]);
+            $update_array_project = $this->Project_model->retrieve_by_id($project_id);
+            $next_project_phase_id = $current_project_phase_id + 1;
+            $update_array_project['current_project_phase_id'] = $next_project_phase_id;
+            $this->Project_model->update($update_array_project);
+            //$this->load->view('project/project_update', $data = ["project" => $this->Project_model->retrieve_by_id($project_id), "current_phase" => $next_phase, "current_project_phase_id" => $next_project_phase_id]);
+        }else{
+            $this->Project_phase_model->insert($project_id);
+           // $this->load->view('project/project_update', $data = ["project" => $this->Project_model->retrieve_by_id($project_id), "current_phase" => $next_phase, "current_project_phase_id" => $next_project_phase_id]);
+        }
     }
 }

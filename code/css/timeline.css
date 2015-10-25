@@ -122,6 +122,7 @@
 .timeline-info{
     color:#837E7C;
 }
+.no-gutter{ cursor: pointer; }
 .calendar-month{
     text-align:center !important;
     background:#e74c3c !important;

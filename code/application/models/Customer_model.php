@@ -61,7 +61,8 @@ class Customer_model extends CI_Model
 
         $date = date('Y-m-d H:i:s');
         $update_array['last_updated'] = $date;
-        return $this->db->insert('customer', $insert_array);
+        $this->db->insert('customer', $insert_array);
+        return $this->db->insert_id();
     }
     //not in use
     public function deactivate($input_c_id){

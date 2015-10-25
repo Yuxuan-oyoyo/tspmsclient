@@ -17,13 +17,15 @@ class Milestones extends CI_Controller{
         $this->load->model("Project_model");
         $this->load->model("Post_model");
         $this->load->model("Update_model");
+        $this->load->model("Project_phase_model");
     }
 
-    public function add_new_milestone($project_id,$current_project_phase_id,$current_phase){
+    public function add_new_milestone($project_id,$current_project_phase_id){
         $insert_post_array['header']=$this->input->post("header");
         $insert_post_array['body']=$this->input->post("body");
         $insert_post_array['project_phase_id']=$current_project_phase_id;
         $post_id = $this->Post_model->insert($insert_post_array,'milestone');
+        $phases = $this->Project_phase_model->retrieve_by_project_id($project_id);
 
         $insert_milestone_array['deadline']=$this->input->post("deadline");
         $insert_milestone_array['post_id'] =$post_id;
@@ -37,10 +39,10 @@ class Milestones extends CI_Controller{
 
         $data = [
             "project"=>$this->Project_model->retrieve_by_id($project_id),
-            "current_phase"=>$current_phase,
             "current_project_phase_id"=>$current_project_phase_id,
             "milestones"=>$milestones,
-            "updates"=>$updates
+            "updates"=>$updates,
+            "phases"=>$phases
         ];
 
         $this->load->view('project/project_update',$data);
@@ -49,5 +51,10 @@ class Milestones extends CI_Controller{
     public function all_milestone_in_current_phase($current_project_phase_id){
         $affected_rows = $this->Milestone_model->retrieve_by_project_phase_id($current_project_phase_id);
         return $affected_rows;
+    }
+
+    public function get_by_project_phase_id($project_phase_id){
+        $affected_rows = $this->Milestone_model->retrieve_by_project_phase_id($project_phase_id);
+        echo json_encode($affected_rows);
     }
 }
