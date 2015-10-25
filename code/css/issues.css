@@ -1,0 +1,32 @@
+.icon {
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    text-align: left;
+    overflow: hidden;
+    text-indent: -9999px;
+    width: 16px;
+}
+a {
+    color: #3572b0;
+    text-decoration: none;
+}
+#issues .icon.icon-bug {
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiP¡­w2LjAwMkMxMi42ODksMjIuMDAyLDkuOTk5LDE5LjMxMSw5Ljk5OSwxNnoiLz4KPC9zdmc+Cg==);
+}
+.aui-lozenge {
+    background: #FFFFFF;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    color: #333;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 99%;
+    margin: 0;
+    padding: 2px 5px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+}
