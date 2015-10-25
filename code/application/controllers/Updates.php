@@ -49,7 +49,7 @@ class Updates extends CI_Controller{
     public function get_update_by_project_phase($project_phase_id){
        $updates = $this->Update_model->retrieve_by_project_phase_id($project_phase_id);
        echo (json_encode($updates));
-       //return json_encode($updates);
+       return json_encode($updates);
 
     }
 }

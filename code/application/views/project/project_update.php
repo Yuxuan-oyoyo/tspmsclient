@@ -8,6 +8,8 @@ $class = [
 $this->load->view('common/pm_nav', $class);
 ?>
 
+
+
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
@@ -18,28 +20,95 @@ $this->load->view('common/pm_nav', $class);
             $(".phase").each(function(){
                 $(this).text("Lead");
             });
-
             var project_phase_id=($(this).data().id);
-
             // this changes updates
-            $("#timeline").text('');
-
-            $.get("<?=base_url('updates/get_update_by_project_phase/')?>"+'/'+project_phase_id, function(data, status){
-                var updates = jQuery.parseJSON(data);
-                updates.forEach(function(element){
-                    var htmlText = '<li>'+
-                        '<div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>'+
-                        '<div class="timeline-panel"> <div class="timeline-heading"> <h4 class="timeline-title">'+element.header+'</h4> </div>'+
-                        '<div class="timeline-body"> <p>'+element.body+'</p> <div class="pull-right timeline-info">'+
-                        '<i class="fa fa-user"></i>&nbsp;'+element.posted_by+' &nbsp;'+
-                        '<i class="fa fa-calendar-check-o"></i>&nbsp;'+element.last_updated+'</div>'+
-                        ' </div> </div> </li>';
-                    $('#timeline').append( htmlText );
-                });
+            refillUpdates(project_phase_id,"Lead");
+            refillMilestones(project_phase_id,"Lead");
+        });
+        $("#Requirement" ).click(function() {
+            // this change title
+            $(".phase").each(function(){
+                $(this).text("Requirement");
             });
+            var project_phase_id=($(this).data().id);
+            // this changes updates
+            refillUpdates(project_phase_id,"Requirement");
+            refillMilestones(project_phase_id,"Requirement");
+        });
+        $("#Build" ).click(function() {
+            // this change title
+            $(".phase").each(function(){
+                $(this).text("Build");
+            });
+            var project_phase_id=($(this).data().id);
+            // this changes updates
+            refillUpdates(project_phase_id,"Build");
+            refillMilestones(project_phase_id,"Build");
+        });
+        $("#Testing" ).click(function() {
+            // this change title
+            $(".phase").each(function(){
+                $(this).text("Testing");
+            });
+            var project_phase_id=($(this).data().id);
+            // this changes updates
+            refillUpdates(project_phase_id,"Testing");
+            refillMilestones(project_phase_id,"Testing");
+        });
+        $("#Deploy" ).click(function() {
+            // this change title
+            $(".phase").each(function(){
+                $(this).text("Deploy");
+            });
+            var project_phase_id=($(this).data().id);
+            // this changes updates
+            refillUpdates(project_phase_id,"Deploy");
+            refillMilestones(project_phase_id,"Deploy");
         });
 
     });
+
+    function refillUpdates(project_phase_id,phase_name){
+        $("#timeline").text('');
+        $.get("<?=base_url('Updates/get_update_by_project_phase/')?>"+'/'+project_phase_id,function(data,status){
+            $('#updates-phase').replaceWith('<small>'+phase_name+'</small>');
+            var updates = jQuery.parseJSON(data);
+            updates.forEach(function(element){
+                var htmlText =
+                    '<li>'+
+                    '<div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>'+
+                    '<div class="timeline-panel"> <div class="timeline-heading"> <h4 class="timeline-title">'+element.header+'</h4> </div>'+
+                    '<div class="timeline-body"> <p>'+element.body+'</p> <div class="pull-right timeline-info">'+
+                    '<i class="fa fa-user"></i>&nbsp;'+element.posted_by+' &nbsp;'+
+                    '<i class="fa fa-calendar-check-o"></i>&nbsp;'+element.last_updated+'</div>'+
+                    ' </div> </div> </li>';
+                $('#timeline').append( htmlText );
+            });
+        });
+    }
+
+    function refillMilestones(project_phase_id,phase_name){
+        $("#milestone").text('');
+        var monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        $.get("<?=base_url('Milestones/get_by_project_phase_id/')?>"+'/'+project_phase_id, function(data, status){
+            $('#milestones-phase').replaceWith('<small>'+phase_name+'</small>');
+            var updates = jQuery.parseJSON(data);
+            updates.forEach(function(element){
+                var ddl=new Date(element.deadline);
+                var day = ddl.getDate();
+                var month=monthNames[ddl.getMonth()];
+                var htmlText = ' <div class="row"> <div class="col-lg-4"> <div class="panel panel-default calendar"> ' +
+                    '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'</strong></div>'+
+                    '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-lg-7">'+
+                    '<strong>'+element.header+'</strong><br>'+element.body+
+                    ' </div> </div>';
+
+                $('#milestone').append( htmlText );
+            });
+        });
+    }
 
 </script>
 
@@ -78,9 +147,8 @@ $this->load->view('common/pm_nav', $class);
                             $img_tag = 'img/current.png';
                             $current_phase=$phase;
                         }
-                        $jump_to = base_url() . 'Projects/view_updates/' . $project["project_id"];
-                        echo '<div id="<?=$phase[\'phase_name\']?>" class="test col-sm-2 " align="center" data-toggle="tooltip"
-            data-placement="bottom" title="' . $phase['start_time'] . ' to ' . $phase['end_time'] . '">' . $phase['phase_name'] . '<br><img src="' . base_url() . $img_tag . '" class="img-responsive"></div>';
+                        echo'<div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2 " align="center" data-toggle="tooltip"
+                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase['end_time'].'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
                     }else{
                         $current_phase=$phase;
                     }
@@ -96,11 +164,12 @@ $this->load->view('common/pm_nav', $class);
     <div class="row">
         <div class="col-lg-12">
             <div class="col-lg-7">
-                <h3>Client Updates - <small id="phase"><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
-                <ul class="timeline">
-                    <?php
+
+                <h3>Client Updates - <small id="updates-phase"><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                     <?php
                         foreach($updates as $u){
                     ?>
+                        <ul class="timeline" id="timeline">
                             <li><!---Time Line Element--->
                                 <div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>
                                 <div class="timeline-panel">
@@ -123,7 +192,8 @@ $this->load->view('common/pm_nav', $class);
             </div>
             <div class="col-lg-4">
 
-                <h3>Milestones - <small><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <h3>Milestones - <small id="milestones-phase"><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <div id="milestone">
                 <?php
                     foreach($milestones as $m){
                         $monthName = date('F', strtotime($m['deadline']));
@@ -153,7 +223,7 @@ $this->load->view('common/pm_nav', $class);
                 <?php
                     }
                 ?>
-
+                </div>
             </div>
             </div>
         </div>
