@@ -1,14 +1,6 @@
 <?php
-$class = [
-    'projects_class'=>'active',
-    'message_class'=>'',
-    'customers_class'=>'',
-    'analytics_class'=>''
-];
-$this->load->view('common/pm_nav', $class);
+defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-
-
 
 <script>
     $(function () {
@@ -111,7 +103,15 @@ $this->load->view('common/pm_nav', $class);
     }
 
 </script>
-
+<?php
+$class = [
+    'projects_class'=>'active',
+    'message_class'=>'',
+    'customers_class'=>'',
+    'analytics_class'=>''
+];
+$this->load->view('common/pm_nav', $class);
+?>
 <aside class="sidebar-left">
     <div class="sidebar-links">
         <a class="link-blue " href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Dashboard</a>
