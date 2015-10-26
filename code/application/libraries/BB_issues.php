@@ -12,6 +12,12 @@ class BB_issues {
     //public  $oauth_endpoint = 'https://bitbucket.org/site/oauth2/access_token';
 
     public $_print_err = false;
+    public $server_status = [
+        "new","open","resolved","on hold","invalid","duplicate","wontfix"
+    ];
+    public $defined_status=[
+        "new","to develop","resolved","to test","invalid","to deploy","wontfix"
+    ];
     private function setEndpoint($repo_slug){
         return "https://api.bitbucket.org/1.0/repositories/".BB_ACCOUNT_NAME."/".$repo_slug."/issues";
     }
@@ -29,7 +35,23 @@ class BB_issues {
         $parameters["access_token"] = $token;
         $url = $endpoint.'?'.$this->construct_paras($parameters);
         return $this->sendGetRequest($url);
-        //return $this->sendGetRequest($endpoint);
+    }
+    private function map_status($status, $fromDefined = true){
+        if($fromDefined) {
+            $index = array_search($status, $this->defined_status);
+            if($index!==false) {
+                return $this->server_status[$index];
+            }else{
+                return false;
+            }
+        }else{
+            $index = array_search($status, $this->server_status);
+            if($index!==false) {
+                return $this->defined_status[$index];
+            }else{
+                return false;
+            }
+        }
     }
 
     /**
@@ -66,6 +88,7 @@ class BB_issues {
             if(isset($reply_array['error'])){
                 if($this->_print_err) echo var_dump($reply_array);
             }else{
+                $reply_array["status"] = $this->map_status($reply_array["status"], false);
                 return $reply_array;
             }
         }
@@ -76,12 +99,14 @@ class BB_issues {
         if($parameters==false){
             return '';
         }else{
+            if(isset($reply_array["status"])){
+                $reply_array["status"] = $this->map_status($reply_array["status"], true);
+            }
             $fields_string = '';
             foreach($parameters as $key=>$value){
                 $fields_string .= $key.'='.$value.'&';
             }
             rtrim($fields_string, '&');
-            //echo var_dump($fields_string);
             return $fields_string;
         }
 
@@ -92,7 +117,7 @@ class BB_issues {
      * @param array $issue_array
      */
     public function postNewIssue($repo_slug, array $issue_array){
-        $this->sendIssueRequest($issue_array,$issue_array,"POST");
+        $this->sendIssueRequest($repo_slug,$issue_array,"POST");
         //TODO: may need a confirmation
     }
     /**
@@ -101,7 +126,7 @@ class BB_issues {
      * issue, and can also be incomplete
      */
     public function updateIssue($repo_slug, array $issue_array){
-        $this->sendIssueRequest($issue_array,$issue_array,"PUT");
+        $this->sendIssueRequest($repo_slug,$issue_array,"PUT");
     }
     public function getCommentsForAnIssue($repo_slug, $issue_id){
         //TODO:retrieve comments
@@ -115,6 +140,13 @@ class BB_issues {
         $CI->load->library('bb_shared');
         $token = $CI->bb_shared->getDefaultOauthToken();
         $endpoint = $this->setEndpoint($repo_slug);
+        if(isset($issue_array["local_id"])){
+            $endpoint ="/".$issue_array["local_id"];
+            unset($issue_array["local_id"]);
+        }
+        if(isset($issue_array["status"])){
+            $issue_array["status"] = $this->map_status($issue_array["status"], true);
+        }
         $issue_array['token'] = $token;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $endpoint);

@@ -30,3 +30,268 @@ a {
     text-decoration: none;
     text-transform: uppercase;
 }
+img {
+    border: none;
+}
+#issue-main-content {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+.issue-author {
+    position: relative;
+    margin-top: 12px;
+    padding-left: 42px;
+}
+.issue-description {
+    padding-left: 42px;
+    font-family: Arial,sans-serif;
+}
+
+.avatar img {
+    border-radius: 3px;
+    display: block;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+}
+.avatar-inner {
+    display: table-cell;
+    vertical-align: middle;
+}
+.avatar {
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+
+.issue-author .avatar {
+    position: absolute;
+    top: 3px;
+    left: 0;
+}
+.avatar-medium
+{height:32px;width:32px}
+.avatar-medium .avatar-inner
+{height:32px;width:32px}
+.avatar-medium .avatar-inner img
+{max-height:32px;max-width:32px}
+
+.comments-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+h1 + .comments-list > .comment:first-child {
+    border-top: none;
+}
+.bb-udiff .comments-list .comment header .aui-avatar {
+    left: 10px;
+}
+.comments-list .comment {
+    position: relative;
+    border-top: 1px solid #cccccc;
+}
+.comments-list .comment article {
+    padding-top: 10px;
+}
+.comments-list .comment article:target {
+    background: #ebf2f9;
+    /* when adding highlight, no delay */
+    -webkit-transition: background 1s ease;
+    transition: background 1s ease;
+}
+.comments-list .comment .child-comments {
+    clear: both;
+    margin: 0 0 0 52px;
+    padding: 0;
+    list-style: none;
+}
+.comments-list .comment .author {
+    font-weight: bold;
+    line-height: 1;
+}
+.comments-list .comment .author-lozenge,
+.comments-list .comment .owner-lozenge,
+.comments-list .comment .staff-lozenge {
+    margin: 0 8px;
+}
+.comments-list .comment .user-issue-lozenge {
+    margin-left: 3px;
+}
+.comments-list .comment header {
+    padding-left: 42px;
+}
+.comments-list .comment header .aui-avatar {
+    position: absolute;
+    left: 0;
+    top: 10px;
+}
+.comments-list .comment header a.permalink {
+    color: #707070;
+    margin-left: 3px;
+}
+.comments-list .comment .comment-content {
+    padding-left: 42px;
+    margin-top: 5px;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+.comments-list .comment .comment-content img:not(.emoji) {
+    box-sizing: border-box;
+    border: 1px solid #cccccc;
+    max-width: 100%;
+}
+.comments-list .comment .comment-content li img {
+    vertical-align: middle;
+}
+.comments-list .comment .comment-actions {
+    font-size: 12px;
+    list-style: none;
+    margin: 5px 0 0 42px;
+    padding: 0 0 25px 0;
+}
+.comments-list .comment .comment-actions > li {
+    float: left;
+}
+.comments-list .comment .comment-actions > li:before {
+    padding: 0 3px 0 6px;
+    content: "\2022";
+    color: #707070;
+}
+.comments-list .comment .comment-actions > li:first-child:before {
+    content: none;
+}
+.comments-list .comment .comment-actions > li a {
+    color: #707070;
+}
+.comments-list .comment article.loading .comment-actions {
+    margin-left: 10px;
+    padding-left: 32px;
+
+}
+.comments-list .comment .deleted {
+    margin-bottom: 10px;
+}
+/* Comment forms */
+.comments-list .new-comment {
+    position: relative;
+    margin: 10px 0 10px 0;
+}
+.comments-list .new-comment .user .aui-avatar {
+    position: absolute;
+    left: 0;
+}
+.comments-list .comment + .new-comment {
+    border-top: 1px solid #cccccc;
+    margin-top: 0;
+    padding-top: 20px;
+}
+.comments-list .editor {
+    margin: 0 0 0 42px;
+}
+.comments-list .editor.top-label .field-group {
+    /* Override AUI's .top-label .field-group margin and padding. */
+    margin: 0;
+    padding: 0;
+}
+.comments-list .editor label {
+    position: absolute;
+    left: -9999px;
+}
+.comments-list .editor textarea {
+    width: 100%;
+    height: 32px;
+    overflow: hidden;
+    padding: 7px;
+}
+.comments-list .editor.previewing textarea {
+    display: none;
+}
+.comments-list .editor.focused textarea {
+    height: 110px;
+    min-height: 35px;
+    overflow: auto;
+}
+.comments-list .editor button,
+.comments-list .editor .cancel {
+    display: none;
+    margin: 5px 5px 5px 0;
+}
+.comments-list .editor .preview-container {
+    display: none;
+}
+.comments-list .editor.focused button,
+.comments-list .editor.focused .cancel,
+.comments-list .editor.focused .help,
+.comments-list .editor.focused .preview {
+    display: inline;
+}
+.comments-list .comment .editing .editor {
+    display: block;
+    margin: 5px -10px 10px 32px;
+}
+.comments-list .comment .editing .comment-content,
+.comments-list .comment .editing .comment-metadata,
+.comments-list .comment .editing .new-comment .user,
+.comments-list .comment .editing .comment-actions,
+.comments-list .comment .editor,
+.comments-list .comment .new-comment {
+    display: none;
+}
+.comments-list .editor.loading .buttons {
+    /* Keeps loading spinner next to the <button> when resizing textarea. */
+    padding-left: 32px;
+    margin-left: -32px;
+    /*background: url(../../img/loading.gif) left 50% no-repeat;*/
+}
+.comment-thread-container {
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+}
+.comment-thread-container:first-child {
+    border-top: none;
+}
+.comment-thread-container:last-child {
+    border-bottom: none;
+}
+.comment-thread-container .new-comment {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.comment-thread-container .comment > article {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.comment-thread-container .comments-list {
+    box-sizing: border-box;
+    position: relative;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+.heading + .comment-thread-container .comments-list {
+    margin-top: 0;
+}
+.comment-thread-container .comments-list > .comment:first-child {
+    border-top: none;
+}
+#changeset-diff.hide-comments .hide-comments-link,
+#changeset-diff.hide-comments .comment-thread-container.existing-comment {
+    display: none;
+}
+#changeset-diff:not(.hide-comments) .show-comments-link {
+    display: none;
+}
+#changeset-diff .toggle-comments {
+    background: transparent no-repeat 0 0;
+    /* img/icons/pdl/comment.png */
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABV0RVh0Q3JlYXRpb24gVGltZQAxMi83LzEyiCJQPAAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAEJSURBVDiNjdPBbcJAEIXhz1buoQPSAe4Al5AOYioIkhuggZFIBTgd0EHiDpwOSAekAnLwIq0sEJ7bvn3/eGZnXJhE27YNarygSvKAE74josv9xQTc4zm7/8UZq0z7w/aaqEhwh7dk+EAXEcOksgoN3pP0GRFNkb58wA+aKXijxQpdqmpTYpfuHsKQPE067kos0c+BJ0l6LMukLebCWSygNPa+atu2nksm7wp9iW3Sj+lBH8GvOKbj7jrGxjgJxveoJ1BlXKoG6yRvIqIrJqY91hFRTJLm0RsXaSDbxKy3L2zyioxrPOAYEaecebrT6sG4svWj8ZZ39FnwrQRn4w80C4bicrnM8d2Nf1QoZ5g+V6fMAAAAAElFTkSuQmCC);
+    padding-left: 20px;
+}
+.comment-content .bb-udiff {
+    margin-bottom: 15px;
+}
+
+/*# sourceMappingURL=../components/comments.css.map */

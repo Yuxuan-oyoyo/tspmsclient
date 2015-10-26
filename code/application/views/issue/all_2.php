@@ -21,17 +21,6 @@
 
     <![endif]-->
     <script>
-        $(document).ready(function(){
-            $.ajax({
-                url:"<?=base_url()."Issues/list_all_json/".$repo_slug."?".$filter?>",
-                beforeSend: function() {
-                    $('#tbody').html("loading..");
-                },
-                success: function(data){
-                    $("#tbody").html(data);
-                }
-            });
-        });
     </script>
 </head>
 <body>
@@ -147,7 +136,7 @@
             <?php
                 $filter_str = "status=new&amp;status=open&amp;";
                 $headers = [
-                    ["display"=>"Title"     ,"sort"=>"id"       ,"sm"=>""],//"sm" for sort method
+                    ["display"=>"Title"     ,"sort"=>"local_id"       ,"sm"=>""],//"sm" for sort method
                     ["display"=>"Type"      ,"sort"=>"kind"     ,"sm"=>""],
                     ["display"=>"Priority"  ,"sort"=>"priority" ,"sm"=>""],
                     ["display"=>"Status"    ,"sort"=>"status"   ,"sm"=>""],
@@ -156,6 +145,7 @@
                     ["display"=>"Created"   ,"sort"=>"created_on","sm"=>""],
                     ["display"=>"Updated"   ,"sort"=>"updated_on","sm"=>""],
                 ];
+            $issues = $issues_response["issues"];
             //$data = [["kind"=>"bug","local_id"=>3,"title"=>"Speed up page load by localize assest","status"=>"new","priority"=>"major","milestone"=>null,"responsible"=>"WANG TIANTONG _","created_on"=>"2015-10-25T09:48:10.147","utc_last_updated"=>"2015-10-25 08:48:10+00:00"]];
             ?>
             <table class="table table-striped table-bordered" data-sort-by="updated_on" data-modules="components/follow-list">
@@ -170,12 +160,59 @@
                 </thead>
                 <tbody id="tbody">
 
+                <?php foreach($issues as $d):?>
+                    <tr class="" data-state="open">
+                        <td class="">
+                            <a class="execute" href="<?=base_url()."issues/retrieve_by_id/".$repo_slug."?local_id=".$d["local_id"]?>" title="View Details">#<?=$d["local_id"]?>: <?=$d["title"]?></a>
+                        </td>
+                        <td class="icon-col">
+                            <a href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."kind=".$d["metadata"]["kind"]?>"
+                               class="icon-bug" title="Filter by type:<?=$d["metadata"]["kind"]?>">
+                                <?=$d["metadata"]["kind"]?>
+                            </a>
+                        </td>
+                        <td class="icon-col">
+                            <a href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."priority=".$d["priority"]?>"
+                               class=" icon-major" title="Filter by priority:"<?=$d["priority"]?>>
+                                <?=$d["priority"]?>
+                            </a>
+                        </td>
+                        <td class="state">
+                            <a class="aui-lozenge" href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."status=".$d["status"]?>"
+                               title="Filter by status: <?=$d["status"]?>">
+                                <?=$d["status"]?>
+                            </a>
+                        </td>
+                        <td></td>
+                        <td class="user">
+                            <div>
+                                <a href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."responsible=".$d["responsible"]["username"]?>"
+                                   title="Filter issues assigned to: <?=$d["responsible"]["display_name"]?>">
+                                    <div class="aui-avatar aui-avatar-xsmall">
+                                        <div class="aui-avatar-inner">
+                                            <!--img src="https://bitbucket.org/account/czyang_jessie/avatar/32/?ts=1443338247" alt="" /-->
+                                        </div>
+                                    </div>
+                                    <span title="<?=$d["responsible"]["username"]?>"><?=$d["responsible"]["display_name"]?></span>
+                                </a>
+                            </div>
+                        </td>
+                        <td class="date">
+                            <div>
+                                <time datetime="2015-10-15T11:43:49.635488+00:00" data-title="true">2015-10-15</time>
+                            </div>
+                        </td>
+                        <td class="date">
+                            <div>
+                                <time datetime="2015-10-15T12:06:49.753899+00:00" data-title="true">2015-10-15</time>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach?>
                 </tbody>
             </table>
 
         </div>
-
-
     </div>
 </div>
 </body>
