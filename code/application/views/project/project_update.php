@@ -1,5 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+$class = [
+    'projects_class'=>'active',
+    'message_class'=>'',
+    'customers_class'=>'',
+    'analytics_class'=>''
+];
+$this->load->view('common/pm_nav', $class);
 ?>
 
 <script>
@@ -103,15 +110,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
 
 </script>
-<?php
-$class = [
-    'projects_class'=>'active',
-    'message_class'=>'',
-    'customers_class'=>'',
-    'analytics_class'=>''
-];
-$this->load->view('common/pm_nav', $class);
-?>
+
 <aside class="sidebar-left">
     <div class="sidebar-links">
         <a class="link-blue " href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Dashboard</a>
@@ -165,7 +164,7 @@ $this->load->view('common/pm_nav', $class);
         <div class="col-lg-12">
             <div class="col-lg-7">
 
-                <h3>Client Updates - <small id="updates-phase"><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <h3>Client Updates - <small class="phase"><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
                      <?php
                         foreach($updates as $u){
                     ?>
@@ -192,7 +191,7 @@ $this->load->view('common/pm_nav', $class);
             </div>
             <div class="col-lg-4">
 
-                <h3>Milestones - <small id="milestones-phase"><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <h3>Milestones - <small class="phase"><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
                 <div id="milestone">
                 <?php
                     foreach($milestones as $m){
