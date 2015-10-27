@@ -29,10 +29,10 @@ class Issues extends CI_Controller {
             }
             //$para['repo_slug'] = $repo_slug;
             //TODO:validate parameters
-            $issues_response = $this->bb_issues->retrieveIssues($repo_slug, $para);
+            $issues_response = $this->bb_issues->retrieveIssues($repo_slug, $para, time());
             $data= ["issues_response"=>$issues_response,"repo_slug"=>$repo_slug,"filter_str"=>$this->getParamStr($status_filter, "status")];
             $this->session->set_userdata('issue_list'.$repo_slug, $issues_response["issues"]);
-            $this->load->view("issue/all_2", $data);
+            //$this->load->view("issue/all_2", $data);
         }else{
             //TODO: take user to 404 page
         }

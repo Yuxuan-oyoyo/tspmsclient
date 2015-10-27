@@ -27,7 +27,7 @@ class BB_issues {
      * @param array|null $parameters
      * @return array|null
      */
-    public function retrieveIssues($repo_slug, array $parameters=null){
+    public function retrieveIssues($repo_slug, array $parameters=null,$time){
         $CI =& get_instance();
         $CI->load->library('bb_shared');
         $token = $CI->bb_shared->getDefaultOauthToken();
@@ -74,7 +74,9 @@ class BB_issues {
         /*open connection*/
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-        //curl_setopt($ch, CURLOPT_USERPWD, BB_OAUTH_KEY.':'.BB_OAUTH_SECRET);
+        $header = array("Cache-Control: no-cache");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         $response = curl_exec($ch);
@@ -83,12 +85,17 @@ class BB_issues {
             echo curl_error($ch);
         }
         //echo var_dump( curl_getinfo($ch));
-        //echo "response",var_dump($response);
+        $hhhhh_time = time();
         if(($reply_array = json_decode($response,true))!=null){
+            //echo "response",var_dump($reply_array);
             if(isset($reply_array['error'])){
                 if($this->_print_err) echo var_dump($reply_array);
             }else{
-                $reply_array["status"] = $this->map_status($reply_array["status"], false);
+                foreach($reply_array["issues"] as $issue){
+                    $issue["status"] = $this->map_status($issue["status"], false);
+                }
+                var_dump($reply_array);
+                var_dump($hhhhh_time);
                 return $reply_array;
             }
         }
@@ -159,6 +166,7 @@ class BB_issues {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $issue_array);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
         $response = curl_exec($ch);
         /*process response*/
         if($response==false){

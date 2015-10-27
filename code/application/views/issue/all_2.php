@@ -186,6 +186,7 @@
                         <td></td>
                         <td class="user">
                             <div>
+                                <?php if(isset($d["responsible"])):?>
                                 <a href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."responsible=".$d["responsible"]["username"]?>"
                                    title="Filter issues assigned to: <?=$d["responsible"]["display_name"]?>">
                                     <div class="aui-avatar aui-avatar-xsmall">
@@ -195,6 +196,9 @@
                                     </div>
                                     <span title="<?=$d["responsible"]["username"]?>"><?=$d["responsible"]["display_name"]?></span>
                                 </a>
+                                <?php else:?>
+                                -
+                                <?php endif?>
                             </div>
                         </td>
                         <td class="date">
