@@ -63,7 +63,7 @@ $this->load->view('common/pm_nav', $class);
             </div>
         </div>
         <div class="form-group">
-        <a href="<?=base_url().'projects/customer_overview/'.$this->session->userdata('Customer_cid')?>" class="btn btn-default" id="cancel">Cancel</a>&nbsp;
+        <a href="<?=base_url().'projects/list_all/'?>" class="btn btn-default" id="cancel">Cancel</a>&nbsp;
         <button type="submit"  class="btn btn-primary">Submit</button>
         </div>
     </form>
