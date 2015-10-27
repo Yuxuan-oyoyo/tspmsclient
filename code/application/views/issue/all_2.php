@@ -2,14 +2,16 @@
 <html>
 <?php
     $repo_slug = $repo_slug;
+    $filter="status[]=new&status[]=open";
 ?>
 <head lang="en">
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
-    <link href="css/sb-admin.css" rel="stylesheet">
+    <link href="<?= base_url() . 'css/sb-admin.css' ?>" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Francois+One" />
-    <link rel="stylesheet" href="css/sidebar-left.css">
-    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="<?= base_url() . 'css/sidebar-left.css' ?>">
+    <link rel="stylesheet" href="<?= base_url() . 'css/issues.css' ?>">
+    <!--script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script-->
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -19,26 +21,6 @@
 
     <![endif]-->
     <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-        $(function () {
-
-            var links = $('.sidebar-links > a');
-
-            links.on('click', function () {
-
-                links.removeClass('selected');
-                $(this).addClass('selected');
-            })
-        });
-        $(document).ready(function(){
-            $('#issueTable').dataTable({
-                        "processing": true,
-                        "serverSide": true,
-                        "ajax": '<?=base_url().'Issues/list_all_json/'.$repo_slug ?>'
-                    } );
-        });
     </script>
 </head>
 <body>
@@ -151,26 +133,87 @@
     <hr>
     <div class="row">
         <div class=" col-lg-9">
-            <table class="table table-hover" id="issueTable">
+            <?php
+                $filter_str = "status=new&amp;status=open&amp;";
+                $headers = [
+                    ["display"=>"Title"     ,"sort"=>"local_id"       ,"sm"=>""],//"sm" for sort method
+                    ["display"=>"Type"      ,"sort"=>"kind"     ,"sm"=>""],
+                    ["display"=>"Priority"  ,"sort"=>"priority" ,"sm"=>""],
+                    ["display"=>"Status"    ,"sort"=>"status"   ,"sm"=>""],
+                    ["display"=>"Milestone" ,"sort"=>"milestone","sm"=>""],
+                    ["display"=>"Assignee"  ,"sort"=>"responsible","sm"=>""],
+                    ["display"=>"Created"   ,"sort"=>"created_on","sm"=>""],
+                    ["display"=>"Updated"   ,"sort"=>"updated_on","sm"=>""],
+                ];
+            $issues = $issues_response["issues"];
+            //$data = [["kind"=>"bug","local_id"=>3,"title"=>"Speed up page load by localize assest","status"=>"new","priority"=>"major","milestone"=>null,"responsible"=>"WANG TIANTONG _","created_on"=>"2015-10-25T09:48:10.147","utc_last_updated"=>"2015-10-25 08:48:10+00:00"]];
+            ?>
+            <table class="table table-striped table-bordered" data-sort-by="updated_on" data-modules="components/follow-list">
                 <thead>
                 <tr>
-                    <th>Title</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Milestone</th>
-                    <th>Reported by</th>
-                    <th>utc_last_updated</th>
-                    <th>Responsible</th>
+                    <?php foreach($headers as $h):?>
+                        <th class="text sorter-false tablesorter-header">
+                            <a href="<?=base_url()."Issues/list_all/".$repo_slug."?".$filter_str."sort=".$h["sm"].$h["sort"]?>"><?=$h["display"]?></a>
+                        </th>
+                    <?php endforeach?>
                 </tr>
-                </thead
+                </thead>
+                <tbody id="tbody">
+
+                <?php foreach($issues as $d):?>
+                    <tr class="" data-state="open">
+                        <td class="">
+                            <a class="execute" href="<?=base_url()."issues/retrieve_by_id/".$repo_slug."?local_id=".$d["local_id"]?>" title="View Details">#<?=$d["local_id"]?>: <?=$d["title"]?></a>
+                        </td>
+                        <td class="icon-col">
+                            <a href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."kind=".$d["metadata"]["kind"]?>"
+                               class="icon-bug" title="Filter by type:<?=$d["metadata"]["kind"]?>">
+                                <?=$d["metadata"]["kind"]?>
+                            </a>
+                        </td>
+                        <td class="icon-col">
+                            <a href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."priority=".$d["priority"]?>"
+                               class=" icon-major" title="Filter by priority:"<?=$d["priority"]?>>
+                                <?=$d["priority"]?>
+                            </a>
+                        </td>
+                        <td class="state">
+                            <a class="aui-lozenge" href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."status=".$d["status"]?>"
+                               title="Filter by status: <?=$d["status"]?>">
+                                <?=$d["status"]?>
+                            </a>
+                        </td>
+                        <td></td>
+                        <td class="user">
+                            <div>
+                                <a href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."responsible=".$d["responsible"]["username"]?>"
+                                   title="Filter issues assigned to: <?=$d["responsible"]["display_name"]?>">
+                                    <div class="aui-avatar aui-avatar-xsmall">
+                                        <div class="aui-avatar-inner">
+                                            <!--img src="https://bitbucket.org/account/czyang_jessie/avatar/32/?ts=1443338247" alt="" /-->
+                                        </div>
+                                    </div>
+                                    <span title="<?=$d["responsible"]["username"]?>"><?=$d["responsible"]["display_name"]?></span>
+                                </a>
+                            </div>
+                        </td>
+                        <td class="date">
+                            <div>
+                                <time datetime="2015-10-15T11:43:49.635488+00:00" data-title="true">2015-10-15</time>
+                            </div>
+                        </td>
+                        <td class="date">
+                            <div>
+                                <time datetime="2015-10-15T12:06:49.753899+00:00" data-title="true">2015-10-15</time>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach?>
+                </tbody>
             </table>
+
         </div>
-
-
     </div>
-
-    <!-- /#page-content-wrapper -->
-
 </div>
 </body>
 </html>

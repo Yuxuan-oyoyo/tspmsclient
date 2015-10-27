@@ -11,7 +11,7 @@ $this->load->view('common/pm_nav', $class);
 <p></p>
     <!-- Page Content -->
 
-    <div class="container">
+    <div class="container content">
         <form class="form-horizontal" id="form" method="post" action="<?=base_url()."Projects/process_edit/".$p["project_id"]?>">
             <div class="col-lg-12">
                 <h1 class="page-header">
@@ -158,7 +158,6 @@ $this->load->view('common/pm_nav', $class);
                     </div>
                 </div>
 
-                <hl></hl>
             </div>
         </div>
         </form>

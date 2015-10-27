@@ -12,68 +12,82 @@ class Issues extends CI_Controller {
         // Your own constructor code
         $this->load->library('session');
         $this->load->helper('url');
-
-    }
-    public function index() {
-        $this->list_all();
     }
     public function list_all($repo_slug=null){
-
-        $data["repo_slug"] = $repo_slug;
-        $this->load->view("issue/all_2",$data);
-        //echo var_dump($issues);
-
-    }
-    public function list_all_json($repo_slug=null){
-        $this->load->library('BB_issues');
-
-        $opt_params = ["search","sort","limit","start"];
-        $para_input = $this->input->get($opt_params,true);
-        foreach($para_input as $key=>$value){
-            if(!empty($value)){
-                if($key=="search") $value = $value['value'];
-                $para[$key] = $value;
+        if(isset($repo_slug)) {
+            $data["repo_slug"] = $repo_slug;
+            $this->load->library('BB_issues');
+            $opt_params = ["search","sort","limit","start"];
+            $para_input = $this->input->get($opt_params,true);
+            $status_filter = ($this->input->get("status")!=null)? $this->input->get("status"):[];
+            $para =[];
+            foreach($para_input as $key=>$value){
+                if(!empty($value)){
+                    if($key=="search") $value = $value['value'];
+                    $para[$key] = $value;
+                }
             }
-        }
-        //echo var_dump($para);
-        if(empty($repo_slug)){
-            die("repo_slug is unset");
-            //TODO:may need to implement global selection
+            //$para['repo_slug'] = $repo_slug;
+            //TODO:validate parameters
+            $issues_response = $this->bb_issues->retrieveIssues($repo_slug, $para);
+            $data= ["issues_response"=>$issues_response,"repo_slug"=>$repo_slug,"filter_str"=>$this->getParamStr($status_filter, "status")];
+            $this->session->set_userdata('issue_list'.$repo_slug, $issues_response["issues"]);
+            $this->load->view("issue/all_2", $data);
         }else{
-            $para['repo_slug'] = $repo_slug;
+            //TODO: take user to 404 page
         }
-        $repo_slug="tspms";
-        //TODO:validate parameters
-        /*
-         *                     <th>Title</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Milestone</th>
-                    <th>Reported by</th>
-                    <th>utc_last_updated</th>
-                    <th>Responsible</th>
-         */
-        $issues = $this->bb_issues->retrieveIssues($repo_slug, $para);
-        $reformatted = ['data'=>[]];
-        foreach($issues['issues'] as $i){
-            $row = [$i['title']
-                ,$i['status']
-                ,$i['priority']
-                ,$i['metadata']['milestone']
-                ,$i['reported_by']['display_name']
-                ,$i['utc_last_updated']
-                ,$i['responsible']['display_name']];
-            array_push($reformatted["data"], $row);
+    }
+    private function getParamStr($value_arr,$name){
+        $str = "";
+        if(is_array($value_arr)) {
+            foreach ($value_arr as $value) {
+                $str .= $name . "=" . $value . "&";
+            }
+        }else{
+            $str .= $name . "=" . $value_arr . "&";
         }
-        foreach($reformatted['data'] as $k=>$v){
-            if(is_null($v)) $reformatted['data'][$k]="uuuu";
-        }
-        echo json_encode($reformatted,true);
+        return rtrim($str, "&");
     }
     public function test(){
-        $this->load->library("BB_shared");
-        $this->load->library("BB_issues");
-        echo var_dump($this->bb_issues->retrieveIssues('tspms'));
-        //echo var_dump($this->bb_shared->getDefaultOauthToken());
+    }
+    public function retrieve_by_id($repo_slug=null) {
+        $issue_id = $this->input->get("local_id");
+        //echo var_dump($issue_id);
+        if (isset($repo_slug)) {
+            $issue_list = $this->session->userdata("issue_list" . $repo_slug);
+            if (isset($issue_list)){
+                /*if issue list is in session, find the one with this local id*/
+                foreach($issue_list as $issue){
+                    if($issue["local_id"]==$issue_id) {$issue_details= $issue;break;}
+                }
+            }
+            if(!isset($issue_details)){/*if issue list is not in session, or cannot find*/
+                $issue_details = $this->bb_issues->retrieveIssues($repo_slug, $issue_id);
+            }
+            $data =["issue_details"=>$issue_details, "repo_slug"=>$repo_slug];
+            $this->load->view("issue/view", $data);
+        }else{
+            //TODO: take user to 404 page
+            die("repo slug is not set");
+        }
+    }
+
+    /**
+     * Processes Ajax request
+     * @param null $repo_slug
+     */
+    public function update($repo_slug=null){
+        $issue_id = $this->input->get("issue_id",true);
+        $param = $this->input->get("param",true);
+        $value = $this->input->get("value",true);
+        if(($issue_list =$this->session->userdata("issue_list" . $repo_slug))!=null){
+            foreach($issue_list as $issue){
+                if($issue["local_id"]==$issue_id) {
+                    $issue[$param] = $value;
+                    break;
+                }
+            }
+        }
+        $this->bb_issues->updateIssue($repo_slug, [$param=>$value]);
     }
 }
