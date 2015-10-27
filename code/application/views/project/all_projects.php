@@ -1,3 +1,14 @@
+
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <?php $this->load->view('common/common_header');?>
+
+</head>
+<body>
 <?php
 $class = [
     'projects_class'=>'active',
@@ -7,7 +18,6 @@ $class = [
 ];
 $this->load->view('common/pm_nav', $class);
 ?>
-
 
 <div class="col-lg-offset-1 content">
     <!-- Page Content -->

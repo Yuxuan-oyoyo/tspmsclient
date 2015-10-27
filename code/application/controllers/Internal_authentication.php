@@ -19,9 +19,10 @@ class Internal_authentication extends CI_Controller {
     public function login()
     {
 //        first, check to see if there is an existing session.
-        if($this->session->userdata('internal_uid')){
+        if($this->session->userdata('internal_uid')||$this->session->userdata('internal_username')){
             //if there is, log the user out first.
             $this->session->unset_userdata('internal_uid');
+            $this->session->unset_userdata('internal_username');
             $this->session->sess_destroy();
             $this->session->set_userdata('message','You have been logged out.');
         }
@@ -39,6 +40,7 @@ class Internal_authentication extends CI_Controller {
                     if (password_verify($this->input->post('password'), $user['password_hash'])) {
                         //set session data
                         $this->session->set_userdata('internal_uid', $user['u_id']);
+                        $this->session->set_userdata('internal_username', $user['username']);
                         //redirect to successpage
                         redirect('/projects/list_all/');
 
@@ -60,54 +62,42 @@ class Internal_authentication extends CI_Controller {
 
     }
 
-    /*
-        public function change_password(){
-            $this->load->library('form_validation');
-            $this->form_validation->set_rules('existing_password', 'Existing password', 'required');
-            $this->form_validation->set_rules('new_password', 'New Password', 'required|min_length[6]');
-            $this->form_validation->set_rules('confirm_password', 'Confirm New Password', 'required|matches[new_password]|min_length[6]');
-            if ($this->form_validation->run() == FALSE) {
-                $this->load->view('admin/change_password_form');
-            } else {
-                $this->load->model('User_model');
-                $user = $this->User_model->get_by_username($this->session->userdata('ADMusername'));
-                $this->load->library('encrypt');
-                if (password_verify($this->input->post('existing_password'),$user['password_hash'])) {
-                    $new_hash = password_hash($this->input->post('new_password'),PASSWORD_DEFAULT);
-                    $user['password_hash'] = $new_hash;
-                    if ($this->User_model->update($user) == 1) {
-                        $this->session->set_userdata('message', 'Admin password has been changed successfully.');
-                        //logMessage
-                        $this->User_log_model->log_message('Admin password has been changed successfully.');
 
-                    } else {
-                        $this->session->set_userdata('message', 'An error occurred, please try to use a different password set or contact administrator.');
-                        //logMessage
-                        $this->User_log_model->log_message('An error occurred, please try to use a different password set or contact administrator.');
-                    }
+    public function change_password(){
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('existing_password', 'Existing password', 'required');
+        $this->form_validation->set_rules('new_password', 'New Password', 'required|min_length[6]');
+        $this->form_validation->set_rules('confirm_password', 'Confirm New Password', 'required|matches[new_password]|min_length[6]');
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('internal_user/change_password');
+        } else {
+            $user = $this->Internal_user_model->retrieve_by_username($this->session->userdata('Customer_username'));
+            $this->load->library('encrypt');
+            if (password_verify($this->input->post('existing_password'),$user['password_hash'])) {
+                $new_hash = password_hash($this->input->post('new_password'),PASSWORD_DEFAULT);
+                $user['password_hash'] = $new_hash;
+                if ($this->Internal_user_model->update($user) == 1) {
+                    $this->session->set_userdata('message', 'Your password has been changed successfully.');
+                    //logMessage
+                    //$this->User_log_model->log_message('Admin password has been changed successfully.');
                 } else {
-                    $this->session->set_userdata('message', 'Old password entered is incorrect');
+                    $this->session->set_userdata('message', 'An error occurred, please try to use a different password set or contact administrator.');
+                    //logMessage
+                    // $this->User_log_model->log_message('An error occurred, please try to use a different password set or contact administrator.');
                 }
-                redirect('admin/authenticate/change_password');
+            } else {
+                $this->session->set_userdata('message', 'Old password entered is incorrect');
             }
+            redirect('internal_user/change_password');
         }
+    }
 
 
         public function logout()
         {
-            redirect('/admin/authenticate/login/');
+            redirect('/internal_authentication/login/');
         }
 
-        public function start()
-        {
-            if($this->User_log_model->validate_access("A",$this->session->userdata('ADMaccess'))){
-                redirect('/admin/admin/start/');
-            }else{
 
-                $this->session->set_userdata('message','This user does not have any valid access rights.');
-                redirect('/admin/authenticate/login/');
-            }
 
-        }
-    */
 }

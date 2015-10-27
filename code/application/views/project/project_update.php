@@ -1,5 +1,116 @@
+
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <?php $this->load->view('common/common_header');?>
+    <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+        $(document).ready(function(){
+            $("#Lead" ).click(function() {
+                // this change title
+                $(".phase").each(function(){
+                    $(this).text("Lead");
+                });
+                var project_phase_id=($(this).data().id);
+                // this changes updates
+                refillUpdates(project_phase_id,"Lead");
+                refillMilestones(project_phase_id,"Lead");
+            });
+            $("#Requirement" ).click(function() {
+                // this change title
+                $(".phase").each(function(){
+                    $(this).text("Requirement");
+                });
+                var project_phase_id=($(this).data().id);
+                // this changes updates
+                refillUpdates(project_phase_id,"Requirement");
+                refillMilestones(project_phase_id,"Requirement");
+            });
+            $("#Build" ).click(function() {
+                // this change title
+                $(".phase").each(function(){
+                    $(this).text("Build");
+                });
+                var project_phase_id=($(this).data().id);
+                // this changes updates
+                refillUpdates(project_phase_id,"Build");
+                refillMilestones(project_phase_id,"Build");
+            });
+            $("#Testing" ).click(function() {
+                // this change title
+                $(".phase").each(function(){
+                    $(this).text("Testing");
+                });
+                var project_phase_id=($(this).data().id);
+                // this changes updates
+                refillUpdates(project_phase_id,"Testing");
+                refillMilestones(project_phase_id,"Testing");
+            });
+            $("#Deploy" ).click(function() {
+                // this change title
+                $(".phase").each(function(){
+                    $(this).text("Deploy");
+                });
+                var project_phase_id=($(this).data().id);
+                // this changes updates
+                refillUpdates(project_phase_id,"Deploy");
+                refillMilestones(project_phase_id,"Deploy");
+            });
+
+        });
+
+        function refillUpdates(project_phase_id,phase_name){
+            $("#timeline").text('');
+            $.get("<?=base_url('Updates/get_update_by_project_phase/')?>"+'/'+project_phase_id,function(data,status){
+                $('#updates-phase').replaceWith('<small>'+phase_name+'</small>');
+                var updates = jQuery.parseJSON(data);
+                updates.forEach(function(element){
+                    var htmlText =
+                        '<li>'+
+                        '<div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>'+
+                        '<div class="timeline-panel"> <div class="timeline-heading"> <h4 class="timeline-title">'+element.header+'</h4> </div>'+
+                        '<div class="timeline-body"> <p>'+element.body+'</p> <div class="pull-right timeline-info">'+
+                        '<i class="fa fa-user"></i>&nbsp;'+element.posted_by+' &nbsp;'+
+                        '<i class="fa fa-calendar-check-o"></i>&nbsp;'+element.last_updated+'</div>'+
+                        ' </div> </div> </li>';
+                    $('#timeline').append( htmlText );
+                });
+            });
+        }
+
+        function refillMilestones(project_phase_id,phase_name){
+            $("#milestone").text('');
+            var monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            $.get("<?=base_url('Milestones/get_by_project_phase_id/')?>"+'/'+project_phase_id, function(data, status){
+                $('#milestones-phase').replaceWith('<small>'+phase_name+'</small>');
+                var updates = jQuery.parseJSON(data);
+                updates.forEach(function(element){
+                    var ddl=new Date(element.deadline);
+                    var day = ddl.getDate();
+                    var month=monthNames[ddl.getMonth()];
+                    var htmlText = ' <div class="row"> <div class="col-lg-4"> <div class="panel panel-default calendar"> ' +
+                        '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'</strong></div>'+
+                        '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-lg-7">'+
+                        '<strong>'+element.header+'</strong><br>'+element.body+
+                        ' </div> </div>';
+
+                    $('#milestone').append( htmlText );
+                });
+            });
+        }
+
+    </script>
+</head>
+<body>
+<?php
 $class = [
     'projects_class'=>'active',
     'message_class'=>'',
@@ -9,107 +120,8 @@ $class = [
 $this->load->view('common/pm_nav', $class);
 ?>
 
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    });
-    $(document).ready(function(){
-        $("#Lead" ).click(function() {
-            // this change title
-            $(".phase").each(function(){
-                $(this).text("Lead");
-            });
-            var project_phase_id=($(this).data().id);
-            // this changes updates
-            refillUpdates(project_phase_id,"Lead");
-            refillMilestones(project_phase_id,"Lead");
-        });
-        $("#Requirement" ).click(function() {
-            // this change title
-            $(".phase").each(function(){
-                $(this).text("Requirement");
-            });
-            var project_phase_id=($(this).data().id);
-            // this changes updates
-            refillUpdates(project_phase_id,"Requirement");
-            refillMilestones(project_phase_id,"Requirement");
-        });
-        $("#Build" ).click(function() {
-            // this change title
-            $(".phase").each(function(){
-                $(this).text("Build");
-            });
-            var project_phase_id=($(this).data().id);
-            // this changes updates
-            refillUpdates(project_phase_id,"Build");
-            refillMilestones(project_phase_id,"Build");
-        });
-        $("#Testing" ).click(function() {
-            // this change title
-            $(".phase").each(function(){
-                $(this).text("Testing");
-            });
-            var project_phase_id=($(this).data().id);
-            // this changes updates
-            refillUpdates(project_phase_id,"Testing");
-            refillMilestones(project_phase_id,"Testing");
-        });
-        $("#Deploy" ).click(function() {
-            // this change title
-            $(".phase").each(function(){
-                $(this).text("Deploy");
-            });
-            var project_phase_id=($(this).data().id);
-            // this changes updates
-            refillUpdates(project_phase_id,"Deploy");
-            refillMilestones(project_phase_id,"Deploy");
-        });
 
-    });
 
-    function refillUpdates(project_phase_id,phase_name){
-        $("#timeline").text('');
-        $.get("<?=base_url('Updates/get_update_by_project_phase/')?>"+'/'+project_phase_id,function(data,status){
-            $('#updates-phase').replaceWith('<small>'+phase_name+'</small>');
-            var updates = jQuery.parseJSON(data);
-            updates.forEach(function(element){
-                var htmlText =
-                    '<li>'+
-                    '<div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>'+
-                    '<div class="timeline-panel"> <div class="timeline-heading"> <h4 class="timeline-title">'+element.header+'</h4> </div>'+
-                    '<div class="timeline-body"> <p>'+element.body+'</p> <div class="pull-right timeline-info">'+
-                    '<i class="fa fa-user"></i>&nbsp;'+element.posted_by+' &nbsp;'+
-                    '<i class="fa fa-calendar-check-o"></i>&nbsp;'+element.last_updated+'</div>'+
-                    ' </div> </div> </li>';
-                $('#timeline').append( htmlText );
-            });
-        });
-    }
-
-    function refillMilestones(project_phase_id,phase_name){
-        $("#milestone").text('');
-        var monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
-        $.get("<?=base_url('Milestones/get_by_project_phase_id/')?>"+'/'+project_phase_id, function(data, status){
-            $('#milestones-phase').replaceWith('<small>'+phase_name+'</small>');
-            var updates = jQuery.parseJSON(data);
-            updates.forEach(function(element){
-                var ddl=new Date(element.deadline);
-                var day = ddl.getDate();
-                var month=monthNames[ddl.getMonth()];
-                var htmlText = ' <div class="row"> <div class="col-lg-4"> <div class="panel panel-default calendar"> ' +
-                    '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'</strong></div>'+
-                    '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-lg-7">'+
-                    '<strong>'+element.header+'</strong><br>'+element.body+
-                    ' </div> </div>';
-
-                $('#milestone').append( htmlText );
-            });
-        });
-    }
-
-</script>
 
 <aside class="sidebar-left">
     <div class="sidebar-links">
