@@ -159,7 +159,7 @@ $this->load->view('common/pm_nav', $class);
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="username">Password</label>
-                        <input type="password" class="form-control" name="password" id="password">
+                        <input type="password" class="form-control" name="password" id="password" value="<?=DEFAULT_PASSWORD?>" >
                     </div>
                 </div>
             </div>
