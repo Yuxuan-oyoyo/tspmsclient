@@ -6,8 +6,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-<link ref="stylesheet" href="<?=base_url() . 'css/bootstrap.min.css'?>" rel="stylesheet">
+<!-- Custom CSS -->
+<link href="<?=base_url().'css/sb-admin.css'?>" rel="stylesheet">
+<link rel="stylesheet" href="<?=base_url() . 'css/bootstrap.min.css'?>" rel="stylesheet">
 <link rel="stylesheet" href="<?=base_url() . 'css/font-awesome.min.css'?>">
+<link rel="stylesheet" href="<?=base_url() . 'css/parsley.css'?>">
 <script src="<?= base_url() . 'js/jquery.min.js' ?>"></script>
 <script src="<?= base_url() . 'js/bootstrap.min.js' ?>"></script>
 <!--[if lt IE 9]>

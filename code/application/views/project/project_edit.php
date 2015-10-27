@@ -12,7 +12,7 @@ $this->load->view('common/pm_nav', $class);
     <!-- Page Content -->
 
     <div class="container content">
-        <form class="form-horizontal" id="form" method="post" action="<?=base_url()."Projects/process_edit/".$p["project_id"]?>">
+        <form class="form-horizontal" id="form" method="post" action="<?=base_url()."projects/process_edit/".$p["project_id"]?>">
             <div class="col-lg-12">
                 <h1 class="page-header">
                     Edit Project&nbsp;

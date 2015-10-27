@@ -251,7 +251,7 @@ class Projects extends CI_Controller {
         if($customer_project){
             //customer has more than one project
             if(sizeof($customer_project)>1){
-                $this->load->view('customer/project_list',$data=["projects"=>$customer_project]);
+                $this->load->view('project/customer_project_list',$data=["projects"=>$customer_project]);
             }else{
                 $this->customer_view($customer_project[0]['project_id']);
             }
@@ -266,7 +266,7 @@ class Projects extends CI_Controller {
                     "updates"=>$this->Update_model->retrieve_by_project_phase_id($project['current_project_phase_id']),
                     "milestones"=>$this->Milestone_model->retrieve_by_project_phase_id($project['current_project_phase_id'])
             );
-            $this->load->view('customer/project_dashboard',$data);
+            $this->load->view('project/customer_project_dashboard',$data);
         }
     }
 }
