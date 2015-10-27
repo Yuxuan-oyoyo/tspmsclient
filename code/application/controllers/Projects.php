@@ -108,7 +108,7 @@ class Projects extends CI_Controller {
                 'hp_number'=>$this->input->post("hp_number"),
                 'other_number'=>$this->input->post("other_number"),
                 'username'=>$this->input->post("username"),
-                'password_hash'=>$this->input->post("password"),
+                'password_hash'=> password_hash($this->input->post('password'),PASSWORD_DEFAULT)
             );
             $c_id = $this->Customer_model->insert($new_customer);
         }
@@ -170,6 +170,7 @@ class Projects extends CI_Controller {
                 ,"other_number","email","username","password_hash"];
 
             $new_customer_input = $this->input->post($customer_name_array,true);
+            $new_customer_input['password_hash'] = password_hash($this->input->post('password'),PASSWORD_DEFAULT);
             $new_customer_id = $this->Customer_model->insert($new_customer_input);
             if($new_customer_id==false){
                 echo "something wrong happen when creating customer";
@@ -251,7 +252,7 @@ class Projects extends CI_Controller {
         if($customer_project){
             //customer has more than one project
             if(sizeof($customer_project)>1){
-                $this->load->view('customer/project_list',$data=["projects"=>$customer_project]);
+                $this->load->view('project/customer_project_list',$data=["projects"=>$customer_project]);
             }else{
                 $this->customer_view($customer_project[0]['project_id']);
             }
@@ -266,7 +267,7 @@ class Projects extends CI_Controller {
                     "updates"=>$this->Update_model->retrieve_by_project_phase_id($project['current_project_phase_id']),
                     "milestones"=>$this->Milestone_model->retrieve_by_project_phase_id($project['current_project_phase_id'])
             );
-            $this->load->view('customer/project_dashboard',$data);
+            $this->load->view('project/customer_project_dashboard',$data);
         }
     }
 }

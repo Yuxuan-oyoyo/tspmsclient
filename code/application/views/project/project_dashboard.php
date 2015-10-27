@@ -1,6 +1,15 @@
 
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <?php $this->load->view('common/common_header');?>
+    <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
+    </head>
+<body>
+<?php
 $class = [
     'projects_class'=>'active',
     'message_class'=>'',
@@ -26,7 +35,6 @@ $this->load->view('common/pm_nav', $class);
             <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>
             <a href="<?=$project['staging_link']?>" class="btn btn-primary"><i class="fa fa-external-link"></i>&nbsp;Project Preview</a>
         </h1>
-        <h4 style="color:darkgrey">Click each phase on timeline to check updates for each phase.</h4>
     </div>
 
     <!-- /.row -->

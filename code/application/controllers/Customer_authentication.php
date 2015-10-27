@@ -71,7 +71,7 @@ class Customer_authentication extends CI_Controller {
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('customer/change_password');
         } else {
-            $customer = $this->Customer_model->get_by_username($this->session->userdata('Customer_username'));
+            $customer = $this->Customer_model->retrieve_by_username($this->session->userdata('Customer_username'));
             $this->load->library('encrypt');
             if (password_verify($this->input->post('existing_password'),$customer['password_hash'])) {
                 $new_hash = password_hash($this->input->post('new_password'),PASSWORD_DEFAULT);
@@ -99,16 +99,6 @@ class Customer_authentication extends CI_Controller {
         redirect('/customer_authentication/login/');
     }
 
-    public function start()
-    {
-        if($this->User_log_model->validate_access("A",$this->session->userdata('ADMaccess'))){
-            redirect('/admin/admin/start/');
-        }else{
 
-            $this->session->set_userdata('message','This user does not have any valid access rights.');
-            redirect('/admin/authenticate/login/');
-        }
-
-    }
 
 }
