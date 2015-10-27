@@ -16,7 +16,7 @@ $this->load->view('common/pm_nav', $class);
             <div class="col-lg-12">
                 <h1 class="page-header">
                     Edit Project&nbsp;
-                    <a href="#" class="btn btn-default" id="cancel">Cancel</a>&nbsp;
+                    <a href="<?=base_url().'Projects/view_dashboard/'.$p["project_id"]?>" class="btn btn-default" id="cancel">Cancel</a>&nbsp;
                     <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
                 </h1>
             </div>
