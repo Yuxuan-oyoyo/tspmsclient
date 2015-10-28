@@ -40,7 +40,7 @@ class Internal_user_model extends CI_Model
      */
     public function update($update_array){
         $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
-        $update_array['last_updated'] = $date;
+        $update_array['last_updated'] = $date->format('c');
         $this->db->update('internal_user', $update_array, array('u_id' => $update_array['u_id']));
         return $this->db->affected_rows();
     }
@@ -51,7 +51,7 @@ class Internal_user_model extends CI_Model
      */
     public function insert($insert_array){
         $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
-        $insert_array['last_updated'] = $date;
+        $insert_array['last_updated'] = $date->format('c');
         return $this->db->insert('internal_user', $insert_array);
         //echo var_dump($this->db->error());
     }
