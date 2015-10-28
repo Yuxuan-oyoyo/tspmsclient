@@ -212,13 +212,14 @@ $this->load->view('common/pm_nav', $class);
                 <div id="milestone">
                 <?php
                     foreach($milestones as $m){
-                        $monthName = date('F', strtotime($m['deadline']));
-                        $dateNumber = date('j', strtotime($m['deadline']));
+                        $monthName = date('M', strtotime($m['deadline']));
+                        $dateNumber = date('d', strtotime($m['deadline']));
+                        $year = date('Y', strtotime($m['deadline']));
                 ?>
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="panel panel-default calendar">
-                                    <div class="panel-heading calendar-month"><strong><?=$monthName?></strong></div>
+                                    <div class="panel-heading calendar-month"><strong><?=$monthName."-".$year?></strong></div>
                                     <div class="panel-body">
                                         <div class="thumbnail calendar-date" >
                                             <?=$dateNumber?>

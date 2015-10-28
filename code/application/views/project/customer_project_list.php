@@ -9,7 +9,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Custom CSS -->
     <link href="<?=base_url().'css/sb-admin.css'?>" rel="stylesheet">
     <link href="<?=base_url().'css/timeline.css'?>" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Francois+One" />
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
     <!-- jQuery -->
     <script src="<?= base_url() . 'js/jquery.min.js' ?>"></script>
