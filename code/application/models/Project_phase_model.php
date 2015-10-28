@@ -70,7 +70,7 @@ class Project_phase_model extends CI_Model {
     }
 
     public function update($update_array){
-        $date = date('Y-m-d H:i:s');
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
         $update_array['last_updated'] = $date;
         $update_array['end_time'] = $date;
         $affected_rows1 = $this->db->update('project_phase', $update_array, array('project_phase_id' => $update_array['project_phase_id']));
@@ -96,7 +96,7 @@ class Project_phase_model extends CI_Model {
     }
 
     public function insert($insert_array){
-        $date = date('Y-m-d H:i:s');
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
         $insert_array['last_updated'] = $date;
         $insert_array['start_time'] = $date;
         $this->db->insert('project_phase',$insert_array);

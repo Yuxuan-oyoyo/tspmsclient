@@ -65,14 +65,14 @@ class Project_model extends CI_Model {
     }
 
     public function update($update_array){
-        $date = date('Y-m-d H:i:s');
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
         $update_array['last_updated'] = $date;
         $this->db->update('project', $update_array, array('project_id' => $update_array['project_id']));
         //echo var_dump($this->db->error());
         return $this->db->affected_rows();
     }
     public function insert($insert_array){
-        $date = date('Y-m-d H:i:s');
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
         $insert_array['start_time'] =  $date;
         $insert_array['last_updated'] =  $date;
         $this->db->insert('project', $insert_array);
