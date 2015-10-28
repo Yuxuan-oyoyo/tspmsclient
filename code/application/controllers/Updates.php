@@ -16,6 +16,7 @@ class Updates extends CI_Controller{
         $this->load->model("Project_model");
         $this->load->model("Post_model");
         $this->load->model("Milestone_model");
+        $this->load->model("Project_phase_model");
     }
 
     public function add_new_update($project_id,$current_project_phase_id){
