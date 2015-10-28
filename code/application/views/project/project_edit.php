@@ -7,6 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 <head>
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
+
     <script>
         function cus_option(){
             if($("#customer_option").val()=="from-existing"){
