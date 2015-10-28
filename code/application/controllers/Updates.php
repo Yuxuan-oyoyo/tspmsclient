@@ -29,7 +29,6 @@ class Updates extends CI_Controller{
         //post_by will be changed to user name useing session data
         $insert_update_array['posted_by']=$this->session->userdata('internal_username');
         $insert_update_array['post_id'] =$post_id;
-        var_dump($insert_update_array);
         $this->Update_model->insert($insert_update_array);
 
         //milestones

@@ -71,14 +71,14 @@ class Project_phase_model extends CI_Model {
 
     public function update($update_array){
         $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
-        $update_array['last_updated'] = $date;
-        $update_array['end_time'] = $date;
+        $update_array['last_updated'] = $date->format('c');
+        $update_array['end_time'] = $date->format('c');
         $affected_rows1 = $this->db->update('project_phase', $update_array, array('project_phase_id' => $update_array['project_phase_id']));
 
         $next_project_phase_id =$this->retrieve_last_project_phase_id()+1;
         $start_next_phase_array = $this->retrieve__by_id($next_project_phase_id);
-        $start_next_phase_array['start_time'] = $date;
-        $start_next_phase_array['last_updated'] = $date;
+        $start_next_phase_array['start_time'] = $date->format('c');
+        $start_next_phase_array['last_updated'] = $date->format('c');
         $start_next_phase_array['estimated_end_time'] = $update_array['estimated_end_time'];
         $affected_rows2 = $this->db->update('project_phase', $start_next_phase_array, array('project_phase_id' => $next_project_phase_id));
         echo $affected_rows1;
@@ -97,8 +97,8 @@ class Project_phase_model extends CI_Model {
 
     public function insert($insert_array){
         $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
-        $insert_array['last_updated'] = $date;
-        $insert_array['start_time'] = $date;
+        $insert_array['last_updated'] = $date->format('c');
+        $insert_array['start_time'] = $date->format('c');
         $this->db->insert('project_phase',$insert_array);
         return $this->db->insert_id();
     }
