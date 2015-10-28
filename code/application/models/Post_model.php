@@ -30,6 +30,16 @@ class Post_model extends CI_Model{
         return $query->result_array();
     }
 
+    public function retrieve_by_id($post_id){
+        if(isset($post_id)){
+            $query = $this->db->get_where("post",["post_id"=>$post_id]);
+            if( $query->num_rows()>0){
+                return $query->row_array();
+            }
+        }
+        return null;
+    }
+
     public function update($update_array){
         //$date = date('Y-m-d H:i:s');
         $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));

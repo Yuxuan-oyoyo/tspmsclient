@@ -224,11 +224,22 @@ $this->load->view('common/pm_nav', $class);
                             <div class="col-lg-7">
                                 <strong><?=$m['header']?></strong><br>
                                 <?=$m['body']?>
+                                <?php
+                                    if($m['if_completed']==0){
+                                ?>
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" id="done" onchange="showModal()"> Done
+                                        <input type="checkbox" id="done" data-toggle="modal" data-target="#milestoneCompletionModal"> Complete
                                     </label>
                                 </div>
+                                <?php
+                                    }else{
+                                ?>
+                                        <br><span class="badge success" style="background-color: #00a65a">Completed</span>
+                                <?php
+                                    }
+                                ?>
+
                             </div>
                          </div>
                 <?php
@@ -333,6 +344,28 @@ $this->load->view('common/pm_nav', $class);
                 <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Update">
             </div>
             </form>
+        </div>
+    </div>
+</div>
+<!--Milestone Completion Modal-->
+<div class="modal fade" id="milestoneCompletionModal" tabindex="-1" role="dialog" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong>Complete Milestone</strong>
+            </div>
+            <form role="form" action="<?=base_url().'Milestones/completionConfirmation/'.$project['project_id'].'/'.$m['milestone_id']?>" method="post">
+                <div class="modal-body">
+                    Please confirm your completion of this milestone :
+                    <br>
+                    <?=$m['header']?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <input type="submit" name="submit" id="submit" class="btn btn-success" value="Complete">
+                </div>
+            </form>
+
         </div>
     </div>
 </div>
