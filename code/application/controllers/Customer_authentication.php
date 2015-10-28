@@ -51,7 +51,7 @@ class Customer_authentication extends CI_Controller {
                     $this->session->set_userdata('message', 'Your account has been deactivated, please contact admin.');
                 }
             } else {
-                $this->session->set_userdata('message', 'hello' . $user['username']);
+                $this->session->set_userdata('message', 'Invalid Username/password.');
             }
             $this->load->view('customer/login');
 

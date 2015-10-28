@@ -37,24 +37,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
             </div>
             <div class="wrap">
+                <div class="row">
                     <?php if($this->session->userdata('message')):?>
-
-                        <div class="alert alert-info" role="alert">
+                        <div class="alert alert-info col-lg-offset-4 col-lg-4" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
                             </button>
                             <?=$this->session->userdata('message')?>
                         </div>
                         <?php $this->session->unset_userdata('message') ?>
                     <?php endif;?>
-                <?php if($this->session->userdata('message')):?>
+                </div>
 
-                    <div class="alert alert-info" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
-                        </button>
-                        <?=$this->session->userdata('message')?>
-                    </div>
-                    <?php $this->session->unset_userdata('message') ?>
-                <?php endif;?>
                 <p class="form-title">
                     Sign In
                 </p>
