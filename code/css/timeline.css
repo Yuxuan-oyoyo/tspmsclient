@@ -124,6 +124,7 @@
 }
 .no-gutter{ cursor: pointer; }
 .calendar-month{
+    font-size:17px;
     text-align:center !important;
     background:#e74c3c !important;
     color:white !important
@@ -138,7 +139,7 @@
 
 .calendar-date{
     text-align:center;
-    font-size:30px;
+    font-size:26px;
     font-family:impact;
     margin-top:-10px;
     color:#444444;

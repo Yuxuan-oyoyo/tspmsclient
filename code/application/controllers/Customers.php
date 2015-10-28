@@ -94,9 +94,36 @@ class Customers extends CI_Controller {
     }
 
     //allow customer to edit their own profile
-    public function edit_profile($id){
+    public function edit_profile(){
+        $customer = $this->Customer_model->retrieve($this->session->userdata('Customer_cid'));
 
+        if ($this->input->post('submit')) {
+            $customer=$this->_prepare_edit_customer_record_array($customer);
+            $this->session->set_userdata('message', 'kk');
+            if ($this->Customer_model->update($customer)==1) {
+                $this->session->set_userdata('message', 'Your profile has been updated.');
+                //$this->User_log_model->log_message("Course Participant Record updated|cpid:".$cpid);
+            } else {
+                $this->session->set_userdata('message', 'Unable to update profile.');
+            }
+
+        }
+        $data = array(
+            'customer' => $customer
+        );
+        $this->load->view('customer/edit_profile', $data);
     }
+    public function _prepare_edit_customer_record_array($customer){
+        $customer['first_name']=$this->input->post('first_name');
+        $customer['last_name']=$this->input->post('last_name');
+        $customer['hp_number']=$this->input->post('hp_number');
+        $customer['other_number']=$this->input->post('other_number');
+        $customer['company_name']=$this->input->post('company_name');
+        $customer['email']=$this->input->post('email');
+        return $customer;
+    }
+
+
 
     public function delete($cid){
         echo $this->Customer_model->delete($cid);
