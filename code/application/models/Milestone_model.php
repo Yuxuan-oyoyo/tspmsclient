@@ -41,10 +41,17 @@ class Milestone_model extends CI_Model{
         $insert_array['if_missed'] = 0;
         return $this->db->insert('milestone', $insert_array);
     }
+    public function complete($milestone_id){
+        $update_array = $this->retrieve_by_id($milestone_id);
+        $update_array['if_completed'] = 1;
+        return $this->db->update('milestone', $update_array, array('milestone_id' => $update_array['milestone_id']));
+    }
+    /*
     public function mark_miss($milestone_id){
         $update_array = $this->retrieve_by_milestone_id($milestone_id);
         $update_array['if_missed'] = 1;
         return $this->db->update('milestone', $update_array, array('milestone_id' => $update_array['milestone_id']));
     }
+    */
 
 }
