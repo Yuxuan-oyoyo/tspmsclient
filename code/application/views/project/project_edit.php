@@ -7,8 +7,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 <head>
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
+    <script>
+        function cus_option(){
+            if($("#customer_option").val()=="from-existing"){
+                $('#existing_customer').show();
+                $('#new_customer').hide();
+            }else{
+                $('#existing_customer').hide();
+                $('#new_customer').show();
+            }
+        };
+    </script>
 </head>
-<body>
+<body onload="cus_option()">
 <?php
 $class = [
     'projects_class'=>'active',
@@ -92,7 +103,7 @@ $this->load->view('common/pm_nav', $class);
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="customer-option"> Customer</label>
-                    <select class="form-control" id="customer-option" name="customer-option" onchange="cus_option()">
+                    <select class="form-control" id="customer_option" name="customer_option" onchange="cus_option()">
                         <option value="create-new">Create new</option>
                         <option value="from-existing" selected>From existing</option>
                     </select>

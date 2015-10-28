@@ -6,9 +6,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
 <head>
     <?php $this->load->view('common/common_header');?>
+    <script>
+        function cus_option(){
+            if($("#customer_option").val()=="from-existing"){
+                $('#existing_customer').show();
+                $('#new_customer').hide();
+            }else{
+                $('#existing_customer').hide();
+                $('#new_customer').show();
+            }
+        };
+    </script>
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
+
 </head>
-<body>
+<body onload="cus_option()">
 <?php
 $class = [
     'projects_class'=>'active',
@@ -89,12 +101,12 @@ $this->load->view('common/pm_nav', $class);
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="customer_option"> Customer</label>
-                    <select class="form-control" id="customer_option" name="customer_option">
+                    <select class="form-control" id="customer_option" name="customer_option" onchange="cus_option()">
                         <option value="create-new">Create new</option>
                         <option value="from-existing">From existing</option>
                     </select>
                 </div>
-                <div class="existing_customer">
+                <div id="existing_customer">
                     <div class="form-group">
                         <label >Choose Customer:</label>
                         <select class="form-control" name="c_id">
@@ -107,7 +119,7 @@ $this->load->view('common/pm_nav', $class);
                 </div>
             </div>
 
-            <div class="new_customer">
+            <div id="new_customer">
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="title">Title</label>
