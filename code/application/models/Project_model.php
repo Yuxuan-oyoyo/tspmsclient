@@ -65,16 +65,16 @@ class Project_model extends CI_Model {
     }
 
     public function update($update_array){
-        $date = date('Y-m-d H:i:s');
-        $update_array['last_updated'] = $date;
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
+        $update_array['last_updated'] = $date->format('c');
         $this->db->update('project', $update_array, array('project_id' => $update_array['project_id']));
         //echo var_dump($this->db->error());
         return $this->db->affected_rows();
     }
     public function insert($insert_array){
-        $date = date('Y-m-d H:i:s');
-        $insert_array['start_time'] =  $date;
-        $insert_array['last_updated'] =  $date;
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
+        $insert_array['start_time'] = $date->format('c');
+        $insert_array['last_updated'] = $date->format('c');
         $this->db->insert('project', $insert_array);
         return $this->db->insert_id();
     }
@@ -115,8 +115,9 @@ class Project_model extends CI_Model {
     }*/
 
     public function retrieve_all_with_phase(){
-        $sql = 'SELECT project.*,phase_name,customer.first_name,customer.last_name from project,project_phase,phase,customer
-                where project.current_project_phase_id=project_phase.project_phase_id and project_phase.phase_id = phase.phase_id and customer.c_id=project.c_id';
+        $sql = 'SELECT project.*, phase.phase_name from  project left join project_phase
+on project.current_project_phase_id=project_phase.project_phase_id
+left join phase on project_phase.phase_id = phase.phase_id';
         $query=$this->db->query($sql);
         return $query->result_array();
     }

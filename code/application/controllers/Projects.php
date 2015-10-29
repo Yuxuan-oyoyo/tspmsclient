@@ -71,21 +71,6 @@ class Projects extends CI_Controller {
             'project_name' => $this->input->get("project_title")
         );
         */
-        /*
-        $update_array["customer_id"]=$this->input->get("customer_id");
-        $update_array["project_title"]=$this->input->get("project_title");
-        $update_array["project_description"]=$this->input->get("project_description");
-        $update_array["tags"]=$this->input->get("tags");
-        $update_array["remarks"]=$this->input->get("remarks");
-        $update_array["file_repo_name"]=$this->input->get("file_repo_name");
-        $update_array["no_of_use_cases"]=$this->input->get("no_of_use_cases");
-        $update_array["bitbucket_repo_name"]=$this->input->get("bitbucket_repo_name");
-        $update_array["project_value"]=$this->input->get("project_value");
-
-        $update_array["start_time"]=(new \DateTime())->format('Y-m-d H:i:s');
-        $update_array["last_updated"]=(new \DateTime())->format('Y-m-d H:i:s');
-        $update_array["current_project_phase_id"]=1;
-        */
         //echo var_dump($update_array);
         $this->Project_model->insert($insert_array);
         return $this->db->insert_id();
@@ -120,14 +105,15 @@ class Projects extends CI_Controller {
             'tags' => $this->input->post("tags"),
             'remarks' => $this->input->post("remarks"),
             'file_repo_name' => $this->input->post("file_repo_name"),
-            'staging_link' => null,
-            'production_link' => null,
+            'staging_link' =>$this->input->post("staging_link"),
+            'production_link' =>$this->input->post("production_link"),
             'no_of_use_cases' =>$this->input->post("no_of_use_cases"),
             'bitbucket_repo_name' => $this->input->post("bitbucket_repo_name"),
             'project_value' => $this->input->post("project_value"),
             'current_project_phase_id' => 0
         );
         $project_id = $this->insert($insert_array);
+        echo $project_id;
         $current_project_phase_id = $this->Project_phase_model->create_phase_upon_new_project($project_id);
         $this->Project_model->update_new_project_phase_id($project_id, $current_project_phase_id);
         $this->list_all();
@@ -159,7 +145,7 @@ class Projects extends CI_Controller {
         $name_array = ["c_id","project_title"
             ,"project_description","tags","remarks"
             ,"file_repo_name","no_of_use_cases"
-            ,"bitbucket_repo_name","project_value"];
+            ,"bitbucket_repo_name","project_value","staging_link","production_link"];
         $input = $this->input->post($name_array,true);
         $customer_option =  $this->input->post('customer-option');
         if($customer_option=='from-existing'){

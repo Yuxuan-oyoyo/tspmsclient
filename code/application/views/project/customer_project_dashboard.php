@@ -183,20 +183,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <h3>Milestones - <small class="phase">Build</small></h3><hr>
                 <div id="milestone">
                     <?php foreach($milestones as $milestone):
-                        /*$months=["January", "February", "March", "April", "May", "June",
-                            "July", "August", "September", "October", "November", "December"
-                        ];*/
-                        $month = date('F',strtotime($milestone['deadline']));
+                        $month = date('M',strtotime($milestone['deadline']));
                         $date =  date('d',strtotime($milestone['deadline']));
+                        $year =  date('Y',strtotime($milestone['deadline']));
                     ?>
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="panel panel-default calendar">
-                            <div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong><?=$month?></strong></div>
+                            <div class="panel-heading calendar-month"><strong><?=$month."-".$year?></strong></div>
                             <div class="panel-body">
                                 <div class="thumbnail calendar-date" >
                                     <?=$date?>
                                 </div>
+
                             </div>
                         </div>
                     </div>

@@ -16,9 +16,9 @@ class Post_model extends CI_Model{
     }
 
     public function insert($insert_array,$type){
-        $date = date('Y-m-d H:i:s');
-        $insert_array['last_updated'] = $date;
-        $insert_array['datetime_created'] = $date;
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
+        $insert_array['last_updated'] = $date->format('c');
+        $insert_array['datetime_created'] = $date->format('c');
         $insert_array['type'] = $type;
         $this->db->insert('post', $insert_array);
         $post_id = $this->db->insert_id();
@@ -31,8 +31,9 @@ class Post_model extends CI_Model{
     }
 
     public function update($update_array){
-        $date = date('Y-m-d H:i:s');
-        $update_array['last_updated'] = $date;
+        //$date = date('Y-m-d H:i:s');
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
+        $update_array['last_updated'] =  $date->format('c');
         $this->db->update('post', $update_array, array('post_id' => $update_array['post_id']));
         return $this->db->affected_rows();
     }

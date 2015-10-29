@@ -16,6 +16,7 @@ class Updates extends CI_Controller{
         $this->load->model("Project_model");
         $this->load->model("Post_model");
         $this->load->model("Milestone_model");
+        $this->load->model("Project_phase_model");
     }
 
     public function add_new_update($project_id,$current_project_phase_id){
@@ -26,7 +27,7 @@ class Updates extends CI_Controller{
         $phases = $this->Project_phase_model->retrieve_by_project_id($project_id);
 
         //post_by will be changed to user name useing session data
-        $insert_update_array['posted_by']='TT';
+        $insert_update_array['posted_by']=$this->session->userdata('internal_username');
         $insert_update_array['post_id'] =$post_id;
         $this->Update_model->insert($insert_update_array);
 

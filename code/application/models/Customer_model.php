@@ -52,22 +52,22 @@ class Customer_model extends CI_Model
     }
 
     public function update($update_array){
-        $date = date('Y-m-d H:i:s');
-        $update_array['last_updated'] = $date;
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
+        $update_array['last_updated'] = $date->format('c');
         $this->db->update('customer', $update_array, array('c_id' => $update_array['c_id']));
         return $this->db->affected_rows();
     }
     public function insert($insert_array){
 
-        $date = date('Y-m-d H:i:s');
-        $update_array['last_updated'] = $date;
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
+        $update_array['last_updated'] = $date->format('c');
         $this->db->insert('customer', $insert_array);
         return $this->db->insert_id();
     }
     //not in use
     public function deactivate($input_c_id){
-        $date = date('Y-m-d H:i:s');
-        $update_array['last_updated'] = $date;
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
+        $update_array['last_updated'] = $date->format('c');
         $this->db->update('customer', ["is_active"=>0], array('c_id' => $input_c_id));
         return $this->db->affected_rows();
     }

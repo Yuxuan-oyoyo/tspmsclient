@@ -7,6 +7,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 <head>
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#customerTable').dataTable();
+        });
+    </script>
 </head>
 <body>
 <?php

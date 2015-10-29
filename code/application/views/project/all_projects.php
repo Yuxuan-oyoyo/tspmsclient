@@ -40,15 +40,19 @@ $this->load->view('common/pm_nav', $class);
                             <table class="table table-condensed">
                                 <tr>
                                     <td><i class="fa fa-calendar-check-o"></i>&nbsp;<strong>Current Stage </strong></td>
-                                    <td><?=$p['phase_name']?></td>
+                                    <td><?php
+
+                                        if($p['phase_name']){
+                                            echo $p['phase_name'];
+                                        }else{
+                                            echo "not started";
+                                        }
+
+                                        ?></td>
                                 </tr>
                                 <tr>
                                     <td> <i class="fa fa-link"></i>&nbsp;<strong>Staging link </strong></td>
                                     <td> <a href="<?=$p['staging_link']?>">Click here</a></td>
-                                </tr>
-                                <tr>
-                                    <td>  <i class="fa fa-user"></i>&nbsp;<strong>Customer </strong></td>
-                                    <td> <a href="<?=base_url().'Customers/list_all'?>"><?=$p['first_name'].' '.$p['last_name']?></a></td>
                                 </tr>
                                 <tr>
                                     <td>  <i class="fa fa-clock-o"></i>&nbsp;<strong>Number Of Issues </strong></td>
