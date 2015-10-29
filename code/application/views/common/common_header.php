@@ -13,8 +13,7 @@
 <link href="<?=base_url().'css/sb-admin.css'?>" rel="stylesheet">
 
 <link rel="stylesheet" href="<?=base_url() . 'css/font-awesome.min.css'?>">
-<link rel="stylesheet" href="<?=base_url() . 'css/parsley.css'?>">
-<script src="<?= base_url() . 'js/jquery.min.js' ?>"></script>
+<script src="<?= base_url() . 'js/jquery.js' ?>"></script>
 <script src="<?= base_url() . 'js/bootstrap.min.js' ?>"></script>
 <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
