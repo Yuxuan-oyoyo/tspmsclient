@@ -29,23 +29,10 @@ class Milestones extends CI_Controller{
 
         $insert_milestone_array['deadline']=$this->input->post("deadline");
         $insert_milestone_array['post_id'] =$post_id;
-        $affected_rows2 = $this->Milestone_model->insert($insert_milestone_array);
 
-        //milestones
-        $milestones = $this->Milestone_model-> retrieve_by_project_phase_id($current_project_phase_id);
-
-        //updates
-        $updates = $this->Update_model-> retrieve_by_project_phase_id($current_project_phase_id);
-
-        $data = [
-            "project"=>$this->Project_model->retrieve_by_id($project_id),
-            "current_project_phase_id"=>$current_project_phase_id,
-            "milestones"=>$milestones,
-            "updates"=>$updates,
-            "phases"=>$phases
-        ];
-
-        $this->load->view('project/project_update',$data);
+        if($this->Milestone_model->insert($insert_milestone_array)==1){
+            redirect('projects/view_updates/'.$project_id);
+        }
     }
 
     public function all_milestone_in_current_phase($current_project_phase_id){
@@ -56,5 +43,23 @@ class Milestones extends CI_Controller{
     public function get_by_project_phase_id($project_phase_id){
         $affected_rows = $this->Milestone_model->retrieve_by_project_phase_id($project_phase_id);
         echo json_encode($affected_rows);
+    }
+    public function completionConfirmation($project_id,$milestone_id){
+        $affected_rows1 = $this->Milestone_model->complete($milestone_id);
+        $m = $this->Milestone_model->retrieve_by_id($milestone_id);
+        $p = $this->Post_model->retrieve_by_id($m['post_id']);
+
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
+
+        $new_post_array['header']="Milestone Completion";
+        $new_post_array['body']="Milestone '".$p['header']."' - ".$p['body']."has been completed.";
+        $new_post_array['project_phase_id']=$p['project_phase_id'];
+        $post_id = $this->Post_model->insert($new_post_array,'update');
+
+        $new_update_array['posted_by']=$this->session->userdata('internal_username');
+        $new_update_array['post_id'] =$post_id;
+        if($this->Update_model->insert($new_update_array)==1){
+            redirect('projects/view_updates/'.$project_id);
+        }
     }
 }

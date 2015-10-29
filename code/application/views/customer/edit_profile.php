@@ -17,12 +17,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?=base_url().'js/bootstrap.min.js'?>"></script>
     <script src="<?= base_url() . 'js/parsley.js' ?>"></script>
     <script type="text/javascript">
-        window.Parsley.setLocale('fr');
-        $('#form').parsley();
 
-        function submit(){
-            alert("h");
-            document.getElementById("form").submit();
+//        $(document).ready(function(){
+//            $('form').parsley();
+//        });
+
+        $("div").on("click","#submit", function(e){
+            e.preventDefault();
+            submitForm();
+        });
+        function submitForm(){
+            console.log("h");
+            document.getElementById("form").parsley().reset();
+            console.log("a");
+            var validateReturn = document.getElementById("form").parsley().validate();
+            console.log(validateReturn);
+            if(validateReturn===true){
+                console.log("b");
+                document.getElementById("form").submit();
+            }
+
         }
     </script>
 </head>
@@ -77,7 +91,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
             <div class="form-group">
                 <a href="<?=base_url().'projects/customer_overview/'.$this->session->userdata('Customer_cid')?>" class="btn btn-default" id="cancel">Cancel</a>&nbsp;
-                <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit" onclick="submit()">
+                <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
             </div>
         </form>
     </div>

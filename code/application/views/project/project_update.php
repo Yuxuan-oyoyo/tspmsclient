@@ -66,11 +66,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         });
 
         function refillUpdates(project_phase_id,phase_name){
-            if(project_phase_id!=<?=$project['current_project_phase_id']?>){
-                $(".add_button").hide();
-            }else{
-                $(".add_button").show();
-            }
             $("#timeline").text('');
             $.get("<?=base_url('Updates/get_update_by_project_phase/')?>"+'/'+project_phase_id,function(data,status){
                 $('#updates-phase').replaceWith('<small>'+phase_name+'</small>');
@@ -181,7 +176,7 @@ $this->load->view('common/pm_nav', $class);
         <div class="col-lg-12">
             <div class="col-lg-7">
 
-                <h3>Client Updates - <small class="phase"><?=$current_phase['phase_name']?></small><button class="add_button btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <h3>Client Updates - <small class="phase"><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
                      <?php
                         foreach($updates as $u){
                     ?>
@@ -208,18 +203,17 @@ $this->load->view('common/pm_nav', $class);
             </div>
             <div class="col-lg-4">
 
-                <h3>Milestones - <small class="phase"><?=$current_phase['phase_name']?></small><button class="add_button btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <h3>Milestones - <small class="phase"><?=$current_phase['phase_name']?></small><button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
                 <div id="milestone">
                 <?php
                     foreach($milestones as $m){
-                        $monthName = date('M', strtotime($m['deadline']));
-                        $dateNumber = date('d', strtotime($m['deadline']));
-                        $year = date('Y', strtotime($m['deadline']));
+                        $monthName = date('F', strtotime($m['deadline']));
+                        $dateNumber = date('j', strtotime($m['deadline']));
                 ?>
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="panel panel-default calendar">
-                                    <div class="panel-heading calendar-month"><strong><?=$monthName."-".$year?></strong></div>
+                                    <div class="panel-heading calendar-month"><strong><?=$monthName?></strong></div>
                                     <div class="panel-body">
                                         <div class="thumbnail calendar-date" >
                                             <?=$dateNumber?>
@@ -230,11 +224,22 @@ $this->load->view('common/pm_nav', $class);
                             <div class="col-lg-7">
                                 <strong><?=$m['header']?></strong><br>
                                 <?=$m['body']?>
+                                <?php
+                                    if($m['if_completed']==0){
+                                ?>
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" id="done" onchange="showModal()"> Done
+                                        <input type="checkbox" id="done" data-toggle="modal" data-target="#milestoneCompletionModal"> Complete
                                     </label>
                                 </div>
+                                <?php
+                                    }else{
+                                ?>
+                                        <br><span class="badge success" style="background-color: #00a65a">Completed</span>
+                                <?php
+                                    }
+                                ?>
+
                             </div>
                          </div>
                 <?php
@@ -339,6 +344,28 @@ $this->load->view('common/pm_nav', $class);
                 <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Update">
             </div>
             </form>
+        </div>
+    </div>
+</div>
+<!--Milestone Completion Modal-->
+<div class="modal fade" id="milestoneCompletionModal" tabindex="-1" role="dialog" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong>Complete Milestone</strong>
+            </div>
+            <form role="form" action="<?=base_url().'Milestones/completionConfirmation/'.$project['project_id'].'/'.$m['milestone_id']?>" method="post">
+                <div class="modal-body">
+                    Please confirm your completion of this milestone :
+                    <br>
+                    <?=$m['header']?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <input type="submit" name="submit" id="submit" class="btn btn-success" value="Complete">
+                </div>
+            </form>
+
         </div>
     </div>
 </div>
