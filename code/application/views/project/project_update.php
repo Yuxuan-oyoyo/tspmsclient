@@ -98,6 +98,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 $('#milestones-phase').replaceWith('<small>'+phase_name+'</small>');
                 var updates = jQuery.parseJSON(data);
                 updates.forEach(function(element){
+                    var append;
+                    if (element.if_completed==0){
+                        append=' <div class="checkbox"> <label> <input type="checkbox" id="done" data-toggle="modal" data-target="#milestoneCompletionModal"> Complete </label> </div>';
+                    }else{
+                        append='<br><span class="badge success" style="background-color: #00a65a">Completed</span>';
+                    }
                     var ddl=new Date(element.deadline);
                     var day = ddl.getDate();
                     var month=monthNames[ddl.getMonth()];
@@ -105,7 +111,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     var htmlText = ' <div class="row"> <div class="col-lg-4"> <div class="panel panel-default calendar"> ' +
                         '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'-'+year+'</strong></div>'+
                         '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-lg-7">'+
-                        '<strong>'+element.header+'</strong><br>'+element.body+
+                        '<strong>'+element.header+'</strong><br>'+element.body+append+
                         ' </div> </div>';
 
                     $('#milestone').append( htmlText );
