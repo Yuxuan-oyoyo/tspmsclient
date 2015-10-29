@@ -29,22 +29,11 @@ class Updates extends CI_Controller{
         //post_by will be changed to user name useing session data
         $insert_update_array['posted_by']=$this->session->userdata('internal_username');
         $insert_update_array['post_id'] =$post_id;
-        $this->Update_model->insert($insert_update_array);
+        if($this->Update_model->insert($insert_update_array)==1){
+            redirect('projects/view_updates/'.$project_id);
+        }
 
-        //milestones
-        $milestones = $this->Milestone_model-> retrieve_by_project_phase_id($current_project_phase_id);
 
-        //updates
-        $updates = $this->Update_model-> retrieve_by_project_phase_id($current_project_phase_id);
-
-        $data = [
-            "project"=>$this->Project_model->retrieve_by_id($project_id),
-            "current_project_phase_id"=>$current_project_phase_id,
-            "milestones"=>$milestones,
-            "updates"=>$updates,
-            "phases"=>$phases
-        ];
-        $this->load->view('project/project_update',$data);
     }
 
     public function get_update_by_project_phase($project_phase_id){

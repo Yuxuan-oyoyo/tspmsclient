@@ -8,7 +8,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <?php $this->load->view('common/common_header');?>
     <link href="<?=base_url().'css/parsley.css'?>" rel="stylesheet" type="text/css">
     <script src="<?= base_url() . 'js/parsley.min.js' ?>"></script>
-
 </head>
 <body>
 <?php $this->load->view('common/customer_nav');?>

@@ -93,8 +93,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
         function refillMilestones(project_phase_id){
             $("#milestone").text('');
-            var monthNames = ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
+            var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
             ];
             $.get("<?=base_url('milestones/get_by_project_phase_id/')?>"+'/'+project_phase_id, function(data, status){
                 var updates = jQuery.parseJSON(data);
@@ -102,8 +102,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     var ddl=new Date(element.deadline);
                     var day = ddl.getDate();
                     var month=monthNames[ddl.getMonth()];
+                    var year=ddl.getFullYear();
                     var htmlText = ' <div class="row"> <div class="col-lg-4"> <div class="panel panel-default calendar"> ' +
-                        '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'</strong></div>'+
+                        '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'-'+year+'</strong></div>'+
                     '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-lg-7">'+
                     '<strong>'+element.header+'</strong><br>'+element.body+
                    ' </div> </div>';
