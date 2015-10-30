@@ -392,7 +392,7 @@ $this->load->view('common/pm_nav', $class);
                     </div>
                     <div class="form-group">
                         <label for="estimated_end_time">Estimated End Date:</label>
-                        <input type="text" name="estimated_end_time" id="estimated_end_time" readonly="readonly" class="form-control clsDatePicker">
+                        <input type="text" name="estimated_end_time" id="estimated_end_time" class="form-control clsDatePicker">
                     </div>
             </div>
             <div class="modal-footer">

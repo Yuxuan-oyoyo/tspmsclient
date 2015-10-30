@@ -41,7 +41,10 @@ class Project_phase extends CI_Controller{
             $insert_array['project_id'] = $project_id;
             $insert_array['phase_id'] = $next_phase_id;
             $insert_array['end_time'] = null;
-            $insert_array['estimated_end_time'] = $this->input->post("estimated_end_time");
+
+            $estimated_end_time = $this->input->post("estimated_end_time");
+            $estimated_end_time = new DateTime($estimated_end_time);
+            $insert_array['estimated_end_time'] = $estimated_end_time->format('c');
 
             $next_project_phase_id = $this->Project_phase_model->insert($insert_array);
             $update_array_project = $this->Project_model->retrieve_by_id($project_id);
