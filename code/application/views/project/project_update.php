@@ -63,6 +63,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 refillMilestones(project_phase_id,"Deploy");
             });
 
+            $('#deadlinePicker').datepicker({
+                dateFormat: 'dd-mm-yy',
+                minDate: '+5d',
+                changeMonth: true,
+                changeYear: true,
+                altFormat: "yy-mm-dd"
+            });
+
         });
 
         function refillUpdates(project_phase_id,phase_name){
@@ -309,8 +317,8 @@ $this->load->view('common/pm_nav', $class);
                     </div>
                     <div class="form-group">
                         <label for="title">Deadline:</label>
-                        <input name="deadline" type="text" class="form-control"  id="deadline" >
-                    </div>
+                        <input type="text" name="deadlinePicker" id="deadlinePicker" readonly="readonly" class="form-control clsDatePicker">
+                     </div>
                     <div class="form-group">
                         <label for="milestone_description">Description:</label>
                         <textarea name="body" class="form-control" rows="4" id="milestone_description"></textarea>
