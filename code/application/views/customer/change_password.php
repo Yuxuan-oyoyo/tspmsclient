@@ -15,7 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="<?=base_url().'js/jquery.js'?>"></script>
         <!-- Bootstrap Core JavaScript -->
         <script src="<?=base_url().'js/bootstrap.min.js'?>"></script>
-        <script src="<?= base_url() . 'js/parsley.js' ?>"></script>
+        <script src="<?= base_url() . 'js/parsley.min.js' ?>"></script>
         <script type="text/javascript">
             $('#form').parsley();
         </script>

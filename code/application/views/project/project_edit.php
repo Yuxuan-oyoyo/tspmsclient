@@ -26,6 +26,7 @@ $class = [
     'projects_class'=>'active',
     'message_class'=>'',
     'customers_class'=>'',
+    'internal_user_class'=>'',
     'analytics_class'=>''
 ];
 $p = $project;
