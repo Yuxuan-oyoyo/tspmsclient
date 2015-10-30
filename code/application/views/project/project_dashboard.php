@@ -42,6 +42,10 @@ $this->load->view('common/pm_nav', $class);
         <div class="col-lg-offset-1 no-gutter">
             <?php
             foreach($phases as $phase){
+                $phase_end_time = $phase['end_time'];
+                if(!isset($phase_end_time)){
+                    $phase_end_time = "now";
+                }
                 $img_tag='img/future.png';
                 if(isset($phase['project_phase_id'])){
                     if(!$phase['phase_id']==0) {
@@ -51,7 +55,7 @@ $this->load->view('common/pm_nav', $class);
                             $img_tag = 'img/current.png';
                         }
                         echo'<div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2 " align="center" data-toggle="tooltip"
-                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase['end_time'].'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase_end_time.'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
                     }
                 }else{
                     echo' <div  class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';

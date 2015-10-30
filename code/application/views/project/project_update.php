@@ -70,6 +70,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 changeYear: true,
                 altFormat: "yy-mm-dd"
             });
+            $('#estimated_end_time').datepicker({
+                dateFormat: 'dd-mm-yy',
+                minDate: '+5d',
+                changeMonth: true,
+                changeYear: true,
+                altFormat: "yy-mm-dd"
+            });
 
         });
 
@@ -157,7 +164,7 @@ $this->load->view('common/pm_nav', $class);
     <div class="col-lg-12">
         <h1 class="page-header">
             <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>
-            <a href="<?=$project['staging_link']?>" class="btn btn-primary"><i class="fa fa-external-link"></i>&nbsp;Project Preview</a>
+            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#updatePhaseModal"><i class="fa fa-pencil-square-o"></i>&nbsp;Update phase</button>
         </h1>
         <h4 style="color:darkgrey">Click each phase on timeline to check updates for each phase.</h4>
     </div>
@@ -169,6 +176,10 @@ $this->load->view('common/pm_nav', $class);
             <?php
             $current_phase;
             foreach($phases as $phase){
+                $phase_end_time = $phase['end_time'];
+                if(!isset($phase_end_time)){
+                    $phase_end_time = "now";
+                }
                 $img_tag='img/future.png';
                 if(isset($phase['project_phase_id'])){
                     if(!$phase['phase_id']==0) {
@@ -179,7 +190,7 @@ $this->load->view('common/pm_nav', $class);
                             $current_phase=$phase;
                         }
                         echo'<div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2 " align="center" data-toggle="tooltip"
-                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase['end_time'].'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase_end_time.'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
                     }else{
                         $current_phase=$phase;
                     }
@@ -192,41 +203,61 @@ $this->load->view('common/pm_nav', $class);
         </div>
     </div>
     <hr>
+    <?php
+        if(!isset($phases[0]['project_phase_id'])){
+    ?>
+    <div class="alert alert-warning" role="alert"><strong>This project hasn't been started. Please update phase to start the project.</strong></div>
+    <?php
+        }else{
+    ?>
     <div class="row">
         <div class="col-lg-12">
             <div class="col-lg-7">
 
-                <h3>Client Updates - <small class="phase"><?=$current_phase['phase_name']?></small><button class="add_button btn btn-primary pull-right" data-toggle="modal" data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
-                     <?php
-                        foreach($updates as $u){
-                    ?>
-                        <ul class="timeline" id="timeline">
-                            <li><!---Time Line Element--->
-                                <div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>
-                                <div class="timeline-panel">
-                                    <div class="timeline-heading">
-                                        <h4 class="timeline-title"><?=$u['header']?></h4>
-                                    </div>
-                                    <div class="timeline-body"><!---Time Line Body&Content--->
-                                        <p><?=$u['body']?></p>
-                                        <div class="pull-right timeline-info">
-                                            <i class="fa fa-user"></i>&nbsp;<?=$u['posted_by']?> &nbsp;
-                                            <i class="fa fa-calendar-check-o"></i>&nbsp;<?=$u['last_updated']?></div>
-                                    </div>
-                                </div>
-                            </li>
+                <h3>Client Updates -
+                    <small class="phase"><?= $current_phase['phase_name'] ?></small>
+                    <button class="add_button btn btn-primary pull-right" data-toggle="modal"
+                            data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add
+                    </button>
+                </h3>
+                <hr>
+                <?php
+                foreach ($updates as $u){
+                ?>
+                <ul class="timeline" id="timeline">
+                    <li><!---Time Line Element--->
+                        <div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="timeline-title"><?= $u['header'] ?></h4>
+                            </div>
+                            <div class="timeline-body"><!---Time Line Body&Content--->
+                                <p><?= $u['body'] ?></p>
+
+                                <div class="pull-right timeline-info">
+                                    <i class="fa fa-user"></i>&nbsp;<?= $u['posted_by'] ?> &nbsp;
+                                    <i class="fa fa-calendar-check-o"></i>&nbsp;<?= $u['last_updated'] ?></div>
+                            </div>
+                        </div>
+                    </li>
                     <?php
-                        }
+                    }
                     ?>
 
                 </ul>
             </div>
             <div class="col-lg-4">
 
-                <h3>Milestones - <small class="phase"><?=$current_phase['phase_name']?></small><button class="add_button btn btn-primary pull-right" data-toggle="modal" data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add</button></h3><hr>
+                <h3>Milestones -
+                    <small class="phase"><?= $current_phase['phase_name'] ?></small>
+                    <button class="add_button btn btn-primary pull-right" data-toggle="modal"
+                            data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add
+                    </button>
+                </h3>
+                <hr>
                 <div id="milestone">
-                <?php
-                    foreach($milestones as $m){
+                    <?php
+                    foreach ($milestones as $m) {
                         $monthName = date('M', strtotime($m['deadline']));
                         $dateNumber = date('j', strtotime($m['deadline']));
                         $year = date('Y', strtotime($m['deadline']));
@@ -234,46 +265,50 @@ $this->load->view('common/pm_nav', $class);
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="panel panel-default calendar">
-                                    <div class="panel-heading calendar-month"><strong><?=$monthName."-".$year?></strong></div>
+                                    <div class="panel-heading calendar-month">
+                                        <strong><?= $monthName . "-" . $year ?></strong></div>
                                     <div class="panel-body">
-                                        <div class="thumbnail calendar-date" >
-                                            <?=$dateNumber?>
+                                        <div class="thumbnail calendar-date">
+                                            <?= $dateNumber ?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-7">
-                                <strong><?=$m['header']?></strong><br>
-                                <?=$m['body']?>
+                                <strong><?= $m['header'] ?></strong><br>
+                                <?= $m['body'] ?>
                                 <?php
-                                    if($m['if_completed']==0){
-                                ?>
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" id="done" data-toggle="modal" data-target="#milestoneCompletionModal"> Complete
-                                    </label>
-                                </div>
-                                <?php
-                                    }else{
-                                ?>
-                                        <br><span class="badge success" style="background-color: #00a65a">Completed</span>
-                                <?php
-                                    }
+                                if ($m['if_completed'] == 0) {
+                                    ?>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" id="done" data-toggle="modal"
+                                                   data-target="#milestoneCompletionModal"> Complete
+                                        </label>
+                                    </div>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <br><span class="badge success" style="background-color: #00a65a">Completed</span>
+                                    <?php
+                                }
                                 ?>
 
                             </div>
-                         </div>
-                <?php
+                        </div>
+                        <?php
                     }
-                ?>
+                    ?>
                 </div>
             </div>
-            </div>
         </div>
+    </div>
 
 
     </div>
-
+    <?php
+    }
+    ?>
     <!-- /#page-content-wrapper -->
 
 </div>
@@ -348,16 +383,16 @@ $this->load->view('common/pm_nav', $class);
                 <h4 class="modal-title">Next Phase</h4>
             </div>
 
-            <form role="form" action="<?=base_url().'Project_phase/update_phase/'.$p["project_id"].'/'.$current_project_phase_id?>" method="post">
+            <form role="form" action="<?=base_url().'Project_phase/update_phase/'.$project["project_id"].'/'.$project['current_project_phase_id']?>" method="post">
 
             <div class="modal-body">
                 <div class="form-group">
                         <label for="title">Title:</label>
-                        <input type="text" class="form-control" disabled value="<?=$next_phase?>" id="title" >
+                        <input type="text" class="form-control" disabled value="<?=$next_phase_name?>" id="title" >
                     </div>
                     <div class="form-group">
                         <label for="estimated_end_time">Estimated End Date:</label>
-                        <input name="estimated_end_time" type="text" class="form-control" id="estimated_end_time">
+                        <input type="text" name="estimated_end_time" id="estimated_end_time" readonly="readonly" class="form-control clsDatePicker">
                     </div>
             </div>
             <div class="modal-footer">

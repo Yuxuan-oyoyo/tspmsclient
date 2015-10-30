@@ -122,10 +122,15 @@ $this->load->view('common/pm_nav', $class);
                     <div class="form-group">
                         <label >Choose Customer:</label>
                         <select class="form-control" name="c_id">
-
-                            <?php foreach($customers as $c):?>
-                                <option value="<?=$c['c_id']?>"><?=$c['first_name']?>&nbsp;<?=$c['last_name']?></option>
-                            <?php endforeach?>
+                            <?php foreach($customers as $c) {
+                                    if($c['is_active']==1) {
+                                        ?>
+                                        <option value="<?= $c['c_id'] ?>"><?= $c['first_name'] ?>
+                                            &nbsp;<?= $c['last_name'] ?></option>
+                                        <?php
+                                    }
+                                }
+                            ?>
                         </select>
                     </div>
                 </div>

@@ -113,9 +113,9 @@ class Projects extends CI_Controller {
             'current_project_phase_id' => 0
         );
         $project_id = $this->insert($insert_array);
-        echo $project_id;
-        $current_project_phase_id = $this->Project_phase_model->create_phase_upon_new_project($project_id);
-        $this->Project_model->update_new_project_phase_id($project_id, $current_project_phase_id);
+        //echo $project_id;
+        //$current_project_phase_id = $this->Project_phase_model->create_phase_upon_new_project($project_id);
+        //$this->Project_model->update_new_project_phase_id($project_id, $current_project_phase_id);
         $this->list_all();
     }
     public function add(){
@@ -191,6 +191,11 @@ class Projects extends CI_Controller {
     public function retrieveDataForProjectUpdatePage($project_id){
         //phase
         $project = $this->Project_model->retrieve_by_id($project_id);
+        $current_project_phase_id = $project['current_project_phase_id'];
+        $current_project_phase = $this->Project_phase_model->retrieve_by_id($current_project_phase_id);
+        $next_phase_id = $current_project_phase['phase_id']+1;
+        $next_phase =  $this->Phase_model->retrieve_phase_by_id($next_phase_id);
+        $next_phase_name = $next_phase['phase_name'];
         $phases=$this->Project_phase_model->retrieve_by_project_id($project_id);
 
         //milestones
@@ -203,7 +208,8 @@ class Projects extends CI_Controller {
             "project"=>$project,
             "phases"=>$phases,
             "milestones"=>$milestones,
-            "updates"=>$updates
+            "updates"=>$updates,
+            "next_phase_name"=>$next_phase_name
         ];
         return $data;
     }
