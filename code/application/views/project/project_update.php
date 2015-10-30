@@ -351,7 +351,7 @@ $this->load->view('common/pm_nav', $class);
                 <h4 class="modal-title" >New Milestone</h4>
             </div>
 
-            <form role="form" action="<?=base_url().'Milestones/add_new_milestone/'.$project['project_id'].'/'.$project['current_project_phase_id']?>" method="post">
+            <form id="newMilestone" role="form" action="<?=base_url().'Milestones/add_new_milestone/'.$project['project_id'].'/'.$project['current_project_phase_id']?>" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Title:</label>
@@ -359,7 +359,7 @@ $this->load->view('common/pm_nav', $class);
                     </div>
                     <div class="form-group">
                         <label for="title">Deadline:</label>
-                        <input type="text" name="deadlinePicker" id="deadlinePicker" readonly="readonly" class="form-control clsDatePicker">
+                        <input type="text" name="deadlinePicker" id="deadlinePicker" class="form-control clsDatePicker">
                      </div>
                     <div class="form-group">
                         <label for="milestone_description">Description:</label>

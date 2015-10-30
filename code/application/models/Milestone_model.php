@@ -38,7 +38,7 @@ class Milestone_model extends CI_Model{
         return null;
     }
     public function insert($insert_array){
-        $insert_array['if_missed'] = 0;
+        $insert_array['if_completed'] = 0;
         return $this->db->insert('milestone', $insert_array);
     }
     public function complete($milestone_id){

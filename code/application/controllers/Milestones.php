@@ -13,6 +13,7 @@ class Milestones extends CI_Controller{
         // Your own constructor code
         $this->load->library('session');
         $this->load->helper('url');
+        $this->load->helper("date");
         $this->load->model("Milestone_model");
         $this->load->model("Project_model");
         $this->load->model("Post_model");
@@ -27,9 +28,10 @@ class Milestones extends CI_Controller{
         $post_id = $this->Post_model->insert($insert_post_array,'milestone');
         $phases = $this->Project_phase_model->retrieve_by_project_id($project_id);
 
-        $insert_milestone_array['deadline']=$this->input->post("deadline");
+        $deadline=$this->input->post("deadlinePicker");
+        $deadline = new DateTime($deadline);
+        $insert_milestone_array['deadline'] = $deadline->format('c');
         $insert_milestone_array['post_id'] =$post_id;
-
         if($this->Milestone_model->insert($insert_milestone_array)==1){
             redirect('projects/view_updates/'.$project_id);
         }
