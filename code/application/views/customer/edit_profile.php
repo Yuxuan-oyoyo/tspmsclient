@@ -6,25 +6,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <head>
     <?php $this->load->view('common/common_header');?>
-    <link href="<?=base_url().'css/timeline.css'?>" rel="stylesheet">
-    <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
-    <!-- Custom Fonts -->
-    <link href="<?=base_url().'css/font-awesome.min.css'?>" rel="stylesheet" type="text/css">
     <link href="<?=base_url().'css/parsley.css'?>" rel="stylesheet" type="text/css">
-    <!-- jQuery -->
-    <script src="<?=base_url().'js/jquery.js'?>"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="<?=base_url().'js/bootstrap.min.js'?>"></script>
-    <script src="<?= base_url() . 'js/parsley.js' ?>"></script>
-    <script type="text/javascript">
-        window.Parsley.setLocale('fr');
-        $('#form').parsley();
-
-        function submit(){
-            alert("h");
-            document.getElementById("form").submit();
-        }
-    </script>
+    <script src="<?= base_url() . 'js/parsley.min.js' ?>"></script>
 </head>
 <body>
 <?php $this->load->view('common/customer_nav');?>
@@ -77,9 +60,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
             <div class="form-group">
                 <a href="<?=base_url().'projects/customer_overview/'.$this->session->userdata('Customer_cid')?>" class="btn btn-default" id="cancel">Cancel</a>&nbsp;
-                <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit" onclick="submit()">
+                <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
             </div>
         </form>
+
     </div>
 </div>
 

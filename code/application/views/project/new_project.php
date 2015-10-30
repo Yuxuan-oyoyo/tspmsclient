@@ -89,6 +89,18 @@ $this->load->view('common/pm_nav', $class);
             </div>
             <div class="col-lg-12">
                 <div class="form-group">
+                    <label for="staging_link">Staging Link</label>
+                    <input class="form-control" name="staging_link" value="">
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label for="production_link">Production Link</label>
+                    <input class="form-control" name="production_link" value="">
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="form-group">
                     <label for="remarks">Remarks</label>
                     <input class="form-control" name="remarks" value="">
                 </div>

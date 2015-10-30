@@ -105,14 +105,15 @@ class Projects extends CI_Controller {
             'tags' => $this->input->post("tags"),
             'remarks' => $this->input->post("remarks"),
             'file_repo_name' => $this->input->post("file_repo_name"),
-            'staging_link' => null,
-            'production_link' => null,
+            'staging_link' =>$this->input->post("staging_link"),
+            'production_link' =>$this->input->post("production_link"),
             'no_of_use_cases' =>$this->input->post("no_of_use_cases"),
             'bitbucket_repo_name' => $this->input->post("bitbucket_repo_name"),
             'project_value' => $this->input->post("project_value"),
             'current_project_phase_id' => 0
         );
         $project_id = $this->insert($insert_array);
+        echo $project_id;
         $current_project_phase_id = $this->Project_phase_model->create_phase_upon_new_project($project_id);
         $this->Project_model->update_new_project_phase_id($project_id, $current_project_phase_id);
         $this->list_all();
@@ -144,7 +145,7 @@ class Projects extends CI_Controller {
         $name_array = ["c_id","project_title"
             ,"project_description","tags","remarks"
             ,"file_repo_name","no_of_use_cases"
-            ,"bitbucket_repo_name","project_value"];
+            ,"bitbucket_repo_name","project_value","staging_link","production_link"];
         $input = $this->input->post($name_array,true);
         $customer_option =  $this->input->post('customer-option');
         if($customer_option=='from-existing'){

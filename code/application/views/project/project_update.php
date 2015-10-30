@@ -99,20 +99,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
         function refillMilestones(project_phase_id,phase_name){
             $("#milestone").text('');
-            var monthNames = ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
+            var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
             ];
             $.get("<?=base_url('Milestones/get_by_project_phase_id/')?>"+'/'+project_phase_id, function(data, status){
                 $('#milestones-phase').replaceWith('<small>'+phase_name+'</small>');
                 var updates = jQuery.parseJSON(data);
                 updates.forEach(function(element){
+                    var append;
+                    if (element.if_completed==0){
+                        append=' <div class="checkbox"> <label> <input type="checkbox" id="done" data-toggle="modal" data-target="#milestoneCompletionModal"> Complete </label> </div>';
+                    }else{
+                        append='<br><span class="badge success" style="background-color: #00a65a">Completed</span>';
+                    }
                     var ddl=new Date(element.deadline);
                     var day = ddl.getDate();
                     var month=monthNames[ddl.getMonth()];
+                    var year=ddl.getFullYear();
                     var htmlText = ' <div class="row"> <div class="col-lg-4"> <div class="panel panel-default calendar"> ' +
-                        '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'</strong></div>'+
+                        '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'-'+year+'</strong></div>'+
                         '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-lg-7">'+
-                        '<strong>'+element.header+'</strong><br>'+element.body+
+                        '<strong>'+element.header+'</strong><br>'+element.body+append+
                         ' </div> </div>';
 
                     $('#milestone').append( htmlText );
@@ -221,9 +228,9 @@ $this->load->view('common/pm_nav', $class);
                 <?php
                     foreach($milestones as $m){
                         $monthName = date('M', strtotime($m['deadline']));
-                        $dateNumber = date('d', strtotime($m['deadline']));
+                        $dateNumber = date('j', strtotime($m['deadline']));
                         $year = date('Y', strtotime($m['deadline']));
-                ?>
+                        ?>
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="panel panel-default calendar">

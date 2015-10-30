@@ -19,10 +19,13 @@ class Issues extends CI_Controller {
             $this->load->library('BB_issues');
             $opt_params = ["search","sort","limit","start"];
             $para_input = $this->input->get($opt_params,true);
+            //Status should be array. if status not set, return an empty array for later processing
             $status_filter = ($this->input->get("status")!=null)? $this->input->get("status"):[];
             $para =[];
+            //transfer $para_input to $para. Only keep non-null key value pairs
             foreach($para_input as $key=>$value){
                 if(!empty($value)){
+                    //what does this mean?
                     if($key=="search") $value = $value['value'];
                     $para[$key] = $value;
                 }
@@ -89,5 +92,19 @@ class Issues extends CI_Controller {
             }
         }
         $this->bb_issues->updateIssue($repo_slug, [$param=>$value]);
+    }
+    public function process_edit($repo_slug=null){
+        $field_params = ["status","priority","title","responsible","content","kind","milestone"];
+        $para_input = $this->input->get($field_params,true);
+        //only keep pairs with set value
+        foreach($para_input as $key=>$value){
+            if(!empty($value)){
+                //what does this mean?
+                //if($key=="search") $value = $value['value'];
+                $para[$key] = $value;
+            }
+        }
+
+
     }
 }
