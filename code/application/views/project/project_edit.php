@@ -104,6 +104,12 @@ $this->load->view('common/pm_nav', $class);
                 </div>
                 <div class="col-lg-12">
                     <div class="form-group">
+                        <label for="customer_preview_link">Customer Preview Link</label>
+                        <input class="form-control" name="customer_preview_link" value="<?=$p['customer_preview_link']?>">
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
                         <label for="remarks">Remarks</label>
                         <input class="form-control" name="remarks" value="<?=$p['remarks']?>">
                     </div>

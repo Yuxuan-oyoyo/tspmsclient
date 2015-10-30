@@ -32,8 +32,19 @@ $this->load->view('common/pm_nav', $class);
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-            <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>
-            <a href="<?=$project['staging_link']?>" class="btn btn-primary"><i class="fa fa-external-link"></i>&nbsp;Project Preview</a>
+            <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>&nbsp;
+           <?php
+            if($project['staging_link']):?>
+            <a href="<?=$project['staging_link']?>" class="btn btn-info" target="_blank"><i class="fa fa-external-link"></i>&nbsp;Staging</a>
+            <?php endif?>
+            <?php
+            if($project['production_link']):?>
+                <a href="<?=$project['staging_link']?>" class="btn btn-info" target="_blank"><i class="fa fa-external-link"></i>&nbsp;Production</a>
+            <?php endif?>
+            <?php
+            if($project['customer_preview_link']):?>
+                <a href="<?=$project['customer_preview_link']?>" class="btn btn-info" target="_blank"><i class="fa fa-external-link" ></i>&nbsp;Customer View</a>
+            <?php endif?>
         </h1>
     </div>
 
@@ -80,10 +91,6 @@ $this->load->view('common/pm_nav', $class);
                             <tr>
                                 <td><strong>Project Value</strong></td>
                                 <td><?=$project['project_value']?></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Staging link </strong></td>
-                                <td> <a href="http://fortawesome.github.io/Font-Awesome/icon/link/">Click here</a></td>
                             </tr>
                             <tr>
                                 <td><strong>Customer </strong></td>

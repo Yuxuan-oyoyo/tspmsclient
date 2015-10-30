@@ -21,7 +21,7 @@ class Update_model extends CI_Model{
 
     public function retrieve_by_project_phase_id($project_phase_id){
         if(isset($project_phase_id)){
-            $query = $this->db->query("select * from post p,updates u where p.post_id=u.post_id and p.project_phase_id=?",[$project_phase_id]);
+            $query = $this->db->query("select * from post p,updates u where p.post_id=u.post_id and p.project_phase_id=? order by last_updated desc",[$project_phase_id]);
             return $query->result_array();
         }
         return null;
