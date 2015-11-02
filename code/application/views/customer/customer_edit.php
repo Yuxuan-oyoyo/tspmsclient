@@ -36,11 +36,14 @@ $this->load->view('common/pm_nav', $class);
     </div>
 
     <?php $c=$customer;?>
-    <div class="row">
-        <form data-parsley-validate role="form" action="<?=base_url().'Customers/edit/'.$c["c_id"]?>" method="post">
+    <div class="container">
+        <form  role="form" action="<?=base_url().'Customers/edit/'.$c["c_id"]?>" method="post">
         <div class="col-lg-5 customer-info">
-
-                    <div class="form-group">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input name="username" id="username" disabled type="text" class="form-control" value=<?=$c['username']?>>
+                </div>
+                <div class="form-group">
                     <label for="title">Title:</label>
                     <input name="title" id="title" type="text" class="form-control" value="<?=$c['title']?>" data-parsley-required>
                 </div>
@@ -56,6 +59,9 @@ $this->load->view('common/pm_nav', $class);
                     <label for="company_name">Company:</label>
                     <input name="company_name" id="company_name" type="text" class="form-control" value="<?=$c['company_name']?>"  data-parsley-required>
                 </div>
+
+            </div>
+            <div class="col-lg-offset-1 col-lg-5 customer-info">
                 <div class="form-group">
                     <label for="hp_number">hp number:</label>
                     <input name="hp_number" id="hp_number" type="text" class="form-control" value="<?=$c['hp_number']?>" data-parsley-required>
@@ -80,22 +86,6 @@ $this->load->view('common/pm_nav', $class);
                         <?php endif?>
                     </select>
                 </div>
-            </div>
-            <div class="col-lg-offset-1 col-lg-5 customer-info">
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input name="username" id="username" disabled type="text" class="form-control" value=<?=$c['username']?>>
-                </div>
-                <div class="form-group" id="trigger">
-                    <label for="password">Password:</label><br>
-                    <a href class="btn btn-default" onclick="showChangePassword()">Click here to reset</a>
-                </div>
-                <div class="changePassword">
-                    <div class="form-group">
-                        <label for="new_password">New Password*</label>
-                        <input class="form-control" type="password" id="new_password" placeholder="minimum length:6" name="new_password" data-parsley-minlength="6">
-                    </div>
-                </div>
                 <div class="pull-right">
                     <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
                     <!--<a href="//?base_url().'Customers/edit/'.$c["c_id"]?" class="btn btn-primary">Submit</a>-->
@@ -104,6 +94,7 @@ $this->load->view('common/pm_nav', $class);
             </div>
 
             </form>
+
         </div>
 
 

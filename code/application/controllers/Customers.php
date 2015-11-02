@@ -83,10 +83,6 @@ class Customers extends CI_Controller {
         $update_array["other_number"]=(trim($this->input->post("other_number"))!="-")?
             ($this->input->post("other_number")):null;
         $update_array["is_active"]=(int)$this->input->post("status");
-        $this->load->library('encrypt');
-        if ($this->input->post("new_password")) {
-            $update_array["password_hash"] = password_hash($this->input->post('new_password'), PASSWORD_DEFAULT);
-        }
         if($this->Customer_model->update($update_array)){
             $this->session->set_userdata('message', 'Customer updated successfully.');
         }else{
