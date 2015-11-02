@@ -62,11 +62,11 @@ class Projects extends CI_Controller {
 
     public function list_all($include_hidden=false){
         $projects = $this->Project_model->retrieve_all_ongoing();
-        $this->load->view('project/all_ongoing_projects',$data=array('projects'=>$projects));
+        $this->load->view('project/pm_all_ongoing_projects',$data=array('projects'=>$projects));
     }
     public function list_past_projects($include_hidden=false){
         $projects = $this->Project_model->retrieve_all_past();
-        $this->load->view('project/all_past_project',$data=array('projects'=>$projects));
+        $this->load->view('project/pm_all_past_project',$data=array('projects'=>$projects));
     }
     public function insert($insert_array){
         $this->Project_model->insert($insert_array);
@@ -129,7 +129,7 @@ class Projects extends CI_Controller {
      */
     /*changed function name to edit*/
     public function edit($project_id){
-        $this->load->view('project/project_edit',
+        $this->load->view('project/pm_project_edit',
             $data=["project"=>$this->Project_model->retrieve_by_id($project_id),
                 "customers"=>$this->Customer_model->retrieveAll(),
                 "tags"=>json_encode($this->Project_model->getTags()),
@@ -225,14 +225,14 @@ class Projects extends CI_Controller {
             "phases"=>$phases,
             "customer"=>$customer
         ];
-        $this->load->view('project/project_dashboard',$data);
+        $this->load->view('project/pm_project_dashboard',$data);
         //$this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
     }
 
     public function view_updates($project_id){
         $data = $this->retrieveDataForProjectUpdatePage($project_id);
         $this->load->view('project/project_update',$data);
-        //$this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
+        //$this->load->view('project/pm_project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
     }
 
     public function customer_overview($c_id){

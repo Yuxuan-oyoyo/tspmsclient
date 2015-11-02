@@ -42,7 +42,11 @@ class Internal_authentication extends CI_Controller {
                         $this->session->set_userdata('internal_uid', $user['u_id']);
                         $this->session->set_userdata('internal_username', $user['username']);
                         //redirect to successpage
-                        redirect('/projects/list_all/');
+                        if($user['type']=='PM') {
+                            redirect('/projects/list_all/');
+                        }else{
+                            //to add developer page
+                        }
 
                     } else {
                         $this->session->set_userdata('message', 'Username/password mismatch.');

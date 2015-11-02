@@ -33,7 +33,7 @@ $this->load->view('common/pm_nav', $class);
 ?>
 <div class="container content">
 
-    <form class="form-horizontal" data-parsley-validate id="form" action="<?=base_url().'Projects/create_new_project'?>" method="post">
+    <form class="form-horizontal" data-parsley-validate id="form" action="<?=base_url().'Projects/create_pm_project_new'?>" method="post">
 
     <div class="col-lg-12">
         <h1 class="page-header">
