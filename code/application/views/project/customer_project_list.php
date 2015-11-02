@@ -12,7 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <body>
 <?php $this->load->view('common/customer_nav');?>
-<div class="col-lg-offset-1 content">
+<div class="container">
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
@@ -28,6 +28,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="panel ongoing-panel">
                 <div class="panel-heading" style="text-align:center" ><strong><?=$project['project_title']?></strong></div>
                 <div class="panel-body">
+
                     <a href="<?=base_url("projects/customer_view/".$project['project_id'])?>" class="btn pull-right btn-info"><i class="fa fa-eye"></i> &nbsp;View</a>
 
                 </div>
