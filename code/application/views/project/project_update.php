@@ -134,14 +134,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             });
         }
 
-        $('#update_phase_alert').click(function () {
-            $('#alert').addClass('in'); // shows alert with Bootstrap CSS3 implem
-        });
-
-        $('.close').click(function () {
-            $(this).parent().removeClass('in'); // hides alert with Bootstrap CSS3 implem
-        });
-
     </script>
 </head>
 <body>
@@ -347,7 +339,7 @@ $this->load->view('common/pm_nav', $class);
 </div>
 
 <!--new update modal-->
-<div class="modal fade" id="newUpdateModal" tabindex="-1" role="dialog" >
+<div class="modal fade" id="newUpdateModal" data-parsley-validate tabindex="-1" role="dialog" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -359,11 +351,11 @@ $this->load->view('common/pm_nav', $class);
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Title:</label>
-                        <input name="update_header" type="text" class="form-control"  id="update_title" >
+                        <input name="update_header" type="text" class="form-control"  id="update_title" data-parsley-required>
                     </div>
                     <div class="form-group">
                         <label for="description">Content:</label>
-                        <textarea name="update_body" class="form-control" rows="4" id="description"></textarea>
+                        <textarea name="update_body" class="form-control" rows="4" id="description" data-parsley-required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -384,19 +376,19 @@ $this->load->view('common/pm_nav', $class);
                 <h4 class="modal-title" >New Milestone</h4>
             </div>
 
-            <form id="newMilestone" role="form" action="<?=base_url().'Milestones/add_new_milestone/'.$project['project_id'].'/'.$project['current_project_phase_id']?>" method="post">
+            <form id="newMilestone" data-parsley-validate role="form" action="<?=base_url().'Milestones/add_new_milestone/'.$project['project_id'].'/'.$project['current_project_phase_id']?>" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title">Title:</label>
-                        <input name="header" type="text" class="form-control"  id="milestone_title" >
+                        <input name="header" type="text" class="form-control"  id="milestone_title" data-parsley-required>
                     </div>
                     <div class="form-group">
                         <label for="title">Deadline:</label>
-                        <input type="text" name="deadlinePicker" id="deadlinePicker" class="form-control clsDatePicker">
+                        <input type="text" name="deadlinePicker" id="deadlinePicker" class="form-control clsDatePicker" data-parsley-required>
                      </div>
                     <div class="form-group">
                         <label for="milestone_description">Description:</label>
-                        <textarea name="body" class="form-control" rows="4" id="milestone_description"></textarea>
+                        <textarea name="body" class="form-control" rows="4" id="milestone_description" data-parsley-required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -438,7 +430,7 @@ $this->load->view('common/pm_nav', $class);
                     <h4 class="modal-title">Next Phase</h4>
                 </div>
 
-                <form role="form" action="<?=base_url().'Project_phase/update_phase/'.$project["project_id"].'/'.$project['current_project_phase_id']?>" method="post">
+                <form role="form" data-parsley-validate action="<?=base_url().'Project_phase/update_phase/'.$project["project_id"].'/'.$project['current_project_phase_id']?>" method="post">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="title">Title:</label>
@@ -447,7 +439,7 @@ $this->load->view('common/pm_nav', $class);
                         <div class="form-group">
                             <label for="estimated_end_time">Estimated End Date:</label>
                             <input type="text" name="estimated_end_time" id="estimated_end_time"
-                                   class="form-control clsDatePicker">
+                                   class="form-control clsDatePicker" data-parsley-required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -461,7 +453,7 @@ $this->load->view('common/pm_nav', $class);
         </div>
     </div>
 </div>
-<!--update phase modal-->
+<!--update phase alert modal-->
 <div class="modal fade" id="update_phase_alert_modal" tabindex="-1" role="dialog" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">

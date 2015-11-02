@@ -36,7 +36,7 @@ $this->load->view('common/pm_nav', $class);
     <!-- Page Content -->
 
     <div class="container content">
-        <form class="form-horizontal" id="form" method="post" action="<?=base_url()."Projects/process_edit/".$p["project_id"]?>">
+        <form class="form-horizontal" data-parsley-validate id="form" method="post" action="<?=base_url()."Projects/process_edit/".$p["project_id"]?>">
             <div class="col-lg-12">
                 <h1 class="page-header">
                     Edit Project&nbsp;
@@ -52,7 +52,7 @@ $this->load->view('common/pm_nav', $class);
                 <div class="col-lg-12">
                     <div class="form-group">
                         <label for="project_title">Title*</label>
-                        <input class="form-control" id="project_title" name="project_title" value="<?=$p['project_title']?>">
+                        <input class="form-control" id="project_title" name="project_title" value="<?=$p['project_title']?>" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -81,8 +81,8 @@ $this->load->view('common/pm_nav', $class);
                 </div>
                 <div class="col-lg-offset-1 col-lg-6">
                     <div class="form-group">
-                        <label for="project_value">Project value</label>
-                        <input class="form-control" name="project_value" value="<?=$p['project_value']?>">
+                        <label for="project_value">Project value(S$)</label>
+                        <input class="form-control" name="project_value" value="<?=$p['project_value']?>" data-parsley-type="number">
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -94,19 +94,19 @@ $this->load->view('common/pm_nav', $class);
                 <div class="col-lg-12">
                     <div class="form-group">
                         <label for="staging_link">Staging Link</label>
-                        <input class="form-control" name="staging_link" value="<?=$p['staging_link']?>">
+                        <input class="form-control" name="staging_link" value="<?=$p['staging_link']?>" data-parsley-type="url">
                     </div>
                 </div>
                 <div class="col-lg-12">
                     <div class="form-group">
                         <label for="production_link">Production Link</label>
-                        <input class="form-control" name="production_link" value="<?=$p['production_link']?>">
+                        <input class="form-control" name="production_link" value="<?=$p['production_link']?>" data-parsley-type="url">
                     </div>
                 </div>
                 <div class="col-lg-12">
                     <div class="form-group">
                         <label for="customer_preview_link">Customer Preview Link</label>
-                        <input class="form-control" name="customer_preview_link" value="<?=$p['customer_preview_link']?>">
+                        <input class="form-control" name="customer_preview_link" value="<?=$p['customer_preview_link']?>" data-parsley-type="url">
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -150,37 +150,37 @@ $this->load->view('common/pm_nav', $class);
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input type="text" class="form-control" name="title" id="title">
+                        <input type="text" class="form-control" name="title" id="title" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="form-group ">
                         <label for="first_name">First name</label>
-                        <input type="text" class="form-control" name="first_name" id="first_name">
+                        <input type="text" class="form-control" name="first_name" id="first_name" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="last_name">Last name</label>
-                        <input type="text" class="form-control"  name="last_name" id="last_name">
+                        <input type="text" class="form-control"  name="last_name" id="last_name" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="company_name">Company name</label>
-                        <input type="text" class="form-control" name="company_name" id="company_name">
+                        <input type="text" class="form-control" name="company_name" id="company_name" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" class="form-control" name="email" id="email">
+                        <input type="email" class="form-control" name="email" id="email" data-parsley-type="email" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="hp_number">HP Number</label>
-                        <input type="text" class="form-control" name="hp_number" id="hp_number">
+                        <input type="text" class="form-control" name="hp_number" id="hp_number" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -192,7 +192,7 @@ $this->load->view('common/pm_nav', $class);
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text" class="form-control" name="username" id="username" >
+                        <input type="text" class="form-control" name="username" id="username" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
