@@ -36,6 +36,16 @@ $this->load->view('common/pm_nav', $class);
 
     <div class="row">
         <div class="col-lg-12">
+            <?php if($this->session->userdata('message')):?>
+                <div class="form-group">
+                    <div class="alert alert-info " role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+                        </button>
+                        <?=$this->session->userdata('message')?>
+                    </div>
+                </div>
+                <?php $this->session->unset_userdata('message') ?>
+            <?php endif;?>
             <table class="table table-striped" id="customerTable">
                 <thead>
                 <th>Title</th>

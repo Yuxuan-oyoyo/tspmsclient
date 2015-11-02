@@ -6,13 +6,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 <head>
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
+    <script>
+        function showChangePassword(){
+                $('#trigger').hide();
+                $('.changePassword').show();
+        }
+        function onLoad(){
+            $('.changePassword').hide();
+        }
+    </script>
 </head>
-<body>
+<body onload="onLoad()">
 <?php
 $class = [
     'projects_class'=>'',
     'message_class'=>'',
     'customers_class'=>'active',
+    'internal_user_class'=>'',
     'analytics_class'=>''
 ];
 $this->load->view('common/pm_nav', $class);
@@ -76,9 +86,15 @@ $this->load->view('common/pm_nav', $class);
                     <label for="username">Username:</label>
                     <input name="username" id="username" disabled type="text" class="form-control" value=<?=$c['username']?>>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="trigger">
                     <label for="password">Password:</label><br>
-                    <button class="btn btn-default">Click here to reset</button>
+                    <button class="btn btn-default" onclick="showChangePassword()">Click here to reset</button>
+                </div>
+                <div class="changePassword">
+                    <div class="form-group">
+                        <label for="new_password">New Password*</label>
+                        <input class="form-control" type="password" id="new_password" placeholder="minimum length:6" name="new_password" data-parsley-minlength="6">
+                    </div>
                 </div>
                 <div class="pull-right">
                     <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
