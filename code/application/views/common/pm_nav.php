@@ -19,13 +19,16 @@
             <a href="#"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
         </li>
         <li  class="<?=$projects_class?>">
-            <a href="<?=base_url().'Projects/list_all'?>"><i class="fa fa-fw fa-bar-chart-o"></i> Projects</a>
+            <a href="<?=base_url().'projects/list_all'?>"><i class="fa fa-fw fa-bar-chart-o"></i> Projects</a>
         </li>
         <li class="<?=$message_class?>">
             <a href="chat.html"><i class="fa fa-fw fa-comment"></i> Message</a>
         </li>
         <li class="<?=$customers_class?>">
-            <a href="<?=base_url().'Customers/list_all'?>"><i class="fa fa-fw fa-users"></i>Customers</a>
+            <a href="<?=base_url().'customers/list_all'?>"><i class="fa fa-fw fa-users"></i>Customers</a>
+        </li>
+        <li class="<?=$internal_user_class?>">
+            <a href="<?=base_url().'internal_users/list_all'?>"><i class="fa fa-fw fa-users"></i>Internal Users</a>
         </li>
         <li class="<?=$analytics_class?>">
             <a href="customers.html"><i class="fa fa-fw fa-line-chart"></i>Analytics</a>
@@ -47,14 +50,11 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>&nbsp;<?=$this->session->userdata('internal_username')?><b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li>
-                    <a href="<?=base_url('internal_users/change_password')?>"><i class="fa fa-fw fa-user"></i> Profile</a>
-                </li>
-                <li>
                     <a href="<?=base_url('internal_authentication/change_password')?>"><i class="fa fa-fw fa-gear"></i> Reset Password</a>
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    <a href="<?=base_url('internal_authentication/logout')?>"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                 </li>
             </ul>
         </li>

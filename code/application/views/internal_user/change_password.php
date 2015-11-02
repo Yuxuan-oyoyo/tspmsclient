@@ -14,6 +14,7 @@ $class = [
     'projects_class'=>'',
     'message_class'=>'',
     'customers_class'=>'',
+    'internal_user_class'=>'',
     'analytics_class'=>''
 ];
 $this->load->view('common/pm_nav', $class);

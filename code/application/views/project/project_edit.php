@@ -26,6 +26,7 @@ $class = [
     'projects_class'=>'active',
     'message_class'=>'',
     'customers_class'=>'',
+    'internal_user_class'=>'',
     'analytics_class'=>''
 ];
 $p = $project;
@@ -100,6 +101,12 @@ $this->load->view('common/pm_nav', $class);
                     <div class="form-group">
                         <label for="production_link">Production Link</label>
                         <input class="form-control" name="production_link" value="<?=$p['production_link']?>">
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="customer_preview_link">Customer Preview Link</label>
+                        <input class="form-control" name="customer_preview_link" value="<?=$p['customer_preview_link']?>">
                     </div>
                 </div>
                 <div class="col-lg-12">

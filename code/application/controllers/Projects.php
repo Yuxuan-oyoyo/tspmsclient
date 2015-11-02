@@ -111,6 +111,7 @@ class Projects extends CI_Controller {
             'file_repo_name' => $this->input->post("file_repo_name"),
             'staging_link' =>$this->input->post("staging_link"),
             'production_link' =>$this->input->post("production_link"),
+            'customer_preview_link' =>$this->input->post("customer_preview_link"),
             'no_of_use_cases' =>$this->input->post("no_of_use_cases"),
             'bitbucket_repo_name' => $this->input->post("bitbucket_repo_name"),
             'project_value' => $this->input->post("project_value"),
@@ -144,12 +145,11 @@ class Projects extends CI_Controller {
     }
     /*changed function name to process_edit*/
     public function process_edit($project_id){
-        //TODO: edit title and username/password
         $original_array = $this->Project_model->retrieve_by_id($project_id);
         $name_array = ["c_id","project_title"
             ,"project_description","tags","remarks"
             ,"file_repo_name","no_of_use_cases"
-            ,"bitbucket_repo_name","project_value","staging_link","production_link"];
+            ,"bitbucket_repo_name","project_value","staging_link","production_link","customer_preview_link"];
         $input = $this->input->post($name_array,true);
         var_dump($input);
         $customer_option =  $this->input->post('customer-option');
