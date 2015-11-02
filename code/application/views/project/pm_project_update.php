@@ -115,9 +115,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 updates.forEach(function(element){
                     var append;
                     if (element.if_completed==0){
-                        append=' <div class="checkbox"> <label> <input type="checkbox" id="done" data-toggle="modal" data-target="#milestoneCompletionModal-'+element.milestone_id+'"> Complete </label> </div>';
+                        append=' <div class="checkbox"> <label> <input type="checkbox" id="done" onchange="completeMilestoneButtonClicked('+ element.milestone_id+')" > Complete </label> </div>';
                     }else{
-                        append='<br><span class="badge success" style="background-color: #00a65a">Completed</span>';
+                        append='  <br><span class="badge success" style="background-color: limegreen">Completed</span>';
                     }
                     var ddl=new Date(element.deadline);
                     var day = ddl.getDate();
@@ -126,12 +126,39 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     var htmlText = ' <div class="row"> <div class="col-lg-4"> <div class="panel panel-default calendar"> ' +
                         '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'-'+year+'</strong></div>'+
                         '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-lg-7">'+
-                        '<strong>'+element.header+'</strong><br>'+element.body+append+
+                        '<strong>'+element.header+'</strong>'+
+                        '<i class="fa fa-close pull-right" style="cursor: pointer;color:darkgray" onclick="deleteMilestoneButtonClicked('+element.milestone_id+')"></i>'+
+                        '<br>'+element.body+append+
                         ' </div> </div>';
 
                     $('#milestone').append( htmlText );
                 });
             });
+        }
+
+        function deleteMilestoneButtonClicked(milestone_id) {
+            $('#milestoneDeleteModal').data('milestone_id', milestone_id).modal('show');
+
+        }
+        function completeMilestoneButtonClicked(milestone_id) {
+            if(document.getElementById('done').checked) {
+                $('#milestoneCompletionModal').data('milestone_id', milestone_id).modal('show');
+            }
+        }
+        function confirmMilestoneComplete() {
+            // handle deletion here
+            var mid = $('#milestoneCompletionModal').data('milestone_id');
+            //to be change to delete milestone controller
+            var complete_m_url = "<?= base_url() . 'Milestones/completionConfirmation/' . $project['project_id'] . '/' ?>" + mid;
+           window.location.href = complete_m_url;
+        }
+
+        function confirmMilestoneDelete() {
+            // handle deletion here
+            var mid = $('#milestoneDeleteModal').data('milestone_id');
+            //to be change to delete milestone controller
+            var delete_m_url = "<?=site_url().''?>" + mid;
+            window.location.href = delete_m_url;
         }
 
     </script>
@@ -300,21 +327,22 @@ $this->load->view('common/pm_nav', $class);
                                 </div>
                             </div>
                             <div class="col-lg-7">
-                                <strong><?= $m['header'] ?></strong><br>
+                                <strong><?= $m['header'] ?></strong>
+                                <i class="fa fa-close pull-right"  style="cursor: pointer;color:darkgray" onclick="deleteMilestoneButtonClicked(<?=$m['milestone_id']?>)"></i>
+                                <br>
                                 <?= $m['body'] ?>
                                 <?php
                                 if ($m['if_completed'] == 0) {
                                     ?>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" id="done" data-toggle="modal"
-                                                   data-target="#milestoneCompletionModal-<?=$m['milestone_id']?>"> Complete
+                                            <input type="checkbox" id="done" onchange="completeMilestoneButtonClicked(<?=$m['milestone_id']?>)" > Complete
                                         </label>
                                     </div>
                                     <?php
                                 } else {
                                     ?>
-                                    <br><span class="badge success" style="background-color: #00a65a">Completed</span>
+                                    <br><span class="badge success" style="background-color:limegreen">Completed</span>
                                     <?php
                                 }
                                 ?>
@@ -475,35 +503,43 @@ $this->load->view('common/pm_nav', $class);
     </div>
 </div>
 <!--Milestone Completion Modal-->
-<?php
-foreach($milestones as $m) {
-    ?>
-    <div class="modal fade" id="milestoneCompletionModal-<?=$m['milestone_id']?>" tabindex="-1" role="dialog">
+
+
+    <div class="modal fade" id="milestoneCompletionModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <strong>Complete Milestone</strong>
                 </div>
-                <form role="form"
-                      action="<?= base_url() . 'Milestones/completionConfirmation/' . $project['project_id'] . '/' . $m['milestone_id'] ?>"
-                      method="post">
                     <div class="modal-body">
-                        Please confirm your completion of this milestone :
-                        <br>
-                        <?= $m['header'] ?>
+                       Do you wish to complete this milestone?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelComplete()">Cancel</button>
-                        <input type="submit" name="submit" id="submit" class="btn btn-success" value="Complete">
+                        <input type="submit" name="submit" id="submit" class="btn btn-success" onclick="confirmMilestoneComplete()" value="Complete">
                     </div>
-                </form>
-
             </div>
         </div>
     </div>
-    <?php
-}
-?>
+
+    <div class="modal fade" id="milestoneDeleteModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong>Delete Milestone</strong>
+                </div>
+                    <div class="modal-body">
+                        This action cannot be undone, do you wish to proceed?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="btnYes" onclick="confirmDelete()">Delete this video record</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
 
 </body>
 </html>
