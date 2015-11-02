@@ -71,7 +71,7 @@ class Internal_authentication extends CI_Controller {
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('internal_user/change_password');
         } else {
-            $user = $this->Internal_user_model->retrieve_by_username($this->session->userdata('Customer_username'));
+            $user = $this->Internal_user_model->retrieve_by_username($this->session->userdata('internal_username'));
             $this->load->library('encrypt');
             if (password_verify($this->input->post('existing_password'),$user['password_hash'])) {
                 $new_hash = password_hash($this->input->post('new_password'),PASSWORD_DEFAULT);
@@ -86,9 +86,9 @@ class Internal_authentication extends CI_Controller {
                     // $this->User_log_model->log_message('An error occurred, please try to use a different password set or contact administrator.');
                 }
             } else {
-                $this->session->set_userdata('message', 'Old password entered is incorrect');
+                $this->session->set_userdata('message', 'Existing password entered incorrectly');
             }
-            redirect('internal_user/change_password');
+            redirect('internal_authentication/change_password');
         }
     }
 
