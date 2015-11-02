@@ -186,15 +186,8 @@ $this->load->view('common/pm_nav', $class);
                 }
                 if( $if_completed==0){
             ?>
-            <button class="btn btn-primary" type="button" id="update_phase_alert" href="#alert"><i class="fa fa-pencil-square-o"></i>&nbsp;<?=$update_phase_button?></button>
-
-
-                    <div id="alert" class="alert alert-warn alert-block fade">
-                <button href="#" type="button" class="close">&times;</button>
-                <h4>Unable to update phase!</h4>
-                <p>You haven't completed all milestones of current phase.</p>
-            </div>
-            <?php
+            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#update_phase_alert_modal"><i class="fa fa-pencil-square-o"></i>&nbsp;<?=$update_phase_button?></button>
+             <?php
                 }else{
              ?>
             <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#updatePhaseModal"><i class="fa fa-pencil-square-o"></i>&nbsp;<?=$update_phase_button?></button>
@@ -212,6 +205,7 @@ $this->load->view('common/pm_nav', $class);
             <?php
             $current_phase;
             foreach($phases as $phase){
+                $past_project_phase = $phase;
                 $phase_end_time = $phase['end_time'];
                 if(!isset($phase_end_time)){
                     $phase_end_time = "now";
@@ -233,6 +227,9 @@ $this->load->view('common/pm_nav', $class);
                 }else{
                     echo' <div  class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
                 }
+            }
+            if($project['current_project_phase_id']==-1){
+                $current_phase = $past_project_phase;
             }
             ?>
 
@@ -461,6 +458,27 @@ $this->load->view('common/pm_nav', $class);
                         }
                     ?>
             </form>
+        </div>
+    </div>
+</div>
+<!--update phase modal-->
+<div class="modal fade" id="update_phase_alert_modal" tabindex="-1" role="dialog" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Unable to update phase!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="title">You haven't completed all milestones of current phase.</label>
+                        <br>
+                    <p> Plase make sure that you have completed all the milestones of current phase before updating.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
