@@ -27,28 +27,28 @@ $this->load->view('common/pm_nav', $class);
 
     <?php $c=$customer;?>
     <div class="row">
-        <form role="form" action="<?=base_url().'Customers/edit/'.$c["c_id"]?>" method="post">
+        <form data-parsley-validate role="form" action="<?=base_url().'Customers/edit/'.$c["c_id"]?>" method="post">
         <div class="col-lg-5 customer-info">
-                <div class="form-group">
 
+                    <div class="form-group">
                     <label for="title">Title:</label>
-                    <input name="title" id="title" type="text" class="form-control" value=<?=$c['title']?> >
+                    <input name="title" id="title" type="text" class="form-control" value="<?=$c['title']?>" data-parsley-required>
                 </div>
                 <div class="form-group">
                     <label for="first_name">First Name:</label>
-                    <input name="first_name" id="first_name" type="text" class="form-control" value="<?=$c['first_name']?>">
+                    <input name="first_name" id="first_name" type="text" class="form-control" value="<?=$c['first_name']?>" data-parsley-required>
                 </div>
                 <div class="form-group">
                     <label for="last_name">Last Name:</label>
-                    <input name="last_name" id="last_name" type="text" class="form-control" value="<?=$c['last_name']?>">
+                    <input name="last_name" id="last_name" type="text" class="form-control" value="<?=$c['last_name']?>" data-parsley-required>
                 </div>
                 <div class="form-group">
                     <label for="company_name">Company:</label>
-                    <input name="company_name" id="company_name" type="text" class="form-control" value=<?=$c['company_name']?>>
+                    <input name="company_name" id="company_name" type="text" class="form-control" value="<?=$c['company_name']?>"  data-parsley-required>
                 </div>
                 <div class="form-group">
                     <label for="hp_number">hp number:</label>
-                    <input name="hp_number" id="hp_number" type="text" class="form-control" value=<?=$c['hp_number']?>>
+                    <input name="hp_number" id="hp_number" type="text" class="form-control" value="<?=$c['hp_number']?>" data-parsley-required>
                 </div>
                 <div class="form-group">
                     <label for="other_number">other number:</label>
@@ -56,7 +56,7 @@ $this->load->view('common/pm_nav', $class);
                 </div>
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input name="email" id="email" type="email" class="form-control" value=<?=$c['email']?>>
+                    <input name="email" id="email" type="email" class="form-control" value="<?=$c['email']?>" data-parsley-type="email" data-parsley-required>
                 </div>
                 <div class="form-group">
                     <label for="status">Status:</label>

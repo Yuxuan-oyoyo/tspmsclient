@@ -69,13 +69,6 @@ class Projects extends CI_Controller {
         $this->load->view('project/all_past_project',$data=array('projects'=>$projects));
     }
     public function insert($insert_array){
-        /*
-        $data = array(
-            'phase_id' =>$this->input->get("customer_id"),
-            'project_name' => $this->input->get("project_title")
-        );
-        */
-        //echo var_dump($update_array);
         $this->Project_model->insert($insert_array);
         return $this->db->insert_id();
         //$this->Project_phase_model->create_phases_upon_new_project($project_id);
@@ -96,8 +89,8 @@ class Projects extends CI_Controller {
                 'email'=>$this->input->post("email"),
                 'hp_number'=>$this->input->post("hp_number"),
                 'other_number'=>$this->input->post("other_number"),
-                'username'=>$this->input->post("username"),
-                'password_hash'=> password_hash($this->input->post('password'),PASSWORD_DEFAULT)
+                'username'=>$this->input->post("c_username"),
+                'password_hash'=> password_hash($this->input->post('c_password'),PASSWORD_DEFAULT)
             );
             $c_id = $this->Customer_model->insert($new_customer);
         }
@@ -117,11 +110,11 @@ class Projects extends CI_Controller {
             'project_value' => $this->input->post("project_value"),
             'current_project_phase_id' => 0
         );
-        $project_id = $this->insert($insert_array);
+        $this->insert($insert_array);
         //echo $project_id;
         //$current_project_phase_id = $this->Project_phase_model->create_phase_upon_new_project($project_id);
         //$this->Project_model->update_new_project_phase_id($project_id, $current_project_phase_id);
-        $this->list_all();
+        redirect('projects/list_all');
     }
     public function add(){
         $this->load->view('project/new_project', $data = ["customers"=>$this->Customer_model->retrieveAll()]);

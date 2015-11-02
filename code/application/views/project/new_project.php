@@ -17,9 +17,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             }
         };
     </script>
-    <script type="text/javascript">
-        $('#form').parsley();
-    </script>
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
 
 </head>
@@ -36,8 +33,7 @@ $this->load->view('common/pm_nav', $class);
 ?>
 <div class="container content">
 
-    <form class="form-horizontal" action="<?=base_url().'Projects/create_new_project'?>" method="post"
-          data-parsley-validate action="<?=base_url('project_validation/create_new')?>>
+    <form class="form-horizontal" data-parsley-validate id="form" action="<?=base_url().'Projects/create_new_project'?>" method="post">
 
     <div class="col-lg-12">
         <h1 class="page-header">
@@ -82,32 +78,32 @@ $this->load->view('common/pm_nav', $class);
             </div>
             <div class="col-lg-offset-1 col-lg-6">
                 <div class="form-group">
-                    <label for="project_value">Project value</label>
-                    <input class="form-control" name="project_value" value="">
+                    <label for="project_value">Project value(S$)</label>
+                    <input class="form-control" name="project_value" value="" data-parsley-type="number">
                 </div>
             </div>
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="tags">Tags</label>
-                    <input class="form-control tokenfield" name="tags" value="" data-parsley-required>
+                    <input class="form-control tokenfield" name="tags" value="">
                 </div>
             </div>
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="staging_link">Staging Link</label>
-                    <input class="form-control" name="staging_link" value="">
+                    <input class="form-control" name="staging_link" value="" data-parsley-type="url">
                 </div>
             </div>
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="production_link">Production Link</label>
-                    <input class="form-control" name="production_link" value="">
+                    <input class="form-control" name="production_link" value="" data-parsley-type="url">
                 </div>
             </div>
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="customer_preview_link">Customer Preview Link</label>
-                    <input class="form-control" name="customer_preview_link" value="">
+                    <input class="form-control" name="customer_preview_link" value="" data-parsley-type="url">
                 </div>
             </div>
             <div class="col-lg-12">
@@ -151,37 +147,37 @@ $this->load->view('common/pm_nav', $class);
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input type="text" class="form-control" name="title" id="title">
+                        <input type="text" class="form-control" name="title" id="title" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="form-group ">
                         <label for="first_name">First name</label>
-                        <input type="text" class="form-control" name="first_name" id="first_name">
+                        <input type="text" class="form-control" name="first_name" id="first_name" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="last_name">Last name</label>
-                        <input type="text" class="form-control"  name="last_name" id="last_name">
+                        <input type="text" class="form-control"  name="last_name" id="last_name" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="company_name">Company name</label>
-                        <input type="text" class="form-control" name="company_name" id="company_name">
+                        <input type="text" class="form-control" name="company_name" id="company_name" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" class="form-control" name="email" id="email">
+                        <input type="email" class="form-control" name="email" id="email" data-parsley-type="email" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="hp_number">HP Number</label>
-                        <input type="text" class="form-control" name="hp_number" id="hp_number">
+                        <input type="text" class="form-control" name="hp_number" id="hp_number" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -192,14 +188,14 @@ $this->load->view('common/pm_nav', $class);
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" name="username" id="username">
+                        <label for="c_username">Username</label>
+                        <input type="text" class="form-control" name="c_username" id="c_username" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="username">Password</label>
-                        <input type="password" class="form-control" name="password" id="password" value="<?=DEFAULT_PASSWORD?>" >
+                        <label for="c_password">Password</label>
+                        <input type="password" class="form-control" name="c_password" id="c_password" value="<?=DEFAULT_PASSWORD?>" >
                     </div>
                 </div>
             </div>
@@ -210,8 +206,5 @@ $this->load->view('common/pm_nav', $class);
 
 <!-- /#page-content-wrapper -->
 <!-- jQuery -->
-<script src="js/jquery.js"></script>
-<!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script>
 </body>
 </html>

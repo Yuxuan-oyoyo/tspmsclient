@@ -9,6 +9,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Custom CSS -->
     <link href="<?=base_url().'css/sb-admin.css'?>" rel="stylesheet">
     <link href="<?=base_url().'css/timeline.css'?>" rel="stylesheet">
+    <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
+    <!-- jQuery -->
+    <script src="<?= base_url() . 'js/jquery.min.js' ?>"></script>
+    <script src="<?= base_url() . 'js/bootstrap.min.js' ?>"></script>
+
 </head>
 <body>
 <?php $this->load->view('common/customer_nav');?>
