@@ -61,8 +61,12 @@ class Projects extends CI_Controller {
     }
 
     public function list_all($include_hidden=false){
-        $projects = $this->Project_model->retrieve_all_with_phase();
-        $this->load->view('project/all_projects',$data=array('projects'=>$projects));
+        $projects = $this->Project_model->retrieve_all_ongoing();
+        $this->load->view('project/all_ongoing_projects',$data=array('projects'=>$projects));
+    }
+    public function list_past_projects($include_hidden=false){
+        $projects = $this->Project_model->retrieve_all_past();
+        $this->load->view('project/all_past_project',$data=array('projects'=>$projects));
     }
     public function insert($insert_array){
         /*
@@ -147,6 +151,7 @@ class Projects extends CI_Controller {
             ,"file_repo_name","no_of_use_cases"
             ,"bitbucket_repo_name","project_value","staging_link","production_link"];
         $input = $this->input->post($name_array,true);
+        var_dump($input);
         $customer_option =  $this->input->post('customer-option');
         if($customer_option=='from-existing'){
             $input['c_id'] = $this->input->post('c_id');
@@ -170,12 +175,10 @@ class Projects extends CI_Controller {
                 $original_array[$key] = $value;
             }
         }
-
-        $affected_rows = $this->Project_model->update($original_array);
-        //$this->edit($original_array["project_id"]);
-        //TODO:input validation
-        //TODO:prompt user on success/failure
-        $this->view_dashboard($project_id);
+        var_dump($original_array);
+        if($this->Project_model->update($original_array)==0){
+            $this->view_dashboard($project_id);
+        }
     }
     public function project_by_id($project_id){
         //TODO: edit title and username/password

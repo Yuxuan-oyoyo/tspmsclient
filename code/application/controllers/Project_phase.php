@@ -68,4 +68,18 @@ class Project_phase extends CI_Controller{
          }
     }
 
+    public function end_project($project_id,$current_project_phase_id){
+            $update_array = $this->Project_phase_model->retrieve_by_id($current_project_phase_id);
+            $this->Project_phase_model->update($update_array);
+
+            $update_array_project = $this->Project_model->retrieve_by_id($project_id);
+            $update_array_project['current_project_phase_id'] = -1;
+            $update_array_project['is_ongoing'] = 0;
+
+            if($this->Project_model->update($update_array_project)==1){
+                redirect('projects/list_past_projects');
+            }
+    }
+
+
 }

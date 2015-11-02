@@ -115,7 +115,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 updates.forEach(function(element){
                     var append;
                     if (element.if_completed==0){
-                        append=' <div class="checkbox"> <label> <input type="checkbox" id="done" data-toggle="modal" data-target="#milestoneCompletionModal"> Complete </label> </div>';
+                        append=' <div class="checkbox"> <label> <input type="checkbox" id="done" data-toggle="modal" data-target="#milestoneCompletionModal-'+element.milestone_id+'"> Complete </label> </div>';
                     }else{
                         append='<br><span class="badge success" style="background-color: #00a65a">Completed</span>';
                     }
@@ -133,6 +133,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 });
             });
         }
+
+        $('#update_phase_alert').click(function () {
+            $('#alert').addClass('in'); // shows alert with Bootstrap CSS3 implem
+        });
+
+        $('.close').click(function () {
+            $(this).parent().removeClass('in'); // hides alert with Bootstrap CSS3 implem
+        });
 
     </script>
 </head>
@@ -164,7 +172,34 @@ $this->load->view('common/pm_nav', $class);
     <div class="col-lg-12">
         <h1 class="page-header">
             <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>
-            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#updatePhaseModal"><i class="fa fa-pencil-square-o"></i>&nbsp;Update phase</button>
+            <?php
+                $if_completed = 1;
+                foreach ($milestones as $m) {
+                    if($m['if_completed']==0){
+                        $if_completed = 0;
+                    }
+                }
+            $update_phase_button = 'Update Phase';
+                if(is_null($next_phase_name)){
+                    $update_phase_button = 'End Project';
+                }
+                if( $if_completed==0){
+            ?>
+            <button class="btn btn-primary" type="button" id="update_phase_alert" href="#alert"><i class="fa fa-pencil-square-o"></i>&nbsp;<?=$update_phase_button?></button>
+
+
+                    <div id="alert" class="alert alert-warn alert-block fade">
+                <button href="#" type="button" class="close">&times;</button>
+                <h4>Unable to update phase!</h4>
+                <p>You haven't completed all milestones of current phase.</p>
+            </div>
+            <?php
+                }else{
+             ?>
+            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#updatePhaseModal"><i class="fa fa-pencil-square-o"></i>&nbsp;<?=$update_phase_button?></button>
+            <?php
+            }
+            ?>
         </h1>
         <h4 style="color:darkgrey">Click each phase on timeline to check updates for each phase.</h4>
     </div>
@@ -283,7 +318,7 @@ $this->load->view('common/pm_nav', $class);
                                     <div class="checkbox">
                                         <label>
                                             <input type="checkbox" id="done" data-toggle="modal"
-                                                   data-target="#milestoneCompletionModal"> Complete
+                                                   data-target="#milestoneCompletionModal-<?=$m['milestone_id']?>"> Complete
                                         </label>
                                     </div>
                                     <?php
@@ -378,53 +413,86 @@ $this->load->view('common/pm_nav', $class);
 <div class="modal fade" id="updatePhaseModal" tabindex="-1" role="dialog" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+            <?php
+            if($current_phase['phase_id']==5){
+            ?>
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Next Phase</h4>
+                <h4 class="modal-title">End Project</h4>
             </div>
 
-            <form role="form" action="<?=base_url().'Project_phase/update_phase/'.$project["project_id"].'/'.$project['current_project_phase_id']?>" method="post">
+            <form role="form" action="<?=base_url().'Project_phase/end_project/'.$project['project_id'].'/'.$project['current_project_phase_id']?>" method="post">
 
-            <div class="modal-body">
-                <div class="form-group">
-                        <label for="title">Title:</label>
-                        <input type="text" class="form-control" disabled value="<?=$next_phase_name?>" id="title" >
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="title">This project will be ended. You can still find it in "Past Projects".</label>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="estimated_end_time">Estimated End Date:</label>
-                        <input type="text" name="estimated_end_time" id="estimated_end_time" class="form-control clsDatePicker">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <input type="submit" name="submit" id="submit" class="btn btn-primary" value="End Project">
                     </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Update">
-            </div>
+                <?php
+                }else {
+                    ?>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Next Phase</h4>
+                </div>
+
+                <form role="form" action="<?=base_url().'Project_phase/update_phase/'.$project["project_id"].'/'.$project['current_project_phase_id']?>" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="title">Title:</label>
+                            <input type="text" class="form-control" disabled value="<?= $next_phase_name ?>" id="title">
+                        </div>
+                        <div class="form-group">
+                            <label for="estimated_end_time">Estimated End Date:</label>
+                            <input type="text" name="estimated_end_time" id="estimated_end_time"
+                                   class="form-control clsDatePicker">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Update">
+                    </div>
+                    <?php
+                        }
+                    ?>
             </form>
         </div>
     </div>
 </div>
 <!--Milestone Completion Modal-->
-<div class="modal fade" id="milestoneCompletionModal" tabindex="-1" role="dialog" >
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <strong>Complete Milestone</strong>
-            </div>
-            <form role="form" action="<?=base_url().'Milestones/completionConfirmation/'.$project['project_id'].'/'.$m['milestone_id']?>" method="post">
-                <div class="modal-body">
-                    Please confirm your completion of this milestone :
-                    <br>
-                    <?=$m['header']?>
+<?php
+foreach($milestones as $m) {
+    ?>
+    <div class="modal fade" id="milestoneCompletionModal-<?=$m['milestone_id']?>" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong>Complete Milestone</strong>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <input type="submit" name="submit" id="submit" class="btn btn-success" value="Complete">
-                </div>
-            </form>
+                <form role="form"
+                      action="<?= base_url() . 'Milestones/completionConfirmation/' . $project['project_id'] . '/' . $m['milestone_id'] ?>"
+                      method="post">
+                    <div class="modal-body">
+                        Please confirm your completion of this milestone :
+                        <br>
+                        <?= $m['header'] ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelComplete()">Cancel</button>
+                        <input type="submit" name="submit" id="submit" class="btn btn-success" value="Complete">
+                    </div>
+                </form>
 
+            </div>
         </div>
     </div>
-</div>
+    <?php
+}
+?>
 
 </body>
 </html>

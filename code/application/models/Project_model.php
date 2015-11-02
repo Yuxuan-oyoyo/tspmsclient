@@ -67,8 +67,8 @@ class Project_model extends CI_Model {
     public function update($update_array){
         $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
         $update_array['last_updated'] = $date->format('c');
-        $this->db->update('project', $update_array, array('project_id' => $update_array['project_id']));
-        //echo var_dump($this->db->error());
+        $query = $this->db->update('project', $update_array, array('project_id' => $update_array['project_id']));
+        print_r($query);
         return $this->db->affected_rows();
     }
     public function insert($insert_array){
@@ -117,7 +117,21 @@ class Project_model extends CI_Model {
     public function retrieve_all_with_phase(){
         $sql = 'SELECT project.*, phase.phase_name from  project left join project_phase
 on project.current_project_phase_id=project_phase.project_phase_id
-left join phase on project_phase.phase_id = phase.phase_id';
+left join phase on project_phase.phase_id = phase.phase_id and project.is_ongoing = 1';
+        $query=$this->db->query($sql);
+        return $query->result_array();
+    }
+
+    public function retrieve_all_ongoing(){
+     $sql = 'SELECT p.*, phase.phase_name from (select project.* from project where  project.is_ongoing = 1) as p left join project_phase
+    on p.current_project_phase_id=project_phase.project_phase_id
+      left join phase on project_phase.phase_id = phase.phase_id';
+        $query=$this->db->query($sql);
+        return $query->result_array();
+    }
+
+    public function retrieve_all_past(){
+        $sql = 'SELECT project.* from  project where project.is_ongoing = 0';
         $query=$this->db->query($sql);
         return $query->result_array();
     }

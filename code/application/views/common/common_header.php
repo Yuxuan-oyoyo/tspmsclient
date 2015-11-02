@@ -15,8 +15,10 @@
 <link href="<?=base_url().'css/sb-admin.css'?>" rel="stylesheet">
 
 <link rel="stylesheet" href="<?=base_url() . 'css/font-awesome.min.css'?>">
+<link href="<?=base_url().'css/parsley.css'?>" rel="stylesheet" type="text/css">
 <script src="<?= base_url() . 'js/jquery.js' ?>"></script>
 <script src="<?= base_url() . 'js/bootstrap.min.js' ?>"></script>
+<script src="<?= base_url() . 'js/parsley.js' ?>"></script>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <!--[if lt IE 9]>

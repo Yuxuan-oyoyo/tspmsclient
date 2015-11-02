@@ -83,7 +83,7 @@ $this->load->view('common/pm_nav', $class);
                             </tr>
                             <tr>
                                 <td><strong>Staging link </strong></td>
-                                <td> <a href="http://fortawesome.github.io/Font-Awesome/icon/link/">Click here</a></td>
+                                <td> <a href="<?=$project['staging_link']?>">Click here</a></td>
                             </tr>
                             <tr>
                                 <td><strong>Customer </strong></td>

@@ -17,6 +17,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             }
         };
     </script>
+    <script type="text/javascript">
+        $('#form').parsley();
+    </script>
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
 
 </head>
@@ -32,7 +35,8 @@ $this->load->view('common/pm_nav', $class);
 ?>
 <div class="container content">
 
-    <form class="form-horizontal" action="<?=base_url().'Projects/create_new_project'?>" method="post">
+    <form class="form-horizontal" action="<?=base_url().'Projects/create_new_project'?>" method="post"
+          data-parsley-validate action="<?=base_url('project_validation/create_new')?>>
 
     <div class="col-lg-12">
         <h1 class="page-header">
@@ -48,7 +52,7 @@ $this->load->view('common/pm_nav', $class);
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="project_title">Title*</label>
-                    <input class="form-control" id="project_title" name="project_title" value="">
+                    <input class="form-control" id="project_title" name="project_title" value="" data-parsley-required>
                 </div>
             </div>
             <div class="col-lg-12">
@@ -84,7 +88,7 @@ $this->load->view('common/pm_nav', $class);
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="tags">Tags</label>
-                    <input class="form-control tokenfield" name="tags" value="">
+                    <input class="form-control tokenfield" name="tags" value="" data-parsley-required>
                 </div>
             </div>
             <div class="col-lg-12">
