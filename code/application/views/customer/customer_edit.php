@@ -88,7 +88,7 @@ $this->load->view('common/pm_nav', $class);
                 </div>
                 <div class="form-group" id="trigger">
                     <label for="password">Password:</label><br>
-                    <button class="btn btn-default" onclick="showChangePassword()">Click here to reset</button>
+                    <a href class="btn btn-default" onclick="showChangePassword()">Click here to reset</a>
                 </div>
                 <div class="changePassword">
                     <div class="form-group">
