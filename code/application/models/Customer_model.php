@@ -60,7 +60,7 @@ class Customer_model extends CI_Model
     public function insert($insert_array){
 
         $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
-        $update_array['last_updated'] = $date->format('c');
+        $insert_array['last_updated'] = $date->format('c');
         $this->db->insert('customer', $insert_array);
         return $this->db->insert_id();
     }

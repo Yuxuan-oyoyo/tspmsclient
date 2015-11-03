@@ -25,7 +25,7 @@ $this->load->view('common/pm_nav', $class);
     <div class="col-lg-12">
         <h1 class="page-header">
             Projects
-            <a href="<?=base_url().'Projects/add'?>" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Project</a>
+            <a href="<?=base_url().'Projects/create_new_project'?>" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Project</a>
         </h1>
         <ul class="nav nav-tabs">
             <li><a href="<?=base_url().'Projects/list_all'?>">Ongoing Projects</a></li>
