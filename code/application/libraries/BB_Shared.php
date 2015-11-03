@@ -19,7 +19,8 @@ class BB_Shared {
         }
         return $this->requestFromServer();
     }
-    private function requestFromServer(){
+
+    public function requestFromServer(){
         /*open connection*/
         $data = ['grant_type'=>'client_credentials'];
         $ch = curl_init();
@@ -30,7 +31,16 @@ class BB_Shared {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
+        //debug-------------------------------------------
+//        curl_setopt($ch, CURLOPT_VERBOSE, true);
+//
+//        $verbose = fopen('php://temp', 'w+');
+//        curl_setopt($ch, CURLOPT_STDERR, $verbose);
+//        $response = curl_exec($ch);
+//        rewind($verbose);
+//        $verboseLog = stream_get_contents($verbose);
+//        echo "Verbose information:\n<pre>", htmlspecialchars($verboseLog), "</pre>\n";
+        //debug --------------------------------------------
         $response = curl_exec($ch);
         if($response ==false){
             echo curl_error($ch);

@@ -8,7 +8,6 @@
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
     <link href="<?= base_url() . 'css/sb-admin.css' ?>" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Francois+One" />
     <link rel="stylesheet" href="<?= base_url() . 'css/sidebar-left.css' ?>">
     <link rel="stylesheet" href="<?= base_url() . 'css/issues.css' ?>">
     <!--script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script-->
@@ -148,7 +147,7 @@
             $issues = $issues_response["issues"];
             //$data = [["kind"=>"bug","local_id"=>3,"title"=>"Speed up page load by localize assest","status"=>"new","priority"=>"major","milestone"=>null,"responsible"=>"WANG TIANTONG _","created_on"=>"2015-10-25T09:48:10.147","utc_last_updated"=>"2015-10-25 08:48:10+00:00"]];
             ?>
-            <table class="table table-striped table-bordered" data-sort-by="updated_on" data-modules="components/follow-list">
+            <table class="table table-striped" data-sort-by="updated_on" data-modules="components/follow-list">
                 <thead>
                 <tr>
                     <?php foreach($headers as $h):?>
@@ -163,7 +162,7 @@
                 <?php foreach($issues as $d):?>
                     <tr class="" data-state="open">
                         <td class="">
-                            <a class="execute" href="<?=base_url()."issues/retrieve_by_id/".$repo_slug."?local_id=".$d["local_id"]?>" title="View Details">#<?=$d["local_id"]?>: <?=$d["title"]?></a>
+                            <a class="execute" href="<?=base_url()."issues/detail/".$repo_slug."/".$d["local_id"]?>" title="View Details">#<?=$d["local_id"]?>: <?=$d["title"]?></a>
                         </td>
                         <td class="icon-col">
                             <a href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."kind=".$d["metadata"]["kind"]?>"

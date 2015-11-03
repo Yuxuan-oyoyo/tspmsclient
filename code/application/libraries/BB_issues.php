@@ -13,10 +13,10 @@ class BB_issues {
 
     public $_print_err = false;
     public $server_status = [
-        "new","open","resolved","on hold","invalid","duplicate","wontfix"
+        "new","open","resolved","on hold","invalid","duplicate","wontfix","closed"
     ];
     public $defined_status=[
-        "new","to develop","resolved","to test","invalid","to deploy","wontfix"
+        "new","to develop","resolved","to test","invalid","to deploy","wontfix","closed"
     ];
     private function setEndpoint($repo_slug){
         return "https://api.bitbucket.org/1.0/repositories/".BB_ACCOUNT_NAME."/".$repo_slug."/issues";
@@ -24,17 +24,27 @@ class BB_issues {
 
     /**
      * @param $repo_slug
+     * @param $id
      * @param array|null $parameters
      * @return array|null
      */
-    public function retrieveIssues($repo_slug, array $parameters=null,$time){
+    public function retrieveIssues($repo_slug, $id, array $parameters=null){
         $CI =& get_instance();
         $CI->load->library('bb_shared');
         $token = $CI->bb_shared->getDefaultOauthToken();
         $endpoint = $this->setEndpoint($repo_slug);
+        if(isset($id)) $endpoint.="/".$id;
         $parameters["access_token"] = $token;
+        $parameters["timestamp"] = time();
         $url = $endpoint.'?'.$this->construct_paras($parameters);
-        return $this->sendGetRequest($url);
+        $result =  $this->sendGetRequest($url);
+        if(is_null($result)){
+            $parameters["access_token"] = $CI->bb_shared->requestFromServer();
+            $url = $endpoint.'?'.$this->construct_paras($parameters);
+            $result = $this->sendGetRequest($url);
+        }
+        //var_dump($result);
+        return $result;
     }
     private function map_status($status, $fromDefined = true){
         if($fromDefined) {
@@ -54,69 +64,42 @@ class BB_issues {
         }
     }
 
-    /**
-     * @param $repo_slug
-     * @param $issue_id
-     * @return array|null
-     */
-    public function retrieveIssue($repo_slug, $issue_id){
-        $CI =& get_instance();
-        $CI->load->library('bb_shared');
-        $token = $CI->bb_shared->getDefaultOauthToken();
-        $endpoint = $this->setEndpoint($repo_slug);
-        $parameters["access_token"] = $token;
 
-        $url = $endpoint.'/'.$issue_id;
-
-        return $this->sendGetRequest($url);
-    }
     private function sendGetRequest($url){
         /*open connection*/
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-        $header = array("Cache-Control: no-cache");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         $response = curl_exec($ch);
-        /*process response*/
-        if($response==false){
-            echo curl_error($ch);
-        }
-        //echo var_dump( curl_getinfo($ch));
-        $hhhhh_time = time();
-        if(($reply_array = json_decode($response,true))!=null){
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if($code==200 && ($reply_array = json_decode($response,true))!=null){
             //echo "response",var_dump($reply_array);
             if(isset($reply_array['error'])){
-                if($this->_print_err) echo var_dump($reply_array);
-            }else{
-                foreach($reply_array["issues"] as $issue){
-                    $issue["status"] = $this->map_status($issue["status"], false);
+                if($this->_print_err) var_dump($reply_array);
+            }else if(isset($reply_array['issues'])){
+                foreach($reply_array["issues"] as $key=>$issue){
+                    $reply_array["issues"][$key]["status"] = $this->map_status($issue["status"], false);
                 }
-                var_dump($reply_array);
-                var_dump($hhhhh_time);
+                return $reply_array;
+            }else{
+                $reply_array["status"] = $this->map_status($reply_array["status"], false);
                 return $reply_array;
             }
         }
         return null;
-
     }
     private function construct_paras($parameters){
         if($parameters==false){
             return '';
         }else{
-            if(isset($reply_array["status"])){
-                $reply_array["status"] = $this->map_status($reply_array["status"], true);
+            if(isset($parameters["status"])){
+                $parameters["status"] = $this->map_status($parameters["status"], true);
             }
-            $fields_string = '';
-            foreach($parameters as $key=>$value){
-                $fields_string .= $key.'='.$value.'&';
-            }
-            rtrim($fields_string, '&');
-            return $fields_string;
+            return http_build_query($parameters);
         }
-
     }
 
     /**
@@ -124,16 +107,17 @@ class BB_issues {
      * @param array $issue_array
      */
     public function postNewIssue($repo_slug, array $issue_array){
-        $this->sendIssueRequest($repo_slug,$issue_array,"POST");
+        return $this->sendIssueRequest($repo_slug,null,$issue_array,"POST");
         //TODO: may need a confirmation
     }
     /**
      * @param $repo_slug
+     * @param $id
      * @param array $issue_array this can be the same as array in post new
      * issue, and can also be incomplete
      */
-    public function updateIssue($repo_slug, array $issue_array){
-        $this->sendIssueRequest($repo_slug,$issue_array,"PUT");
+    public function updateIssue($repo_slug, $id, array $issue_array){
+        return $this->sendIssueRequest($repo_slug,$id,$issue_array,"PUT");
     }
     public function getCommentsForAnIssue($repo_slug, $issue_id){
         //TODO:retrieve comments
@@ -142,36 +126,53 @@ class BB_issues {
         //TODO: post comment
         //question: $comment string only? how do we know who posts it?
     }
-    private function sendIssueRequest($repo_slug, $issue_array, $_flag='POST'){
+    private function sendIssueRequest($repo_slug,$id, $issue_array, $_flag='POST'){
         $CI =& get_instance();
         $CI->load->library('bb_shared');
         $token = $CI->bb_shared->getDefaultOauthToken();
         $endpoint = $this->setEndpoint($repo_slug);
-        if(isset($issue_array["local_id"])){
-            $endpoint ="/".$issue_array["local_id"];
-            unset($issue_array["local_id"]);
+        if(isset($id)){
+            $endpoint =$endpoint."/".$id;
         }
         if(isset($issue_array["status"])){
             $issue_array["status"] = $this->map_status($issue_array["status"], true);
         }
-        $issue_array['token'] = $token;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $endpoint);
+        $_trial = 2;
+        $issue_array['access_token'] = $token;
 
-        if($_flag=='POST')
-            curl_setopt($ch, CURLOPT_POST, TRUE);
-        else if($_flag=='PUT')
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        while($_trial>=0) {
+            $_trial -= 1;/*IMPORTANT*/
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $endpoint);
 
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $issue_array);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
-        $response = curl_exec($ch);
-        /*process response*/
-        if($response==false){
-            echo curl_error($ch);
+            if ($_flag == 'POST')
+                curl_setopt($ch, CURLOPT_POST, TRUE);
+            else if ($_flag == 'PUT')
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($issue_array));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
+        //debug-------------------------------------------
+//        curl_setopt($ch, CURLOPT_VERBOSE, true);
+//
+//        $verbose = fopen('php://temp', 'w+');
+//        curl_setopt($ch, CURLOPT_STDERR, $verbose);
+//        $response = curl_exec($ch);
+//        rewind($verbose);
+//        $verboseLog = stream_get_contents($verbose);
+//        echo "Verbose information:\n<pre>", htmlspecialchars($verboseLog), "</pre>\n";
+            //debug --------------------------------------------
+            /*process response*/
+            $response = curl_exec($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if($code==200) break;/*IMPORTANT*/
+            else{
+                $issue_array['access_token'] = $CI->bb_shared->requestFromServer();
+            }
         }
+        //var_dump($response);
         if(($reply_array = json_decode($response,true))!=null){
             if(isset($reply_array['error'])){
                 if($this->_print_err) echo var_dump($reply_array);
