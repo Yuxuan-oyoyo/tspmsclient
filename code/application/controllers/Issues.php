@@ -17,23 +17,24 @@ class Issues extends CI_Controller {
     public function list_all($repo_slug=null){
         if(isset($repo_slug)) {
             $data["repo_slug"] = $repo_slug;
-            $opt_params = ["search","sort","limit","start"];
+            $opt_params = [
+                "search","sort","limit","start","status","kind","responsible",
+                "milestone","reported_by","priority"
+            ];
             $para_input = $this->input->get($opt_params,true);
             //Status should be array. if status not set, return an empty array for later processing
-            $status_filter = ($this->input->get("status")!=null)? $this->input->get("status"):[];
+            //$status_filter = ($this->input->get("status")!=null)? $this->input->get("status"):[];
             $para =[];
             //transfer $para_input to $para. Only keep non-null key value pairs
             foreach($para_input as $key=>$value){
                 if(!empty($value)){
-                    //what does this mean?
                     if($key=="search") $value = $value['value'];
                     $para[$key] = $value;
                 }
             }
-            //$para['repo_slug'] = $repo_slug;
             //TODO:validate parameters
             $issues_response = $this->bb_issues->retrieveIssues($repo_slug,null, $para);
-            $data= ["issues_response"=>$issues_response,"repo_slug"=>$repo_slug,"filter_str"=>$this->getParamStr($status_filter, "status")];
+            $data= ["issues_response"=>$issues_response,"repo_slug"=>$repo_slug,"filter_arr"=>$para];
             $this->session->set_userdata('issue_list'.$repo_slug, $issues_response["issues"]);
             $this->load->view("issue/all_2", $data);
         }else{

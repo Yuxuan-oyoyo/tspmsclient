@@ -47,21 +47,24 @@ class BB_issues {
         return $result;
     }
     private function map_status($status, $fromDefined = true){
+        $negate = false;
+        $result = false;
+        if(substr($status,0,1)=="!"){
+            $status = substr($status,1);$negate = true;
+        }
         if($fromDefined) {
             $index = array_search($status, $this->defined_status);
             if($index!==false) {
-                return $this->server_status[$index];
-            }else{
-                return false;
+                $result = $this->server_status[$index];
             }
         }else{
             $index = array_search($status, $this->server_status);
             if($index!==false) {
-                return $this->defined_status[$index];
-            }else{
-                return false;
+                $result = $this->defined_status[$index];
             }
         }
+        if($negate&&$result) return "!".$result;
+        else return $result;
     }
 
 
