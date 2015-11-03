@@ -83,8 +83,11 @@ class Customers extends CI_Controller {
         $update_array["other_number"]=(trim($this->input->post("other_number"))!="-")?
             ($this->input->post("other_number")):null;
         $update_array["is_active"]=(int)$this->input->post("status");
-        //echo var_dump($update_array);
-        $affected_rows = $this->Customer_model->update($update_array);
+        if($this->Customer_model->update($update_array)){
+            $this->session->set_userdata('message', 'Customer updated successfully.');
+        }else{
+            $this->session->set_userdata('message', 'An error occurred, please contact administrator.');
+        }
         $this->list_all();
         //echo $affected_rows;
     }

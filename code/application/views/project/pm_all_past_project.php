@@ -14,6 +14,7 @@ $class = [
     'projects_class'=>'active',
     'message_class'=>'',
     'customers_class'=>'',
+    'internal_user_class'=>'',
     'analytics_class'=>''
 ];
 $this->load->view('common/pm_nav', $class);
@@ -27,36 +28,25 @@ $this->load->view('common/pm_nav', $class);
             <a href="<?=base_url().'Projects/add'?>" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Project</a>
         </h1>
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#">Ongoing Projects</a></li>
-            <li><a href="pastProjects.html">Past Projects</a></li>
+            <li><a href="<?=base_url().'Projects/list_all'?>">Ongoing Projects</a></li>
+            <li class="active"><a href="#">Past Projects</a></li>
         </ul>
         <?php
+        if(sizeof($projects)==0){
+        ?>
+            <div class="alert alert-warning" role="alert"><strong>There is no past project yet.</strong></div>
+        <?php
+        }else{
             foreach($projects as $p){
-         ?>
+                ?>
                 <div class=" col-lg-4">
-                    <div class="panel ongoing-panel">
+                    <div class="panel past-panel">
                         <div class="panel-heading" style="text-align:center" ><strong>#<?=$p['project_id']?>&nbsp;<?=$p['project_title']?></strong></div>
                         <div class="panel-body" style="font-size:15px" >
                             <table class="table table-condensed">
                                 <tr>
-                                    <td><i class="fa fa-calendar-check-o"></i>&nbsp;<strong>Current Stage </strong></td>
-                                    <td><?php
-
-                                        if($p['phase_name']){
-                                            echo $p['phase_name'];
-                                        }else{
-                                            echo "not started";
-                                        }
-
-                                        ?></td>
-                                </tr>
-                                <tr>
-                                    <td> <i class="fa fa-link"></i>&nbsp;<strong>Staging link </strong></td>
-                                    <td> <a href="<?=$p['staging_link']?>">Click here</a></td>
-                                </tr>
-                                <tr>
-                                    <td>  <i class="fa fa-clock-o"></i>&nbsp;<strong>Number Of Issues </strong></td>
-                                    <td> 3</td>
+                                    <td> <i class="fa fa-link"></i>&nbsp;<strong>Production link </strong></td>
+                                    <td> <a href="<?=$p['production_link']?>">Click here</a></td>
                                 </tr>
                             </table>
 
@@ -65,8 +55,9 @@ $this->load->view('common/pm_nav', $class);
                         </div>
                     </div>
                 </div>
-        <?php
+                <?php
             }
+        }
         ?>
     </div>
 

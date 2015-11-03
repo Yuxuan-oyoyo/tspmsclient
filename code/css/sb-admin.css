@@ -191,6 +191,9 @@ ul.alert-dropdown {
         font-size:18px;
 
     }
+    .clsDatePicker {
+        z-index: 100000;
+    }
 
 
 

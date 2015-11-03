@@ -61,17 +61,14 @@ class Projects extends CI_Controller {
     }
 
     public function list_all($include_hidden=false){
-        $projects = $this->Project_model->retrieve_all_with_phase();
-        $this->load->view('project/all_projects',$data=array('projects'=>$projects));
+        $projects = $this->Project_model->retrieve_all_ongoing();
+        $this->load->view('project/pm_all_ongoing_projects',$data=array('projects'=>$projects));
+    }
+    public function list_past_projects($include_hidden=false){
+        $projects = $this->Project_model->retrieve_all_past();
+        $this->load->view('project/pm_all_past_project',$data=array('projects'=>$projects));
     }
     public function insert($insert_array){
-        /*
-        $data = array(
-            'phase_id' =>$this->input->get("customer_id"),
-            'project_name' => $this->input->get("project_title")
-        );
-        */
-        //echo var_dump($update_array);
         $this->Project_model->insert($insert_array);
         return $this->db->insert_id();
         //$this->Project_phase_model->create_phases_upon_new_project($project_id);
@@ -92,8 +89,8 @@ class Projects extends CI_Controller {
                 'email'=>$this->input->post("email"),
                 'hp_number'=>$this->input->post("hp_number"),
                 'other_number'=>$this->input->post("other_number"),
-                'username'=>$this->input->post("username"),
-                'password_hash'=> password_hash($this->input->post('password'),PASSWORD_DEFAULT)
+                'username'=>$this->input->post("c_username"),
+                'password_hash'=> password_hash($this->input->post('c_password'),PASSWORD_DEFAULT)
             );
             $c_id = $this->Customer_model->insert($new_customer);
         }
@@ -107,16 +104,17 @@ class Projects extends CI_Controller {
             'file_repo_name' => $this->input->post("file_repo_name"),
             'staging_link' =>$this->input->post("staging_link"),
             'production_link' =>$this->input->post("production_link"),
+            'customer_preview_link' =>$this->input->post("customer_preview_link"),
             'no_of_use_cases' =>$this->input->post("no_of_use_cases"),
             'bitbucket_repo_name' => $this->input->post("bitbucket_repo_name"),
             'project_value' => $this->input->post("project_value"),
             'current_project_phase_id' => 0
         );
-        $project_id = $this->insert($insert_array);
-        echo $project_id;
-        $current_project_phase_id = $this->Project_phase_model->create_phase_upon_new_project($project_id);
-        $this->Project_model->update_new_project_phase_id($project_id, $current_project_phase_id);
-        $this->list_all();
+        $this->insert($insert_array);
+        //echo $project_id;
+        //$current_project_phase_id = $this->Project_phase_model->create_phase_upon_new_project($project_id);
+        //$this->Project_model->update_new_project_phase_id($project_id, $current_project_phase_id);
+        redirect('projects/list_all');
     }
     public function add(){
         $this->load->view('project/new_project', $data = ["customers"=>$this->Customer_model->retrieveAll()]);
@@ -131,7 +129,7 @@ class Projects extends CI_Controller {
      */
     /*changed function name to edit*/
     public function edit($project_id){
-        $this->load->view('project/project_edit',
+        $this->load->view('project/pm_project_edit',
             $data=["project"=>$this->Project_model->retrieve_by_id($project_id),
                 "customers"=>$this->Customer_model->retrieveAll(),
                 "tags"=>json_encode($this->Project_model->getTags()),
@@ -140,13 +138,13 @@ class Projects extends CI_Controller {
     }
     /*changed function name to process_edit*/
     public function process_edit($project_id){
-        //TODO: edit title and username/password
         $original_array = $this->Project_model->retrieve_by_id($project_id);
         $name_array = ["c_id","project_title"
             ,"project_description","tags","remarks"
             ,"file_repo_name","no_of_use_cases"
-            ,"bitbucket_repo_name","project_value","staging_link","production_link"];
+            ,"bitbucket_repo_name","project_value","staging_link","production_link","customer_preview_link"];
         $input = $this->input->post($name_array,true);
+        var_dump($input);
         $customer_option =  $this->input->post('customer-option');
         if($customer_option=='from-existing'){
             $input['c_id'] = $this->input->post('c_id');
@@ -170,12 +168,10 @@ class Projects extends CI_Controller {
                 $original_array[$key] = $value;
             }
         }
-
-        $affected_rows = $this->Project_model->update($original_array);
-        //$this->edit($original_array["project_id"]);
-        //TODO:input validation
-        //TODO:prompt user on success/failure
-        $this->view_dashboard($project_id);
+        var_dump($original_array);
+        if($this->Project_model->update($original_array)==0){
+            $this->view_dashboard($project_id);
+        }
     }
     public function project_by_id($project_id){
         //TODO: edit title and username/password
@@ -191,6 +187,11 @@ class Projects extends CI_Controller {
     public function retrieveDataForProjectUpdatePage($project_id){
         //phase
         $project = $this->Project_model->retrieve_by_id($project_id);
+        $current_project_phase_id = $project['current_project_phase_id'];
+        $current_project_phase = $this->Project_phase_model->retrieve_by_id($current_project_phase_id);
+        $next_phase_id = $current_project_phase['phase_id']+1;
+        $next_phase =  $this->Phase_model->retrieve_phase_by_id($next_phase_id);
+        $next_phase_name = $next_phase['phase_name'];
         $phases=$this->Project_phase_model->retrieve_by_project_id($project_id);
 
         //milestones
@@ -203,7 +204,8 @@ class Projects extends CI_Controller {
             "project"=>$project,
             "phases"=>$phases,
             "milestones"=>$milestones,
-            "updates"=>$updates
+            "updates"=>$updates,
+            "next_phase_name"=>$next_phase_name
         ];
         return $data;
     }
@@ -223,14 +225,14 @@ class Projects extends CI_Controller {
             "phases"=>$phases,
             "customer"=>$customer
         ];
-        $this->load->view('project/project_dashboard',$data);
+        $this->load->view('project/pm_project_dashboard',$data);
         //$this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
     }
 
     public function view_updates($project_id){
         $data = $this->retrieveDataForProjectUpdatePage($project_id);
-        $this->load->view('project/project_update',$data);
-        //$this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
+        $this->load->view('project/pm_project_update',$data);
+        //$this->load->view('project/pm_project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
     }
 
     public function customer_overview($c_id){

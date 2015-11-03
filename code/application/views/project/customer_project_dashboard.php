@@ -120,7 +120,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <?php $this->load->view('common/customer_nav');?>
 <aside class="sidebar-left">
     <div class="sidebar-links">
-        <a class="link-blue selected" href="customerMainpage.html"><i class="fa fa-flag"></i>Update & Milestone</a>
+        <a class="link-blue selected" href="#"><i class="fa fa-flag"></i>Update & Milestone</a>
         <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
     </div>
 
@@ -129,8 +129,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-           <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>
-            <a href="<?=$project['staging_link']?>" class="btn btn-primary"><i class="fa fa-external-link"></i>&nbsp;Project Preview</a>
+           <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>&nbsp;
+            <?php if($project['customer_preview_link']):?>
+            <a href="<?=$project['customer_preview_link']?>" class="btn btn-info" target="_blank"><i class="fa fa-external-link"></i>&nbsp;Project Preview</a>
+            <?php endif?>
         </h1>
         <h4 style="color:darkgrey">Click each phase on timeline to check updates for each phase.</h4>
     </div>

@@ -32,8 +32,6 @@ class Updates extends CI_Controller{
         if($this->Update_model->insert($insert_update_array)==1){
             redirect('projects/view_updates/'.$project_id);
         }
-
-
     }
 
     public function get_update_by_project_phase($project_phase_id){
@@ -41,5 +39,13 @@ class Updates extends CI_Controller{
        echo (json_encode($updates));
        return json_encode($updates);
 
+    }
+
+    public function delete_update($project_id,$update_id){
+        $u = $this->Update_model->retrieve_by_id($update_id);
+        $post_id = $u['post_id'];
+        $this->Update_model->delete_($update_id);
+        $this->Post_model->delete_($post_id);
+        redirect('projects/view_updates/'.$project_id);
     }
 }

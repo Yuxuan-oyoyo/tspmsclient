@@ -7,13 +7,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 <head>
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
-    </head>
+</head>
 <body>
 <?php
 $class = [
     'projects_class'=>'active',
     'message_class'=>'',
     'customers_class'=>'',
+    'internal_user_class'=>'',
     'analytics_class'=>''
 ];
 $this->load->view('common/pm_nav', $class);
@@ -32,8 +33,19 @@ $this->load->view('common/pm_nav', $class);
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-            <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>
-            <a href="<?=$project['staging_link']?>" class="btn btn-primary"><i class="fa fa-external-link"></i>&nbsp;Project Preview</a>
+            <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>&nbsp;
+            <?php
+            if($project['staging_link']):?>
+                <a href="<?=$project['staging_link']?>" class="btn btn-info" target="_blank"><i class="fa fa-external-link"></i>&nbsp;Staging</a>
+            <?php endif?>
+            <?php
+            if($project['production_link']):?>
+                <a href="<?=$project['staging_link']?>" class="btn btn-info" target="_blank"><i class="fa fa-external-link"></i>&nbsp;Production</a>
+            <?php endif?>
+            <?php
+            if($project['customer_preview_link']):?>
+                <a href="<?=$project['customer_preview_link']?>" class="btn btn-info" target="_blank"><i class="fa fa-external-link" ></i>&nbsp;Customer View</a>
+            <?php endif?>
         </h1>
     </div>
 
@@ -42,6 +54,10 @@ $this->load->view('common/pm_nav', $class);
         <div class="col-lg-offset-1 no-gutter">
             <?php
             foreach($phases as $phase){
+                $phase_end_time = $phase['end_time'];
+                if(!isset($phase_end_time)){
+                    $phase_end_time = "now";
+                }
                 $img_tag='img/future.png';
                 if(isset($phase['project_phase_id'])){
                     if(!$phase['phase_id']==0) {
@@ -51,7 +67,7 @@ $this->load->view('common/pm_nav', $class);
                             $img_tag = 'img/current.png';
                         }
                         echo'<div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2 " align="center" data-toggle="tooltip"
-                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase['end_time'].'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase_end_time.'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
                     }
                 }else{
                     echo' <div  class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
@@ -78,10 +94,6 @@ $this->load->view('common/pm_nav', $class);
                                 <td><?=$project['project_value']?></td>
                             </tr>
                             <tr>
-                                <td><strong>Staging link </strong></td>
-                                <td> <a href="http://fortawesome.github.io/Font-Awesome/icon/link/">Click here</a></td>
-                            </tr>
-                            <tr>
                                 <td><strong>Customer </strong></td>
                                 <td> <a href="<?=base_url().'Customers/update_customer/'.$customer["c_id"]?>"><?=$customer['last_name'].' '.$customer['first_name']?></a> (Click to edit)</td>
                             </tr>
@@ -96,15 +108,15 @@ $this->load->view('common/pm_nav', $class);
                             <tr>
                                 <td><strong>Status </strong></td>
                                 <td><?php
-                                if($project['is_ongoing']==1){
-                                    ?>
-                                    Ongoing
-                                    <?php
-                                }else{
-                                    ?>
-                                    Closed
-                                    <?php
-                                }
+                                    if($project['is_ongoing']==1){
+                                        ?>
+                                        Ongoing
+                                        <?php
+                                    }else{
+                                        ?>
+                                        Closed
+                                        <?php
+                                    }
                                     ?></td>
                             </tr>
                             <tr>

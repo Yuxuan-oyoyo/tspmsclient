@@ -47,4 +47,11 @@ class Post_model extends CI_Model{
         $this->db->update('post', $update_array, array('post_id' => $update_array['post_id']));
         return $this->db->affected_rows();
     }
+
+    public function delete_($post_id){
+        if(isset($post_id)){
+            $query = $this->db->query("delete from post where post_id = $post_id");
+        }
+        return null;
+    }
 }

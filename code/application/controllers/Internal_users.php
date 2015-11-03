@@ -12,6 +12,7 @@ class Internal_users extends CI_Controller
         parent::__construct();
         // Your own constructor code
         $this->load->library('session');
+        $this->load->library('form_validation');
         $this->load->helper('url');
         $this->load->model("Internal_user_model");
         // $this->load->model('User_log_model');
@@ -21,32 +22,42 @@ class Internal_users extends CI_Controller
         $this->list_all();
     }
 
-    public function list_all($include_hidden=false){
-        if($include_hidden=="include_hidden"){
-            $users = $this->Internal_user_model->retrieveAll(false);
-            $data["show_all"] = false;
-        }else {
-            $users = $this->Internal_user_model->retrieveAll();
-            $data["show_all"] = true;
-        }
+    public function list_all(){
+
+        $users = $this->Internal_user_model->retrieveAll();
+
         $data["users"] = $users;
 
-        $this->load->view('internal_user/all',$data);
+        $this->load->view('internal_user/all_users',$data);
     }
     public function insert(){
         //$this->load->library('input');
-        $update_array["name"]=$this->input->post("name");
-        $update_array["username"]=$this->input->post("username");
-        $update_array["bb_username"]=$this->input->post("bb_username");
-        $update_array["type"]=$this->input->post("type");
-        $update_array["is_active"]=$this->input->post("is_active");
-        $update_array["password_hash"]=password_hash($this->input->post("password"),PASSWORD_DEFAULT);
-        //echo var_dump($update_array);
-        $affected_rows = $this->Internal_user_model->insert($update_array);
-        echo $affected_rows;
+        $this->form_validation->set_rules('username','Username','trim|required|max_length[512]|is_unique[internal_user.username]');
+
+        if ($this->form_validation->run()) {
+            $update_array["name"] = $this->input->post("name");
+            $update_array["username"] = $this->input->post("username");
+            $update_array["bb_username"] = $this->input->post("bb_username");
+            $update_array["type"] = $this->input->post("type");
+            $update_array["is_active"] = 1;
+            $update_array["password_hash"] = password_hash($this->input->post("password"), PASSWORD_DEFAULT);
+            //echo var_dump($update_array);
+            $affected_rows = $this->Internal_user_model->insert($update_array);
+            if($affected_rows==1){
+                $this->session->userdata('message','new user added successfully');
+                redirect('internal_users/list_all');
+            }else{
+                $this->session->userdata('message','cannot create new user.');
+                $this->load->view('internal_user/new_user');
+            }
+            //echo $affected_rows;
+        }else{
+            $this->load->view('internal_user/new_user');
+        }
+
     }
     public function add(){
-        $this->load->view('internal_user/add');
+        $this->load->view('internal_user/new_user');
     }
 
     public function update_password($cid){
@@ -56,16 +67,14 @@ class Internal_users extends CI_Controller
         $affected_rows = $this->Internal_user_model->update($update_array);
         echo $affected_rows;
     }
-    public function edit($cid){
+    public function edit($id){
         //$this->load->library('input');
-        $update_array["c_id"]=$cid;
-        $update_array["first_name"]=$this->input->post("first_name");
-        $update_array["last_name"]=$this->input->post("last_name");
-        $update_array["company_name"]=$this->input->post("company_name");
-        $update_array["email"]=$this->input->post("email");
-        $update_array["hp_number"]=$this->input->post("hp_number");
-        $update_array["other_number"]=(trim($this->input->post("other_number"))!="-")?
-            ($this->input->post("other_number")):null;
+        $update_array["name"]=$this->input->post("name");
+        $update_array["username"]=$this->input->post("username");
+        $update_array["bb_username"]=$this->input->post("bb_username");
+        $update_array["type"]=$this->input->post("type");
+        $update_array["is_active"]=$this->input->post("is_active");
+        $update_array["password_hash"]=password_hash($this->input->post("password"),PASSWORD_DEFAULT);
         //echo var_dump($update_array);
         $affected_rows = $this->Internal_user_model->update($update_array);
         echo $affected_rows;

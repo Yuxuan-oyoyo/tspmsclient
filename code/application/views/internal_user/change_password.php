@@ -14,6 +14,7 @@ $class = [
     'projects_class'=>'',
     'message_class'=>'',
     'customers_class'=>'',
+    'internal_user_class'=>'',
     'analytics_class'=>''
 ];
 $this->load->view('common/pm_nav', $class);
@@ -28,7 +29,7 @@ $this->load->view('common/pm_nav', $class);
     </div>
     <div class="col-lg-offset-1 col-lg-6">
 
-        <form class="form-horizontal" id="form" method="post" data-parsley-validate action="<?=base_url('customer_authentication/change_password')?>">
+        <form class="form-horizontal" id="form" method="post" data-parsley-validate action="<?=base_url('internal_authentication/change_password')?>">
             <?php if($this->session->userdata('message')):?>
             <div class="form-group">
                 <div class="alert alert-info " role="alert">

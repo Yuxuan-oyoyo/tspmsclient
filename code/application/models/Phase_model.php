@@ -18,8 +18,7 @@ class Phase_model extends CI_Model{
         if(isset($phase_id)){
             $query = $this->db->get_where("phase",["phase_id"=>$phase_id]);
             if( $query->num_rows()>0){
-                $phase =  $query->result_array();
-                return $phase;
+                return $query->row_array();
             }
         }
         return null;
