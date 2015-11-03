@@ -157,7 +157,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             // handle deletion here
             var mid = $('#milestoneDeleteModal').data('milestone_id');
             //to be change to delete milestone controller
-            var delete_m_url = "<?=site_url().''?>" + mid;
+            var delete_m_url = "<?= base_url().'Milestones/delete_milestone/'.$project['project_id'].'/' ?>" + mid;
             window.location.href = delete_m_url;
         }
 
@@ -533,7 +533,7 @@ $this->load->view('common/pm_nav', $class);
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger" id="btnYes" onclick="confirmDelete()">Delete this video record</button>
+                        <button type="button" class="btn btn-danger" id="btnYes" onclick="confirmMilestoneDelete()">Delete this milestone</button>
                     </div>
             </div>
         </div>

@@ -64,4 +64,12 @@ class Milestones extends CI_Controller{
             redirect('projects/view_updates/'.$project_id);
         }
     }
+
+    public function delete_milestone($project_id,$milestone_id){
+        $m = $this->Milestone_model->retrieve_by_id($milestone_id);
+        $post_id = $m['post_id'];
+        $this->Milestone_model->delete_($milestone_id);
+        $this->Post_model->delete_($post_id);
+        redirect('projects/view_updates/'.$project_id);
+    }
 }

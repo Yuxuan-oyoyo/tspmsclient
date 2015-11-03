@@ -46,6 +46,12 @@ class Milestone_model extends CI_Model{
         $update_array['if_completed'] = 1;
         return $this->db->update('milestone', $update_array, array('milestone_id' => $update_array['milestone_id']));
     }
+    public function delete_($milestone_id){
+        if(isset($milestone_id)){
+            $query = $this->db->query("delete from milestone where milestone_id = $milestone_id");
+        }
+        return null;
+    }
     /*
     public function mark_miss($milestone_id){
         $update_array = $this->retrieve_by_milestone_id($milestone_id);
