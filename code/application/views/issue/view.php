@@ -166,7 +166,7 @@ function _ago($tm,$rcs = 0) {
                 </div>
             </div>
             <div>
-                <h3>Comments <span style="color: #777777;padding-left: 10px">#<?=$i["comment_count"]?></span></h3>
+                <h3>Comments <span style="color: #777777;padding-left: 10px">#<?=isset($i["comment_count"])?$i["comment_count"]:0?></span></h3>
                 <div>
                     <ol id="issues-comments" class="comments-list commentable">
                         <li class="new-comment">
@@ -198,16 +198,11 @@ function _ago($tm,$rcs = 0) {
         <div class="col-sm-6">
             <div class="issue-tool-bar">
                 <script>
-                    $(".update-btn").on("click",function(e){
+                    $("div").on("click",".update-btn",function(e){
                         e.preventDefault();
                         var param = $(this).attr("param");
                         var value = $(this).attr("value");
-                        $.ajax({
-                            url:"<?=base_url()."Issues/update/".$repo_slug?>?param="+ param+"&value="+value+"&local_id="+<?=$i["local_id"]?>,
-                            success: function(response){
-                                window.location.reload();
-                            }
-                        });
+                        window.location.replace("<?=base_url()."Issues/update/".$repo_slug."/".$i["local_id"]."?"?>"+"param="+param+"&value="+value);
                     });
                 </script>
                 <div class="btn-group">
@@ -217,7 +212,8 @@ function _ago($tm,$rcs = 0) {
                         <a href="#" class="btn btn-primary update-btn" param="status" value="resolved">Resolve</a>
 
                     <?php endif?>
-                    <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                    <a href="<?=base_url()."/Issues/update/".$repo_slug."/".$i["local_id"]."?status=resolved"?>"
+                       class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#" class="update-btn" param="status" value="new">new</a></li>
                         <li><a href="#" class="update-btn" param="status" value="to develop">to develop</a></li>
@@ -229,7 +225,7 @@ function _ago($tm,$rcs = 0) {
                     </ul>
                 </div>
 
-                <a class="btn btn-default" style="margin-left:30px" href="<?= base_url()."Issues/edit/".$repo_slug."?local_id=".$i["local_id"]?>">Edit</a>
+                <a class="btn btn-default" style="margin-left:30px" href="<?= base_url()."Issues/edit/".$repo_slug."/".$i["local_id"]?>">Edit</a>
             </div>
             <div class="well" style="background-color: white;width: 250px;margin-top:10px">
                 <table>
@@ -238,6 +234,9 @@ function _ago($tm,$rcs = 0) {
                     </tr>
                     <tr>
                         <td style="text-align: right;padding-right: 20px">Priority</td><td><?=$i["priority"]?></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;padding-right: 20px">Type</td><td><?=$i["metadata"]["kind"]?></td>
                     </tr>
                     <tr>
                         <td style="text-align: right;padding-right: 20px">Status</td><td><?=$i["status"]?></td>
