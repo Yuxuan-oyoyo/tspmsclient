@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <body>
 <?php $this->load->view('common/customer_nav');?>
-<div class="container">
+<div class="container content">
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
@@ -28,13 +28,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <!-- /.row -->
     <div class="row">
-       <?php foreach($projects as $project):?>
+       <?php foreach($projects as $p):?>
         <div class=" col-lg-4">
             <div class="panel ongoing-panel">
-                <div class="panel-heading" style="text-align:center" ><strong><?=$project['project_title']?></strong></div>
+                <div class="panel-heading" style="text-align:center" ><strong><?=$p['project_title']?></strong></div>
                 <div class="panel-body">
+                    <table class="table table-condensed">
+                        <tr>
+                            <td><i class="fa fa-calendar-check-o"></i>&nbsp;<strong>Current Stage </strong></td>
+                            <td><?php
 
-                    <a href="<?=base_url("projects/customer_view/".$project['project_id'])?>" class="btn pull-right btn-info"><i class="fa fa-eye"></i> &nbsp;View</a>
+                                if($p['phase_name']){
+                                    echo $p['phase_name'];
+                                }else{
+                                    echo "not started";
+                                }
+
+                                ?></td>
+                        </tr>
+                        <?php if($p['customer_preview_link']):?>
+                        <tr>
+                            <td> <i class="fa fa-link"></i>&nbsp;<strong>Preview </strong></td>
+                            <td> <a href="<?=$p['customer_preview_link']?>">Click here</a></td>
+                        </tr>
+                        <?php endif?>
+
+                    </table>
+                    <a href="<?=base_url("projects/customer_view/".$p['project_id'])?>" class="btn pull-right btn-info"><i class="fa fa-eye"></i> &nbsp;View</a>
 
                 </div>
             </div>
