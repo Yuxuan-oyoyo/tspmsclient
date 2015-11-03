@@ -49,7 +49,7 @@ class Projects extends CI_Controller {
 
     public function create_new_project(){
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('c_username', 'Customer Username', 'required|is_unique[customer.username]');
+        $this->form_validation->set_rules('c_username', 'Customer Username', 'is_unique[customer.username]');
         if ($this->form_validation->run()) {
             $customer_option = $this->input->post("customer_option");
             $c_id = '';
@@ -114,6 +114,7 @@ class Projects extends CI_Controller {
      */
     /*changed function name to edit*/
     public function edit($project_id){
+        $this->load->library('form_validation');
         $this->load->view('project/pm_project_edit',
             $data=["project"=>$this->Project_model->retrieve_by_id($project_id),
                 "customers"=>$this->Customer_model->retrieveAll(),
@@ -123,39 +124,42 @@ class Projects extends CI_Controller {
     }
     /*changed function name to process_edit*/
     public function process_edit($project_id){
-        $original_array = $this->Project_model->retrieve_by_id($project_id);
-        $name_array = ["c_id","project_title"
-            ,"project_description","tags","remarks"
-            ,"file_repo_name","no_of_use_cases"
-            ,"bitbucket_repo_name","project_value","staging_link","production_link","customer_preview_link"];
-        $input = $this->input->post($name_array,true);
-        var_dump($input);
-        $customer_option =  $this->input->post('customer-option');
-        if($customer_option=='from-existing'){
-            $input['c_id'] = $this->input->post('c_id');
-        }else{
-            $customer_name_array=["title","first_name"
-                ,"last_name","company_name","hp_number"
-                ,"other_number","email","username","password_hash"];
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('c_username', 'Customer Username', 'is_unique[customer.username]');
+        if ($this->form_validation->run()) {
+            $original_array = $this->Project_model->retrieve_by_id($project_id);
+            $name_array = ["c_id", "project_title"
+                , "project_description", "tags", "remarks"
+                , "file_repo_name", "no_of_use_cases"
+                , "bitbucket_repo_name", "project_value", "staging_link", "production_link", "customer_preview_link"];
+            $input = $this->input->post($name_array, true);
+            var_dump($input);
+            $customer_option = $this->input->post('customer-option');
+            if ($customer_option == 'from-existing') {
+                $input['c_id'] = $this->input->post('c_id');
+            } else {
+                $customer_name_array = ["title", "first_name"
+                    , "last_name", "company_name", "hp_number"
+                    , "other_number", "email", "username", "password_hash"];
 
-            $new_customer_input = $this->input->post($customer_name_array,true);
-            $new_customer_input['password_hash'] = password_hash($this->input->post('password'),PASSWORD_DEFAULT);
-            $new_customer_id = $this->Customer_model->insert($new_customer_input);
-            if($new_customer_id==false){
-                echo "something wrong happen when creating customer";
-            }else{
-                $input['c_id'] = $new_customer_id;
+                $new_customer_input = $this->input->post($customer_name_array, true);
+                $new_customer_input['password_hash'] = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
+                $new_customer_id = $this->Customer_model->insert($new_customer_input);
+                if ($new_customer_id == false) {
+                    echo "something wrong happen when creating customer";
+                } else {
+                    $input['c_id'] = $new_customer_id;
+                }
             }
-        }
 
-        foreach($input as $key=>$value){
-            if($value!=null){
-                $original_array[$key] = $value;
+            foreach ($input as $key => $value) {
+                if ($value != null) {
+                    $original_array[$key] = $value;
+                }
             }
-        }
-        var_dump($original_array);
-        if($this->Project_model->update($original_array)==0){
-            $this->view_dashboard($project_id);
+            if ($this->Project_model->update($original_array) == 1) {
+                $this->view_dashboard($project_id);
+            }
         }
     }
     public function project_by_id($project_id){

@@ -173,7 +173,7 @@ $this->load->view('common/pm_nav', $class);
                 <div class="col-lg-4">
                     <div class="form-group ">
                         <label for="first_name">First name</label>
-                        <input type="text" class="form-control" name="first_name" id="first_name" value="<?=set_value("first_name")?>"data-parsley-required>
+                        <input type="text" class="form-control" name="first_name" id="first_name" value="<?=set_value("first_name")?>" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -209,7 +209,7 @@ $this->load->view('common/pm_nav', $class);
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="c_username">Username</label>
-                        <input type="text" class="form-control" name="c_username" id="c_username" value="<?=set_value("c_username")?>"data-parsley-required>
+                        <input type="text" class="form-control" name="c_username" id="c_username" value="<?=set_value("c_username")?>" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">

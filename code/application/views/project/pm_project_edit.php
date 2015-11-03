@@ -43,6 +43,26 @@ $this->load->view('common/pm_nav', $class);
                     <a href="<?=base_url().'Projects/view_dashboard/'.$p["project_id"]?>" class="btn btn-default" id="cancel">Cancel</a>&nbsp;
                     <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
                 </h1>
+                <div class="row">
+                    <?php if($this->session->userdata('message')):?>
+                        <div class="form-group">
+                            <div class="alert alert-info " role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                </button>
+                                <?=$this->session->userdata('message')?>
+                            </div>
+                        </div>
+                        <?php $this->session->unset_userdata('message') ?>
+                    <?php endif;?>
+                    <?php if (validation_errors()): ?>
+                        <div class="alert alert-info" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span>
+                            </button>
+                            <?= validation_errors(); ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
 
             <div class="col-lg-6 project-info">
