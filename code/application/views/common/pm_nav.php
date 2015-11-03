@@ -11,7 +11,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">The Shipyard </a>
+        <a class="navbar-brand" href="<?=base_url().'projects/list_all'?>">The Shipyard </a>
     </div>
     <!-- Top Menu Items -->
     <ul class="nav navbar-nav">

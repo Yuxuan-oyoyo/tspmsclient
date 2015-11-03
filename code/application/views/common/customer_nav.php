@@ -3,7 +3,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-        <a class="navbar-brand" href="index.html">The Shipyard </a>
+        <a class="navbar-brand" href="<?=base_url()?>projects/customer_overview/<?=$this->session->userdata('Customer_cid')?>">The Shipyard </a>
     </div>
     <!-- Top Menu Items -->
     <ul class="nav navbar-nav">
