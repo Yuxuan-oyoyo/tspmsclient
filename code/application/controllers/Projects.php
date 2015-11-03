@@ -29,35 +29,7 @@ class Projects extends CI_Controller {
 
     public function index()
     {
-        //This is for testing project_update, please comment the next line and uncomment next next line
-        //$this->view_upadtes(2);
-        $project = $this->list_all($include_hidden=false);
-        /*
-        $projects = array();
-        foreach($project as $p){
-            //phase_name
-            $current_project_phase_id = $p['current_project_phase_id'];
-            $project_phase = $this->Project_phase_model->retrieve_by_id($current_project_phase_id);
-            $phase_id = $project_phase['phase_id'];
-            $phase = $this->Phase_model-> retrieve_phase_by_id($phase_id);
-            $phase_name = $phase[0]['phase_name'];
-            $p["phase_name"] = $phase_name;
 
-            //customer_name
-            $c_id = $p['c_id'];
-            $customer = $this->Customer_model->retrieve($c_id);
-            $first_name = $customer['first_name'];
-            $last_name = $customer['last_name'];
-            $p["customer_name"] = $first_name.' '.$last_name;
-
-            array_push($projects,$p);
-        }
-        $data = [
-            "projects"=>$projects
-        ];
-        $this->load->view('project/projects',$data);
-        */
-        //$this->list_all();
     }
 
     public function list_all($include_hidden=false){
@@ -75,49 +47,60 @@ class Projects extends CI_Controller {
 
     }
 
-    public function create_new_project(){
-        $customer_option = $this->input->post("customer_option");
-        $c_id = '';
-        if($customer_option=="from-existing"){
-            $c_id = $this->input->post("c_id");
-        }else{
-            $new_customer = array(
-                'title'=>$this->input->post("title"),
-                'first_name'=>$this->input->post("first_name"),
-                'last_name'=>$this->input->post("last_name"),
-                'company_name'=>$this->input->post("company_name"),
-                'email'=>$this->input->post("email"),
-                'hp_number'=>$this->input->post("hp_number"),
-                'other_number'=>$this->input->post("other_number"),
-                'username'=>$this->input->post("c_username"),
-                'password_hash'=> password_hash($this->input->post('c_password'),PASSWORD_DEFAULT)
+    public function create_new_project()
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('c_username', 'Customer Username', 'is_unique[customer.username]');
+        if ($this->form_validation->run()) {
+            $customer_option = $this->input->post("customer_option");
+            $c_id = '';
+            if ($customer_option == "from-existing") {
+                $c_id = $this->input->post("c_id");
+            } else {
+                $new_customer = array(
+                    'title' => $this->input->post("title"),
+                    'first_name' => $this->input->post("first_name"),
+                    'last_name' => $this->input->post("last_name"),
+                    'company_name' => $this->input->post("company_name"),
+                    'email' => $this->input->post("email"),
+                    'hp_number' => $this->input->post("hp_number"),
+                    'other_number' => $this->input->post("other_number"),
+                    'username' => $this->input->post("c_username"),
+                    'password_hash' => password_hash($this->input->post('c_password'), PASSWORD_DEFAULT)
+                );
+                $c_id = $this->Customer_model->insert($new_customer);
+                if ($c_id < 0) {
+                    $this->session->set_userdata('message', 'Cannot create new project,please contact administrator.');
+                    $this->load->view('project/pm_project_new', $data = ["customers" => $this->Customer_model->retrieveAll()]);
+                }
+            }
+            //$current_project_phase_id = $this->Project_phase_model->retrieve_last_project_phase_id()+1;
+            $insert_array = array(
+                'c_id' => $c_id,
+                'project_title' => $this->input->post("project_title"),
+                'project_description' => $this->input->post("project_description"),
+                'tags' => $this->input->post("tags"),
+                'remarks' => $this->input->post("remarks"),
+                'file_repo_name' => $this->input->post("file_repo_name"),
+                'staging_link' => $this->input->post("staging_link"),
+                'production_link' => $this->input->post("production_link"),
+                'customer_preview_link' => $this->input->post("customer_preview_link"),
+                'no_of_use_cases' => $this->input->post("no_of_use_cases"),
+                'bitbucket_repo_name' => $this->input->post("bitbucket_repo_name"),
+                'project_value' => $this->input->post("project_value"),
+                'current_project_phase_id' => 0
             );
-            $c_id = $this->Customer_model->insert($new_customer);
+            if ($this->insert($insert_array)) {
+                $this->session->set_userdata('message', 'New project has been created successfully.');
+                redirect('projects/list_all');
+            } else {
+                $this->session->set_userdata('message', 'Cannot create new project,please contact administrator.');
+                $this->load->view('project/pm_project_new', $data = ["customers" => $this->Customer_model->retrieveAll()]);
+            }
+
+        } else {
+            $this->load->view('project/pm_project_new', $data = ["customers" => $this->Customer_model->retrieveAll()]);
         }
-        //$current_project_phase_id = $this->Project_phase_model->retrieve_last_project_phase_id()+1;
-        $insert_array = array(
-            'c_id' =>$c_id,
-            'project_title' => $this->input->post("project_title"),
-            'project_description' => $this->input->post("project_description"),
-            'tags' => $this->input->post("tags"),
-            'remarks' => $this->input->post("remarks"),
-            'file_repo_name' => $this->input->post("file_repo_name"),
-            'staging_link' =>$this->input->post("staging_link"),
-            'production_link' =>$this->input->post("production_link"),
-            'customer_preview_link' =>$this->input->post("customer_preview_link"),
-            'no_of_use_cases' =>$this->input->post("no_of_use_cases"),
-            'bitbucket_repo_name' => $this->input->post("bitbucket_repo_name"),
-            'project_value' => $this->input->post("project_value"),
-            'current_project_phase_id' => 0
-        );
-        $this->insert($insert_array);
-        //echo $project_id;
-        //$current_project_phase_id = $this->Project_phase_model->create_phase_upon_new_project($project_id);
-        //$this->Project_model->update_new_project_phase_id($project_id, $current_project_phase_id);
-        redirect('projects/list_all');
-    }
-    public function add(){
-        $this->load->view('project/new_project', $data = ["customers"=>$this->Customer_model->retrieveAll()]);
     }
     /*
     public function close($project_id){
@@ -129,6 +112,7 @@ class Projects extends CI_Controller {
      */
     /*changed function name to edit*/
     public function edit($project_id){
+        $this->load->library('form_validation');
         $this->load->view('project/pm_project_edit',
             $data=["project"=>$this->Project_model->retrieve_by_id($project_id),
                 "customers"=>$this->Customer_model->retrieveAll(),
@@ -138,39 +122,42 @@ class Projects extends CI_Controller {
     }
     /*changed function name to process_edit*/
     public function process_edit($project_id){
-        $original_array = $this->Project_model->retrieve_by_id($project_id);
-        $name_array = ["c_id","project_title"
-            ,"project_description","tags","remarks"
-            ,"file_repo_name","no_of_use_cases"
-            ,"bitbucket_repo_name","project_value","staging_link","production_link","customer_preview_link"];
-        $input = $this->input->post($name_array,true);
-        var_dump($input);
-        $customer_option =  $this->input->post('customer-option');
-        if($customer_option=='from-existing'){
-            $input['c_id'] = $this->input->post('c_id');
-        }else{
-            $customer_name_array=["title","first_name"
-                ,"last_name","company_name","hp_number"
-                ,"other_number","email","username","password_hash"];
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('c_username', 'Customer Username', 'is_unique[customer.username]');
+        if ($this->form_validation->run()) {
+            $original_array = $this->Project_model->retrieve_by_id($project_id);
+            $name_array = ["c_id", "project_title"
+                , "project_description", "tags", "remarks"
+                , "file_repo_name", "no_of_use_cases"
+                , "bitbucket_repo_name", "project_value", "staging_link", "production_link", "customer_preview_link"];
+            $input = $this->input->post($name_array, true);
+            var_dump($input);
+            $customer_option = $this->input->post('customer-option');
+            if ($customer_option == 'from-existing') {
+                $input['c_id'] = $this->input->post('c_id');
+            } else {
+                $customer_name_array = ["title", "first_name"
+                    , "last_name", "company_name", "hp_number"
+                    , "other_number", "email", "username", "password_hash"];
 
-            $new_customer_input = $this->input->post($customer_name_array,true);
-            $new_customer_input['password_hash'] = password_hash($this->input->post('password'),PASSWORD_DEFAULT);
-            $new_customer_id = $this->Customer_model->insert($new_customer_input);
-            if($new_customer_id==false){
-                echo "something wrong happen when creating customer";
-            }else{
-                $input['c_id'] = $new_customer_id;
+                $new_customer_input = $this->input->post($customer_name_array, true);
+                $new_customer_input['password_hash'] = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
+                $new_customer_id = $this->Customer_model->insert($new_customer_input);
+                if ($new_customer_id == false) {
+                    echo "something wrong happen when creating customer";
+                } else {
+                    $input['c_id'] = $new_customer_id;
+                }
             }
-        }
 
-        foreach($input as $key=>$value){
-            if($value!=null){
-                $original_array[$key] = $value;
+            foreach ($input as $key => $value) {
+                if ($value != null) {
+                    $original_array[$key] = $value;
+                }
             }
-        }
-        var_dump($original_array);
-        if($this->Project_model->update($original_array)==0){
-            $this->view_dashboard($project_id);
+            if ($this->Project_model->update($original_array) == 1) {
+                $this->view_dashboard($project_id);
+            }
         }
     }
     public function project_by_id($project_id){

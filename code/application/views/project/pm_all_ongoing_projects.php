@@ -25,12 +25,34 @@ $this->load->view('common/pm_nav', $class);
     <div class="col-lg-12">
         <h1 class="page-header">
             Projects
-            <a href="<?=base_url().'Projects/add'?>" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Project</a>
+            <a href="<?=base_url().'projects/create_new_project'?>" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Project</a>
         </h1>
+        <?php if($this->session->userdata('message')):?>
+            <div class="form-group">
+                <div class="alert alert-info " role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <?=$this->session->userdata('message')?>
+                </div>
+            </div>
+            <?php $this->session->unset_userdata('message') ?>
+        <?php endif;?>
         <ul class="nav nav-tabs">
             <li class="active"><a href="#">Ongoing Projects</a></li>
             <li><a href="<?=base_url().'Projects/list_past_projects'?>">Past Projects</a></li>
         </ul>
+        <br>
+        <div class="col-lg-12">
+
+            <?php if($this->session->userdata('message')):?>
+                <div class="alert alert-info " role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <?=$this->session->userdata('message')?>
+                </div>
+                <?php $this->session->unset_userdata('message') ?>
+            <?php endif;?>
+        </div>
         <?php
             foreach($projects as $p){
          ?>

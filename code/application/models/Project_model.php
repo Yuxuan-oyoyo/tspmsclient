@@ -31,18 +31,7 @@ class Project_model extends CI_Model {
         return null;
     }
 
-    public function retrieve_by_c_id($input_c_id){
-        if(isset($input_c_id)){
-            /*$sql = "SELECT project_phase.*,phase.phase_name,project.* FROM `project_phase`,`phase`,`project` WHERE project_phase.project_id = project.project_id and phase.phase_id=project_phase.phase_id and project.project_id =?";
-            $query = $this->db->query($sql, array($input_p_id));
-            return $query->row_array();*/
-            $query = $this->db->get_where("project",["c_id"=>$input_c_id]);
-            if( $query->num_rows()>0){
-                return $query->result_array();
-            }
-        }
-        return null;
-    }
+
 
     public function retrieve_by_title($input_p_title){
         if(isset($input_p_title)){
@@ -134,6 +123,19 @@ left join phase on project_phase.phase_id = phase.phase_id and project.is_ongoin
         $sql = 'SELECT project.* from  project where project.is_ongoing = 0';
         $query=$this->db->query($sql);
         return $query->result_array();
+    }
+
+    public function retrieve_by_c_id($input_c_id){
+        if(isset($input_c_id)){
+           $sql= 'SELECT project.*, phase.phase_name from  project left join project_phase
+on project.current_project_phase_id=project_phase.project_phase_id
+left join phase on project_phase.phase_id = phase.phase_id and project.c_id= ?';
+            $query=$this->db->query($sql,array($input_c_id));
+            if( $query->num_rows()>0){
+                return $query->result_array();
+            }
+        }
+        return null;
     }
 
     public function update_new_project_phase_id($project_id,$current_project_phase_id){

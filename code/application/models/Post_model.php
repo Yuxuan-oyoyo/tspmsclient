@@ -50,7 +50,7 @@ class Post_model extends CI_Model{
 
     public function delete_($post_id){
         if(isset($post_id)){
-            $query = $this->db->query("delete from post where post_id = $post_id");
+            $this->db->delete('post', array('post_id' => $post_id));
         }
         return null;
     }
