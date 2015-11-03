@@ -53,8 +53,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
                 <form class="login" method="post">
-                    <input type="text" placeholder="Username" id="username" name="username">
-                    <input type="password" placeholder="Password" id="password" name="password">
+                    <input type="text" placeholder="Username" id="username" name="username" required>
+                    <input type="password" placeholder="Password" id="password" name="password" required>
                     <input type="submit" value="Sign In" class="btn btn-primary btn-sm">
                     <div class="remember-forgot">
                         <div class="row">

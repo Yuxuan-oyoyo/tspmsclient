@@ -75,6 +75,25 @@ img {
 {height:32px;width:32px}
 .avatar-medium .avatar-inner img
 {max-height:32px;max-width:32px}
+.form-part {
+    display: table-row;
+}
+.form-label {
+    display: table-cell;
+    text-align: right;
+    padding: 7pt;
+    vertical-align: top;
+    width: 20%;
+}
+.form-input {
+    display: table-cell;
+    padding: 7pt;
+    width: 80%;
+}
+
+
+
+
 
 .comments-list {
     margin: 0;
