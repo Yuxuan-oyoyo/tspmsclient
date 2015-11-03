@@ -110,14 +110,21 @@ class Projects extends CI_Controller {
             'project_value' => $this->input->post("project_value"),
             'current_project_phase_id' => 0
         );
-        $this->insert($insert_array);
+
+        if(!$this->insert($insert_array)==null){
+            $this->session->set_userdata('message', 'New project created successfully.');
+            redirect('projects/list_all');
+        }else{
+            $this->session->set_userdata('message', 'An error occurred, please contact administrator.');
+            redirect('projects/list_all');
+        }
         //echo $project_id;
         //$current_project_phase_id = $this->Project_phase_model->create_phase_upon_new_project($project_id);
         //$this->Project_model->update_new_project_phase_id($project_id, $current_project_phase_id);
-        redirect('projects/list_all');
+
     }
     public function add(){
-        $this->load->view('project/new_project', $data = ["customers"=>$this->Customer_model->retrieveAll()]);
+        $this->load->view('project/pm_project_new', $data = ["customers"=>$this->Customer_model->retrieveAll()]);
     }
     /*
     public function close($project_id){

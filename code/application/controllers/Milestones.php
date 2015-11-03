@@ -33,6 +33,10 @@ class Milestones extends CI_Controller{
         $insert_milestone_array['deadline'] = $deadline->format('c');
         $insert_milestone_array['post_id'] =$post_id;
         if($this->Milestone_model->insert($insert_milestone_array)==1){
+            $this->session->set_userdata('message', 'New milestone created successfully.');
+            redirect('projects/view_updates/'.$project_id);
+        }else{
+            $this->session->set_userdata('message', 'An error occurred, please contact administrator.');
             redirect('projects/view_updates/'.$project_id);
         }
     }
@@ -54,7 +58,7 @@ class Milestones extends CI_Controller{
         $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
 
         $new_post_array['header']="Milestone Completion";
-        $new_post_array['body']="Milestone '".$p['header']."' - ".$p['body']."has been completed.";
+        $new_post_array['body']="Milestone '".$p['header']."' - ".$p['body']." has been completed.";
         $new_post_array['project_phase_id']=$p['project_phase_id'];
         $post_id = $this->Post_model->insert($new_post_array,'update');
 
@@ -69,7 +73,12 @@ class Milestones extends CI_Controller{
         $m = $this->Milestone_model->retrieve_by_id($milestone_id);
         $post_id = $m['post_id'];
         $this->Milestone_model->delete_($milestone_id);
-        $this->Post_model->delete_($post_id);
-        redirect('projects/view_updates/'.$project_id);
+        if($this->Post_model->delete_($post_id)==null){
+            $this->session->set_userdata('message', 'Milestone deleted successfully.');
+            redirect('projects/view_updates/'.$project_id);
+        }else{
+            $this->session->set_userdata('message', 'An error occurred, please contact administrator.');
+            redirect('projects/view_updates/'.$project_id);
+        }
     }
 }

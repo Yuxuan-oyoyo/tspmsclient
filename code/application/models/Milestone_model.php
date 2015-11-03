@@ -48,7 +48,7 @@ class Milestone_model extends CI_Model{
     }
     public function delete_($milestone_id){
         if(isset($milestone_id)){
-            $query = $this->db->query("delete from milestone where milestone_id = $milestone_id");
+            $this->db->delete('milestone', array('milestone_id' => $milestone_id));
         }
         return null;
     }

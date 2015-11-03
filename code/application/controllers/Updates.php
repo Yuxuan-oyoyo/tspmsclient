@@ -30,6 +30,10 @@ class Updates extends CI_Controller{
         $insert_update_array['posted_by']=$this->session->userdata('internal_username');
         $insert_update_array['post_id'] =$post_id;
         if($this->Update_model->insert($insert_update_array)==1){
+            $this->session->set_userdata('message', 'New update created successfully.');
+            redirect('projects/view_updates/'.$project_id);
+        }else{
+            $this->session->set_userdata('message', 'An error occurred, please contact administrator.');
             redirect('projects/view_updates/'.$project_id);
         }
     }
@@ -45,7 +49,13 @@ class Updates extends CI_Controller{
         $u = $this->Update_model->retrieve_by_id($update_id);
         $post_id = $u['post_id'];
         $this->Update_model->delete_($update_id);
-        $this->Post_model->delete_($post_id);
+        if($this->Post_model->delete_($post_id)==null){
+            $this->session->set_userdata('message', 'Update deleted successfully.');
+            redirect('projects/view_updates/'.$project_id);
+        }else{
+            $this->session->set_userdata('message', 'An error occurred, please contact administrator.');
+            redirect('projects/view_updates/'.$project_id);
+        }
         redirect('projects/view_updates/'.$project_id);
     }
 }
