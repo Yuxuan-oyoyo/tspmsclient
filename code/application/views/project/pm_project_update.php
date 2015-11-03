@@ -145,10 +145,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 $('#milestoneCompletionModal').data('milestone_id', milestone_id).modal('show');
             }
         }
-        function confirmMilestoneComplete() {
+        function deleteUpdateButtonClicked(update_id) {
+                $('#updateDeleteModal').data('update_id', update_id).modal('show');
+        }
+        function confirmUpdateDelete() {
             // handle deletion here
+            var uid = $('#updateDeleteModal').data('update_id');
+            //to be change to delete update controller
+            var delete_u_url = "<?= base_url()?>"
+            window.location.href = delete_u_url;
+        }
+        function confirmMilestoneComplete() {
             var mid = $('#milestoneCompletionModal').data('milestone_id');
-            //to be change to delete milestone controller
             var complete_m_url = "<?= base_url() . 'Milestones/completionConfirmation/' . $project['project_id'] . '/' ?>" + mid;
            window.location.href = complete_m_url;
         }
@@ -281,7 +289,9 @@ $this->load->view('common/pm_nav', $class);
                         <div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
-                                <h4 class="timeline-title"><?= $u['header'] ?></h4>
+                                <h4 class="timeline-title"><?= $u['header'] ?>
+                                    <i class="fa fa-close pull-right small "  style="cursor: pointer;color:darkgray" onclick="deleteUpdateButtonClicked(<?=$u['update_id']?>)"></i>
+                                </h4>
                             </div>
                             <div class="timeline-body"><!---Time Line Body&Content--->
                                 <p><?= $u['body'] ?></p>
@@ -521,7 +531,7 @@ $this->load->view('common/pm_nav', $class);
             </div>
         </div>
     </div>
-
+<!--Milestone Delete Modal-->
     <div class="modal fade" id="milestoneDeleteModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -533,11 +543,28 @@ $this->load->view('common/pm_nav', $class);
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger" id="btnYes" onclick="confirmDelete()">Delete this video record</button>
+                        <button type="button" class="btn btn-danger" id="btnYes" onclick="confirmDelete()">Delete</button>
                     </div>
             </div>
         </div>
     </div>
+<!--Update Delete Modal-->
+<div class="modal fade" id="updateDeleteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong>Delete Update</strong>
+            </div>
+            <div class="modal-body">
+                This action cannot be undone, do you wish to proceed?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="btnYes" onclick="confirmUpdateDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
