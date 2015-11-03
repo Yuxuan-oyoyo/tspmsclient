@@ -26,4 +26,20 @@ class Update_model extends CI_Model{
         }
         return null;
     }
+    public function retrieve_by_id($update_id){
+        if(isset($update_id)){
+            $query = $this->db->get_where("updates",["update_id"=>$update_id]);
+            if( $query->num_rows()>0){
+                return $query->row_array();
+            }
+        }
+        return null;
+    }
+
+    public function delete_($update_id){
+        if(isset($update_id)){
+            $query = $this->db->query("delete from updates where update_id = $update_id");
+        }
+        return null;
+    }
 }

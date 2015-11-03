@@ -152,7 +152,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             // handle deletion here
             var uid = $('#updateDeleteModal').data('update_id');
             //to be change to delete update controller
-            var delete_u_url = "<?= base_url()?>"
+            var delete_u_url = "<?= base_url().'Updates/delete_update/'.$project['project_id'].'/' ?>" + uid;
             window.location.href = delete_u_url;
         }
         function confirmMilestoneComplete() {
