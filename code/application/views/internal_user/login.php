@@ -76,6 +76,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
     </div>
 </div>
-
+<div class=" col-md-12">
+    <img src="<?=base_url()?>img/Shipyardlogo1.png" style="margin-left:15px;margin-top:15px" "width="357" height="88" alt=""/>
+</div>
 </body>
 </html>
