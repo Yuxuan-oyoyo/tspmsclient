@@ -30,7 +30,7 @@ class BB_issues {
      */
     public function retrieveIssues($repo_slug, $id, array $parameters=null){
         $CI =& get_instance();
-        $CI->load->library('bb_shared');
+        $CI->load->library('BB_shared');
         $token = $CI->bb_shared->getDefaultOauthToken();
         $endpoint = $this->setEndpoint($repo_slug);
         if(isset($id)) $endpoint.="/".$id;
@@ -70,6 +70,7 @@ class BB_issues {
 
     private function sendGetRequest($url){
         /*open connection*/
+        //var_dump($url);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
@@ -78,16 +79,16 @@ class BB_issues {
         $response = curl_exec($ch);
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        if($code==200 && ($reply_array = json_decode($response,true))!=null){
+        if($code==200 && ($reply_array = json_decode($response,true))!=null) {
             //echo "response",var_dump($reply_array);
-            if(isset($reply_array['error'])){
-                if($this->_print_err) var_dump($reply_array);
-            }else if(isset($reply_array['issues'])){
-                foreach($reply_array["issues"] as $key=>$issue){
+            if (isset($reply_array['error'])) {
+                if ($this->_print_err) var_dump($reply_array);
+            } else if (isset($reply_array['issues'])) {
+                foreach ($reply_array["issues"] as $key => $issue) {
                     $reply_array["issues"][$key]["status"] = $this->map_status($issue["status"], false);
                 }
                 return $reply_array;
-            }else{
+            } else {
                 $reply_array["status"] = $this->map_status($reply_array["status"], false);
                 return $reply_array;
             }
@@ -131,7 +132,7 @@ class BB_issues {
     }
     private function sendIssueRequest($repo_slug,$id, $issue_array, $_flag='POST'){
         $CI =& get_instance();
-        $CI->load->library('bb_shared');
+        $CI->load->library('BB_shared');
         $token = $CI->bb_shared->getDefaultOauthToken();
         $endpoint = $this->setEndpoint($repo_slug);
         if(isset($id)){

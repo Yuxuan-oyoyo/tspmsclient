@@ -153,7 +153,9 @@
                     "utc_last_updated"=>["display"=>"Updated" ,"sort"=>"utc_last_updated"],
                 ];
             $status_color=[
-                "new"=>"white","to develop"=>"LightYellow ","resolved"=>"LightGreen","to test"=>"LightGoldenRodYellow","invalid"=>"Peru","to deploy"=>"Plum ","wontfix"=>"brown","closed"=>"LightGray "
+                "new"=>"white","to develop"=>"LightYellow ","resolved"=>"LightGreen",
+                "to test"=>"LightGoldenRodYellow","invalid"=>"Peru","to deploy"=>"Plum ",
+                "wontfix"=>"brown","closed"=>"LightGray "
             ];
             $issues = $issues_response["issues"];
             if(isset($filter_arr["sort"])){
