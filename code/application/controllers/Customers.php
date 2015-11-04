@@ -26,7 +26,6 @@ class Customers extends CI_Controller {
             $data["show_all"] = true;
         }
         $data["customers"]= $customers;
-
         $this->load->view('customer/customer_all',$data);
     }
 
