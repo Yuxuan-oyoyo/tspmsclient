@@ -72,9 +72,9 @@ $this->load->view('common/pm_nav', $class);
                     "utc_last_updated"=>["display"=>"Updated" ,"sort"=>"utc_last_updated"],
                 ];
             $status_color=[
-                "new"=>"white","to develop"=>"LightYellow ","resolved"=>"LightGreen",
-                "to test"=>"LightGoldenRodYellow","invalid"=>"Peru","to deploy"=>"Plum ",
-                "wontfix"=>"brown","closed"=>"LightGray "
+                "new"=>"#34495e","to develop"=>"#e67e22 ","resolved"=>"#2ecc71",
+                "to test"=>"#3498db","invalid"=>"#e74c3c","to deploy"=>"#9b59b6 ",
+                "wontfix"=>"#95a5a6","closed"=>"#7f8c8d "
             ];
             $issues = $issues_response["issues"];
             if(isset($filter_arr["sort"])){
@@ -139,7 +139,7 @@ $this->load->view('common/pm_nav', $class);
                         </td>
                         <td class="state">
                             <a class="aui-lozenge" href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."status=".$d["status"]?>"
-                               title="Filter by status: <?=$d["status"]?>" style="background-color: <?=$status_color[$d["status"]]?>">
+                               title="Filter by status: <?=$d["status"]?>" style="color: <?=$status_color[$d["status"]]?>">
                                 <?=$d["status"]=="to deploy"?"to dep":($d["status"]=="to develop"?"to dev":$d["status"])?>
                             </a>
                         </td>

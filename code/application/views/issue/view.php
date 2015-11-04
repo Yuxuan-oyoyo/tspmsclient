@@ -8,6 +8,9 @@
     //echo var_dump($issue_details);
 $i = $issue_details;
 $repo_slug = $repo_slug;
+$ci =&get_instance();
+$ci->load->model("Project_model");
+$project = $ci->Project_model->retrieve_by_repo_slug($repo_slug);
 function _ago($tm,$rcs = 0) {
     $cur_tm = time(); $dif = $cur_tm-$tm;
     $pds = array('second','minute','hour','day','week','month','year','decade');

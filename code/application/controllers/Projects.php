@@ -182,6 +182,9 @@ class Projects extends CI_Controller {
         $next_phase_id = $current_project_phase['phase_id']+1;
         $next_phase =  $this->Phase_model->retrieve_phase_by_id($next_phase_id);
         $next_phase_name = $next_phase['phase_name'];
+        if($current_project_phase_id==0){
+            $next_phase_name = "Lead";
+        }
         $phases=$this->Project_phase_model->retrieve_by_project_id($project_id);
 
         //milestones
