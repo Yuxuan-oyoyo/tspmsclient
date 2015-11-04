@@ -452,7 +452,7 @@ $this->load->view('common/pm_nav', $class);
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <?php
-            if($current_phase['phase_id']==5){
+              if(isset($current_phase)&&$current_phase['phase_id']==5){
             ?>
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -470,6 +470,7 @@ $this->load->view('common/pm_nav', $class);
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         <input type="submit" name="submit" id="submit" class="btn btn-primary" value="End Project">
                     </div>
+            </form>
                 <?php
                 }else {
                     ?>
@@ -494,10 +495,10 @@ $this->load->view('common/pm_nav', $class);
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Update">
                     </div>
-                    <?php
-                        }
-                    ?>
-            </form>
+                </form>
+                <?php
+                    }
+                ?>
         </div>
     </div>
 </div>
