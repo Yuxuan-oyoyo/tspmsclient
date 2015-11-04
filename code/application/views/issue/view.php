@@ -17,6 +17,9 @@ function _ago($tm,$rcs = 0) {
     if(($rcs == 1)&&($v >= 1)&&(($cur_tm-$_tm) > 0)) $x .= time_ago($_tm);
     return $x;
 }
+$ci =&get_instance();
+$ci->load->model("Project_model");
+$project = $ci->Project_model->retrieve_by_repo_slug($repo_slug);
 ?>
 <!DOCTYPE html>
 <html>
@@ -130,7 +133,7 @@ $this->load->view('common/pm_nav', $class);
                 </script>
                 <div class="btn-group">
                     <?php if($i["status"]=="resolved"):?>
-                        <a href="#" class="btn btn-primary update-btn" param="status" value="Open">Open</a>
+                        <a href="#" class="btn btn-primary update-btn" param="status" value="new">Open</a>
                     <?php else:?>
                         <a href="#" class="btn btn-primary update-btn" param="status" value="resolved">Resolve</a>
 
