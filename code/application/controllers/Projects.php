@@ -131,7 +131,6 @@ class Projects extends CI_Controller {
                 , "file_repo_name", "no_of_use_cases"
                 , "bitbucket_repo_name", "project_value", "staging_link", "production_link", "customer_preview_link"];
             $input = $this->input->post($name_array, true);
-            var_dump($input);
             $customer_option = $this->input->post('customer-option');
             if ($customer_option == 'from-existing') {
                 $input['c_id'] = $this->input->post('c_id');
