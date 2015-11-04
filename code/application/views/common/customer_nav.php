@@ -1,4 +1,4 @@
-<?php?>
+
 
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -11,7 +11,7 @@
             <a href="<?=base_url()?>projects/customer_overview/<?=$this->session->userdata('Customer_cid')?>"><i class="fa fa-fw fa-tasks"></i>My Projects</a>
         </li>
         <li>
-            <a href="chat.html"><i class="fa fa-fw fa-comment"></i>Message</a>
+            <a href="#"><i class="fa fa-fw fa-comment"></i>Message</a>
         </li>
     </ul>
     <ul class="nav navbar-right top-nav">

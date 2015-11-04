@@ -57,7 +57,6 @@ $this->load->view('common/pm_nav', $class);
                 <th>Other number</th>
                 <th>Email</th>
                 <th>Status</th>
-                <th>Projects</th>
                 <th></th>
                 </thead>
 
@@ -78,7 +77,6 @@ $this->load->view('common/pm_nav', $class);
                                     Deactivated
                                 <?php endif?>
                             </td>
-                            <td>Projects</td>
                             <td><a href="<?=base_url().'Customers/update_customer/'.$c["c_id"]?>" class="btn btn-primary" type="button" ><i class="fa fa-pencil-square-o"></i></a></td>
                         </tr>
                     <?php endforeach?>

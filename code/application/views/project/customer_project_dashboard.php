@@ -7,14 +7,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <head>
     <?php $this->load->view('common/common_header');?>
-    <!-- Custom CSS -->
-    <link href="<?=base_url().'css/sb-admin.css'?>" rel="stylesheet">
     <link href="<?=base_url().'css/timeline.css'?>" rel="stylesheet">
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
-    <!-- jQuery -->
-    <script src="<?= base_url() . 'js/jquery.min.js' ?>"></script>
-    <script src="<?= base_url() . 'js/bootstrap.min.js' ?>"></script>
-
 
     <script>
         $(function () {
@@ -129,7 +123,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-           <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>&nbsp;
+           <?='#'.$project['project_id'].'. '.$project['project_title']?>&nbsp;
             <?php if($project['customer_preview_link']):?>
             <a href="<?=$project['customer_preview_link']?>" class="btn btn-info" target="_blank"><i class="fa fa-external-link"></i>&nbsp;Project Preview</a>
             <?php endif?>

@@ -22,7 +22,7 @@
             <a href="<?=base_url().'projects/list_all'?>"><i class="fa fa-fw fa-bar-chart-o"></i> Projects</a>
         </li>
         <li class="<?=$message_class?>">
-            <a href="chat.html"><i class="fa fa-fw fa-comment"></i> Message</a>
+            <a href="#"><i class="fa fa-fw fa-comment"></i> Message</a>
         </li>
         <li class="<?=$customers_class?>">
             <a href="<?=base_url().'customers/list_all'?>"><i class="fa fa-fw fa-users"></i>Customers</a>
@@ -31,7 +31,7 @@
             <a href="<?=base_url().'internal_users/list_all'?>"><i class="fa fa-fw fa-users"></i>Internal Users</a>
         </li>
         <li class="<?=$analytics_class?>">
-            <a href="customers.html"><i class="fa fa-fw fa-line-chart"></i>Analytics</a>
+            <a href="#"><i class="fa fa-fw fa-line-chart"></i>Analytics</a>
         </li>
         <!---
         <li>

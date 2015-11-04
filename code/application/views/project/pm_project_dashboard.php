@@ -24,7 +24,7 @@ $this->load->view('common/pm_nav', $class);
     <div class="sidebar-links">
         <a class="link-blue selected" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Dashboard</a>
         <a class="link-blue " href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
-        <a class="link-blue " href="projectIssues.html"><i class="fa fa-wrench"></i>Issues</a>
+        <a class="link-blue " href="<?=base_url().'Issues/list_all/'.$project["bitbucket_repo_name"]?>"><i class="fa fa-wrench"></i>Issues</a>
         <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
     </div>
 </aside>
@@ -33,7 +33,7 @@ $this->load->view('common/pm_nav', $class);
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-            <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>&nbsp;
+            <?='#'.$project['project_id'].'. '.$project['project_title']?>&nbsp;
             <?php
             if($project['staging_link']):?>
                 <a href="<?=$project['staging_link']?>" class="btn btn-info" target="_blank"><i class="fa fa-external-link"></i>&nbsp;Staging</a>
@@ -66,7 +66,7 @@ $this->load->view('common/pm_nav', $class);
                         if ($phase['project_phase_id'] == $project['current_project_phase_id']) {
                             $img_tag = 'img/current.png';
                         }
-                        echo'<div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2 " align="center" data-toggle="tooltip"
+                        echo'<div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2" align="center" data-toggle="tooltip"
                 data-placement="bottom" title="'.$phase['start_time'].' to '.$phase_end_time.'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
                     }
                 }else{
