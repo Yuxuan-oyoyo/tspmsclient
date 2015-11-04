@@ -97,11 +97,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     var day = ddl.getDate();
                     var month=monthNames[ddl.getMonth()];
                     var year=ddl.getFullYear();
+                    var append='';
+                    if (element.if_completed!==0){
+                        append='<br><span class="badge success" style="background-color: limegreen">Completed</span>';
+                    }
                     var htmlText = ' <div class="row"> <div class="col-lg-4"> <div class="panel panel-default calendar"> ' +
                         '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'-'+year+'</strong></div>'+
                     '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-lg-7">'+
                     '<strong>'+element.header+'</strong><br>'+element.body+
-                   ' </div> </div>';
+                   ' </div> </div>'+append;
 
                     $('#milestone').append( htmlText );
                 });
@@ -199,6 +203,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="col-lg-7">
                         <strong><?=$milestone['header']?></strong><br>
                         <?=$milestone['body']?>
+                        <?php
+                        if ($milestone['if_completed'] !== 0) {
+                            ?>
+                            <br><span class="badge success" style="background-color:limegreen">Completed</span>
+                        <?php
+                        }
+                        ?>
                     </div>
                 </div>
                     <?php endforeach?>

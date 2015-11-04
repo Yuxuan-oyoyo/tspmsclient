@@ -251,4 +251,10 @@ class Projects extends CI_Controller {
             $this->load->view('project/customer_project_dashboard',$data);
         }
     }
+
+    public function dev_page(){
+        $data["projects"]=$this->Project_model->retrieve_all_ongoing();
+        $this->load->view('project/developer_dashboard',$data);//to add developer page
+    }
+
 }

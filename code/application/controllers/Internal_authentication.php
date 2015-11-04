@@ -19,10 +19,11 @@ class Internal_authentication extends CI_Controller {
     public function login()
     {
 //        first, check to see if there is an existing session.
-        if($this->session->userdata('internal_uid')||$this->session->userdata('internal_username')){
+        if($this->session->userdata('internal_uid')||$this->session->userdata('internal_username')||$this->session->userdata('internal_type')){
             //if there is, log the user out first.
             $this->session->unset_userdata('internal_uid');
             $this->session->unset_userdata('internal_username');
+            $this->session->unset_userdata('internal_type');
             $this->session->sess_destroy();
             $this->session->set_userdata('message','You have been logged out.');
         }
@@ -41,11 +42,12 @@ class Internal_authentication extends CI_Controller {
                         //set session data
                         $this->session->set_userdata('internal_uid', $user['u_id']);
                         $this->session->set_userdata('internal_username', $user['username']);
+                        $this->session->set_userdata('internal_type', $user['type']);
                         //redirect to successpage
                         if($user['type']=='PM') {
                             redirect('/projects/list_all/');
                         }else{
-                            //to add developer page
+                            redirect('/projects/dev_page');
                         }
 
                     } else {
@@ -67,7 +69,8 @@ class Internal_authentication extends CI_Controller {
     }
 
 
-    public function change_password(){
+
+        public function change_password(){
         $this->load->library('form_validation');
         $this->form_validation->set_rules('existing_password', 'Existing password', 'required');
         $this->form_validation->set_rules('new_password', 'New Password', 'required|min_length[6]');

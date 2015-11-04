@@ -33,17 +33,14 @@ $class = [
     'internal_user_class'=>'',
     'analytics_class'=>''
 ];
-$this->load->view('common/pm_nav', $class);
+if($this->session->userdata('internal_type')=='Developer') {
+    $this->load->view('common/dev_nav', $class);
+}else {
+    $this->load->view('common/pm_nav', $class);
+    $this->load->view('common/side_bar');
+}
 ?>
-<aside class="sidebar-left">
-    <div class="sidebar-links">
-        <a class="link-blue" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Dashboard</a>
-        <a class="link-blue " href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
-        <a class="link-blue selected" href="./<?=$repo_slug?>"><i class="fa fa-wrench"></i>Issues</a>
-        <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
-    </div>
 
-</aside>
 
 <div class="col-lg-offset-1 content">
     <!-- Page Content -->

@@ -17,7 +17,11 @@ $class = [
     'internal_user_class'=>'',
     'analytics_class'=>''
 ];
-$this->load->view('common/pm_nav', $class);
+if($this->session->userdata('internal_type')=='Developer') {
+    $this->load->view('common/dev_nav', $class);
+}else {
+    $this->load->view('common/pm_nav', $class);
+}
 ?>
 <div class="container content">
     <!-- Page Content -->
@@ -64,8 +68,12 @@ $this->load->view('common/pm_nav', $class);
             </div>
         </div>
         <div class="form-group">
-        <a href="<?=base_url().'projects/list_all/'?>" class="btn btn-default" id="cancel">Cancel</a>&nbsp;
-        <button type="submit"  class="btn btn-primary">Submit</button>
+            <?php if($this->session->userdata('internal_type')=='PM'){
+            echo'<a href="'.base_url().'projects/list_all/" class="btn btn-default" id="cancel">Cancel</a>&nbsp';
+            }else{
+                echo'<a href="'.base_url().'projects/dev_page/" class="btn btn-default" id="cancel">Cancel</a>&nbsp';
+            }?>
+            <button type="submit"  class="btn btn-primary">Submit</button>
         </div>
     </form>
     </div>
