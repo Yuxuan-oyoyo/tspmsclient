@@ -12,6 +12,9 @@
         if(($rcs == 1)&&($v >= 1)&&(($cur_tm-$_tm) > 0)) $x .= time_ago($_tm);
         return $x;
     }
+    $ci =&get_instance();
+    $ci->load->model("Project_model");
+    $project = $ci->Project_model->retrieve_by_repo_slug($repo_slug);
 ?>
 <head lang="en">
     <?php $this->load->view('common/common_header');?>
@@ -132,7 +135,9 @@
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-            #1. Inventory Management System<small> - Issues</small>
+            <span style="color: gray;margin-right: 10px">#<?=$project["project_id"]?>.</span>
+            <span><?=$project["project_title"]?></span>
+            <small> - Issues</small>
         </h1>
     </div>
 

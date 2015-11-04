@@ -30,7 +30,7 @@ class BB_issues {
      */
     public function retrieveIssues($repo_slug, $id, array $parameters=null){
         $CI =& get_instance();
-        $CI->load->library('bb_shared');
+        $CI->load->library('BB_shared');
         $token = $CI->bb_shared->getDefaultOauthToken();
         $endpoint = $this->setEndpoint($repo_slug);
         if(isset($id)) $endpoint.="/".$id;
@@ -131,7 +131,7 @@ class BB_issues {
     }
     private function sendIssueRequest($repo_slug,$id, $issue_array, $_flag='POST'){
         $CI =& get_instance();
-        $CI->load->library('bb_shared');
+        $CI->load->library('BB_shared');
         $token = $CI->bb_shared->getDefaultOauthToken();
         $endpoint = $this->setEndpoint($repo_slug);
         if(isset($id)){

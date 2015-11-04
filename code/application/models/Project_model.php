@@ -30,7 +30,10 @@ class Project_model extends CI_Model {
         }
         return null;
     }
-
+    public function retrieve_by_repo_slug($repo_slug){
+        $query = $this->db->get_where("project",["bitbucket_repo_name"=>$repo_slug]);
+        return $query->row_array();
+    }
 
 
     public function retrieve_by_title($input_p_title){
