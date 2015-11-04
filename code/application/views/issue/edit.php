@@ -180,6 +180,19 @@ function _ago($tm,$rcs = 0) {
                 </select>
             </div>
         </div>
+            <div class="form-part">
+                <div class="form-label">Status<span class="cmpl"></span></div>
+                <div class="form-input">
+                    <?php $status=[
+                        "new","to develop","to test","to deploy"
+                    ]?>
+                    <select name="status" class="form-control">
+                        <?php foreach($status as $k):?>
+                            <option value="<?=$k?>"><?=$k?></option>
+                        <?php endforeach?>
+                    </select>
+                </div>
+            </div>
         <div class="form-part">
             <div class="form-label">Kind</div>
             <div class="form-input">

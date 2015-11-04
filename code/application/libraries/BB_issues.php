@@ -63,7 +63,7 @@ class BB_issues {
                 $result = $this->defined_status[$index];
             }
         }
-        if($negate&&$result) return "!".$result;
+        if($negate && $result) return "!".$result;
         else return $result;
     }
 
@@ -180,6 +180,7 @@ class BB_issues {
             if(isset($reply_array['error'])){
                 if($this->_print_err) echo var_dump($reply_array);
             }else{
+                $reply_array["status"] = $this->map_status($reply_array["status"], false);
                 return $reply_array;
             }
         }
