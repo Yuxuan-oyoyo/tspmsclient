@@ -66,7 +66,7 @@ $this->load->view('common/pm_nav', $class);
                         if ($phase['project_phase_id'] == $project['current_project_phase_id']) {
                             $img_tag = 'img/current.png';
                         }
-                        echo'<div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2 " align="center" data-toggle="tooltip"
+                        echo'<div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2" align="center" data-toggle="tooltip"
                 data-placement="bottom" title="'.$phase['start_time'].' to '.$phase_end_time.'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
                     }
                 }else{
