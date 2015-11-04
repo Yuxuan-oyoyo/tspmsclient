@@ -170,49 +170,49 @@ $this->load->view('common/pm_nav', $class);
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input type="text" class="form-control" name="title" id="title" data-parsley-required>
+                        <input type="text" class="form-control" name="title" id="title" value="<?=set_value("title","Title")?>" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="form-group ">
                         <label for="first_name">First name</label>
-                        <input type="text" class="form-control" name="first_name" id="first_name" data-parsley-required>
+                        <input type="text" class="form-control" name="first_name" id="first_name" value="<?=set_value("first_name","First name")?>" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="last_name">Last name</label>
-                        <input type="text" class="form-control"  name="last_name" id="last_name" data-parsley-required>
+                        <input type="text" class="form-control"  name="last_name" id="last_name" value="<?=set_value("last_name","Last name")?>" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="company_name">Company name</label>
-                        <input type="text" class="form-control" name="company_name" id="company_name" data-parsley-required>
+                        <input type="text" class="form-control" name="company_name" id="company_name" value="<?=set_value("company_name","Company name")?>" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" class="form-control" name="email" id="email" data-parsley-type="email" data-parsley-required>
+                        <input type="email" class="form-control" name="email" id="email" value="<?=set_value("email","default@default.com")?>" data-parsley-type="email" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="hp_number">HP Number</label>
-                        <input type="text" class="form-control" name="hp_number" id="hp_number" data-parsley-required>
+                        <input type="text" class="form-control" name="hp_number" id="hp_number" value="<?=set_value("hp_number","HP Number")?>" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="other_number">Other Number</label>
-                        <input type="text" class="form-control" name="other_number" id="other_number" >
+                        <input type="text" class="form-control" name="other_number" id="other_number" value="<?=set_value("other_number","Other Number")?>" >
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text" class="form-control" name="username" id="username" data-parsley-required>
+                        <input type="text" class="form-control" name="username" id="username" value="<?=set_value("c_username","Username")?>" data-parsley-required>
                     </div>
                 </div>
                 <div class="col-lg-6">
