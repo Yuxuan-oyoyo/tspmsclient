@@ -80,6 +80,16 @@ $this->load->view('common/pm_nav', $class);
     <hr>
     <div class="row">
         <div class="col-lg-12">
+            <?php if($this->session->userdata('message')):?>
+                <div class="form-group">
+                    <div class="alert alert-info " role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+                        </button>
+                        <?=$this->session->userdata('message')?>
+                    </div>
+                </div>
+                <?php $this->session->unset_userdata('message') ?>
+            <?php endif;?>
             <div class="col-lg-offset-7 col-lg-4">
                 <div class="panel info-panel">
                     <div class="panel-heading">Project Detail</div>
