@@ -155,7 +155,11 @@ class Projects extends CI_Controller {
                 }
             }
             if ($this->Project_model->update($original_array) == 1) {
-                $this->view_dashboard($project_id);
+                $this->session->set_userdata('message', 'Project has been edited successfully.');
+                redirect('projects/view_dashboard/'.$project_id);
+            }else{
+                $this->session->set_userdata('message', 'Cannot edit project,please contact administrator.');
+                $this->edit($project_id);
             }
         }
     }

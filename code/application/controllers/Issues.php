@@ -19,13 +19,13 @@ class Issues extends CI_Controller {
             $data["repo_slug"] = $repo_slug;
             $opt_params = [
                 "search","sort","limit","start","status","kind","responsible",
-                "milestone","reported_by","priority"
+                "milestone","reported_by","priority","created_on","utc_last_updated"
             ];
             $para_input = $this->input->get($opt_params,true);
-            //Status should be array. if status not set, return an empty array for later processing
-            //$status_filter = ($this->input->get("status")!=null)? $this->input->get("status"):[];
+            if($para_input["sort"]=="responsible")$para_input["sort"] = null;
             $para =[];
-            //transfer $para_input to $para. Only keep non-null key value pairs
+            /*transfer $para_input to $para. Only keep non-null key value pairs.*/
+            /*this prevents bad request*/
             foreach($para_input as $key=>$value){
                 if(!empty($value)){
                     if($key=="search") $value = $value['value'];
