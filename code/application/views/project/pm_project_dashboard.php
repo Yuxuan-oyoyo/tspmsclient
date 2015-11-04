@@ -33,7 +33,7 @@ $this->load->view('common/pm_nav', $class);
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-            <?='#'.$project['project_id'].'. '.strtoupper($project['project_title'])?>&nbsp;
+            <?='#'.$project['project_id'].'. '.$project['project_title']?>&nbsp;
             <?php
             if($project['staging_link']):?>
                 <a href="<?=$project['staging_link']?>" class="btn btn-info" target="_blank"><i class="fa fa-external-link"></i>&nbsp;Staging</a>
