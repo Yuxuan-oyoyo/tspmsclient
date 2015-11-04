@@ -12,6 +12,9 @@ $repo_slug = $repo_slug;
 $ci =&get_instance();
 $ci->load->model("Internal_user_model");
 $users = $ci->Internal_user_model->retrieveAll(false);
+$ci =&get_instance();
+$ci->load->model("Project_model");
+$project = $ci->Project_model->retrieve_by_repo_slug($repo_slug);
 ?>
 <!DOCTYPE html>
 <html>
