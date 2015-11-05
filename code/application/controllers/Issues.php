@@ -41,17 +41,6 @@ class Issues extends CI_Controller {
             //TODO: take user to 404 page
         }
     }
-    private function getParamStr($value_arr,$name){
-        $str = "";
-        if(is_array($value_arr)) {
-            foreach ($value_arr as $value) {
-                $str .= $name . "=" . $value . "&";
-            }
-        }else{
-            $str .= $name . "=" . $value_arr . "&";
-        }
-        return rtrim($str, "&");
-    }
     public function create($repo_slug){
         $this->load->view("issue/new", ["repo_slug"=>$repo_slug]);
     }
