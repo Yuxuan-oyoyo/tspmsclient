@@ -64,32 +64,37 @@ class Customer_authentication extends CI_Controller {
 
 
     public function change_password(){
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('existing_password', 'Existing password', 'required');
-        $this->form_validation->set_rules('new_password', 'New Password', 'required|min_length[6]');
-        $this->form_validation->set_rules('confirm_password', 'Confirm New Password', 'required|matches[new_password]|min_length[6]');
-        if ($this->form_validation->run() == FALSE) {
-            $this->load->view('customer/change_password');
-        } else {
-            $customer = $this->Customer_model->retrieve_by_username($this->session->userdata('Customer_username'));
-            $this->load->library('encrypt');
-            if (password_verify($this->input->post('existing_password'),$customer['password_hash'])) {
-                $new_hash = password_hash($this->input->post('new_password'),PASSWORD_DEFAULT);
-                $customer['password_hash'] = $new_hash;
-                if ($this->Customer_model->update($customer) == 1) {
-                    $this->session->set_userdata('message', 'Your password has been changed successfully.');
-                    //logMessage
-                    //$this->User_log_model->log_message('Admin password has been changed successfully.');
-
-                } else {
-                    $this->session->set_userdata('message', 'An error occurred, please try to use a different password set or contact administrator.');
-                    //logMessage
-                   // $this->User_log_model->log_message('An error occurred, please try to use a different password set or contact administrator.');
-                }
+        if($this->session->userdata('Customer_cid')) {
+            $this->load->library('form_validation');
+            $this->form_validation->set_rules('existing_password', 'Existing password', 'required');
+            $this->form_validation->set_rules('new_password', 'New Password', 'required|min_length[6]');
+            $this->form_validation->set_rules('confirm_password', 'Confirm New Password', 'required|matches[new_password]|min_length[6]');
+            if ($this->form_validation->run() == FALSE) {
+                $this->load->view('customer/change_password');
             } else {
-                $this->session->set_userdata('message', 'Old password entered is incorrect');
+                $customer = $this->Customer_model->retrieve_by_username($this->session->userdata('Customer_username'));
+                $this->load->library('encrypt');
+                if (password_verify($this->input->post('existing_password'), $customer['password_hash'])) {
+                    $new_hash = password_hash($this->input->post('new_password'), PASSWORD_DEFAULT);
+                    $customer['password_hash'] = $new_hash;
+                    if ($this->Customer_model->update($customer) == 1) {
+                        $this->session->set_userdata('message', 'Your password has been changed successfully.');
+                        //logMessage
+                        //$this->User_log_model->log_message('Admin password has been changed successfully.');
+
+                    } else {
+                        $this->session->set_userdata('message', 'An error occurred, please try to use a different password set or contact administrator.');
+                        //logMessage
+                        // $this->User_log_model->log_message('An error occurred, please try to use a different password set or contact administrator.');
+                    }
+                } else {
+                    $this->session->set_userdata('message', 'Old password entered is incorrect');
+                }
+                redirect('customer_authentication/change_password');
             }
-            redirect('customer_authentication/change_password');
+        }else{
+            $this->session->set_userdata('message','Please login first.');
+            redirect('/customer_authentication/login/');
         }
     }
 
