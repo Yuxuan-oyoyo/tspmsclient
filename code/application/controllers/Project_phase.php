@@ -32,43 +32,49 @@ class Project_phase extends CI_Controller{
 */
 
     public function update_phase($project_id,$current_project_phase_id){
-        if(!$current_project_phase_id==0) {
-            $update_array = $this->Project_phase_model->retrieve_by_id($current_project_phase_id);
-            $this->Project_phase_model->update($update_array);
+        if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
+            if(!$current_project_phase_id==0) {
+                $update_array = $this->Project_phase_model->retrieve_by_id($current_project_phase_id);
+                $this->Project_phase_model->update($update_array);
 
-            $current_phase_id = $update_array['phase_id'];
-            $next_phase_id = $current_phase_id + 1;
-            $insert_array['project_id'] = $project_id;
-            $insert_array['phase_id'] = $next_phase_id;
-            $insert_array['end_time'] = null;
+                $current_phase_id = $update_array['phase_id'];
+                $next_phase_id = $current_phase_id + 1;
+                $insert_array['project_id'] = $project_id;
+                $insert_array['phase_id'] = $next_phase_id;
+                $insert_array['end_time'] = null;
 
-            $estimated_end_time = $this->input->post("estimated_end_time");
-            $estimated_end_time = new DateTime($estimated_end_time);
-            $insert_array['estimated_end_time'] = $estimated_end_time->format('c');
+                $estimated_end_time = $this->input->post("estimated_end_time");
+                $estimated_end_time = new DateTime($estimated_end_time);
+                $insert_array['estimated_end_time'] = $estimated_end_time->format('c');
 
-            $next_project_phase_id = $this->Project_phase_model->insert($insert_array);
-            $update_array_project = $this->Project_model->retrieve_by_id($project_id);
-            $update_array_project['current_project_phase_id'] = $next_project_phase_id;
+                $next_project_phase_id = $this->Project_phase_model->insert($insert_array);
+                $update_array_project = $this->Project_model->retrieve_by_id($project_id);
+                $update_array_project['current_project_phase_id'] = $next_project_phase_id;
 
-            if($this->Project_model->update($update_array_project)==1){
-                redirect('projects/view_updates/'.$project_id);
-            }
+                if($this->Project_model->update($update_array_project)==1){
+                    redirect('projects/view_updates/'.$project_id);
+                }
 
+            }else{
+                $insert_array['project_id'] = $project_id;
+                $insert_array['phase_id'] = 1;
+                $insert_array['end_time'] = null;
+                $insert_array['estimated_end_time'] = $this->input->post("estimated_end_time");
+                $next_project_phase_id = $this->Project_phase_model->insert($insert_array);
+                $update_array_project = $this->Project_model->retrieve_by_id($project_id);
+                $update_array_project['current_project_phase_id'] = $next_project_phase_id;
+                if($this->Project_model->update($update_array_project)==1){
+                    redirect('projects/view_updates/'.$project_id);
+                }
+             }
         }else{
-            $insert_array['project_id'] = $project_id;
-            $insert_array['phase_id'] = 1;
-            $insert_array['end_time'] = null;
-            $insert_array['estimated_end_time'] = $this->input->post("estimated_end_time");
-            $next_project_phase_id = $this->Project_phase_model->insert($insert_array);
-            $update_array_project = $this->Project_model->retrieve_by_id($project_id);
-            $update_array_project['current_project_phase_id'] = $next_project_phase_id;
-            if($this->Project_model->update($update_array_project)==1){
-                redirect('projects/view_updates/'.$project_id);
-            }
-         }
+            $this->session->set_userdata('message','You have not login / have no access rights. ');
+            redirect('/internal_authentication/login/');
+        }
     }
 
     public function end_project($project_id,$current_project_phase_id){
+        if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
             $update_array = $this->Project_phase_model->retrieve_by_id($current_project_phase_id);
             $this->Project_phase_model->update($update_array);
 
@@ -79,6 +85,10 @@ class Project_phase extends CI_Controller{
             if($this->Project_model->update($update_array_project)==1){
                 redirect('projects/list_past_projects');
             }
+        }else{
+            $this->session->set_userdata('message','You have not login / have no access rights. ');
+            redirect('/internal_authentication/login/');
+        }
     }
 
 
