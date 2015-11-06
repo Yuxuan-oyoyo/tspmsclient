@@ -12,7 +12,7 @@
     <meta charset="utf-8">
     <title>[480] chat prototype</title>
     <!-- Not present in the tutorial. Just for basic styling. -->
-    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="<?=base_url()?>css/chat/base.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.0/react.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -21,7 +21,7 @@
 <body>
 
 <div id="container"></div>
-<script type="text/jsx">
+<script type="text/babel">
     var CurrentUser = "1";
     var get_data = [];
 
@@ -130,7 +130,7 @@
                 var datetime = new Date() / 1000;
 
                 var url = "<?=base_url()."chat/write"?>";
-                
+
                 $.ajax({
                     type: "GET",
                     data: {chatID:threadID, timeStamp: datetime, author: CurrentUser ,content: text },
