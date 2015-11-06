@@ -12,6 +12,7 @@ class Chat_model extends CI_Model{
         // Call the CI_Model constructor
         parent::__construct();
         $this->load->helper("date");
+        $this->load->library("session");
     }
 
     public function retrieve($input_id, $user_type){
@@ -50,9 +51,11 @@ class Chat_model extends CI_Model{
                     return ($a["timestamp"] < $b["timestamp"]) ? -1 : 1;
                 });
                 $threads = [];
+                $k = 1;
                 foreach($tMsgs as $key=>$value){
                     $last_message = end($value);
                      array_push($threads,[
+                         'chatID'        => $k,
                          'user1'         => $last_message["user1"],
                          'user2'         => $last_message["user2"],
                          'seen'          => $last_message["seen"],
@@ -60,6 +63,9 @@ class Chat_model extends CI_Model{
                          'lastMessage'   => $last_message["content"],
                          'messages'      => $value
                     ]);
+                    $this->session->set_userdata($k,
+                        ['user1' => $last_message["user1"],'user2'=> $last_message["user2"],]);
+                    $k++;
                 }
                 return $threads;
             }
@@ -67,6 +73,7 @@ class Chat_model extends CI_Model{
         return null;
     }
     public function write(array $values){
+        $this->session->set_userdata($k,)//TODO: finish this shit
         if(isset($values)){
             $values["m_author"] = $values["m_author"]==$values["user1"]? 1:0;
             $sql = "insert into message (customer_id, pm_id, project_id, to_pm, body, file_id, timestamp) VALUES (?, ?, 0, ?,?,0, ?)";
