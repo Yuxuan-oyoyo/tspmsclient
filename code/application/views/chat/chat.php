@@ -130,6 +130,7 @@
                 var datetime = new Date() / 1000;
 
                 var url = "<?=base_url()."chat/write"?>";
+                
                 $.ajax({
                     type: "GET",
                     data: {chatID:threadID, timeStamp: datetime, author: CurrentUser ,content: text },
