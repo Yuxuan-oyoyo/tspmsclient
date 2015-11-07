@@ -14,6 +14,7 @@ $ci->load->model("Internal_user_model");
 $users = $ci->Internal_user_model->retrieveAll(false);
 $ci->load->model("Project_model");
 $project = $ci->Project_model->retrieve_by_repo_slug($repo_slug);
+$user = $user;
 ?>
 <!DOCTYPE html>
 <html>
@@ -42,7 +43,17 @@ if($this->session->userdata('internal_type')=='Developer') {
     $this->load->view('common/dev_nav', $class);
 }else {
     $this->load->view('common/pm_nav', $class);
-    $this->load->view('common/side_bar');
+    ?>
+    <aside class="sidebar-left">
+        <div class="sidebar-links">
+            <a class="link-blue" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Dashboard</a>
+            <a class="link-blue " href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
+            <a class="link-blue selected" href="./<?=$repo_slug?>"><i class="fa fa-wrench"></i>Issues</a>
+            <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
+        </div>
+
+    </aside>
+    <?php
 }
 ?>
 
@@ -51,12 +62,12 @@ if($this->session->userdata('internal_type')=='Developer') {
         $(".cmpl").text("*").css("color","red");
     });
 </script>
-<div class="col-sm-offset-1 content" style="margin-top: 100px">
+<div class="col-sm-offset-1 content" style="margin-top: 75px;margin-left:15%">
     <form class="form-horizontal" action="<?=base_url()."Issues/process_create/".$repo_slug?>">
         <h2 style="max-width: 40%">
             New Issue
         </h2>
-        <div style="display: table">
+        <div style="display: table;width:45%">
             <div class="form-part">
                 <div class="form-label">Title <span class="cmpl"></span></div>
                 <div class="form-input">
