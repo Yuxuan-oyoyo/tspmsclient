@@ -31,10 +31,10 @@ class Chat_model extends CI_Model{
                 /*translate direction to author id*/
                 foreach( $result as $rKey=>$row){
                     /*depends on uer's nature and direction*/
-                    if(($user_type!="pm" && $row["to_pm"]==1)
-                            || $user_type=="pm" && $row["to_pm"]==0)
+                    if ($row["to_pm"]==1)
                         $result[$rKey]["author"]=$row["user1"];
                     else $result[$rKey]["author"]=$row["user2"];
+                    unset($result[$rKey]["to_pm"]);
                 }
 
                 /*group chats into threads based on other user.
