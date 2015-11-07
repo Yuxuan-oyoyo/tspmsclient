@@ -25,7 +25,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="row">
        <?php foreach($projects as $p):?>
         <div class=" col-lg-4">
-            <div class="panel ongoing-panel">
+            <?php
+            if($p['is_ongoing']==1){
+            ?>
+                <div class="panel ongoing-panel">
+            <?php
+            }else{
+            ?>
+                <div class="panel past-panel">
+            <?php
+            }
+            ?>
                 <div class="panel-heading" style="text-align:center" ><strong><?=$p['project_title']?></strong></div>
                 <div class="panel-body">
                     <table class="table table-condensed">
