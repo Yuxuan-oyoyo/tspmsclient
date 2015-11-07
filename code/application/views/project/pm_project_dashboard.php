@@ -108,7 +108,7 @@ $this->load->view('common/pm_nav', $class);
                 TASKS
             </div>
             <div class="col-lg-3" style=" border: solid 2px #1abc9c;  height:120px">
-                <h2>20</h2>Use Cases
+                <h2><?=$project['no_of_use_cases']?></h2>Use Cases
             </div>
             <div class="col-lg-offset-6 col-lg-3" style="margin-top:-120px; border: solid 2px #1abc9c; border-left:1px; height:120px">
                 <h2>$<?=$project['project_value']?></h2>Project Value
