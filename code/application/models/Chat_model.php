@@ -20,7 +20,7 @@ class Chat_model extends CI_Model{
             $sql = "select customer_id as user1, ".//convert customer id to user1
                 "pm_id as user2, project_id, to_pm, body as content, ".
                 "seen, time_created as timestamp from message ".
-                "where pm_id=? or customer_id=? order by time_created desc";
+                "where pm_id=? or customer_id=? order by time_created";
             /*use trick to bind query*/
             $filter = $user_type=="pm"? [$input_id,-1]:[-1,$input_id];
             $query = $this->db->query($sql,$filter);

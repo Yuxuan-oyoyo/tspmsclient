@@ -164,7 +164,7 @@
 
         render: function() {
             var parentProps = this.props;
-            console.log("user 1 is " + this.props.chat.user1)
+            //console.log("user 1 is " + this.props.chat.user1)
             var j = (this.props.chat.user1 == CurrentUser) ? this.props.chat.user2: this.props.chat.user1;
 
             // WORKINGON
@@ -217,18 +217,24 @@
             }.bind(this))
             //console.log(this)
         },
+        getUnreadCount:function(){
+            // TODO
+            this.setState({unreadCount: this.state.chats.length})
+        },
         tick: function(){
             this.getInitialData()
+            this.getUnreadCount()
         },
         componentDidMount: function(){
             this.getInitialData();
-            this.interval = setInterval(this.tick, 5000);
+            this.interval = setInterval(this.tick, 2000);
             //console.log("component did mount")
         },
         getInitialState: function() {
             return {
                 chatId : "",
                 chats : [],
+                unreadCount : 0,
                 //chats: this.props.chats
             };
         },
@@ -255,11 +261,15 @@
                 }
             }
 
+            var unread = this.state.unreadCount === 0 ?
+                <span>Unread threads: 0 </span>
+                :   <span>Unread threads: {this.state.unreadCount} </span>;
+
             return (
                 <div className="chatapp">
                     <div className="thread-section">
                         <div className="thread-count">
-
+                            {unread}
                         </div>
                         <LeftUserList
                             chat_id={this.state.chatID}
