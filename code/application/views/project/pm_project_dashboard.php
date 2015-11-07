@@ -105,7 +105,7 @@ $this->load->view('common/pm_nav', $class);
                             </tr>
                             <tr>
                                 <td><strong>Customer </strong></td>
-                                <td> <a href="<?=base_url().'Customers/update_customer/'.$customer["c_id"]?>"><?=$customer['last_name'].' '.$customer['first_name']?></a> (Click to edit)</td>
+                                <td> <a href="<?=base_url().'Customers/update_customer_fproject/'.$customer["c_id"].'/'.$project['project_id']?>"><?=$customer['last_name'].' '.$customer['first_name']?></a> (Click to edit)</td>
                             </tr>
                             <tr>
                                 <td><strong>Bitbucket Repo Name </strong></td>
