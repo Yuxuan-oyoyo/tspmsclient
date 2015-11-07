@@ -55,7 +55,17 @@ if($this->session->userdata('internal_type')=='Developer') {
     $this->load->view('common/dev_nav', $class);
 }else {
     $this->load->view('common/pm_nav', $class);
-    $this->load->view('common/side_bar');
+    ?>
+    <aside class="sidebar-left">
+        <div class="sidebar-links">
+            <a class="link-blue" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Dashboard</a>
+            <a class="link-blue " href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
+            <a class="link-blue selected" href="./<?=$repo_slug?>"><i class="fa fa-wrench"></i>Issues</a>
+            <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
+        </div>
+
+    </aside>
+    <?php
 }
 ?>
 
@@ -64,18 +74,13 @@ if($this->session->userdata('internal_type')=='Developer') {
         $(".cmpl").text("*").css("color","red");
     });
 </script>
-<div class="col-sm-offset-1 content" style="margin-top: 100px">
+<div class="col-sm-offset-1 content" style="margin-top: 75px;margin-left:15%">
     <form class="form-horizontal" action="<?=base_url()."Issues/process_edit/".$repo_slug."/".$i["local_id"]?>">
-        <h2 style="max-width: 40%">
+        <h2 style="max-width: 50%">
             <span style="color: #777777;padding-right: 10px">#<?=$i["local_id"]?></span>
             <?=$i["title"]?>
-            <div style="height: 100%;display: inline;padding-top:0;position:relative">
-                <div class="aui-lozenge" style="background-color: #fcf8e3;position:absolute;top:15px;left: 15px" title="Filter by status: <?=$i["status"]?>">
-                    <?=$i["status"]?>
-                </div>
-            </div>
         </h2>
-        <div style="display: table">
+        <div style="display: table;width:45%">
         <div class="form-part">
             <div class="form-label">Title <span class="cmpl"></span></div>
             <div class="form-input">
@@ -155,7 +160,7 @@ if($this->session->userdata('internal_type')=='Developer') {
             <div style="display: table-cell"></div>
             <div class="form-input" style="vertical-align: middle">
                 <button class="btn btn-primary" style="margin-right: 5pt">Update issue</button>
-                <a href="<?=base_url()."issues/detail/".$repo_slug."?local_id=".$i["local_id"]?>">Cancel</a>
+                <a href="<?=base_url()."issues/detail/".$repo_slug."/".$i["local_id"]?>">Cancel</a>
             </div>
         </div>
 

@@ -50,18 +50,28 @@ if($this->session->userdata('internal_type')=='Developer') {
     $this->load->view('common/dev_nav', $class);
 }else {
     $this->load->view('common/pm_nav', $class);
-    $this->load->view('common/side_bar');
+    ?>
+    <aside class="sidebar-left">
+        <div class="sidebar-links">
+            <a class="link-blue" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Dashboard</a>
+            <a class="link-blue " href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
+            <a class="link-blue selected" href="./<?=$repo_slug?>"><i class="fa fa-wrench"></i>Issues</a>
+            <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
+        </div>
+
+    </aside>
+    <?php
 }
 ?>
 
-<div class="col-sm-offset-1 content">
+<div class="col-sm-offset-1 content" style="margin-left:10%">
     <div class="row">
         <div class="col-sm-6">
             <h2>
                 <span style="color: #777777;padding-right: 10px">#<?=$i["local_id"]?></span>
                 <?=$i["title"]?>
-                <div style="height: 100%;display: inline;padding-top:0;position:relative">
-                    <div class="aui-lozenge" style="background-color: #fcf8e3;position:absolute;top:15px;left: 15px" title="Filter by status: <?=$i["status"]?>">
+                <div style="height: 100%;display: inline;position:relative">
+                    <div class="aui-lozenge" style="background-color: #fcf8e3;vertical-align:middle" title="Filter by status: <?=$i["status"]?>">
                         <?=$i["status"]?>
                     </div>
                 </div>

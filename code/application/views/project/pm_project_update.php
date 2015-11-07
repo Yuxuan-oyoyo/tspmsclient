@@ -65,14 +65,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
             $('#deadlinePicker').datepicker({
                 dateFormat: 'dd-mm-yy',
-                minDate: '+5d',
+                minDate: '+0d',
                 changeMonth: true,
                 changeYear: true,
                 altFormat: "yy-mm-dd"
             });
             $('#estimated_end_time').datepicker({
                 dateFormat: 'dd-mm-yy',
-                minDate: '+5d',
+                minDate: '+0d',
                 changeMonth: true,
                 changeYear: true,
                 altFormat: "yy-mm-dd"

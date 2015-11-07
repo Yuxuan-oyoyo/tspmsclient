@@ -21,8 +21,8 @@
 <body>
 
 <div id="container"></div>
-<script type="text/babel">
-    var CurrentUser = "1";
+<script type="text/jsx">
+    var CurrentUser = "2";
     var get_data = [];
 
     var LeftUser = React.createClass({
@@ -124,7 +124,6 @@
             var text = this.state.text.trim();
             if (text)
             {
-
                 console.log("handle composer [enter]");
                 var threadID = this.props.thread.chatID;
                 var datetime = new Date() / 1000;
@@ -167,7 +166,7 @@
             render: function() {
                 var parentProps = this.props;
                 console.log("user 1 is " + this.props.chat.user1);
-                var j = (this.props.chat.user1 == CurrentUser) ? this.props.chat.user2: this.props.chat.user1;
+                var j = (this.props.chat.user1!==undefined && this.props.chat.user1 == CurrentUser) ? this.props.chat.user2: this.props.chat.user1;
 
                 // WORKINGON
                 var sortedMessages;
@@ -177,7 +176,7 @@
 
 
                 if (this.props.chat.user1 !== undefined) {
-                    sortedMessages = this.props.chat.messages.sort(function(a,b){
+                    sortedMessages = this.props.chats.messages.sort(function(a,b){
                         return a.timeStamp - b.timeStamp
                     });
                     msgNodes = sortedMessages.map(function(msg){
@@ -194,7 +193,7 @@
         <ul className="message-list" ref="messageList">
         {msgNodes}
         </ul>
-        <RightMessageComposerBox thread={this.props.chat} refreshFunc={this.props.refreshFunc} />
+        <RightMessageComposerBox thread={this.props.chats} refreshFunc={this.props.refreshFunc} />
 
     </div>
     )
@@ -227,7 +226,7 @@
     },
     getInitialState: function() {
         return {
-            chatId : "",
+            chatId : "1##2",
             chats : []
             //chats: this.props.chats
         };

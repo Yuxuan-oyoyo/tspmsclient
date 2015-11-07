@@ -15,7 +15,8 @@ class Issues extends CI_Controller {
         $this->load->library('BB_issues');
     }
     public function list_all($repo_slug=null){
-        if($this->session->userdata('internal_uid')) {
+        $user_id = $this->session->userdata('internal_uid');
+        if(isset($user_id)) {
             if(isset($repo_slug)) {
                 $data["repo_slug"] = $repo_slug;
                 $opt_params = [
@@ -34,8 +35,16 @@ class Issues extends CI_Controller {
                     }
                 }
                 //TODO:validate parameters
+                /*Get all issues*/
                 $issues_response = $this->bb_issues->retrieveIssues($repo_slug,null, $para);
-                $data= ["issues_response"=>$issues_response,"repo_slug"=>$repo_slug,"filter_arr"=>$para];
+                /*Get user bb_username*/
+                $this->load->model("Internal_user_model");
+                $user = $this->Internal_user_model->retrieve($user_id);
+                $data= ["issues_response"=>$issues_response,
+                    "repo_slug"=>$repo_slug,
+                    "filter_arr"=>$para,
+                    "user" =>$user
+                ];
                 $this->session->set_userdata('issue_list'.$repo_slug, $issues_response["issues"]);
                 $this->load->view("issue/all_2", $data);
             }else{
@@ -48,8 +57,13 @@ class Issues extends CI_Controller {
 
     }
     public function create($repo_slug){
-        if($this->session->userdata('internal_uid')) {
-            $this->load->view("issue/new", ["repo_slug"=>$repo_slug]);
+        $user_id = $this->session->userdata('internal_uid');
+        if(isset($user_id)) {
+            $user = $this->internal_user_model->retrieve($user_id);
+            $this->load->view("issue/new", [
+                "repo_slug"=>$repo_slug,
+                "user"=>$user
+            ]);
         }else{
             $this->session->set_userdata('message','Please login first.');
             redirect('/internal_authentication/login/');
