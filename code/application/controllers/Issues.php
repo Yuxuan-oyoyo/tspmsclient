@@ -13,6 +13,7 @@ class Issues extends CI_Controller {
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->library('BB_issues');
+
     }
     public function list_all($repo_slug=null){
         $user_id = $this->session->userdata('internal_uid');
@@ -59,7 +60,8 @@ class Issues extends CI_Controller {
     public function create($repo_slug){
         $user_id = $this->session->userdata('internal_uid');
         if(isset($user_id)) {
-            $user = $this->internal_user_model->retrieve($user_id);
+            $this->load->model("Internal_user_model");
+            $user = $this->Internal_user_model->retrieve($user_id);
             $this->load->view("issue/new", [
                 "repo_slug"=>$repo_slug,
                 "user"=>$user
