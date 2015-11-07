@@ -9,7 +9,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Chat extends CI_Controller {
-
+    public $user_id = 11;
     public function __construct() {
         parent::__construct();
         // Your own constructor code
@@ -17,12 +17,13 @@ class Chat extends CI_Controller {
         $this->load->library('session');
     }
     public function index(){
-        $this->load->view("chat/chat",[]);
+        $user_id = $this->user_id;
+        $this->load->view("chat/chat",["user_id"=>$user_id]);
     }
     public function get(){
         header('Content-type: application/json');
         header("Access-Control-Allow-Origin: *");
-        $user_id =2;
+        $user_id = $this->user_id;
         $user_type = "customer";
         //TODO: fetch data with model
           $threads =  $this->Chat_model->retrieve($user_id, $user_type);
@@ -62,7 +63,7 @@ class Chat extends CI_Controller {
         $values=[
             "chat_id" 	=> $this->input->get("chatID",true),
             "m_author" 	=> $this->input->get("author",true),
-            "m_content" 	=> $this->input->get("content",true),
+            "m_content" => $this->input->get("content",true),
             "m_timestamp" => $this->input->get("timeStamp",true),
         ];
         //TODO: link up with model

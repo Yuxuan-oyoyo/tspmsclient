@@ -31,10 +31,9 @@ class Chat_model extends CI_Model{
                 /*translate direction to author id*/
                 foreach( $result as $rKey=>$row){
                     /*depends on uer's nature and direction*/
-                    if ($row["to_pm"]==1)
-                        $result[$rKey]["author"]=$row["user1"];
+                    if ($row["to_pm"]==1)$result[$rKey]["author"]=$row["user1"];
                     else $result[$rKey]["author"]=$row["user2"];
-                    unset($result[$rKey]["to_pm"]);
+                    //unset($result[$rKey]["to_pm"]);
                 }
 
                 /*group chats into threads based on other user.
@@ -44,10 +43,15 @@ class Chat_model extends CI_Model{
                 foreach ($result as $rKey=>$row){
                     $row["msgID"] = $i;
                     $row["seen"]   = $row["seen"]==1?true:false;
-                    if(isset($tMsgs[$row[$other_user]]))
+                    if(isset($tMsgs[$row[$other_user]])) {
                         array_push($tMsgs[$row[$other_user]], $row);
-                    else
-                        $tMsgs[$row["user1"]] = [$row];
+
+                    }
+                    else {
+                        $tMsgs[$row[$other_user]] = [$row];
+                    }
+                    //echo "push";
+                    //print_r($row);
                     $i++;
                 }
                 //print_r($tMsgs);
@@ -94,7 +98,7 @@ class Chat_model extends CI_Model{
                 "customer_id"=>$values["user1"],
                 "pm_id"=>$values["user2"],
                 "project_id"=>0,
-                "to_pm"=>$values["user2"]==$values["m_author"],
+                "to_pm"=>$values["user2"]==$values["m_author"]?0:1,
                 "body"=> $values["m_content"],
                 "time_created"=>time()
 

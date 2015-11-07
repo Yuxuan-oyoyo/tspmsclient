@@ -5,6 +5,8 @@
  * Date: 11/5/2015
  * Time: 11:55 PM
  */
+
+$user_id = $user_id;
 ?>
 <!DOCTYPE html>
 <html>
@@ -22,8 +24,8 @@
 
 <div id="container"></div>
 <script type="text/babel">
-    var CurrentUser = "1"
-    var get_data = []
+    var CurrentUser = <?=$user_id?>;
+    var get_data = [];
 
     var LeftUser = React.createClass({
         render: function() {
