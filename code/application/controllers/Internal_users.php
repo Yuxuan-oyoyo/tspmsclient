@@ -87,19 +87,29 @@ class Internal_users extends CI_Controller
     }
     public function edit($id){
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
-        //$this->load->library('input');
-            $update_array["name"]=$this->input->post("name");
-            $update_array["username"]=$this->input->post("username");
-            $update_array["bb_username"]=$this->input->post("bb_username");
-            $update_array["type"]=$this->input->post("type");
-            $update_array["is_active"]=$this->input->post("is_active");
-            $update_array["password_hash"]=password_hash($this->input->post("password"),PASSWORD_DEFAULT);
-        //echo var_dump($update_array);
-        $affected_rows = $this->Internal_user_model->update($update_array);
+            $update_array=$this->Internal_user_model->retrieve($id);
+                if ($this->input->post('submit')) {
+                    $update_array["name"]=$this->input->post("name");
+                    $update_array["bb_username"]=$this->input->post("bb_username");
+                    $update_array["type"]=$this->input->post("type");
+                    $update_array["is_active"]=$this->input->post("is_active");
+                    if ($this->Internal_user_model->update($update_array)==1) {
+                        $this->session->set_userdata('message', 'User profile has been updated.');
+                        redirect("internal_users/list_all");
+                    } else {
+                        $this->session->set_userdata('message', 'Unable to update profile.');
+                    }
+
+                }
+                $data = array(
+                    'user' => $update_array
+                );
+                $this->load->view('internal_user/edit_user', $data);
         }else{
             $this->session->set_userdata('message','You have not login / have no access rights. ');
             redirect('/internal_authentication/login/');
         }
+
     }
     public function user($id){
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
