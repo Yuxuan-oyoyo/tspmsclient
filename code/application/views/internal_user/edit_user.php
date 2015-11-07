@@ -28,12 +28,12 @@ $this->load->view('common/pm_nav', $class);
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-           New User
+            Edit User
         </h1>
     </div>
     <div class="col-lg-offset-1 col-lg-6">
-
-        <form class="form-horizontal" id="form" method="post" data-parsley-validate action="<?=base_url('internal_users/insert')?>">
+        <?php $u=$user;?>
+        <form class="form-horizontal" id="form" method="post" data-parsley-validate action="<?=base_url('internal_users/edit/'.$u['u_id'])?>">
             <?php if($this->session->userdata('message')):?>
                 <div class="form-group">
                     <div class="alert alert-info " role="alert">
@@ -53,34 +53,40 @@ $this->load->view('common/pm_nav', $class);
                     </div>
                 </div>
             <?php endif;?>
+
             <div class=" customer-info">
                 <div class="form-group">
                     <label for="existing_password">Username*</label>
-                    <input class="form-control" type="text" id="username" name="username" data-parsley-required >
+                    <input disabled class="form-control" type="text" id="username" name="username" value="<?=$u['username']?>" data-parsley-required >
                 </div>
                 <div class="form-group">
                     <label for="existing_password">Name*</label>
-                    <input class="form-control" type="text" id="name" name="name" data-parsley-required >
+                    <input class="form-control" type="text" id="name" name="name"  value="<?=$u['name']?>" data-parsley-required >
                 </div>
                 <div class="form-group">
                     <label for="existing_password">BB username</label>
-                    <input class="form-control" type="text" id="bb_username" name="bb_username" >
+                    <input class="form-control" type="text" id="bb_username" name="bb_username"  value="<?=$u['bb_username']?>" >
                 </div>
                 <div class="form-group">
                     <label for="type">Type</label>
                     <select class="form-control" id="type" name="type" >
-                        <option vlaue="PM" >PM</option>
-                        <option vlaue="Developer" > Developer</option>
+                        <option vlaue="PM" <?=set_select("type","PM",($u["type"]=="PM"))?>>PM</option>
+                        <option vlaue="Developer" <?=set_select("type","Developer",($u["type"]=="Developer"))?> > Developer</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password*</label>
-                    <input class="form-control" type="password" id="password" placeholder="minimum length:6" name="password" value="<?=DEFAULT_PASSWORD?>" data-parsley-required data-parsley-minlength="6">
+                    <label for="is_active">Status</label>
+                    <select class="form-control" name="is_active" id="is_active">
+                    <option value="1" <?=set_select('is_active','1',($u['is_active']=='1'));?>>
+                        Active
+                    </option>
+                    <option value="0" <?=set_select('is_active','0',($u['is_active']=='0'));?>>Deactivated</option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
                 <a href="<?=base_url().'internal_users/list_all/'?>" class="btn btn-default" id="cancel">Cancel</a>&nbsp;
-                <button type="submit"  class="btn btn-primary">Submit</button>
+                <input type="submit" id="submit" name="submit" value="Submit" class="btn btn-primary">
             </div>
         </form>
     </div>
