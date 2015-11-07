@@ -23,7 +23,7 @@ class Chat extends CI_Controller {
         header('Content-type: application/json');
         header("Access-Control-Allow-Origin: *");
         $user_id =2;
-        $user_type = "pm";
+        $user_type = "customer";
         //TODO: fetch data with model
           $threads =  $this->Chat_model->retrieve($user_id, $user_type);
           echo json_encode($threads);

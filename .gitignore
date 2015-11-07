@@ -2,3 +2,4 @@
 .idea/
 #the oauth token generated
 code/application/libraries/oauth_token.txt
+code/.htaccess
