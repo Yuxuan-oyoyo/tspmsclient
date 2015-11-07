@@ -132,7 +132,7 @@ left join phase on project_phase.phase_id = phase.phase_id and project.is_ongoin
         if(isset($input_c_id)){
            $sql= 'SELECT project.*, phase.phase_name from  project left join project_phase
 on project.current_project_phase_id=project_phase.project_phase_id
-left join phase on project_phase.phase_id = phase.phase_id and project.c_id= ?';
+left join phase on project_phase.phase_id = phase.phase_id where project.c_id= ?';
             $query=$this->db->query($sql,array($input_c_id));
             if( $query->num_rows()>0){
                 return $query->result_array();

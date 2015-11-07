@@ -15,7 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 var htmlText1 ='<div class="form-group"> <label >Choose Customer:</label> ' +
                     '<select class="form-control" name="c_id">'+
                  <?php foreach($customers as $c) {if($c["is_active"]==1) {?>
-                '<option value="<?= $c["c_id"] ?>"><?= $c["first_name"] ?>'+
+                '<option value="<?= $c["c_id"] ?>"　<?=set_select("c_id",$c["c_id"],($project["c_id"]==$c["c_id"]))?>   ><?= $c["first_name"] ?>'+
                 '&nbsp;<?= $c["last_name"] ?></option>'+
                     <?php }}?>' </select> </div>';
                 $('#existing_customer').append(htmlText1);
