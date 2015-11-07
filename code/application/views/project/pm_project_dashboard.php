@@ -90,19 +90,38 @@ $this->load->view('common/pm_nav', $class);
                 </div>
                 <?php $this->session->unset_userdata('message') ?>
             <?php endif;?>
-            <div class="col-lg-offset-7 col-lg-4">
+            <div class="col-lg-offset-1 col-lg-5">
+            <div class="col-lg-6" style=" border: solid 2px #1abc9c; height:240px">
+                <table class="table table-condensed">
+                    <tr>
+                        <td><strong>Assigned Developer</strong></td>
+                        <td>Will</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Last Updated</strong></td>
+                        <td><?=$project['last_updated']?></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-3" style=" border: solid 2px #1abc9c; border-left:1px; height:120px">
+                    <h2>5</h2>
+                TASKS
+            </div>
+            <div class="col-lg-3" style=" border: solid 2px #1abc9c;  height:120px">
+                <h2>20</h2>Use Cases
+            </div>
+            <div class="col-lg-offset-6 col-lg-3" style="margin-top:-120px; border: solid 2px #1abc9c; border-left:1px; height:120px">
+                <h2>$<?=$project['project_value']?></h2>Project Value
+            </div>
+            <div class="col-lg-offset-9 col-lg-3" style="margin-top:-120px; border: solid 2px #1abc9c;  height:120px">
+                <h2>15</h2>Unresolved Issues
+            </div>
+            </div>
+            <div class="col-lg-4">
                 <div class="panel info-panel">
                     <div class="panel-heading">Project Detail</div>
                     <div class="panel-body" style="font-size:15px" >
                         <table class="table table-condensed">
-                            <tr>
-                                <td><strong>No. of use case</strong></td>
-                                <td><?=$project['no_of_use_cases']?></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Project Value</strong></td>
-                                <td><?=$project['project_value']?></td>
-                            </tr>
                             <tr>
                                 <td><strong>Customer </strong></td>
                                 <td> <a href="<?=base_url().'Customers/update_customer_fproject/'.$customer["c_id"].'/'.$project['project_id']?>"><?=$customer['last_name'].' '.$customer['first_name']?></a> (Click to edit)</td>
