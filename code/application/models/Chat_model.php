@@ -55,7 +55,7 @@ class Chat_model extends CI_Model{
                 foreach($tMsgs as $key=>$value){
                     $last_message = end($value);
                      array_push($threads,[
-                         'chatID'        => $k,
+                         'chatID'        => $last_message["user1"]."##".$last_message["user2"],
                          'user1'         => $last_message["user1"],
                          'user2'         => $last_message["user2"],
                          'seen'          => $last_message["seen"],
@@ -63,8 +63,6 @@ class Chat_model extends CI_Model{
                          'lastMessage'   => $last_message["content"],
                          'messages'      => $value
                     ]);
-                    $this->session->set_userdata($k,
-                        ['user1' => $last_message["user1"],'user2'=> $last_message["user2"],]);
                     $k++;
                 }
                 return $threads;
@@ -73,7 +71,9 @@ class Chat_model extends CI_Model{
         return null;
     }
     public function write(array $values){
-        $this->session->set_userdata($k,)//TODO: finish this shit
+        $usersFromChatID = explode("##",$values["chat_id"]);
+        $values["user1"] = $usersFromChatID[0];
+        $values["user2"] = $usersFromChatID[1];
         if(isset($values)){
             $values["m_author"] = $values["m_author"]==$values["user1"]? 1:0;
             $sql = "insert into message (customer_id, pm_id, project_id, to_pm, body, file_id, timestamp) VALUES (?, ?, 0, ?,?,0, ?)";
