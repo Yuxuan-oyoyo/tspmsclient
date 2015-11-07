@@ -106,7 +106,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'-'+year+'</strong></div>'+
                         '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-lg-7">'+
                         '<strong>'+element.header+'</strong>'+
-                        '<i class="fa fa-close pull-right" style="cursor: pointer;color:darkgray" onclick="deleteMilestoneButtonClicked('+element.milestone_id+')"></i>'+
                         '<br>'+element.body+append+
                         ' </div> </div>';
 
