@@ -217,8 +217,8 @@
             }.bind(this))
             //console.log(this)
         },
-        getUnreadCount: function(){
-
+        getUnreadCount:function(){
+            // TODO
             this.setState({unreadCount: this.state.chats.length})
         },
         tick: function(){
@@ -227,7 +227,6 @@
         },
         componentDidMount: function(){
             this.getInitialData();
-            this.getUnreadCount();
             this.interval = setInterval(this.tick, 2000);
             //console.log("component did mount")
         },
@@ -261,9 +260,10 @@
                     break;
                 }
             }
+
             var unread = this.state.unreadCount === 0 ?
                 <span>Unread threads: 0 </span>
-            :   <span>Unread threads: {this.state.unreadCount} </span>;
+                :   <span>Unread threads: {this.state.unreadCount} </span>;
 
             return (
                 <div className="chatapp">
