@@ -69,6 +69,10 @@ class Customers extends CI_Controller {
         $this->load->view('customer/customer_edit',$data=["customer"=>$this->Customer_model->retrieve($c_id)]);
     }
 
+    public function update_customer_fproject($c_id, $project_id){
+        $this->load->view('customer/customer_edit',$data=["customer"=>$this->Customer_model->retrieve($c_id),"project_id"=>$project_id]);
+    }
+
     public function edit($cid){
         //TODO: edit title and username/password
         $update_array = $this->Customer_model->retrieve($cid);

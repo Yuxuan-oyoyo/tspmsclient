@@ -52,7 +52,7 @@ class Milestones extends CI_Controller{
     }
 
     public function get_by_project_phase_id($project_phase_id){
-        if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
+        if(($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM")||$this->session->userdata('Customer_cid')) {
             $affected_rows = $this->Milestone_model->retrieve_by_project_phase_id($project_phase_id);
             echo json_encode($affected_rows);
         }else{

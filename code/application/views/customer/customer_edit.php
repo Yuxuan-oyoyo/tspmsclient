@@ -89,7 +89,17 @@ $this->load->view('common/pm_nav', $class);
                 <div class="pull-right">
                     <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
                     <!--<a href="//?base_url().'Customers/edit/'.$c["c_id"]?" class="btn btn-primary">Submit</a>-->
-                    <a href="<?=base_url().'Customers/list_all'?>" class="btn btn-default">Cancel</a>
+                    <?php
+                    if(isset($project_id)){
+                    ?>
+                        <a href="<?=base_url().'Projects/view_dashboard/'.$project_id?>" class="btn btn-default">Cancel</a>
+                    <?php
+                    }else {
+                        ?>
+                        <a href="<?= base_url() . 'Customers/list_all' ?>" class="btn btn-default">Cancel</a>
+                        <?php
+                    }
+                    ?>
                 </div>
             </div>
 
