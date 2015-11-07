@@ -17,8 +17,8 @@ class Chat_model extends CI_Model{
 
     public function retrieve($input_id, $user_type){
         if(isset($input_id)&& isset($user_type)){
-            $sql = "select c.first_name as user1, ".//convert customer id to user1
-                "i.name as user2, project_id, to_pm, body as content, ".
+            $sql = "select c.first_name as user1, customer_id, ".//convert customer id to user1
+                "i.name as user2,pm_id , project_id, to_pm, body as content, ".
                 "seen, time_created as timestamp from message m ".
                 ", customer c, internal_user i where m.pm_id=i.u_id and m.customer_id=c.c_id ".
                 " and (pm_id=? or customer_id=? )".
@@ -80,8 +80,8 @@ class Chat_model extends CI_Model{
                          'messages'      => $value
                     ]);
                     $this->session->set_userdata("chat_id_".$k,[
-                        'user1'=> $last_message["user1"],
-                        'user2'=> $last_message["user2"]
+                        'customer_id'=> $last_message["customer_id"],
+                        'pm_id'=> $last_message["pm_id"]
                     ]);
                     $k++;
                 }
@@ -92,13 +92,12 @@ class Chat_model extends CI_Model{
     }
     public function write(array $values){
         $fromSession = $this->session->userdata("chat_id_".$values["chat_id"]);
-        $values["user1"] = $fromSession["user1"];
-        $values["user2"] = $fromSession["user2"];
         print_r($values);
+
         if(isset($values)){
             $message =[
-                "customer_id"=>$values["user1"],
-                "pm_id"=>$values["user2"],
+                "customer_id"=>$fromSession["customer_id"],
+                "pm_id"=>$fromSession["pm_id"],
                 "project_id"=>0,
                 "to_pm"=>($values["user2"]==$values["m_author"])?0:1,
                 "body"=> $values["m_content"],

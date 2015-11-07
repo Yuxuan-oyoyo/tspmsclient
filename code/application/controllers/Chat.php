@@ -16,6 +16,7 @@ class Chat extends CI_Controller {
         $this->load->library('session');
     }
     public function index(){
+
         $user = $this->getUserInfo();
         $this->load->view("chat/chat",["user_id"=>$user["user_id"]]);
     }
