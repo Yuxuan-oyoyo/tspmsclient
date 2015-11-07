@@ -20,10 +20,10 @@ class Chat_model extends CI_Model{
             $sql = "select customer_id as user1, ".//convert customer id to user1
                 "pm_id as user2, project_id, to_pm, body as content, ".
                 "seen, time_created as timestamp from message ".
-                "where pm_id=? or customer_id=? order by time_created";
+                "where pm_id=? or customer_id=? order by time_created desc";
             /*use trick to bind query*/
-            $binding = $user_type=="pm"? [$input_id,-1]:[-1,$input_id];
-            $query = $this->db->query($sql,$binding);
+            $filter = $user_type=="pm"? [$input_id,-1]:[-1,$input_id];
+            $query = $this->db->query($sql,$filter);
             //print_r($query);
             if( $query->num_rows()>0){
                 $tMsgs = [];
@@ -33,35 +33,49 @@ class Chat_model extends CI_Model{
                     /*depends on uer's nature and direction*/
                     if(($user_type!="pm" && $row["to_pm"]==1)
                             || $user_type=="pm" && $row["to_pm"]==0)
-                        $result[$rKey]["author_id"]=$row["user1"];
-                    else $result[$rKey]["author_id"]=$row["user2"];
+                        $result[$rKey]["author"]=$row["user1"];
+                    else $result[$rKey]["author"]=$row["user2"];
                 }
+
                 /*group chats into threads based on other user.
                 One other user means another thread*/
                 $other_user = $user_type=="pm"? "user1":"user2";
+                $i = 1;
                 foreach ($result as $rKey=>$row){
-                    if(isset($threads[$row[$other_user]]))
+                    $row["msgID"] = $i;
+                    $row["timestamp"] = strtotime($row["timestamp"]);
+                    $row["seen"]   = $row["seen"]==1?true:false;
+                    if(isset($tMsgs[$row[$other_user]]))
                         array_push($tMsgs[$row[$other_user]], $row);
                     else
                         $tMsgs[$row["user1"]] = [$row];
+                    $i++;
                 }
+                //print_r($tMsgs);
                 /*sort to make sure messages in time sequence*/
-                uasort($tMsgs, function ($a, $b){
-                    if ($a["timestamp"] == $b["timestamp"]) return 0;
-                    return ($a["timestamp"] < $b["timestamp"]) ? -1 : 1;
-                });
+//                foreach($tMsgs as &$value){
+//                    uasort($value, function ($a, $b){
+//                        if ($a["timestamp"] == $b["timestamp"]) return 0;
+//                        return ($a["timestamp"] < $b["timestamp"]) ? -1 : 1;
+//                    });
+//                }
+
                 $threads = [];
                 $k = 1;
                 foreach($tMsgs as $key=>$value){
                     $last_message = end($value);
                      array_push($threads,[
-                         'chatID'        => $last_message["user1"]."##".$last_message["user2"],
+                         'chatID'        => $k,
                          'user1'         => $last_message["user1"],
                          'user2'         => $last_message["user2"],
-                         'seen'          => $last_message["seen"],
+                         'seen'          => $last_message["seen"]==1?true:false,
                          'lastMsgTimeStamp' => $last_message["timestamp"],
                          'lastMessage'   => $last_message["content"],
                          'messages'      => $value
+                    ]);
+                    $this->session->set_userdata("chat_id_".$k,[
+                        'user1'=> $last_message["user1"],
+                        'user2'=> $last_message["user2"]
                     ]);
                     $k++;
                 }
@@ -71,14 +85,25 @@ class Chat_model extends CI_Model{
         return null;
     }
     public function write(array $values){
-        $usersFromChatID = explode("##",$values["chat_id"]);
-        $values["user1"] = $usersFromChatID[0];
-        $values["user2"] = $usersFromChatID[1];
+        $fromSession = $this->session->userdata("chat_id_".$values["chat_id"]);
+        $values["user1"] = $fromSession["user1"];
+        $values["user2"] = $fromSession["user2"];
+        print_r($values);
         if(isset($values)){
             $values["m_author"] = $values["m_author"]==$values["user1"]? 1:0;
-            $sql = "insert into message (customer_id, pm_id, project_id, to_pm, body, file_id, timestamp) VALUES (?, ?, 0, ?,?,0, ?)";
-            $this->db->query($sql,[$values["user2"],$values["user1"],$values["user2"],$values["m_author"]],time());
-            echo $this->db->_error_message();
+            $message =[
+                "customer_id"=>$values["user1"],
+                "pm_id"=>$values["user2"],
+                "project_id"=>0,
+                "to_pm"=>$values["user2"]==$values["m_author"],
+                "body"=> $values["m_content"],
+                "time_created"=>time()
+
+            ];
+//            $sql = "insert into message (customer_id, pm_id, project_id, to_pm, body, file_id, timestamp) VALUES (?, ?, 0, ?,?,0, ?)";
+//            $this->db->query($sql,[$values["user2"],$values["user1"],$values["user2"],$values["m_author"]],time());
+            $this->db->insert("message",$message);
+            print_r($this->db->error());
         }
     }
 }
