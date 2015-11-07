@@ -75,7 +75,7 @@ if($this->session->userdata('internal_type')=='Developer') {
     });
 </script>
 <div class="col-sm-offset-1 content" style="margin-top: 75px;margin-left:15%">
-    <form class="form-horizontal" action="<?=base_url()."Issues/process_edit/".$repo_slug."/".$i["local_id"]?>">
+    <form class="form-horizontal" data-parsley-validate action="<?=base_url()."Issues/process_edit/".$repo_slug."/".$i["local_id"]?>">
         <h2 style="max-width: 50%">
             <span style="color: #777777;padding-right: 10px">#<?=$i["local_id"]?></span>
             <?=$i["title"]?>
@@ -84,7 +84,7 @@ if($this->session->userdata('internal_type')=='Developer') {
         <div class="form-part">
             <div class="form-label">Title <span class="cmpl"></span></div>
             <div class="form-input">
-                <input name="title" class="form-control" value="<?=$i["title"]?>">
+                <input name="title"  required class="form-control" value="<?=$i["title"]?>">
             </div>
         </div>
         <div class="form-part">
