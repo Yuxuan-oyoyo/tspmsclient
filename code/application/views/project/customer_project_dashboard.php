@@ -80,6 +80,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         '<i class="fa fa-user"></i>&nbsp;'+element.posted_by+' &nbsp;'+
                         '<i class="fa fa-calendar-check-o"></i>&nbsp;'+element.last_updated+'</div>'+
                         ' </div> </div> </li>';
+
                     $('#timeline').append( htmlText );
                 });
             });
