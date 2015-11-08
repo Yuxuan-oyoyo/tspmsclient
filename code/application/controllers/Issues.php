@@ -16,6 +16,7 @@ class Issues extends CI_Controller {
 
     }
     public function list_all($repo_slug=null){
+        $repo_slug="tspms";
         $user_id = $this->session->userdata('internal_uid');
         if(isset($user_id)) {
             if(isset($repo_slug)) {
@@ -58,6 +59,7 @@ class Issues extends CI_Controller {
 
     }
     public function create($repo_slug){
+        $repo_slug="tspms";
         $user_id = $this->session->userdata('internal_uid');
         if(isset($user_id)) {
             $this->load->model("Internal_user_model");
@@ -72,6 +74,7 @@ class Issues extends CI_Controller {
         }
     }
     public function process_create($repo_slug){
+        $repo_slug="tspms";
         if($this->session->userdata('internal_uid')) {
             $field_params = ["status","priority","title","responsible","content","kind","milestone"];
             $para_input = $this->input->get($field_params,true);
@@ -91,6 +94,7 @@ class Issues extends CI_Controller {
         }
     }
     public function detail($repo_slug=null, $issue_id=null) {
+        $repo_slug="tspms";
         if($this->session->userdata('internal_uid')) {
             if (isset($repo_slug) && isset($issue_id)) {
                 $data =["issue_details"=>$this->retrie_by_id($repo_slug,$issue_id), "repo_slug"=>$repo_slug];
@@ -105,6 +109,7 @@ class Issues extends CI_Controller {
         }
     }
     private function retrie_by_id($repo_slug=null, $id=null){
+        $repo_slug="tspms";
         //$issue_list = $this->session->userdata("issue_list" . $repo_slug);
             $issue_details = $this->session->flashdata("issue_last_updated");
     //        if (isset($issue_list)){
@@ -125,6 +130,7 @@ class Issues extends CI_Controller {
      * @param null $repo_slug
      */
     public function update($repo_slug=null,$issue_id){
+        $repo_slug="tspms";
         if($this->session->userdata('internal_uid')) {
             $param = $this->input->get("param",true);
             $value = $this->input->get("value",true);
@@ -147,6 +153,7 @@ class Issues extends CI_Controller {
         }
     }
     public function edit($repo_slug=null, $issue_id){
+        $repo_slug="tspms";
         if($this->session->userdata('internal_uid')) {
         //$issue_id = $this->input->get("local_id");
             if (isset($repo_slug)&&isset($issue_id)) {
@@ -163,6 +170,7 @@ class Issues extends CI_Controller {
 
     }
     public function process_edit($repo_slug=null, $issue_id){
+        $repo_slug="tspms";
         if($this->session->userdata('internal_uid')) {
             $field_params = ["status","priority","title","responsible","content","kind","milestone"];
             $para_input = $this->input->get($field_params,true);
