@@ -131,7 +131,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <h1 class="page-header">
            <?='#'.$project['project_id'].'. '.$project['project_title']?>&nbsp;
             <?php if($project['customer_preview_link']):?>
-            <a href="<?=$project['customer_preview_link']?>" class="btn btn-info" target="_blank"><i class="fa fa-external-link"></i>&nbsp;Project Preview</a>
+            <a href="<?=$project['customer_preview_link']?>" class="btn btn-info" target="_blank"><i class="fa fa-external-link"></i>&nbsp;Prototype</a>
             <?php endif?>
         </h1>
         <h4 style="color:darkgrey">Click each phase on timeline to check updates for each phase.</h4>
