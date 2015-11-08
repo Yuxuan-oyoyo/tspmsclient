@@ -17,24 +17,26 @@ class Chat_model extends CI_Model{
 
     public function retrieve($input_id, $user_type){
         if(isset($input_id)&& isset($user_type)){
-            $sql = "select customer_id as user1, ".//convert customer id to user1
-                "pm_id as user2, project_id, to_pm, body as content, ".
-                "seen, time_created as timestamp from message ".
-                "where pm_id=? or customer_id=? order by time_created desc";
+            $sql = "select c.first_name as user1, customer_id, ".//convert customer id to user1
+                "i.name as user2,pm_id , project_id, to_pm, body as content, ".
+                "seen, time_created as timestamp from message m ".
+                ", customer c, internal_user i where m.pm_id=i.u_id and m.customer_id=c.c_id ".
+                " and (pm_id=? or customer_id=? )".
+               " order by time_created";
             /*use trick to bind query*/
             $filter = $user_type=="pm"? [$input_id,-1]:[-1,$input_id];
             $query = $this->db->query($sql,$filter);
-            //print_r($query);
+
             if( $query->num_rows()>0){
                 $tMsgs = [];
                 $result = $query->result_array();
+
                 /*translate direction to author id*/
                 foreach( $result as $rKey=>$row){
                     /*depends on uer's nature and direction*/
-                    if(($user_type!="pm" && $row["to_pm"]==1)
-                            || $user_type=="pm" && $row["to_pm"]==0)
-                        $result[$rKey]["author"]=$row["user1"];
+                    if ($row["to_pm"]==1)$result[$rKey]["author"]=$row["user1"];
                     else $result[$rKey]["author"]=$row["user2"];
+                    //unset($result[$rKey]["to_pm"]);
                 }
 
                 /*group chats into threads based on other user.
@@ -43,12 +45,16 @@ class Chat_model extends CI_Model{
                 $i = 1;
                 foreach ($result as $rKey=>$row){
                     $row["msgID"] = $i;
-                    $row["timestamp"] = strtotime($row["timestamp"]);
                     $row["seen"]   = $row["seen"]==1?true:false;
-                    if(isset($tMsgs[$row[$other_user]]))
+                    if(isset($tMsgs[$row[$other_user]])) {
                         array_push($tMsgs[$row[$other_user]], $row);
-                    else
-                        $tMsgs[$row["user1"]] = [$row];
+
+                    }
+                    else {
+                        $tMsgs[$row[$other_user]] = [$row];
+                    }
+                    //echo "push";
+                    //print_r($row);
                     $i++;
                 }
                 //print_r($tMsgs);
@@ -74,8 +80,8 @@ class Chat_model extends CI_Model{
                          'messages'      => $value
                     ]);
                     $this->session->set_userdata("chat_id_".$k,[
-                        'user1'=> $last_message["user1"],
-                        'user2'=> $last_message["user2"]
+                        'customer_id'=> $last_message["customer_id"],
+                        'pm_id'=> $last_message["pm_id"]
                     ]);
                     $k++;
                 }
@@ -86,20 +92,19 @@ class Chat_model extends CI_Model{
     }
     public function write(array $values){
         $fromSession = $this->session->userdata("chat_id_".$values["chat_id"]);
-        $values["user1"] = $fromSession["user1"];
-        $values["user2"] = $fromSession["user2"];
         print_r($values);
+
         if(isset($values)){
-            $values["m_author"] = $values["m_author"]==$values["user1"]? 1:0;
             $message =[
-                "customer_id"=>$values["user1"],
-                "pm_id"=>$values["user2"],
+                "customer_id"=>$fromSession["customer_id"],
+                "pm_id"=>$fromSession["pm_id"],
                 "project_id"=>0,
-                "to_pm"=>$values["user2"]==$values["m_author"],
+                "to_pm"=>($values["user2"]==$values["m_author"])?0:1,
                 "body"=> $values["m_content"],
                 "time_created"=>time()
 
             ];
+            print_r($message);
 //            $sql = "insert into message (customer_id, pm_id, project_id, to_pm, body, file_id, timestamp) VALUES (?, ?, 0, ?,?,0, ?)";
 //            $this->db->query($sql,[$values["user2"],$values["user1"],$values["user2"],$values["m_author"]],time());
             $this->db->insert("message",$message);
