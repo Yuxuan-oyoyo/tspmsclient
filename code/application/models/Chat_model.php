@@ -102,7 +102,7 @@ class Chat_model extends CI_Model{
                 "pm_id"=>$fromSession["pm_id"],
                 "project_id"=>0,
                 //"to_pm"=>($values["user2"]==$values["m_author"])?0:1,
-                "to_pm"=>($values["m_author"]==$values["m_author"])?0:1,
+                "to_pm"=>($fromSession["pm_id"]==$values["m_author"])?0:1,
                 "body"=> $values["m_content"],
                 "time_created"=>time()
 
