@@ -23,7 +23,7 @@
                     <a href="<?=base_url('customers/edit_profile')?>"><i class="fa fa-fw fa-user"></i> Profile</a>
                 </li>
                 <li>
-                    <a href="<?=base_url('customer_authentication/change_password')?>"><i class="fa fa-fw fa-gear"></i> Reset Password</a>
+                    <a href="<?=base_url('customer_authentication/change_password')?>"><i class="fa fa-fw fa-gear"></i>Change Password</a>
                 </li>
                 <li class="divider"></li>
                 <li>
