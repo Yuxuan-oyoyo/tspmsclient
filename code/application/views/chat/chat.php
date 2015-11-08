@@ -126,44 +126,48 @@ if($this->session->userdata('Customer_cid')){
 
     })
 
-    var RightMessageComposerBox = React.createClass({
-        //WORKINGON
-        getInitialState: function() {
 
+
+    var RightMessageComposerBox = React.createClass({
+
+        getInitialState: function() {
 
             return {text: ''};
         },
         handleChange: function(event) {
             this.setState({text: event.target.value});
         },
+        handleWrite: function() {
+            var text = this.state.text.trim();
+            if (text)
+            {
+
+                console.log("handle composer [enter]")
+                var threadID = this.props.thread.chatID
+                var datetime = new Date() / 1000;
+                var url = "<?=base_url()."chat/write"?>";
+                $.ajax({
+                    type: "GET",
+                    data: {chatID:threadID, timeStamp: datetime, author: CurrentUser ,content: text },
+                    url : url,
+                    success: function(msg){
+                        console.log("success");
+                    }
+
+                })
+                // push to server
+                // callback to server to refresh
+                //console.log(JSON.stringify(this.state.refreshFunc, null, 4));
+                this.props.refreshFunc();
+
+            }
+            this.setState({text: ''})
+        },
         handleKeyDown: function(evt) {
             if (evt.keyCode == 13 ) { //code 13 enter
                 event.preventDefault()
-                var text = this.state.text.trim();
-                if (text)
-                {
 
-                    console.log("handle composer [enter]")
-                    var threadID = this.props.thread.chatID
-                    var datetime = new Date() / 1000;
-                    var url = "<?=base_url()."chat/write"?>";
-                    $.ajax({
-                        type: "GET",
-                        data: {chatID:threadID, timeStamp: datetime, author: CurrentUser ,content: text },
-                        url : url,
-                        success: function(msg){
-                            console.log("success");
-                        }
-
-                    })
-                    // push to server
-                    // callback to server to refresh
-                    //console.log(JSON.stringify(this.state.refreshFunc, null, 4));
-                    this.props.refreshFunc();
-
-                }
-                this.setState({text: ''})
-
+                this.handleWrite();
             }
         },
         render: function(){
@@ -172,7 +176,11 @@ if($this->session->userdata('Customer_cid')){
             return(
                 <div >
                     <textarea placeholder="Type message here" className="message-composer" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
+                    <div>
+                        <button onClick={this.handleWrite} type="button">Reply </button>
+                    </div>
                 </div>
+
             )
         }
     })
