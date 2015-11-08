@@ -21,6 +21,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 .htaccess
 application/.htaccess
 application/libraries/oauth_token.txt
+/code/.htaccess
 
 ## Sublime Text cache files
 *.tmlanguage.cache
