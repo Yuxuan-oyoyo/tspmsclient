@@ -12,14 +12,12 @@ $user_id = $user_id;
 <html>
 <head>
     <meta charset="utf-8">
-    <title>[480] chat prototype</title>
-    <!-- Not present in the tutorial. Just for basic styling. -->
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="<?=base_url()?>css/chat/base.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.0/react.js"></script>
+    <script src="<?=base_url()?>js/react-with-addons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+
+
 </head>
 <body>
 <?php
@@ -30,17 +28,17 @@ $class = [
     'internal_user_class'=>'',
     'analytics_class'=>''
 ];
-if($this->session->userdata('internal_type')=='Developer') {
+if($this->session->userdata('Customer_cid')){
+    $this->load->view('common/customer_nav', $class);
+}elseif ($this->session->userdata('internal_type')=='Developer') {
     $this->load->view('common/dev_nav', $class);
-}else {
+}else{
     $this->load->view('common/pm_nav', $class);
 }
 ?>
 <br>
-<div id="container">
 
-
-</div>
+<div id="container"></div>
 <script type="text/babel">
     var CurrentUser = <?=$user_id?>;
     var get_data = [];
@@ -128,44 +126,48 @@ if($this->session->userdata('internal_type')=='Developer') {
 
     })
 
-    var RightMessageComposerBox = React.createClass({
-        //WORKINGON
-        getInitialState: function() {
 
+
+    var RightMessageComposerBox = React.createClass({
+
+        getInitialState: function() {
 
             return {text: ''};
         },
         handleChange: function(event) {
             this.setState({text: event.target.value});
         },
+        handleWrite: function() {
+            var text = this.state.text.trim();
+            if (text)
+            {
+
+                console.log("handle composer [enter]")
+                var threadID = this.props.thread.chatID
+                var datetime = new Date() / 1000;
+                var url = "<?=base_url()."chat/write"?>";
+                $.ajax({
+                    type: "GET",
+                    data: {chatID:threadID, timeStamp: datetime, author: CurrentUser ,content: text },
+                    url : url,
+                    success: function(msg){
+                        console.log("success");
+                    }
+
+                })
+                // push to server
+                // callback to server to refresh
+                //console.log(JSON.stringify(this.state.refreshFunc, null, 4));
+                this.props.refreshFunc();
+
+            }
+            this.setState({text: ''})
+        },
         handleKeyDown: function(evt) {
             if (evt.keyCode == 13 ) { //code 13 enter
                 event.preventDefault()
-                var text = this.state.text.trim();
-                if (text)
-                {
 
-                    console.log("handle composer [enter]")
-                    var threadID = this.props.thread.chatID
-                    var datetime = new Date() / 1000;
-                    var url = "<?=base_url()."chat/write"?>";
-                    $.ajax({
-                        type: "GET",
-                        data: {chatID:threadID, timeStamp: datetime, author: CurrentUser ,content: text },
-                        url : url,
-                        success: function(msg){
-                            console.log("success");
-                        }
-
-                    })
-                    // push to server
-                    // callback to server to refresh
-                    //console.log(JSON.stringify(this.state.refreshFunc, null, 4));
-                    this.props.refreshFunc();
-
-                }
-                this.setState({text: ''})
-
+                this.handleWrite();
             }
         },
         render: function(){
@@ -174,7 +176,11 @@ if($this->session->userdata('internal_type')=='Developer') {
             return(
                 <div >
                     <textarea placeholder="Type message here" className="message-composer" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
+                    <div>
+                        <button onClick={this.handleWrite} type="button">Reply </button>
+                    </div>
                 </div>
+
             )
         }
     })
@@ -205,7 +211,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                     return a.timeStamp - b.timeStamp
                 })
                 */
-                console.log(this.props.chat.messages);
+                console.log(this.props.chat.messages)
                 msgNodes = this.props.chat.messages.map(function(msg){
                     return (
                         <RightMessage msg={msg} key={msg.msgID}> </RightMessage>

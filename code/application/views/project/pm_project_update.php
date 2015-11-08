@@ -94,8 +94,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     var htmlText =
                         '<li>'+
                         '<div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>'+
-                        '<div class="timeline-panel"> <div class="timeline-heading"> <h4 class="timeline-title">'+element.header+'</h4> </div>'+
-                        '<div class="timeline-body"> <p>'+element.body+'</p> <div class="pull-right timeline-info">'+
+                        '<div class="timeline-panel"> <div class="timeline-heading"> <h4 class="timeline-title">'+element.header+
+                        <?php if($project['is_ongoing']==1){?>
+                        '<i class="fa fa-close pull-right" style="cursor: pointer;color:darkgray" onclick="deleteMilestoneButtonClicked('+element.milestone_id+')"></i>'+
+                        <?php }?>
+                        '</h4></div><div class="timeline-body"> <p>'+element.body+'</p> <div class="pull-right timeline-info">'+
                         '<i class="fa fa-user"></i>&nbsp;'+element.posted_by+' &nbsp;'+
                         '<i class="fa fa-calendar-check-o"></i>&nbsp;'+element.last_updated+'</div>'+
                         ' </div> </div> </li>';
@@ -193,7 +196,17 @@ $this->load->view('common/pm_nav', $class);
     <div class="sidebar-links">
         <a class="link-blue " href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Project Overview</a>
         <a class="link-blue selected" href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
-        <a class="link-blue " href="<?=base_url().'Issues/list_all/'.$project["bitbucket_repo_name"]?>"><i class="fa fa-wrench"></i>Issues</a>
+        <?php
+        if($project['bitbucket_repo_name']==null){
+            ?>
+            <a class="link-grey"><i class="fa fa-wrench"></i>Issues</a>
+            <?php
+        }else {
+            ?>
+            <a class="link-blue " href="<?= base_url() . 'Issues/list_all/' . $project["bitbucket_repo_name"] ?>"><i class="fa fa-wrench"></i>Issues</a>
+            <?php
+        }
+        ?>
         <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
     </div>
 </aside>

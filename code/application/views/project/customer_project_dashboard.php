@@ -99,8 +99,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     var month=monthNames[ddl.getMonth()];
                     var year=ddl.getFullYear();
                     var append='';
-                    if (element.if_completed!==0){
+                    if (element.if_completed!=0){
                         append='<br><span class="badge success" style="background-color: limegreen">Completed</span>';
+                    }else{
+                        append='';
                     }
                     var htmlText = ' <div class="row"> <div class="col-lg-4"> <div class="panel panel-default calendar"> ' +
                         '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'-'+year+'</strong></div>'+
@@ -117,7 +119,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </script>
 </head>
 <body>
-<?php $this->load->view('common/customer_nav');?>
+<?php
+$class = [
+    'projects_class'=>'active',
+    'message_class'=>'',
+    'customers_class'=>'',
+    'internal_user_class'=>'',
+    'analytics_class'=>''
+];
+$this->load->view('common/customer_nav', $class);
+?>
 <aside class="sidebar-left">
     <div class="sidebar-links">
         <a class="link-blue selected" href="#"><i class="fa fa-flag"></i>Update & Milestone</a>
@@ -206,7 +217,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <strong><?=$milestone['header']?></strong><br>
                         <?=$milestone['body']?>
                         <?php
-                        if ($milestone['if_completed'] !== 0) {
+                        if ($milestone['if_completed'] ==1 ) {
                             ?>
                             <br><span class="badge success" style="background-color:limegreen">Completed</span>
                         <?php

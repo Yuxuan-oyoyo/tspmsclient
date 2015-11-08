@@ -11,7 +11,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 </head>
 <body>
-<?php $this->load->view('common/customer_nav');?>
+<?php
+$class = [
+    'projects_class'=>'active',
+    'message_class'=>'',
+    'customers_class'=>'',
+    'internal_user_class'=>'',
+    'analytics_class'=>''
+];
+$this->load->view('common/customer_nav', $class);
+?>
 <div class="container content">
     <!-- Page Content -->
     <div class="col-lg-12">
