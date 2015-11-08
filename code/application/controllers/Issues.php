@@ -23,7 +23,7 @@ class Issues extends CI_Controller {
                 $data["repo_slug"] = $repo_slug;
                 $opt_params = [
                     "search","sort","limit","start","status","kind","responsible",
-                    "milestone","reported_by","priority","created_on","utc_last_updated"
+                    "milestone","reported_by","priority","utc_created_on","utc_last_updated"
                 ];
                 $para_input = $this->input->get($opt_params,true);
                 if($para_input["sort"]=="responsible")$para_input["sort"] = null;

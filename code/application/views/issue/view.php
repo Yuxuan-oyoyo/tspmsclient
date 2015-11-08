@@ -91,13 +91,17 @@ if($this->session->userdata('internal_type')=='Developer') {
                         <?=$i["reported_by"]["display_name"]?>
                     </a>
                     <span>
-                        Created an Issue <?=_ago(strtotime($i["created_on"]))?> ago
+                        Created an Issue <?=_ago(strtotime($i["utc_created_on"]))?> ago
                     </span>
 
                 </div>
                 <div class="issue-description">
                     <span>
-                        <?=htmlspecialchars($i["content"])?>
+                        <?php if($i["content"]):?>
+                            <?=htmlspecialchars($i["content"])?>
+                        <?php else:?>
+                            <em>No Description provided.</em>
+                        <?php endif?>
                     </span>
                 </div>
             </div>

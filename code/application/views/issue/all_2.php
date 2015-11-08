@@ -75,7 +75,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                     "status"=>["display"=>"Status"   ,"sort"=>"status" ],
                     "milestone"=>["display"=>"Milestone" ,"sort"=>"milestone"],
                     "responsible"=>["display"=>"Assignee" ,"sort"=>"responsible"],
-                    "created_on"=>["display"=>"Created" ,"sort"=>"created_on"],
+                    "utc_created_on"=>["display"=>"Created" ,"sort"=>"utc_created_on"],
                     "utc_last_updated"=>["display"=>"Updated" ,"sort"=>"utc_last_updated"],
                 ];
             $status_color=[
@@ -170,7 +170,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                         </td>
                         <td class="date">
                             <div>
-                                <time datetime="<?=$d["utc_created_on"]?>" data-title="true"><?=_ago(strtotime($d["created_on"]))?> ago</time>
+                                <time datetime="<?=$d["utc_created_on"]?>" data-title="true"><?=_ago(strtotime($d["utc_created_on"]))?> ago</time>
                             </div>
                         </td>
                         <td class="date">
