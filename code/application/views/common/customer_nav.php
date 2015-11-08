@@ -11,7 +11,7 @@
             <a href="<?=base_url()?>projects/customer_overview/<?=$this->session->userdata('Customer_cid')?>"><i class="fa fa-fw fa-tasks"></i>My Projects</a>
         </li>
         <li>
-            <a href="#"><i class="fa fa-fw fa-comment"></i>Message</a>
+            <a href="<?=base_url().'chat'?>"><i class="fa fa-fw fa-comment"></i>Message</a>
         </li>
     </ul>
     <ul class="nav navbar-right top-nav">
@@ -23,7 +23,7 @@
                     <a href="<?=base_url('customers/edit_profile')?>"><i class="fa fa-fw fa-user"></i> Profile</a>
                 </li>
                 <li>
-                    <a href="<?=base_url('customer_authentication/change_password')?>"><i class="fa fa-fw fa-gear"></i> Reset Password</a>
+                    <a href="<?=base_url('customer_authentication/change_password')?>"><i class="fa fa-fw fa-gear"></i>Change Password</a>
                 </li>
                 <li class="divider"></li>
                 <li>

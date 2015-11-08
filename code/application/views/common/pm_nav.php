@@ -22,7 +22,7 @@
             <a href="<?=base_url().'projects/list_all'?>"><i class="fa fa-fw fa-bar-chart-o"></i> Projects</a>
         </li>
         <li class="<?=$message_class?>">
-            <a href="#"><i class="fa fa-fw fa-comment"></i> Message</a>
+            <a href="<?=base_url().'chat'?>"><i class="fa fa-fw fa-comment"></i> Message</a>
         </li>
         <li class="<?=$customers_class?>">
             <a href="<?=base_url().'customers/list_all'?>"><i class="fa fa-fw fa-users"></i>Customers</a>
@@ -50,7 +50,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>&nbsp;<?=$this->session->userdata('internal_username')?><b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li>
-                    <a href="<?=base_url('internal_authentication/change_password')?>"><i class="fa fa-fw fa-gear"></i> Reset Password</a>
+                    <a href="<?=base_url('internal_authentication/change_password')?>"><i class="fa fa-fw fa-gear"></i>Change Password</a>
                 </li>
                 <li class="divider"></li>
                 <li>

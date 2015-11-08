@@ -14,6 +14,7 @@ $user_id = $user_id;
     <meta charset="utf-8">
     <title>[480] chat prototype</title>
     <!-- Not present in the tutorial. Just for basic styling. -->
+    <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="<?=base_url()?>css/chat/base.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.0/react.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
@@ -21,8 +22,25 @@ $user_id = $user_id;
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
 </head>
 <body>
+<?php
+$class = [
+    'projects_class'=>'',
+    'message_class'=>'active',
+    'customers_class'=>'',
+    'internal_user_class'=>'',
+    'analytics_class'=>''
+];
+if($this->session->userdata('internal_type')=='Developer') {
+    $this->load->view('common/dev_nav', $class);
+}else {
+    $this->load->view('common/pm_nav', $class);
+}
+?>
+<br>
+<div id="container">
 
-<div id="container"></div>
+
+</div>
 <script type="text/babel">
     var CurrentUser = <?=$user_id?>;
     var get_data = [];
