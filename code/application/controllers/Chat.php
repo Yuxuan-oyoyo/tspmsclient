@@ -9,7 +9,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Chat extends CI_Controller {
-
     public function __construct() {
         parent::__construct();
         // Your own constructor code
@@ -17,15 +16,26 @@ class Chat extends CI_Controller {
         $this->load->library('session');
     }
     public function index(){
-        $this->load->view("chat/chat",[]);
+
+        $user = $this->getUserInfo();
+        $this->load->view("chat/chat",["user_id"=>$user["user_id"]]);
+    }
+    private function getUserInfo(){
+        $pm_id = $this->session->userdata('internal_uid');
+        $customer_id = $this->session->userdata('Customer_cid');
+        if(isset($pm_id)){
+            return ["user_id"=>$pm_id, "user_type"=>"pm"];
+        }else{
+            return ["user_id"=>$customer_id, "user_type"=>"customer"];
+        }
     }
     public function get(){
         header('Content-type: application/json');
         header("Access-Control-Allow-Origin: *");
-        $user_id =2;
-        $user_type = "pm";
+
+        $user = $this->getUserInfo();
         //TODO: fetch data with model
-          $threads =  $this->Chat_model->retrieve($user_id, $user_type);
+          $threads =  $this->Chat_model->retrieve($user["user_id"], $user["user_type"]);
           echo json_encode($threads);
 //        foreach($result as $row) {
 //            $new_m = ['author'  => $row["author_id"],
@@ -62,7 +72,7 @@ class Chat extends CI_Controller {
         $values=[
             "chat_id" 	=> $this->input->get("chatID",true),
             "m_author" 	=> $this->input->get("author",true),
-            "m_content" 	=> $this->input->get("content",true),
+            "m_content" => $this->input->get("content",true),
             "m_timestamp" => $this->input->get("timeStamp",true),
         ];
         //TODO: link up with model
