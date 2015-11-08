@@ -93,13 +93,16 @@ class Chat_model extends CI_Model{
     public function write(array $values){
         $fromSession = $this->session->userdata("chat_id_".$values["chat_id"]);
         print_r($values);
+        print_r("space\n\n\n");
+        print_r($fromSession);
 
         if(isset($values)){
             $message =[
                 "customer_id"=>$fromSession["customer_id"],
                 "pm_id"=>$fromSession["pm_id"],
                 "project_id"=>0,
-                "to_pm"=>($values["user2"]==$values["m_author"])?0:1,
+                //"to_pm"=>($values["user2"]==$values["m_author"])?0:1,
+                "to_pm"=>($values["m_author"]==$values["m_author"])?0:1,
                 "body"=> $values["m_content"],
                 "time_created"=>time()
 
