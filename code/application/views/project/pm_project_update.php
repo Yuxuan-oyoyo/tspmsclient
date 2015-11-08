@@ -94,8 +94,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     var htmlText =
                         '<li>'+
                         '<div class="timeline-badge  neutral"><i class="fa fa-navicon"></i></div>'+
-                        '<div class="timeline-panel"> <div class="timeline-heading"> <h4 class="timeline-title">'+element.header+'</h4> </div>'+
-                        '<div class="timeline-body"> <p>'+element.body+'</p> <div class="pull-right timeline-info">'+
+                        '<div class="timeline-panel"> <div class="timeline-heading"> <h4 class="timeline-title">'+element.header+
+                        <?php if($project['is_ongoing']==1){?>
+                        '<i class="fa fa-close pull-right" style="cursor: pointer;color:darkgray" onclick="deleteMilestoneButtonClicked('+element.milestone_id+')"></i>'+
+                        <?php }?>
+                        '</h4></div><div class="timeline-body"> <p>'+element.body+'</p> <div class="pull-right timeline-info">'+
                         '<i class="fa fa-user"></i>&nbsp;'+element.posted_by+' &nbsp;'+
                         '<i class="fa fa-calendar-check-o"></i>&nbsp;'+element.last_updated+'</div>'+
                         ' </div> </div> </li>';
