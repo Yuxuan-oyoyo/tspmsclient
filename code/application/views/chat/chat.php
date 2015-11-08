@@ -12,11 +12,10 @@ $user_id = $user_id;
 <html>
 <head>
     <meta charset="utf-8">
-    <title>[480] chat prototype</title>
+    <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="<?=base_url()?>css/chat/base.css" />
     <script src="<?=base_url()?>js/react-with-addons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
-    <script src="<?=base_url()?>js/jquery-2.1.4.min.js"></script>
 
 
 </head>
@@ -29,7 +28,7 @@ $class = [
     'internal_user_class'=>'',
     'analytics_class'=>''
 ];
-if($this->session->userdata('Customer_cid')!=null){
+if($this->session->userdata('Customer_cid')){
     $this->load->view('common/customer_nav', $class);
 }elseif ($this->session->userdata('internal_type')=='Developer') {
     $this->load->view('common/dev_nav', $class);

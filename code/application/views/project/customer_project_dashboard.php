@@ -99,8 +99,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     var month=monthNames[ddl.getMonth()];
                     var year=ddl.getFullYear();
                     var append='';
-                    if (element.if_completed!==0){
+                    if (element.if_completed!=0){
                         append='<br><span class="badge success" style="background-color: limegreen">Completed</span>';
+                    }else{
+                        append='';
                     }
                     var htmlText = ' <div class="row"> <div class="col-lg-4"> <div class="panel panel-default calendar"> ' +
                         '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'-'+year+'</strong></div>'+
@@ -215,7 +217,7 @@ $this->load->view('common/customer_nav', $class);
                         <strong><?=$milestone['header']?></strong><br>
                         <?=$milestone['body']?>
                         <?php
-                        if ($milestone['if_completed'] !== 0) {
+                        if ($milestone['if_completed'] ==1 ) {
                             ?>
                             <br><span class="badge success" style="background-color:limegreen">Completed</span>
                         <?php
