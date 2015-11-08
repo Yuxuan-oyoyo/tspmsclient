@@ -18,6 +18,16 @@ $class = [
     'analytics_class'=>''
 ];
 $this->load->view('common/pm_nav', $class);
+function _ago($tm,$rcs = 0) {
+    $cur_tm = time(); $dif = $cur_tm-$tm;
+    $pds = array('second','minute','hour','day','week','month','year','decade');
+    $lngh = array(1,60,3600,86400,604800,2630880,31570560,315705600);
+    for($v = sizeof($lngh)-1; ($v >= 0)&&(($no = $dif/$lngh[$v])<=1); $v--); if($v < 0) $v = 0; $_tm = $cur_tm-($dif%$lngh[$v]);
+
+    $no = floor($no); if($no <> 1) $pds[$v] .='s'; $x=sprintf("%d %s ",$no,$pds[$v]);
+    if(($rcs == 1)&&($v >= 1)&&(($cur_tm-$_tm) > 0)) $x .= time_ago($_tm);
+    return $x;
+}
 ?>
 
 <aside class="sidebar-left">
@@ -91,31 +101,37 @@ $this->load->view('common/pm_nav', $class);
                 <?php $this->session->unset_userdata('message') ?>
             <?php endif;?>
             <div class="col-lg-offset-1 col-lg-5">
-            <div class="col-lg-6" style=" border: solid 2px #1abc9c; height:240px">
-                <table class="table table-condensed">
-                    <tr>
-                        <td><strong>Assigned Developer</strong></td>
-                        <td>Will</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Last Updated</strong></td>
-                        <td><?=$project['last_updated']?></td>
-                    </tr>
-                </table>
-            </div>
-            <div class="col-lg-3" style=" border: solid 2px #1abc9c; border-left:1px; height:120px">
-                    <h2>5</h2>
-                TASKS
-            </div>
-            <div class="col-lg-3" style=" border: solid 2px #1abc9c;  height:120px">
-                <h2><?=$project['no_of_use_cases']?></h2>Use Cases
-            </div>
-            <div class="col-lg-offset-6 col-lg-3" style="margin-top:-120px; border: solid 2px #1abc9c; border-left:1px; height:120px">
-                <h2>$<?=$project['project_value']?></h2>Project Value
-            </div>
-            <div class="col-lg-offset-9 col-lg-3" style="margin-top:-120px; border: solid 2px #1abc9c;  height:120px">
-                <h2>15</h2>Unresolved Issues
-            </div>
+            <table style="border: solid 1px #1abc9c;">
+                <tr>
+                    <td colspan="2" rowspan="2" class="col-lg-6" style=" border: solid 2px #1abc9c; height:240px">
+                    <table class="table" style="border:none white">
+                        <tr>
+                            <td style="text-align:right"><strong>Assigned Developer</strong></td>
+                            <td>Will</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right"><strong>Last Updated</strong></td>
+                            <!--td><?=_ago(strtotime($project['last_updated']))?> ago</td-->
+                            <td><?=$project['last_updated']?></td>
+                        </tr>
+                    </table>
+                    </td>
+                    <td style=" vertical-align: middle; text-align: center; border: solid 2px #1abc9c;  height:120px">
+                        <div><h2>5</h2>TASKS</div>
+                    </td>
+                    <td style=" vertical-align: middle; text-align: center; border: solid 2px #1abc9c;  height:120px">
+                        <div><h2><?=$project['no_of_use_cases']?></h2>Use Cases</div>
+                    </td>
+                </tr>
+                <tr>
+            <td style=" vertical-align: middle; text-align: center; border: solid 2px #1abc9c; height:120px">
+                <div><h2>$<?=$project['project_value']?></h2>Project Value</div>
+            </td>
+            <td style=" vertical-align: middle; text-align: center; border: solid 2px #1abc9c;  height:120px">
+                <div><h2>15</h2>Unresolved Issues</div>
+            </td>
+                </tr>
+            </table>
             </div>
             <div class="col-lg-4">
                 <div class="panel info-panel">
