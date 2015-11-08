@@ -472,8 +472,13 @@ $this->load->view('common/pm_nav', $class);
                     </div>
                     <div class="form-group">
                         <label for="title">Deadline:</label>
+                        <!--div class="input-group clsDatePicker">
                         <input type="text" name="deadlinePicker" id="deadlinePicker" class="form-control clsDatePicker" data-parsley-required>
-                     </div>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div-->
+                        <input type="text" name="deadlinePicker" id="deadlinePicker" class="form-control clsDatePicker" data-parsley-required>
+
+                    </div>
                     <div class="form-group">
                         <label for="milestone_description">Description:</label>
                         <textarea name="body" class="form-control" rows="4" id="milestone_description" data-parsley-required></textarea>

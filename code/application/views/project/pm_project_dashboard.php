@@ -7,6 +7,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 <head>
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
+    <style>
+        .stat-td{
+            vertical-align: middle;
+            text-align: center;
+            border: solid 2px #1abc9c;
+            width:120px;height:120px;
+            padding: 4px;
+        }
+        .stat-table{
+            -webkit-box-shadow: 0 1px 12px rgba(0, 0, 0, 0.175);
+            box-shadow: 0 1px 12px rgba(0, 0, 0, 0.175);
+        }
+    </style>
 </head>
 <body>
 <?php
@@ -111,35 +124,31 @@ function _ago($tm,$rcs = 0) {
                 <?php $this->session->unset_userdata('message') ?>
             <?php endif;?>
             <div class="col-lg-offset-1 col-lg-5">
-            <table style="border: solid 1px #1abc9c;">
+            <table class="stat-table" style="border: solid 1px #1abc9c;table-layout: fixed">
                 <tr>
-                    <td colspan="2" rowspan="2" class="col-lg-6" style=" border: solid 2px #1abc9c; height:240px">
-                    <table class="table" style="border:none white">
-                        <tr>
-                            <td style="text-align:right"><strong>Assigned Developer</strong></td>
-                            <td>Will</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:right"><strong>Last Updated</strong></td>
+                    <td colspan="2" rowspan="2" class="col-lg-6" style=" border: solid 2px #1abc9c">
+                        <div>
+                            <div style="padding:5px; text-align:center;width: 100%"><strong>Developers:</strong></div>
+                            <div style="padding:5px; text-align:center;width: 100%">Will, Dave</div>
+                            <div style="padding:5px; text-align:center;width: 100%"><strong>Last Updated:</strong></div>
                             <!--td><?=_ago(strtotime($project['last_updated']))?> ago</td-->
-                            <td><?=$project['last_updated']?></td>
-                        </tr>
-                    </table>
+                            <div style="padding:5px; text-align:center;width: 100%"><?=date("M j Y",strtotime($project['last_updated']))?></div>
+                        </div>
                     </td>
-                    <td style=" vertical-align: middle; text-align: center; border: solid 2px #1abc9c;  height:120px">
+                    <td class="stat-td">
                         <div><h2>5</h2>TASKS</div>
                     </td>
-                    <td style=" vertical-align: middle; text-align: center; border: solid 2px #1abc9c;  height:120px">
-                        <div><h2><?=$project['no_of_use_cases']?></h2>Use Cases</div>
+                    <td class="stat-td">
+                        <div><h2><?=$project['no_of_use_cases']?></h2>USE CASES</div>
                     </td>
                 </tr>
                 <tr>
-            <td style=" vertical-align: middle; text-align: center; border: solid 2px #1abc9c; height:120px">
-                <div><h2>$<?=$project['project_value']?></h2>Project Value</div>
-            </td>
-            <td style=" vertical-align: middle; text-align: center; border: solid 2px #1abc9c;  height:120px">
-                <div><h2>15</h2>Unresolved Issues</div>
-            </td>
+                    <td class="stat-td">
+                        <div><h2>$<?=(round($project['project_value'],-2)/1000)." k"?></h2>PROJECT VALUE</div>
+                    </td>
+                    <td class="stat-td">
+                        <div><h2>15</h2>PENDING ISSUES</div>
+                    </td>
                 </tr>
             </table>
             </div>

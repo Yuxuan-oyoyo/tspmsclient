@@ -168,12 +168,12 @@ if($this->session->userdata('internal_type')=='Developer') {
                                 <?php endif?>
                             </div>
                         </td>
-                        <td class="date">
+                        <td class="date" style="min-width: 100px">
                             <div>
                                 <time datetime="<?=$d["utc_created_on"]?>" data-title="true"><?=_ago(strtotime($d["utc_created_on"]))?> ago</time>
                             </div>
                         </td>
-                        <td class="date">
+                        <td class="date" style="min-width: 100px">
                             <div>
                                 <time datetime="<?=$d["utc_last_updated"]?>" data-title="true"><?=_ago(strtotime($d["utc_last_updated"]))?> ago</time>
                             </div>

@@ -100,7 +100,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                         <?php if($i["content"]):?>
                             <?=htmlspecialchars($i["content"])?>
                         <?php else:?>
-                            <em>No Description provided.</em>
+                            <em>No description provided.</em>
                         <?php endif?>
                     </span>
                 </div>
@@ -151,7 +151,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                     <?php else:?>
                         <a href="#" class="btn btn-primary update-btn" param="status" value="resolved">Resolve</a>
 
-                    <?php endif?>
+
                     <a href="<?=base_url()."/Issues/update/".$repo_slug."/".$i["local_id"]."?status=resolved"?>"
                        class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -163,9 +163,10 @@ if($this->session->userdata('internal_type')=='Developer') {
                         <li><a href="#" class="update-btn" param="status" value="wontfix">wontfix</a></li>
                         <li><a href="#" class="update-btn" param="status" value="resolved">resolved</a></li>
                     </ul>
+                    <?php endif?>
                 </div>
 
-                <a class="btn btn-default" style="margin-left:30px" href="<?= base_url()."Issues/edit/".$repo_slug."/".$i["local_id"]?>">Edit</a>
+                <a class="btn btn-default" style="margin-left:7px" href="<?= base_url()."Issues/edit/".$repo_slug."/".$i["local_id"]?>">Edit</a>
             </div>
             <div class="well" style="background-color: white;width: 250px;margin-top:10px">
                 <table>
