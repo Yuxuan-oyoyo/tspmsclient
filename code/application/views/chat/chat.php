@@ -174,13 +174,21 @@ $user_id = $user_id;
             var msgNodes;
 
 
-
+            //MessageSorting
+            //console.log(this.props.chat.user1);
+            //console.log(this.props.chat.user2);
+            console.log("MessageSorting")
 
             if (this.props.chat.user1 !== undefined) {
+                /*
                 sortedMessages = this.props.chat.messages.sort(function(a,b){
+                    //console.log("a: " + a.timestamp)
+                    //console.log("b: " + b.timestamp)
                     return a.timeStamp - b.timeStamp
                 })
-                msgNodes = sortedMessages.map(function(msg){
+                */
+                console.log(this.props.chat.messages);
+                msgNodes = this.props.chat.messages.map(function(msg){
                     return (
                         <RightMessage msg={msg} key={msg.msgID}> </RightMessage>
                     )
