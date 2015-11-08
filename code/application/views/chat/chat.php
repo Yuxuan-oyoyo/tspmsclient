@@ -16,7 +16,7 @@ $user_id = $user_id;
     <link rel="stylesheet" href="<?=base_url()?>css/chat/base.css" />
     <script src="<?=base_url()?>js/react-with-addons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
-
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/1.7.2/moment.min.js"></script>
 
 </head>
 <body>
@@ -48,13 +48,23 @@ if($this->session->userdata('Customer_cid')){
             var DisplayName = (this.props.data.user1 == CurrentUser) ? this.props.data.user2: this.props.data.user1;
             var c_id = this.props.c_id;
 
+            var ts = this.props.data.lastMsgTimeStamp;
+            var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+            d.setUTCSeconds(ts);
+            /*
+            var month = d.getMonth()+1;
+            var date = d.getDate()+"."+month+"."+d.getFullYear();
+            console.log("moo moo");
+            */
+            var dates = moment(d).format('LL');
+
             if(c_id == this.props.data.chatID)
             {
                 return (
                     <li className="thread-list-item active" onClick={this.props.handleClickOnLeftUser.bind(null, this.props.data)}>
                         <h5 className="thread-name"> {DisplayName} </h5>
                         <div className="thread-time">
-                            {this.props.data.lastMsgTimeStamp}
+                            {dates}
                         </div>
                         <div className="thread-last-message">
                             {this.props.data.lastMessage}
@@ -68,7 +78,7 @@ if($this->session->userdata('Customer_cid')){
                     <li className="thread-list-item" onClick={this.props.handleClickOnLeftUser.bind(null, this.props.data)}>
                         <h5 className="thread-name"> {DisplayName} </h5>
                         <div className="thread-time">
-                            {this.props.data.lastMsgTimeStamp}
+                            {dates}
                         </div>
                         <div className="thread-last-message">
                             {this.props.data.lastMessage}
