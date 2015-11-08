@@ -117,7 +117,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </script>
 </head>
 <body>
-<?php $this->load->view('common/customer_nav');?>
+<?php
+$class = [
+    'projects_class'=>'active',
+    'message_class'=>'',
+    'customers_class'=>'',
+    'internal_user_class'=>'',
+    'analytics_class'=>''
+];
+$this->load->view('common/customer_nav', $class);
+?>
 <aside class="sidebar-left">
     <div class="sidebar-links">
         <a class="link-blue selected" href="#"><i class="fa fa-flag"></i>Update & Milestone</a>

@@ -20,7 +20,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             }else{
                 $('#existing_customer').text('');
                 var htmlText2 ='<div class="col-lg-4"> <div class="form-group"> <label for="title">Title</label> ' +
-                    '<input type="text" class="form-control" name="title" id="title" value="<?=set_value("title")?>" data-parsley-required> '+
+                        '<select class="form-control" id="title" name="title">'+
+                '<option value="Mr.">Mr.</option>'+
+                '<option value="Mrs.">Mrs.</option>'+
+                '<option value="Ms.">Ms.</option>'+
+                '<option value="Dr.">Dr.</option>'+
+                    '</select>'+
                     '</div> </div> <div class="col-lg-4"> <div class="form-group "> <label for="first_name">First name</label>'+
                      '<input type="text" class="form-control" name="first_name" id="first_name" value="<?=set_value("first_name")?>" data-parsley-required>'+
                 '</div> </div> <div class="col-lg-4"> <div class="form-group"> <label for="last_name">Last name</label>'+
@@ -118,13 +123,13 @@ $this->load->view('common/pm_nav', $class);
             <div class="col-lg-5">
                 <div class="form-group">
                     <label for="no_of_use_cases">Number of usecases</label>
-                    <input class="form-control" name="no_of_use_cases" value="<?=set_value("no_of_usecase")?>">
+                    <input class="form-control" name="no_of_use_cases" value="<?=set_value("no_of_usecase")?>" data-parsley-type="number" min="0">
                 </div>
             </div>
             <div class="col-lg-offset-1 col-lg-6">
                 <div class="form-group">
                     <label for="project_value">Project value(S$)</label>
-                    <input class="form-control" name="project_value" value="<?=set_value("project_value")?>"data-parsley-type="number">
+                    <input class="form-control" name="project_value" value="<?=set_value("project_value")?>" data-parsley-type="number" min="0">
                 </div>
             </div>
             <div class="col-lg-12">

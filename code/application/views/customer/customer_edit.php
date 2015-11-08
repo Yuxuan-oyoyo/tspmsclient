@@ -45,7 +45,12 @@ $this->load->view('common/pm_nav', $class);
                 </div>
                 <div class="form-group">
                     <label for="title">Title:</label>
-                    <input name="title" id="title" type="text" class="form-control" value="<?=$c['title']?>" data-parsley-required>
+                    <select class="form-control" id="title" name="title">
+                        <option value="Mr.">Mr.</option>
+                        <option value="Mrs.">Mrs.</option>
+                        <option value="Ms.">Ms.</option>
+                        <option value="Dr.">Dr.</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="first_name">First Name:</label>

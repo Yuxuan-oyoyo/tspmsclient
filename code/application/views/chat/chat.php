@@ -30,9 +30,11 @@ $class = [
     'internal_user_class'=>'',
     'analytics_class'=>''
 ];
-if($this->session->userdata('internal_type')=='Developer') {
+if($this->session->userdata('Customer_cid')!=null){
+    $this->load->view('common/customer_nav', $class);
+}elseif ($this->session->userdata('internal_type')=='Developer') {
     $this->load->view('common/dev_nav', $class);
-}else {
+}else{
     $this->load->view('common/pm_nav', $class);
 }
 ?>

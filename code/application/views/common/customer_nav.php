@@ -7,10 +7,10 @@
     </div>
     <!-- Top Menu Items -->
     <ul class="nav navbar-nav">
-        <li  class="active">
+        <li  class="<?=$projects_class?>">
             <a href="<?=base_url()?>projects/customer_overview/<?=$this->session->userdata('Customer_cid')?>"><i class="fa fa-fw fa-tasks"></i>My Projects</a>
         </li>
-        <li>
+        <li class="<?=$message_class?>">
             <a href="<?=base_url().'chat'?>"><i class="fa fa-fw fa-comment"></i>Message</a>
         </li>
     </ul>

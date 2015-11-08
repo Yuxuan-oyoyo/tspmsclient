@@ -102,6 +102,12 @@
 	color: #86be2e;
 }
 
+.sidebar-left .sidebar-links a.link-grey {
+	border-color: #808080;
+}
+.sidebar-left .sidebar-links a.link-grey i.fa {
+	color: #808080;
+}
 
 
 
