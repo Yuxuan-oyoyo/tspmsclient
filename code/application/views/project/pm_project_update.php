@@ -128,7 +128,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                         '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'-'+year+'</strong></div>'+
                         '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-lg-7">'+
                         '<strong>'+element.header+'</strong>'+
+                            <?php if($project['is_ongoing']==1){?>
                         '<i class="fa fa-close pull-right" style="cursor: pointer;color:darkgray" onclick="deleteMilestoneButtonClicked('+element.milestone_id+')"></i>'+
+                        <?php }?>
                         '<br>'+element.body+append+
                         ' </div> </div>';
 
@@ -202,24 +204,29 @@ $this->load->view('common/pm_nav', $class);
         <h1 class="page-header">
             <?='#'.$project['project_id'].'. '.$project['project_title']?>
             <?php
+            if($project['is_ongoing']==1) {
                 $if_completed = 1;
                 foreach ($milestones as $m) {
-                    if($m['if_completed']==0){
+                    if ($m['if_completed'] == 0) {
                         $if_completed = 0;
                     }
                 }
-            $update_phase_button = 'Update Phase';
-                if(is_null($next_phase_name)){
+                $update_phase_button = 'Update Phase';
+                if (is_null($next_phase_name)) {
                     $update_phase_button = 'End Project';
                 }
-                if( $if_completed==0){
-            ?>
-            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#update_phase_alert_modal"><i class="fa fa-pencil-square-o"></i>&nbsp;<?=$update_phase_button?></button>
-             <?php
-                }else{
-             ?>
-            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#updatePhaseModal"><i class="fa fa-pencil-square-o"></i>&nbsp;<?=$update_phase_button?></button>
-            <?php
+                if ($if_completed == 0) {
+                    ?>
+                    <button class="btn btn-primary" type="button" data-toggle="modal"
+                            data-target="#update_phase_alert_modal"><i
+                            class="fa fa-pencil-square-o"></i>&nbsp;<?= $update_phase_button ?></button>
+                    <?php
+                } else {
+                    ?>
+                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#updatePhaseModal"><i
+                            class="fa fa-pencil-square-o"></i>&nbsp;<?= $update_phase_button ?></button>
+                    <?php
+                }
             }
             ?>
         </h1>
@@ -287,9 +294,15 @@ $this->load->view('common/pm_nav', $class);
 
                 <h3>Client Updates -
                     <small class="phase"><?= $current_phase['phase_name'] ?></small>
-                    <button class="add_button btn btn-primary pull-right" data-toggle="modal"
-                            data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add
-                    </button>
+                    <?php
+                    if($project['is_ongoing']==1) {
+                        ?>
+                        <button class="add_button btn btn-primary pull-right" data-toggle="modal"
+                                data-target="#newUpdateModal"><i class="fa fa-plus"></i>&nbsp; Add
+                        </button>
+                        <?php
+                    }
+                    ?>
                 </h3>
                 <hr>
                 <ul class="timeline" id="timeline">
@@ -323,9 +336,15 @@ $this->load->view('common/pm_nav', $class);
 
                 <h3>Milestones -
                     <small class="phase"><?= $current_phase['phase_name'] ?></small>
-                    <button class="add_button btn btn-primary pull-right" data-toggle="modal"
-                            data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add
-                    </button>
+                    <?php
+                    if($project['is_ongoing']==1) {
+                        ?>
+                        <button class="add_button btn btn-primary pull-right" data-toggle="modal"
+                                data-target="#newMilestoneModal"><i class="fa fa-plus"></i>&nbsp; Add
+                        </button>
+                        <?php
+                    }
+                    ?>
                 </h3>
                 <hr>
                 <div id="milestone">
@@ -349,7 +368,14 @@ $this->load->view('common/pm_nav', $class);
                             </div>
                             <div class="col-lg-7">
                                 <strong><?= $m['header'] ?></strong>
-                                <i class="fa fa-close pull-right"  style="cursor: pointer;color:darkgray" onclick="deleteMilestoneButtonClicked(<?=$m['milestone_id']?>)"></i>
+                                <?php
+                                if($project['is_ongoing']==1) {
+                                    ?>
+                                    <i class="fa fa-close pull-right" style="cursor: pointer;color:darkgray"
+                                       onclick="deleteMilestoneButtonClicked(<?= $m['milestone_id'] ?>)"></i>
+                                    <?php
+                                }
+                                ?>
                                 <br>
                                 <?= $m['body'] ?>
                                 <?php
