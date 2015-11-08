@@ -19,7 +19,7 @@
             <a href="<?=base_url().'projects/dev_page'?>"><i class="fa fa-fw fa-bar-chart-o"></i> Projects</a>
         </li>
         <li class="<?=$message_class?>">
-            <a href="#"><i class="fa fa-fw fa-comment"></i> Message</a>
+            <a href="<?=base_url().'chat'?>"><i class="fa fa-fw fa-comment"></i> Message</a>
         </li>
         <!---
         <li>
