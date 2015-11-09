@@ -121,13 +121,13 @@ $this->load->view('common/pm_nav', $class);
             <div class="col-lg-5">
                 <div class="form-group">
                     <label for="no_of_use_cases">Number of usecases</label>
-                    <input class="form-control" name="no_of_use_cases" value="<?=$p['no_of_use_cases']?>">
+                    <input class="form-control" name="no_of_use_cases" value="<?=$p['no_of_use_cases']?>" data-parsley-type="number" min="0">
                 </div>
             </div>
             <div class="col-lg-offset-1 col-lg-6">
                 <div class="form-group">
                     <label for="project_value">Project value(S$)</label>
-                    <input class="form-control" name="project_value" value="<?=$p['project_value']?>" data-parsley-type="number">
+                    <input class="form-control" name="project_value" value="<?=$p['project_value']?>" data-parsley-type="number" min="0">
                 </div>
             </div>
             <div class="col-lg-12">
