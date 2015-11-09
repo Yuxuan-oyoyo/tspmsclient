@@ -17,7 +17,7 @@ $class = [
     'internal_user_class'=>'',
     'analytics_class'=>''
 ];
-$this->load->view('common/pm_nav', $class);
+$this->load->view('common/customer_nav', $class);
 ?>
 <div class="container content">
     <!-- Page Content -->
