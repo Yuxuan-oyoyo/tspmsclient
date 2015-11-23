@@ -11,6 +11,10 @@ class BB_Shared {
     public  $file_path = "application/libraries/oauth_token.txt";
     public  $_save_in_file = true;
 
+    /**
+     * default method to retrieve token
+     * @return string oauth token
+     */
     public function getDefaultOauthToken(){
         if(fopen($this->file_path, "r")!=false && $this->_save_in_file){
             $contents = file_get_contents($this->file_path);
@@ -20,6 +24,10 @@ class BB_Shared {
         return $this->requestFromServer();
     }
 
+    /**
+     * False refresh token, if called from outside
+     * @return string token
+     */
     public function requestFromServer(){
         /*open connection*/
         $data = ['grant_type'=>'client_credentials'];
@@ -31,16 +39,16 @@ class BB_Shared {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        //debug-------------------------------------------
-//        curl_setopt($ch, CURLOPT_VERBOSE, true);
-//
-//        $verbose = fopen('php://temp', 'w+');
-//        curl_setopt($ch, CURLOPT_STDERR, $verbose);
-//        $response = curl_exec($ch);
-//        rewind($verbose);
-//        $verboseLog = stream_get_contents($verbose);
-//        echo "Verbose information:\n<pre>", htmlspecialchars($verboseLog), "</pre>\n";
-        //debug --------------------------------------------
+        /*debug-------------------------------------------
+        curl_setopt($ch, CURLOPT_VERBOSE, true);
+
+        $verbose = fopen('php://temp', 'w+');
+        curl_setopt($ch, CURLOPT_STDERR, $verbose);
+        $response = curl_exec($ch);
+        rewind($verbose);
+        $verboseLog = stream_get_contents($verbose);
+        echo "Verbose information:\n<pre>", htmlspecialchars($verboseLog), "</pre>\n";
+        debug --------------------------------------------*/
         $response = curl_exec($ch);
         if($response ==false){
             echo curl_error($ch);
@@ -60,9 +68,9 @@ class BB_Shared {
             }
         }
         return null;
-
     }
     private  function writeToFile($token, $ttl){
+        //TODO: this may not be thread-safe
         $buffer_time = 60;
         file_put_contents($this->file_path, $token."\t".(time()+$ttl-$buffer_time), LOCK_EX);
         flush();

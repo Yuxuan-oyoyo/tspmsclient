@@ -9,18 +9,21 @@
 class Issues extends CI_Controller {
     public function __construct() {
         parent::__construct();
-        // Your own constructor code
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->library('BB_issues');
 
     }
+    /**
+     * List all issues of given repo page
+     * @param null $repo_slug
+     */
     public function list_all($repo_slug=null){
-        $repo_slug="tspms";
         $user_id = $this->session->userdata('internal_uid');
         if(isset($user_id)) {
             if(isset($repo_slug)) {
                 $data["repo_slug"] = $repo_slug;
+                /*params expected*/
                 $opt_params = [
                     "search","sort","limit","start","status","kind","responsible",
                     "milestone","reported_by","priority","utc_created_on","utc_last_updated"
@@ -58,8 +61,12 @@ class Issues extends CI_Controller {
         }
 
     }
+
+    /**
+     * Create issue page
+     * @param $repo_slug
+     */
     public function create($repo_slug){
-        $repo_slug="tspms";
         $user_id = $this->session->userdata('internal_uid');
         if(isset($user_id)) {
             $this->load->model("Internal_user_model");
@@ -73,8 +80,12 @@ class Issues extends CI_Controller {
             redirect('/internal_authentication/login/');
         }
     }
+
+    /**
+     * Process user inputs from create issue page
+     * @param $repo_slug
+     */
     public function process_create($repo_slug){
-        $repo_slug="tspms";
         if($this->session->userdata('internal_uid')) {
             $field_params = ["status","priority","title","responsible","content","kind","milestone"];
             $para_input = $this->input->get($field_params,true);
@@ -86,15 +97,20 @@ class Issues extends CI_Controller {
             }
             $issue = $this->bb_issues->postNewIssue($repo_slug, $param);
             $this->session->set_flashdata("issue_last_updated",$issue);
-            /*brings user back to this issue*/
+            /*Brings user back to this issue*/
             redirect(base_url()."Issues/detail/".$repo_slug."/".$issue["local_id"]);
         }else{
             $this->session->set_userdata('message','Please login first.');
             redirect('/internal_authentication/login/');
         }
     }
+
+    /**
+     * Issue detail page
+     * @param null $repo_slug
+     * @param null $issue_id
+     */
     public function detail($repo_slug=null, $issue_id=null) {
-        $repo_slug="tspms";
         if($this->session->userdata('internal_uid')) {
             if (isset($repo_slug) && isset($issue_id)) {
                 $data =["issue_details"=>$this->retrie_by_id($repo_slug,$issue_id), "repo_slug"=>$repo_slug];
@@ -110,18 +126,11 @@ class Issues extends CI_Controller {
     }
     private function retrie_by_id($repo_slug=null, $id=null){
         $repo_slug="tspms";
-        //$issue_list = $this->session->userdata("issue_list" . $repo_slug);
-            $issue_details = $this->session->flashdata("issue_last_updated");
-    //        if (isset($issue_list)){
-    //            /*if issue list is in session, find the one with this local id*/
-    //            foreach($issue_list as $issue){
-    //                if($issue["local_id"]==$id) {$issue_details= $issue;break;}
-    //            }
-    //        }
-            if(!isset($issue_details)){/*if issue list is not in session, or cannot find*/
-                $issue_details = $this->bb_issues->retrieveIssues($repo_slug, $id);
-            }
-            return $issue_details;
+        $issue_details = $this->session->flashdata("issue_last_updated");
+        if(!isset($issue_details)){/*if issue list is not in session, or cannot find*/
+            $issue_details = $this->bb_issues->retrieveIssues($repo_slug, $id);
+        }
+        return $issue_details;
     }
 
 
@@ -130,12 +139,10 @@ class Issues extends CI_Controller {
      * @param null $repo_slug
      */
     public function update($repo_slug=null,$issue_id){
-        $repo_slug="tspms";
         if($this->session->userdata('internal_uid')) {
             $param = $this->input->get("param",true);
             $value = $this->input->get("value",true);
-            echo $param;
-            echo $value;
+            /*retrieve from session for performance*/
             if(($issue_list =$this->session->userdata("issue_list" . $repo_slug))!=null){
                 foreach($issue_list as $issue){
                     if($issue["local_id"]==$issue_id) {
@@ -152,12 +159,20 @@ class Issues extends CI_Controller {
             redirect('/internal_authentication/login/');
         }
     }
+
+    /**
+     * Edit issue page
+     * @param null $repo_slug
+     * @param $issue_id
+     */
     public function edit($repo_slug=null, $issue_id){
-        $repo_slug="tspms";
         if($this->session->userdata('internal_uid')) {
         //$issue_id = $this->input->get("local_id");
             if (isset($repo_slug)&&isset($issue_id)) {
-                $data =["issue_details"=>$this->retrie_by_id($repo_slug,$issue_id), "repo_slug"=>$repo_slug];
+                $data =[
+                    "issue_details"=>$this->retrie_by_id($repo_slug,$issue_id),
+                    "repo_slug"=>$repo_slug
+                ];
                 $this->load->view("issue/edit", $data);
             }else{
                 //TODO: take user to 404 page
@@ -169,9 +184,15 @@ class Issues extends CI_Controller {
         }
 
     }
+
+    /**
+     * Processes user input from edit page
+     * @param null $repo_slug
+     * @param $issue_id
+     */
     public function process_edit($repo_slug=null, $issue_id){
-        $repo_slug="tspms";
         if($this->session->userdata('internal_uid')) {
+            /*params expected*/
             $field_params = ["status","priority","title","responsible","content","kind","milestone"];
             $para_input = $this->input->get($field_params,true);
             $param=[];

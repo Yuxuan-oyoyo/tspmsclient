@@ -50,14 +50,16 @@ class BB_issues {
         $negate = false;
         $result = false;
         if(substr($status,0,1)=="!"){
+            /*temporarily detach the negate sign if any*/
             $status = substr($status,1);$negate = true;
         }
         if($fromDefined) {
             $index = array_search($status, $this->defined_status);
-            if($index!==false) {
+            /*return index or false*/
+            if($index!==false) {/*make sure it's indeed false, not 0*/
                 $result = $this->server_status[$index];
             }
-        }else{
+        }else{/*from server*/
             $index = array_search($status, $this->server_status);
             if($index!==false) {
                 $result = $this->defined_status[$index];
@@ -79,23 +81,30 @@ class BB_issues {
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         if($code==200 && ($reply_array = json_decode($response,true))!=null){
-            //echo "response",var_dump($reply_array);
             if(isset($reply_array['error'])){
                 if($this->_print_err) var_dump($reply_array);
             }else if(isset($reply_array['issues'])){
+                /*when server replies issue list*/
                 foreach($reply_array["issues"] as $key=>$issue){
                     $reply_array["issues"][$key]["status"] = $this->map_status($issue["status"], false);
                 }
                 return $reply_array;
             }else{
+                /*when server replies single issue*/
                 $reply_array["status"] = $this->map_status($reply_array["status"], false);
                 return $reply_array;
             }
         }
         return null;
     }
+
+    /**
+     * Convert status, return query string
+     * @param $parameters
+     * @return string query string
+     */
     private function construct_paras($parameters){
-        if($parameters==false){
+        if($parameters==false){/*when param is empty*/
             return '';
         }else{
             if(isset($parameters["status"])){
@@ -108,6 +117,7 @@ class BB_issues {
     /**
      * @param $repo_slug
      * @param array $issue_array
+     * @return array reply_issue_array
      */
     public function postNewIssue($repo_slug, array $issue_array){
         return $this->sendIssueRequest($repo_slug,null,$issue_array,"POST");
@@ -117,7 +127,8 @@ class BB_issues {
      * @param $repo_slug
      * @param $id
      * @param array $issue_array this can be the same as array in post new
-     * issue, and can also be incomplete
+     *        issue, and can also be incomplete
+     * @return array reply_issue_array
      */
     public function updateIssue($repo_slug, $id, array $issue_array){
         return $this->sendIssueRequest($repo_slug,$id,$issue_array,"PUT");
@@ -156,16 +167,16 @@ class BB_issues {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
             curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
-        //debug-------------------------------------------
-//        curl_setopt($ch, CURLOPT_VERBOSE, true);
-//
-//        $verbose = fopen('php://temp', 'w+');
-//        curl_setopt($ch, CURLOPT_STDERR, $verbose);
-//        $response = curl_exec($ch);
-//        rewind($verbose);
-//        $verboseLog = stream_get_contents($verbose);
-//        echo "Verbose information:\n<pre>", htmlspecialchars($verboseLog), "</pre>\n";
-            //debug --------------------------------------------
+            /*debug-------------------------------------------
+            curl_setopt($ch, CURLOPT_VERBOSE, true);
+
+            $verbose = fopen('php://temp', 'w+');
+            curl_setopt($ch, CURLOPT_STDERR, $verbose);
+            $response = curl_exec($ch);
+            rewind($verbose);
+            $verboseLog = stream_get_contents($verbose);
+            echo "Verbose information:\n<pre>", htmlspecialchars($verboseLog), "</pre>\n";
+            debug --------------------------------------------*/
             /*process response*/
             $response = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
