@@ -26,17 +26,25 @@ class Issues extends CI_Controller {
                 /*params expected*/
                 $opt_params = [
                     "search","sort","limit","start","status","kind","responsible",
-                    "milestone","reported_by","priority","utc_created_on","utc_last_updated"
+                    "milestone","reported_by","priority","utc_created_on","utc_last_updated","title","content"
                 ];
                 $para_input = $this->input->get($opt_params,true);
-                if($para_input["sort"]=="responsible")$para_input["sort"] = null;
+                if($para_input["sort"]=="responsible") $para_input["sort"] = null;/*cannot sort by responsible*/
                 $para =[];
                 /*transfer $para_input to $para. Only keep non-null key value pairs.*/
                 /*this prevents bad request*/
                 foreach($para_input as $key=>$value){
                     if(!empty($value)){
-                        if($key=="search") $value = $value['value'];
-                        $para[$key] = $value;
+                        if($key=="search") {/*replace whitespace to +, as required in api*/
+                            if(strpos($value,"=")!==false
+                                && in_array($filed = strtolower(trim(explode("=",$value)[0])),["title","title"])){
+                                $para[$filed] = str_replace (" ","+",trim(explode("=",$value)[1]));
+                            }else{
+                                $para[$key] = str_replace (" ","+",$value);
+                            }
+                        }else{
+                            $para[$key] = $value;
+                        }
                     }
                 }
                 //TODO:validate parameters

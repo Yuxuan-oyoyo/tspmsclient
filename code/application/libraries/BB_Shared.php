@@ -12,7 +12,7 @@ class BB_Shared {
     public  $_save_in_file = true;
 
     /**
-     * default method to retrieve token
+     * Default method to retrieve token
      * @return string oauth token
      */
     public function getDefaultOauthToken(){
@@ -25,18 +25,17 @@ class BB_Shared {
     }
 
     /**
-     * False refresh token, if called from outside
+     * Force refresh token, if called from outside
      * @return string token
      */
     public function requestFromServer(){
         /*open connection*/
-        $data = ['grant_type'=>'client_credentials'];
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL,$this->oauth_endpoint);
         curl_setopt($ch, CURLOPT_POST, TRUE);
         curl_setopt($ch, CURLOPT_USERPWD, BB_OAUTH_KEY.':'.BB_OAUTH_SECRET);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, ['grant_type'=>'client_credentials']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         /*debug-------------------------------------------
@@ -58,8 +57,6 @@ class BB_Shared {
         /*process response*/
         if (($response_array = json_decode($response, true)) != null) {
            // echo var_dump($response_array);
-            if (isset($response_array['error'])) {
-            }
             if (isset($response_array["access_token"])) {
                 $token = $response_array["access_token"];
                 $ttl = $response_array["expires_in"];

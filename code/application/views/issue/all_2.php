@@ -52,9 +52,9 @@ if($this->session->userdata('internal_type')=='Developer') {
 ?>
 
 
-<div class="col-lg-offset-1 content">
+<div class="col-xs-offset-1 content">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-xs-12">
         <h1 class="page-header">
             <span style="color: gray;margin-right: 10px">#<?=$project["project_id"]?>.</span>
             <span><?=$project["project_title"]?></span>
@@ -64,8 +64,8 @@ if($this->session->userdata('internal_type')=='Developer') {
 
 
     <hr>
-    <div class="row">
-        <div class=" col-lg-10" style="padding-left:30px">
+    <div class="row" style="margin-right: auto">
+        <div class=" col-xs-10" style="padding-left:30px">
             <?php
                 $filter_arr =$filter_arr;
                 $headers = [
@@ -84,18 +84,22 @@ if($this->session->userdata('internal_type')=='Developer') {
                 "wontfix"=>"#95a5a6","closed"=>"#7f8c8d "
             ];
             $issues = $issues_response["issues"];
+            $sorted_header=null;
             if(isset($filter_arr["sort"])){
                 if(substr($filter_arr["sort"],0,1)!="-"){
-                    $h = $filter_arr["sort"];
-                    if(isset($headers[$h])){$headers[$h]["sort"]="-".$headers[$h]["sort"];}
-                    unset($filter_arr["sort"]);
+                    $sorted_header = $filter_arr["sort"];
+                    if(isset($headers[$sorted_header]))
+                        $headers[$sorted_header]["sort"]="-".$headers[$sorted_header]["sort"];
+                }else{
+                    $sorted_header = substr($filter_arr["sort"],1);
                 }
+                unset($filter_arr["sort"]);
             }
             $filter_str =http_build_query($filter_arr);
             $filter_str = empty($filter_str)? $filter_str: $filter_str."&";
             ?>
-            <div style="width: 100%">
-                <div style="float: left;margin-bottom: 10px">
+            <div style="width: 100%;height:34px">
+                <div style="float: left">
                     <div class="btn-group">
                         <a class="btn btn-default" href="./<?=$repo_slug?>">All</a>
                         <a class="btn btn-default" href="./<?=$repo_slug?>?status=!resolved">Unresolved</a>
@@ -111,16 +115,36 @@ if($this->session->userdata('internal_type')=='Developer') {
                         <a class="btn btn-default" style="margin-right:15px" href="./<?=$repo_slug?>?responsible=luning1994">My Issues</a>
                     </div>
                 </div>
-                <div style="float: right;margin-bottom: 10px">
-                    <a href="../create/<?=$repo_slug?>" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Create Issue</a>
+                <div style="float: right">
+                    <input id="search-box" class="form-control" style="width: auto;display: inline;margin-right:50px" placeholder="Find issue">
+                    <script>$('#search-box').keypress(function (e) {if (e.which == 13) {
+                            if($('#search-box').length>0){window.location.replace('<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str?>'+"search="+$('#search-box').val());}
+                            return false;}});
+                    </script>
+                    <a href="../create/<?=$repo_slug?>" class="btn btn-primary" style="margin-top: -3px"><i class="fa fa-plus"></i>&nbsp;Create Issue</a>
                 </div>
+            </div>
+            <div style="width: 100%;font-size: 1.2em;margin: 7px 5px">
+
+                <b>Showing issues (0-0 of 0) </b>
+                <?php if(!empty($filter_arr)):?>|
+                    <?php foreach($filter_arr as $key=>$value):?>
+                        <span style="color: grey"><b><?=$key?></b>: "<?=$value?>"</span>
+                    <?php endforeach?>
+                    <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]?>">Clear</a>
+                <?php endif?>
             </div>
             <table class="table table-striped" data-sort-by="updated_on" data-modules="components/follow-list">
                 <thead>
                 <tr>
                     <?php foreach($headers as $h):?>
                         <th class="text sorter-false tablesorter-header">
-                            <a href="<?=base_url()."Issues/list_all/".$repo_slug."?".$filter_str."sort=".$h["sort"]?>"><?=$h["display"]?></a>
+                            <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."sort=".$h["sort"]?>" title="Sort by: <?=$h["sort"] ?>>"><?=$h["display"]?></a>
+                            <?php if(isset($sorted_header) && "-".$sorted_header==$h["sort"]):?>
+                                <i class="glyphicon glyphicon-triangle-top" style="color: grey"></i>
+                            <?php elseif(isset($sorted_header) && $sorted_header==$h["sort"]):?>
+                                <i class="glyphicon glyphicon-triangle-bottom" style="color: grey"></i>
+                            <?php endif?>
                         </th>
                     <?php endforeach?>
                 </tr>
@@ -130,22 +154,22 @@ if($this->session->userdata('internal_type')=='Developer') {
                 <?php foreach($issues as $d):?>
                     <tr class="" data-state="open">
                         <td class="" style="width: 35%">
-                            <a class="execute" href="<?=base_url()."issues/detail/".$repo_slug."/".$d["local_id"]?>" title="View Details">#<?=$d["local_id"]?>: <?=$d["title"]?></a>
+                            <a class="execute" href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."/".$d["local_id"]?>" title="View Details">#<?=$d["local_id"]?>: <?=$d["title"]?></a>
                         </td>
                         <td class="icon-col">
-                            <a href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."kind=".$d["metadata"]["kind"]?>"
+                            <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."kind=".$d["metadata"]["kind"]?>"
                                class="icon-bug" title="Filter by type:<?=$d["metadata"]["kind"]?>">
                                 <?=$d["metadata"]["kind"]?>
                             </a>
                         </td>
                         <td class="icon-col">
-                            <a href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."priority=".$d["priority"]?>"
+                            <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."priority=".$d["priority"]?>"
                                class=" icon-major" title="Filter by priority:"<?=$d["priority"]?>>
                                 <?=$d["priority"]?>
                             </a>
                         </td>
                         <td class="state">
-                            <a class="aui-lozenge" href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."status=".$d["status"]?>"
+                            <a class="aui-lozenge" href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."status=".$d["status"]?>"
                                title="Filter by status: <?=$d["status"]?>" style="color: <?=$status_color[$d["status"]]?>">
                                 <?=$d["status"]=="to deploy"?"to dep":($d["status"]=="to develop"?"to dev":$d["status"])?>
                             </a>
@@ -154,7 +178,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                         <td class="user">
                             <div>
                                 <?php if(isset($d["responsible"])):?>
-                                <a href="<?=base_url()."issues/list_all/".$repo_slug."?".$filter_str."&responsible=".$d["responsible"]["username"]?>"
+                                <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."responsible=".$d["responsible"]["username"]?>"
                                    title="Filter issues assigned to: <?=$d["responsible"]["display_name"]?>">
                                     <div class="aui-avatar aui-avatar-xsmall">
                                         <div class="aui-avatar-inner">
