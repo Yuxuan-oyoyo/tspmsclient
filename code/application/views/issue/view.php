@@ -33,6 +33,7 @@ $project = $ci->Project_model->retrieve_by_repo_slug($repo_slug);
 <head lang="en">
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.3.0/showdown.min.js"></script>
     <link rel="stylesheet" href="<?= base_url() . 'css/sidebar-left.css' ?>">
     <link rel="stylesheet" href="<?= base_url() . 'css/issues.css' ?>">
 
@@ -71,7 +72,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                 <span style="color: #777777;padding-right: 10px">#<?=$i["local_id"]?></span>
                 <?=$i["title"]?>
                 <div style="height: 100%;display: inline;position:relative">
-                    <div class="aui-lozenge" style="background-color: #fcf8e3;vertical-align:middle" title="Filter by status: <?=$i["status"]?>">
+                    <div class="aui-lozenge" style="background-color: #fcf8e3;vertical-align:middle">
                         <?=$i["status"]?>
                     </div>
                 </div>
@@ -93,7 +94,6 @@ if($this->session->userdata('internal_type')=='Developer') {
                     <span>
                         Created an Issue <?=_ago(strtotime($i["utc_created_on"]))?> ago
                     </span>
-
                 </div>
                 <div class="issue-description">
                     <span>
@@ -106,7 +106,12 @@ if($this->session->userdata('internal_type')=='Developer') {
                 </div>
             </div>
             <div>
-                <h3>Comments <span style="color: #777777;padding-left: 10px">#<?=isset($i["comment_count"])?$i["comment_count"]:0?></span></h3>
+                <?php
+                    $comments = $comments;
+                    $c_counts = isset($comments)? sizeof($comments):0;
+
+                ?>
+                <h3>Comments <span style="color: #777777;padding-left: 10px">#<?=$c_counts?></span></h3>
                 <div>
                     <ol id="issues-comments" class="comments-list commentable">
                         <li class="new-comment">
@@ -117,28 +122,130 @@ if($this->session->userdata('internal_type')=='Developer') {
                                     </div>
                                 </div>
                             </div>
-                            <form class="aui top-label editor" action="#">
-                                <input type="hidden" class="parent_id">
-                                <input type="hidden" class="comment_id">
+                            <form class="aui top-label editor" method="post" action="<?=base_url()."Issues/input_comment/".$repo_slug."/".$i["local_id"]?>">
+                                <input hidden name="comment_id" value="new">
                                 <div class="field-group">
-                                    <textarea id="id_new_comment" class="bb-mention-input" placeholder="What do you want to say?"></textarea>
-                                    <div class="preview-container wiki-content"><!-- loaded via ajax --></div>
+                                    <textarea id="new-comment" name="content" class="bb-mention-input input-comment-content" placeholder="What do you want to say?"></textarea>
+                                    <div class="preview-container"><!-- loaded via ajax --></div>
                                     <div class="error"></div>
                                 </div>
-                                <div class="buttons">
-                                    <button class="btn btn-primary" type="submit" resolved="">Comment</button>
-                                    <a href="#" class="cancel">Cancel</a>
+                                <div class="buttons" id="new-comment-btn" style="display:none">
+                                    <button class="btn btn-primary btn-sm disabled submit-button" type="submit" disabled>Comment</button>
+                                    <a href="#" class="cancel" onmousedown="clean()">Cancel</a>
                                 </div>
                                 <div class="mask"></div>
                             </form>
-                        </li></ol>
+                        </li>
+                        <?php if(isset($comments)):?>
+                        <?php foreach($comments as $index=>$c):?>
+                        <li class=" issue-comment comment" comment-id="<?=$c["comment_id"]?>">
+                            <div class="issue-author">
+                                <a href="#" title="View <?=$c["author_info"]["display_name"]?>'s profile">
+                                    <div class="avatar avatar-medium">
+                                        <div class="avatar-inner">
+                                            <img src="https://bitbucket.org/account/<?=$c["author_info"]["username"]?>/avatar/32/?ts=0"class=""  alt="">
+                                        </div>
+                                    </div>
+                                    <?=$c["author_info"]["display_name"]?>
+                                </a>
+                                <span style="color:grey">
+                                    commented <?=_ago(strtotime($c["utc_created_on"]))?> ago
+                                    <?=$c["utc_created_on"]!=$c["utc_updated_on"]? ", updated "._ago(strtotime($c["utc_updated_on"])). " ago":" "?>
+                                </span>
+                                <?php if($c["author_info"]["username"]==$i["reported_by"]["username"]):?>
+                                    <div style="height: 100%;display: inline;position:relative">
+                                        <div class="aui-lozenge" style="color:#4a6785;border-color:#a5b3c2;vertical-align:middle">reporter</div>
+                                    </div>
+                                <?php endif?>
+                            </div>
+
+                            <div class="comment-body">
+                            <div class="comment-content"><?=$c["content"]?></div>
+                            <?php if(true):?>
+                                <ul class="comment-actions">
+                                    <li style="float:left"><a href="#edit" class="edit-comment-link">Edit</a></li>
+                                    <li style="float:left">
+                                        <form style="display:inline" method="post" action="<?=base_url()."Issues/delete_comment/".$repo_slug."/".$i["local_id"]?>">
+                                            <a href="#comment-delete" class="comment-delete">Delete</a>
+                                            <input hidden name="comment_id" value="<?=$c["comment_id"]?>">
+                                        </form>
+                                    </li>
+                                </ul>
+                            <?php endif?>
+                            </div>
+                        </li>
+                        <?php endforeach?>
+                        <?php endif?>
+                    </ol>
                 </div>
             </div>
+            <script>
+                $(document).ready(function(){
+                    var $comments = $('#issues-comments');
+                    var $comment_body_content=null;
+                    var $comment_id =null;
+                    $comments.on('mousedown', '.edit-comment-link', function (e) {
+                        e.preventDefault();
+                        clean();
+                        $comment_id = $(this).closest('.issue-comment').attr("comment-id");
+                        var $comment_body = $(this).closest('.comment-body');
+                        var $comment_content_original = $comment_body.find('.comment-content').text();
+                        $comment_body_content = $comment_body.html();
+                        $comment_body.html($('.input-form-proto').clone());
+                        $comment_body.find('.input-form-proto').removeAttr("id");
+                        $comment_body.find(".input-comment-content").text($comment_content_original);
+                        $comment_body.find(".input-comment-id").val($comment_id);
+                    });
+                    $comments.on('click', '.input-cancel', function (e) {
+                        e.preventDefault();
+                        clean();
+                    });
+                    function cancelNewInput(){
+                        $('#new-comment').text('');$('#new-comment-btn').hide();return false;
+                    }
+                    function clean(){
+                        cancelNewInput();
+                        if($comment_id!=null && $comment_body_content!=null){
+                            var $comment = $('.issue-comment[comment-id="'+$comment_id+'"]');
+                            $comment.find('.comment-body').html($comment_body_content);
+                            $comment_body_content= null;$comment_id =null;
+                        }
+                    }
+                    //disable/enable form submit
+                    $comments.on('keyup', '.input-comment-content',function(e) {
+                        var val = $.trim( this.value );
+                        if(val.length == 0) {
+                            $(this).closest("form").find(".submit-button").addClass("disabled");
+                            $(this).closest("form").find(".submit-button").attr("disabled","disabled");
+                        }else{
+                            $(this).closest("form").find(".submit-button").removeClass("disabled");
+                            $(this).closest("form").find(".submit-button").removeAttr("disabled");
+                        }
+                    });
+                    $comments.on('focus', 'textarea', function () {
+                        console.log("in focus");
+                        $(this).css("height","96px");
+                        if($(this).attr("id")=="new-comment"){
+                            $('#new-comment-btn').css("display","block");
+                        }
+                    });
+                    $comments.on('click', '.comment-delete', function () {
+                        $(this).closest('form').submit();
+                        return false;
+                    });
+                    /*
+                    $comments.on('blur', 'textarea', function () {
+                        $(this).css("height","32px");
+                    });
+                    */
+
+                });
+            </script>
         </div>
         <div class="col-sm-6">
             <div class="issue-tool-bar">
                 <script>
-                    $("div").on("click",".update-btn",function(e){
+                    $("div").on("mousedown",".update-btn",function(e){
                         e.preventDefault();
                         var param = $(this).attr("param");
                         var value = $(this).attr("value");
@@ -183,10 +290,20 @@ if($this->session->userdata('internal_type')=='Developer') {
                         <td style="text-align: right;padding-right: 20px">Status</td><td><?=$i["status"]?></td>
                     </tr>
                 </table>
-
             </div>
         </div>
     </div>
+</div>
+<div style="display: none">
+    <form class="input-form-proto" style="padding-left:42px;margin: 12px 0" method="post"
+          action="<?=base_url()."Issues/input_comment/".$repo_slug."/".$i["local_id"]?>">
+        <textarea class="input-comment-content" name="content"></textarea>
+        <input hidden name="comment_id" class="input-comment-id">
+        <div class="buttons" style="margin-top: 5px">
+            <button class="btn btn-primary btn-sm disabled submit-button" type="submit" disabled="disabled">Update</button>
+            <a href="#" style="margin: 0 5px" class="input-cancel">Cancel</a>
+        </div>
+    </form>
 </div>
 </body>
 </html>

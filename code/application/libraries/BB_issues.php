@@ -18,6 +18,7 @@ class BB_issues {
     public $defined_status=[
         "new","to develop","resolved","to test","invalid","to deploy","wontfix","closed"
     ];
+
     private function setEndpoint($repo_slug){
         return "https://api.bitbucket.org/1.0/repositories/".BB_ACCOUNT_NAME."/".$repo_slug."/issues";
     }
@@ -43,8 +44,17 @@ class BB_issues {
             $url = $endpoint.'?'.$this->construct_paras($parameters);
             $result = $this->sendGetRequest($url);
         }
-        //var_dump($result);
-        return $result;
+        if(isset($result['issues'])){
+            /*when server replies issue list*/
+            foreach($result["issues"] as $key=>$issue){
+                $result["issues"][$key]["status"] = $this->map_status($issue["status"], false);
+            }
+            return $result;
+        }else{
+            /*when server replies single issue*/
+            $result["status"] = $this->map_status($result["status"], false);
+            return $result;
+        }
     }
     private function map_status($status, $fromDefined = true){
         $negate = false;
@@ -81,17 +91,11 @@ class BB_issues {
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         if($code==200 && ($reply_array = json_decode($response,true))!=null){
+            //echo ($response);
             if(isset($reply_array['error'])){
                 if($this->_print_err) var_dump($reply_array);
-            }else if(isset($reply_array['issues'])){
-                /*when server replies issue list*/
-                foreach($reply_array["issues"] as $key=>$issue){
-                    $reply_array["issues"][$key]["status"] = $this->map_status($issue["status"], false);
-                }
-                return $reply_array;
             }else{
-                /*when server replies single issue*/
-                $reply_array["status"] = $this->map_status($reply_array["status"], false);
+                /*this is expected*/
                 return $reply_array;
             }
         }
@@ -133,12 +137,87 @@ class BB_issues {
     public function updateIssue($repo_slug, $id, array $issue_array){
         return $this->sendIssueRequest($repo_slug,$id,$issue_array,"PUT");
     }
-    public function getCommentsForAnIssue($repo_slug, $issue_id){
-        //TODO:retrieve comments
+    public function getCommentsForIssue($repo_slug, $issue_id){
+        /*settle the access token and etc*/
+        $CI =& get_instance();
+        $CI->load->library('BB_shared');
+        $token = $CI->bb_shared->getDefaultOauthToken();
+        $endpoint = $this->setEndpoint($repo_slug).'/'.$issue_id.'/comments';
+        $parameters["access_token"] = $token;
+        $parameters["timestamp"] = time();
+        /*construct endpoint*/
+        $url = $endpoint.'?'.$this->construct_paras($parameters);
+        $result =  $this->sendGetRequest($url);
+        if(is_null($result)){
+            $parameters["access_token"] = $CI->bb_shared->requestFromServer();
+            $url = $endpoint.'?'.$this->construct_paras($parameters);
+            $result = $this->sendGetRequest($url);
+        }
+        //var_dump($result);
+        return $result;
     }
-    public function postCommentsForAnIssue($repo_slug, $issue_id, $comment){
-        //TODO: post comment
-        //question: $comment string only? how do we know who posts it?
+    public function postCommentForIssue($repo_slug, $issue_id, $comment, $comment_id=null){
+        $method = isset($comment_id)? "PUT":"POST";
+        $CI =& get_instance();
+        $CI->load->library('BB_shared');
+        $token = $CI->bb_shared->getDefaultOauthToken();
+        $endpoint = $this->setEndpoint($repo_slug).'/'.$issue_id.'/comments';
+        if($method=="PUT") $endpoint .="/".$comment_id;
+        $_trial = 2;
+        $data = [
+            'access_token'=>$token,
+            'content'=>$comment
+        ];
+        while($_trial>=0) {
+            $_trial -= 1;/*IMPORTANT*/
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $endpoint);
+
+            if ($method == 'POST')
+                curl_setopt($ch, CURLOPT_POST, TRUE);
+            else
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
+            $response = curl_exec($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if($code==200) break;/*IMPORTANT*/
+            else{
+                $issue_array['access_token'] = $CI->bb_shared->requestFromServer();
+            }
+        }
+        //var_dump($response);
+        if(($reply_array = json_decode($response,true))!=null){
+            if(isset($reply_array['error'])){
+                if($this->_print_err) echo var_dump($reply_array);
+            }else{
+                return $reply_array;
+            }
+        }
+        return null;
+
+    }
+    public function deleteCommentForIssue($repo_slug, $issue_id,  $comment_id){
+        $CI =& get_instance();
+        $CI->load->library('BB_shared');
+        $token = $CI->bb_shared->getDefaultOauthToken();
+        $endpoint = $this->setEndpoint($repo_slug).'/'.$issue_id.'/comments/'.$comment_id;
+        $data = [
+            'access_token'=>$token
+        ];
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $endpoint);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
+        curl_setopt($ch, CURLOPT_VERBOSE, true);
+        curl_exec($ch);
+        curl_close($ch);
     }
     private function sendIssueRequest($repo_slug,$id, $issue_array, $_flag='POST'){
         $CI =& get_instance();

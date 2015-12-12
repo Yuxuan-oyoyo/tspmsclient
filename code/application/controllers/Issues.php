@@ -12,53 +12,70 @@ class Issues extends CI_Controller {
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->library('BB_issues');
-
+        $this->load->library('Parsedown');
     }
+
     /**
      * List all issues of given repo page
      * @param null $repo_slug
      */
     public function list_all($repo_slug=null){
+
         $user_id = $this->session->userdata('internal_uid');
         if(isset($user_id)) {
+
             if(isset($repo_slug)) {
-                $data["repo_slug"] = $repo_slug;
+                /*define constants*/
+                $num_per_page = 25;
                 /*params expected*/
                 $opt_params = [
-                    "search","sort","limit","start","status","kind","responsible",
+                    "search","sort","limit","start","status","kind","responsible","page",
                     "milestone","reported_by","priority","utc_created_on","utc_last_updated","title","content"
                 ];
                 $para_input = $this->input->get($opt_params,true);
-                if($para_input["sort"]=="responsible") $para_input["sort"] = null;/*cannot sort by responsible*/
+                /***cannot sort by responsible*/
+                if($para_input["sort"]=="responsible") $para_input["sort"] = null;
+                /***initialize page if not given or not valid numerical value*/
+                if(empty($para_input["page"]) ||!ctype_digit($para_input["page"])) $para_input["page"] = 1;
                 $para =[];
+                $para_raw = [];
                 /*transfer $para_input to $para. Only keep non-null key value pairs.*/
                 /*this prevents bad request*/
                 foreach($para_input as $key=>$value){
                     if(!empty($value)){
-                        if($key=="search") {/*replace whitespace to +, as required in api*/
-                            if(strpos($value,"=")!==false
-                                && in_array($filed = strtolower(trim(explode("=",$value)[0])),["title","title"])){
-                                $para[$filed] = str_replace (" ","+",trim(explode("=",$value)[1]));
-                            }else{
-                                $para[$key] = str_replace (" ","+",$value);
+                        /*Specially process "search" input. replace whitespace to +, as required in api*/
+                        if($key=="search") {
+                            if (strpos($value, "=") !== false
+                                && in_array($filed = strtolower(trim(explode("=", $value)[0])), ["title", "content"])
+                            ) {
+                                $para_raw[$filed] = $para[$filed] = str_replace(" ", "+", trim(explode("=", $value)[1]));
+                            } else {
+                                $para_raw[$key] = $para[$key] = str_replace(" ", "+", $value);
                             }
+                        }elseif($key=="page"){
+                            $para_raw["page"] = $value;
+                            $para["start"] = ($value-1) * $num_per_page;
+                            $para["limit"] = $num_per_page;
                         }else{
-                            $para[$key] = $value;
+                            $para_raw[$key] = $para[$key] = $value;
                         }
                     }
                 }
                 //TODO:validate parameters
                 /*Get all issues*/
-                $issues_response = $this->bb_issues->retrieveIssues($repo_slug,null, $para);
-                /*Get user bb_username*/
+                $response = $this->bb_issues->retrieveIssues($repo_slug,null, $para);
+                /*Get user bb_username to pass on to the page*/
                 $this->load->model("Internal_user_model");
-                $user = $this->Internal_user_model->retrieve($user_id);
-                $data= ["issues_response"=>$issues_response,
+                $data= [
+                    "issues"=>$response["issues"],
+                    "count" => $response["count"],
+                    "num_per_page" =>$num_per_page,
                     "repo_slug"=>$repo_slug,
-                    "filter_arr"=>$para,
-                    "user" =>$user
+                    "para_raw"=>$para_raw,
+                    "user" =>$this->Internal_user_model->retrieve($user_id)
                 ];
-                $this->session->set_userdata('issue_list'.$repo_slug, $issues_response["issues"]);
+                //var_dump($data);
+                $this->session->set_userdata('issue_list'.$repo_slug, $response["issues"]);
                 $this->load->view("issue/all_2", $data);
             }else{
                 //TODO: take user to 404 page
@@ -121,7 +138,19 @@ class Issues extends CI_Controller {
     public function detail($repo_slug=null, $issue_id=null) {
         if($this->session->userdata('internal_uid')) {
             if (isset($repo_slug) && isset($issue_id)) {
-                $data =["issue_details"=>$this->retrie_by_id($repo_slug,$issue_id), "repo_slug"=>$repo_slug];
+                $comments = $this->bb_issues->getCommentsForIssue($repo_slug, $issue_id);
+                /*if(!isset($comments)) $comments = [];
+
+                foreach($comments as $key=>$value){
+
+                }
+                $comments = $this->parsedown->text();
+                 */
+                $data =[
+                    "issue_details"=>$this->retrie_by_id($repo_slug,$issue_id),
+                    "repo_slug"=>$repo_slug,
+                    "comments"=>$comments
+                ];
                 $this->load->view("issue/view", $data);
             }else{
                 //TODO: take user to 404 page
@@ -133,14 +162,26 @@ class Issues extends CI_Controller {
         }
     }
     private function retrie_by_id($repo_slug=null, $id=null){
-        $repo_slug="tspms";
         $issue_details = $this->session->flashdata("issue_last_updated");
         if(!isset($issue_details)){/*if issue list is not in session, or cannot find*/
             $issue_details = $this->bb_issues->retrieveIssues($repo_slug, $id);
         }
         return $issue_details;
     }
-
+    public function input_comment($repo_slug, $issue_id){
+        $comment_id = $this->input->post("comment-id");
+        $comment = $this->input->post("content");
+        if($comment_id=="new"){
+            $comment_id = null;
+        }
+        $issue_details = $this->bb_issues->postCommentForIssue($repo_slug, $issue_id, $comment, $comment_id);
+        redirect(base_url()."Issues/detail/".$repo_slug."/".$issue_id);
+    }
+    public function delete_comment($repo_slug, $issue_id) {
+        $comment_id = $this->input->post("comment-id");
+        $this->bb_issues->deleteCommentForIssue($repo_slug, $issue_id, $comment_id);
+        //redirect(base_url()."Issues/detail/".$repo_slug."/".$issue_id);
+    }
 
     /**
      * Processes Ajax request. Updates a single field

@@ -66,24 +66,29 @@ if($this->session->userdata('internal_type')=='Developer') {
     <hr>
     <div class="row" style="margin-right: auto">
         <div class=" col-xs-10" style="padding-left:30px">
-            <?php
-                $filter_arr =$filter_arr;
-                $headers = [
-                    "local_id"=>["display"=>"Title"     ,"sort"=>"local_id"],//"sm" for sort method
-                    "kind"=>["display"=>"Type"  ,"sort"=>"kind" ],
-                    "priority"=>["display"=>"Priority" ,"sort"=>"priority"],
-                    "status"=>["display"=>"Status"   ,"sort"=>"status" ],
-                    "milestone"=>["display"=>"Milestone" ,"sort"=>"milestone"],
-                    "responsible"=>["display"=>"Assignee" ,"sort"=>"responsible"],
-                    "utc_created_on"=>["display"=>"Created" ,"sort"=>"utc_created_on"],
-                    "utc_last_updated"=>["display"=>"Updated" ,"sort"=>"utc_last_updated"],
-                ];
+        <?php
+            $filter_arr =$para_raw;
+            $issues = $issues;
+            $count = $count;
+            $num_per_page = $num_per_page;
+            $current_page = $filter_arr["page"];
+            $headers = [
+                "local_id"=>["display"=>"Title"     ,"sort"=>"local_id"],//"sm" for sort method
+                "kind"=>["display"=>"Type"  ,"sort"=>"kind" ],
+                "priority"=>["display"=>"Priority" ,"sort"=>"priority"],
+                "status"=>["display"=>"Status"   ,"sort"=>"status" ],
+                "milestone"=>["display"=>"Milestone" ,"sort"=>"milestone"],
+                "responsible"=>["display"=>"Assignee" ,"sort"=>"responsible"],
+                "utc_created_on"=>["display"=>"Created" ,"sort"=>"utc_created_on"],
+                "utc_last_updated"=>["display"=>"Updated" ,"sort"=>"utc_last_updated"],
+            ];
             $status_color=[
                 "new"=>"#34495e","to develop"=>"#e67e22 ","resolved"=>"#2ecc71",
                 "to test"=>"#3498db","invalid"=>"#e74c3c","to deploy"=>"#9b59b6 ",
                 "wontfix"=>"#95a5a6","closed"=>"#7f8c8d "
             ];
-            $issues = $issues_response["issues"];
+
+            unset($filter_arr["page"]);
             $sorted_header=null;
             if(isset($filter_arr["sort"])){
                 if(substr($filter_arr["sort"],0,1)!="-"){
@@ -93,10 +98,11 @@ if($this->session->userdata('internal_type')=='Developer') {
                 }else{
                     $sorted_header = substr($filter_arr["sort"],1);
                 }
-                unset($filter_arr["sort"]);
             }
             $filter_str =http_build_query($filter_arr);
-            $filter_str = empty($filter_str)? $filter_str: $filter_str."&";
+            $filter_str = empty($filter_str)? "": $filter_str."&";
+            unset($filter_arr["sort"]);
+
             ?>
             <div style="width: 100%;height:34px">
                 <div style="float: left">
@@ -126,7 +132,7 @@ if($this->session->userdata('internal_type')=='Developer') {
             </div>
             <div style="width: 100%;font-size: 1.2em;margin: 7px 5px">
 
-                <b>Showing issues (0-0 of 0) </b>
+                <b>Showing issues (<?=$num_per_page * ($current_page -1)?>-<?=min($count,$num_per_page*$current_page)?> of <?=$count?>) </b>
                 <?php if(!empty($filter_arr)):?>|
                     <?php foreach($filter_arr as $key=>$value):?>
                         <span style="color: grey"><b><?=$key?></b>: "<?=$value?>"</span>
@@ -154,7 +160,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                 <?php foreach($issues as $d):?>
                     <tr class="" data-state="open">
                         <td class="" style="width: 35%">
-                            <a class="execute" href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."/".$d["local_id"]?>" title="View Details">#<?=$d["local_id"]?>: <?=$d["title"]?></a>
+                            <a class="execute" href="<?=base_url()."Issues/detail/".$repo_slug."/".$d["local_id"]?>" title="View Details">#<?=$d["local_id"]?>: <?=$d["title"]?></a>
                         </td>
                         <td class="icon-col">
                             <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."kind=".$d["metadata"]["kind"]?>"
@@ -194,19 +200,47 @@ if($this->session->userdata('internal_type')=='Developer') {
                         </td>
                         <td class="date" style="min-width: 100px">
                             <div>
-                                <time datetime="<?=$d["utc_created_on"]?>" data-title="true"><?=_ago(strtotime($d["utc_created_on"]))?> ago</time>
+                                <time datetime="<?=$d["utc_created_on"]?>" data-title="true">
+                                    <?=_ago(strtotime($d["utc_created_on"]))?> ago
+                                </time>
                             </div>
                         </td>
                         <td class="date" style="min-width: 100px">
                             <div>
-                                <time datetime="<?=$d["utc_last_updated"]?>" data-title="true"><?=_ago(strtotime($d["utc_last_updated"]))?> ago</time>
+                                <time datetime="<?=$d["utc_last_updated"]?>" data-title="true">
+                                    <?=_ago(strtotime($d["utc_last_updated"]))?> ago
+                                </time>
                             </div>
                         </td>
                     </tr>
                 <?php endforeach?>
                 </tbody>
             </table>
-
+            <div>
+                <div align="center">
+                <ul class="pagination">
+                    <?php
+                        $num_of_pages = floor($count/ $num_per_page) + 1;
+                    ?>
+                    <li class="<?=$current_page==1?'disabled':''?>">
+                        <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."page=".($current_page-1)?>" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span></a>
+                    </li>
+                    <?php for($i=1;$i<=$num_of_pages;$i++):?>
+                        <li class="<?=$i==$current_page?'active':''?>">
+                            <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."page=".$i?>">
+                                <?=$i?><?=$i==$current_page?'<span class="sr-only">(current)</span>':''?>
+                            </a>
+                        </li>
+                    <?php endfor?>
+                    <li class="<?=$current_page==$num_of_pages?'disabled':''?>">
+                        <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."page=".($current_page+1)?>" aria-label="Previous">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
