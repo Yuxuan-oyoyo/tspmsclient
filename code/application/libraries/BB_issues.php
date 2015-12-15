@@ -189,14 +189,6 @@ class BB_issues {
                 $issue_array['access_token'] = $CI->bb_shared->requestFromServer();
             }
         }
-        //var_dump($response);
-        if(($reply_array = json_decode($response,true))!=null){
-            if(isset($reply_array['error'])){
-                if($this->_print_err) echo var_dump($reply_array);
-            }else{
-                return $reply_array;
-            }
-        }
         return null;
 
     }
