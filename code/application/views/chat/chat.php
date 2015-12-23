@@ -14,7 +14,8 @@ $user_id = $user_id;
     <meta charset="utf-8">
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="<?=base_url()?>css/chat/base.css" />
-    <script src="<?=base_url()?>js/react-with-addons.min.js"></script>
+    <script src="https://fb.me/react-with-addons-0.14.3.js"></script>
+    <script src="https://fb.me/react-dom-0.14.3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/1.7.2/moment.min.js"></script>
 
@@ -137,6 +138,58 @@ if($this->session->userdata('Customer_cid')){
     })
 
 
+    var RightNewMessageBox = React.createClass({
+
+        getInitialState: function()
+        {
+            return {
+                options: []
+            }
+        },
+        componentDidMount: function()
+        {
+            // ajax call, assume success
+            var data_arr = ['yuxuan', 'Luning','chengzhen','fwleong','tiantong']
+            this.successHandler(data_arr)
+        },
+        successHandler: function(data)
+        {
+            this.state.options.push(
+                <option selected disabled> -- Name --</option>
+            )
+            for(var i = 0; i < data.length; i++)
+            {
+                var option = data[i];
+                this.state.options.push(
+                    <option key={i} value={option}> {option} </option>
+                )
+            }
+            this.forceUpdate();
+
+        },
+        handleChange: function(event)
+        {
+
+        },
+        handleWrite: function()
+        {
+            console.log('handleWrite');
+        },
+        render: function(){
+
+
+            return(
+                <div>
+                    <select> {this.state.options}</select>
+                    <div>
+                        <button onClick={this.handleWrite} type="button">New conversation </button>
+                    </div>
+                </div>
+
+            )
+        }
+    })
+
 
     var RightMessageComposerBox = React.createClass({
 
@@ -197,56 +250,91 @@ if($this->session->userdata('Customer_cid')){
 
     var RightMessageBox = React.createClass({
 
-
+        // @formatter:off
         render: function() {
+
             var parentProps = this.props;
             //console.log("user 1 is " + this.props.chat.user1)
-            var j = (this.props.chat.user1 == CurrentUser) ? this.props.chat.user2: this.props.chat.user1;
 
-            // WORKINGON
-            var sortedMessages;
-            var msgNodes;
+            if(this.props.chat == "new_message")
+            {
+
+                return(
+                    <div className="message-section">
+                        <div>
+                            <h3 className="message-thread-heading">New Message</h3>
+                        </div>
 
 
-            //MessageSorting
-            //console.log(this.props.chat.user1);
-            //console.log(this.props.chat.user2);
-            console.log("MessageSorting")
+                        <RightNewMessageBox thread={this.props.chat} refreshFunc={this.props.refreshFunc} />
 
-            if (this.props.chat.user1 !== undefined) {
-                /*
-                sortedMessages = this.props.chat.messages.sort(function(a,b){
-                    //console.log("a: " + a.timestamp)
-                    //console.log("b: " + b.timestamp)
-                    return a.timeStamp - b.timeStamp
-                })
-                */
-                console.log(this.props.chat.messages)
-                msgNodes = this.props.chat.messages.map(function(msg){
-                    return (
-                        <RightMessage msg={msg} key={msg.msgID}> </RightMessage>
-                    )
-                })
-            } else {
-                msgNodes = "not selected yet"
+                    </div>
+                )
+
             }
-            return(
-                <div className="message-section">
-                    <h3 className="message-thread-heading">{j}</h3>
-                    <ul className="message-list" ref="messageList">
-                        {msgNodes}
-                    </ul>
-                    <RightMessageComposerBox thread={this.props.chat} refreshFunc={this.props.refreshFunc} />
+            else
+            {
+                var j = (this.props.chat.user1 == CurrentUser) ? this.props.chat.user2: this.props.chat.user1;
 
-                </div>
-            )
+                // WORKINGON
+                var sortedMessages;
+                var msgNodes;
+
+
+                //MessageSorting
+                //console.log(this.props.chat.user1);
+                //console.log(this.props.chat.user2);
+                //console.log("MessageSorting")
+
+
+                if (this.props.chat.user1 !== undefined) {
+                    /*
+                    sortedMessages = this.props.chat.messages.sort(function(a,b){
+                        //console.log("a: " + a.timestamp)
+                        //console.log("b: " + b.timestamp)
+                        return a.timeStamp - b.timeStamp
+                    })
+                    */
+                    console.log(this.props.chat.messages)
+                    msgNodes = this.props.chat.messages.map(function(msg){
+                        return (
+                            <RightMessage msg={msg} key={msg.msgID}> </RightMessage>
+                        )
+                    })
+                } else {
+                    msgNodes = "not selected yet"
+                }
+                return(
+                    <div className="message-section">
+                        <div>
+                            <h3 className="message-thread-heading">{j}</h3>
+                            <div>
+                                <button onClick={this.props.clickFunc.bind(null, "new_message")} className="message-thread-heading" type="button">+ New Message</button>
+                            </div>
+                        </div>
+
+                        <ul className="message-list" ref="messageList">
+                            {msgNodes}
+                        </ul>
+                        <RightMessageComposerBox thread={this.props.chat} refreshFunc={this.props.refreshFunc} />
+
+                    </div>
+                )
+
+            }
         },
         componentDidUpdate: function() {
-            this._scrollToBottom();
+            if(this.props.chat != "new_message")
+            {
+                this._scrollToBottom();
+            }
         },
         _scrollToBottom: function() {
-            var ul = this.refs.messageList.getDOMNode();
-            ul.scrollTop = ul.scrollHeight;
+            if(this.props.chat != "new_message")
+            {
+                var ul = this.refs.messageList.getDOMNode();
+                ul.scrollTop = ul.scrollHeight;
+            }
         },
     })
 
@@ -286,14 +374,17 @@ if($this->session->userdata('Customer_cid')){
             //console.log("handleClickOnLeftUser");
             // console.log("chat id is");
             // console.log(data.chatID);
-            this.setState({chatID: data.chatID});
+            if(data == "new_message")
+            {
+                this.setState({chatID: "new_message"})
+            }
+            else
+            {
+                this.setState({chatID: data.chatID});
+            }
         },
-
+        // @formatter:off
         render: function() {
-
-            //console.log("main:render")
-            //console.log(this.props.chats);
-
 
             var theThreadIWantToPass = {};
             for(var i = 0; i < this.state.chats.length; i++)
@@ -309,26 +400,57 @@ if($this->session->userdata('Customer_cid')){
                 <span>Unread threads: 0 </span>
                 :   <span>Unread threads: {this.state.unreadCount} </span>;
 
-            return (
-                <div className="chatapp">
-                    <div className="thread-section">
-                        <div className="thread-count">
-                            {unread}
+            if(this.state.chatID == "new_message")
+            {
+                //console.log("new_message")
+                return (
+                    <div className="chatapp">
+                        <div className="thread-section">
+                            <div className="thread-count">
+                                {unread}
+                            </div>
+                            <LeftUserList
+                                chat_id={this.state.chatID}
+                                chats={this.state.chats}
+                                clickFunc={this.handleClickOnLeftUser} // ***important
+                                />
                         </div>
-                        <LeftUserList
-                            chat_id={this.state.chatID}
-                            chats={this.state.chats}
-                            clickFunc={this.handleClickOnLeftUser} // ***important
-                            />
+                        <div>
+                            <RightMessageBox
+                                chat="new_message"
+                                refreshFunc={this.getInitialData}
+                                chat_id = {this.state.chatID}
+                                clickFunc={this.handleClickOnLeftUser}
+                                />
+                        </div>
                     </div>
-                    <div>
-                        <RightMessageBox
-                            chat={theThreadIWantToPass}
-                            refreshFunc={this.getInitialData}
-                            />
+                );
+            }
+            else
+            {
+                return (
+                    <div className="chatapp">
+                        <div className="thread-section">
+                            <div className="thread-count">
+                                {unread}
+                            </div>
+                            <LeftUserList
+                                chat_id={this.state.chatID}
+                                chats={this.state.chats}
+                                clickFunc={this.handleClickOnLeftUser} // ***important
+                                />
+                        </div>
+                        <div>
+                            <RightMessageBox
+                                chat={theThreadIWantToPass}
+                                refreshFunc={this.getInitialData}
+                                chat_id = {this.state.chatID}
+                                clickFunc={this.handleClickOnLeftUser}
+                                />
+                        </div>
                     </div>
-                </div>
-            );
+                );
+            }
         }
     });
 
