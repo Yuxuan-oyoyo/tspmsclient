@@ -30,10 +30,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="col-md-12">
             <div class="pr-wrap">
                 <div class="pass-reset">
-                    <label>
-                        Enter the email you signed up with</label>
-                    <input type="email" placeholder="Email" />
-                    <input type="submit" value="Submit" class="pass-reset-submit btn btn-primary btn-sm" />
+
+                        <label>
+                            Enter the email you signed up with</label>
+                    <form role="form" action= "<?=base_url()."Internal_authentication/reset_password"?>" method="post">
+                        <input type="email" placeholder="Email" id="email" name="email" />
+                        <input type="submit" value="Submit" id="submit" name="submit" class="pass-reset-submit btn btn-primary btn-sm" />
+                    </form>
                 </div>
             </div>
             <div class="wrap">
@@ -45,6 +48,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <?=$this->session->userdata('message')?>
                         </div>
                         <?php $this->session->unset_userdata('message') ?>
+                    <?php endif;?>
+                    <br>
+                    <?php if(validation_errors()):?>
+                        <div class="form-group">
+                            <div class="alert alert-info col-lg-offset-4 col-lg-4" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                </button>
+                                <?=validation_errors();?>
+                            </div>
+                        </div>
                     <?php endif;?>
                 </div>
 
@@ -77,7 +90,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div>
 </div>
 <div class=" col-md-12">
-    <img src="<?=base_url()?>img/Shipyardlogo1.png" style="margin-left:15px;margin-top:15px" "width="357" height="88" alt=""/>
+    <img src="<?=base_url()?>img/Shipyardlogo1.png" style="margin-left:15px;margin-top:15px" width="357" height="88" alt=""/>
 </div>
 </body>
 </html>

@@ -75,4 +75,15 @@ class Internal_user_model extends CI_Model
         }
         return null;
     }
+
+    public function retrieve_by_email($email){
+
+        if(isset($email)){
+            $query = $this->db->get_where("internal_user",["email"=>$email]);
+            if($query->num_rows()>0){
+                return $query->row_array();
+            }
+        }
+        return null;
+    }
 }

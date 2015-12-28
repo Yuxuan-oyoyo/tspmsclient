@@ -40,6 +40,11 @@ class Customer_model extends CI_Model
             return $query->row_array();
     }
 
+    public function retrieve_by_email($email){
+        $query = $this->db->get_where("customer",["email"=>$email]);
+        return $query->row_array();
+    }
+
     public function retrieveAll($only_active=true,$limit=0,$offset=0){
         $where = [];
         if(isset($input_c_id)){

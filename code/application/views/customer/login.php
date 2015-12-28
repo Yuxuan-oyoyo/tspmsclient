@@ -32,8 +32,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="pass-reset">
                     <label>
                         Enter the email you signed up with</label>
-                    <input type="email" placeholder="Email" />
-                    <input type="submit" value="Submit" class="pass-reset-submit btn btn-primary btn-sm" />
+                    <form role="form" action= "<?=base_url()."Customer_authentication/reset_password"?>" method="post">
+                        <input type="email" placeholder="Email" id="email" name="email" />
+                        <input type="submit" value="Submit" id="submit" name="submit" class="pass-reset-submit btn btn-primary btn-sm" />
+                    </form>
                 </div>
             </div>
             <div class="wrap">
@@ -77,7 +79,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div>
 </div>
 <div class=" col-md-12">
-<img src="<?=base_url()?>img/Shipyardlogo1.png" style="margin-left:15px;margin-top:15px" "width="357" height="88" alt=""/>
+<img src="<?=base_url()?>img/Shipyardlogo1.png" style="margin-left:15px;margin-top:15px" width="357" height="88" alt=""/>
 </div>
 
 </body>
