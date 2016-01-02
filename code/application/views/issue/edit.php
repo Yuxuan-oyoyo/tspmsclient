@@ -75,12 +75,14 @@ if($this->session->userdata('internal_type')=='Developer') {
     });
 </script>
 <div class="col-sm-offset-1 content" style="margin-top: 75px;margin-left:15%">
-    <form class="form-horizontal" data-parsley-validate action="<?=base_url()."Issues/process_edit/".$repo_slug."/".$i["local_id"]?>">
+    <div style="display:inline">
         <h2 style="max-width: 50%">
             <span style="color: #777777;padding-right: 10px">#<?=$i["local_id"]?></span>
             <?=$i["title"]?>
         </h2>
-        <div style="display: table;width:45%">
+    <form class="form-horizontal col-sm-6" data-parsley-validate action="<?=base_url()."Issues/process_edit/".$repo_slug."/".$i["local_id"]?>">
+
+        <div style="display: table;width:95%">
         <div class="form-part">
             <div class="form-label">Title <span class="cmpl"></span></div>
             <div class="form-input">
@@ -144,17 +146,91 @@ if($this->session->userdata('internal_type')=='Developer') {
                 </select>
             </div>
         </div>
+            <div class="form-part">
+                <div class="form-label">Use case</div>
+                <div class="form-input">
+                    <?php //get all use cases!!!?>
+                    <select name="priority" class="form-control">
+                        <?php foreach($priorities as $k):?>
+                            <?php if($i["priority"]==$k):?>
+                                <option selected value="<?=$k?>"><?=$k?></option>
+                            <?php else:?>
+                                <option value="<?=$k?>"><?=$k?></option>
+                            <?php endif?>
+                        <?php endforeach?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-part">
+                <div class="form-label">Milestone</div>
+                <div class="form-input">
+                <?php
+                    $ci->load->library('BB_milestones');
+                    $ci->load->model('Milestone_model');
+                    $milestones = $ci->bb_milestones->getAllMilestones($repo_slug);
+                ?>
+                    <select name="milestone" class="form-control">
+                        <option selected value="0">NIL</option>
+                        <?php foreach($milestones as $m):?>
+                            <?php if($i["metadata"]["milestone"]==$m["id"]):?>
+                                <option selected value="<?=$m["id"]?>"><?=print_r($ci->Milestone_model->retrieve_by_id($m["name"]))?></option>
+                            <?php else:?>
+                                <option value="<?=$m["id"]?>"><?=print_r($ci->Milestone_model->retrieve_by_id($m["name"]))?></option>
+                            <?php endif?>
+                        <?php endforeach?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-part">
+                <div class="form-label">Comment</div>
+                <div class="form-input">
+                    <textarea class="form-control" id="new-comment" name="comment" style="width: 100%;height: 96px;overflow: hidden;padding: 7px;"
+                              placeholder="What do you want to say?"></textarea>
+                    <div class="preview-container"><!-- loaded via ajax --></div>
+                </div>
+            </div>
         <div class="form-part">
             <div style="display: table-cell"></div>
             <div class="form-input" style="vertical-align: middle">
                 <button class="btn btn-primary" style="margin-right: 5pt">Update issue</button>
-                <a href="<?=base_url()."issues/detail/".$repo_slug."/".$i["local_id"]?>">Cancel</a>
+                <a href="javascript:history.back(-1)">Cancel</a>
             </div>
         </div>
 
-
         </div>
     </form>
+        <div class="issue-tool-bar" style="padding:7pt">
+            <script>
+                $("div").on("mousedown",".update-btn",function(e){
+                    e.preventDefault();
+                    var param = $(this).attr("param");
+                    var value = $(this).attr("value");
+                    window.location.replace("<?=base_url()."Issues/update/".$repo_slug."/".$i["local_id"]."?"?>"+"param="+param+"&value="+value);
+                });
+            </script>
+            <div class="btn-group">
+                <?php if($i["status"]=="resolved"):?>
+                    <a href="#" class="btn btn-primary update-btn" param="status" value="new">Open</a>
+                <?php else:?>
+                    <a href="#" class="btn btn-primary update-btn" param="status" value="resolved">Resolve</a>
+
+
+                    <a href="<?=base_url()."/Issues/update/".$repo_slug."/".$i["local_id"]."?status=resolved"?>"
+                       class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="update-btn" param="status" value="new">new</a></li>
+                        <li><a href="#" class="update-btn" param="status" value="to develop">to develop</a></li>
+                        <li><a href="#" class="update-btn" param="status" value="to test">to test</a></li>
+                        <li><a href="#" class="update-btn" param="status" value="to deploy">to deploy</a></li>
+                        <li><a href="#" class="update-btn" param="status" value="invalid">invalid</a></li>
+                        <li><a href="#" class="update-btn" param="status" value="wontfix">wontfix</a></li>
+                        <li><a href="#" class="update-btn" param="status" value="resolved">resolved</a></li>
+                    </ul>
+                <?php endif?>
+            </div>
+        </div>
+    </div>
 </div>
+
 </body>
 </html>

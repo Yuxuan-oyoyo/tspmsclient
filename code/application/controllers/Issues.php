@@ -242,7 +242,10 @@ class Issues extends CI_Controller {
     public function process_edit($repo_slug=null, $issue_id){
         if($this->session->userdata('internal_uid')) {
             /*params expected*/
-            $field_params = ["status","priority","title","responsible","content","kind","milestone"];
+            $field_params = [
+                "status","priority","title","responsible","content",
+                "kind","milestone","comment","usecase","deadline"
+            ];
             $para_input = $this->input->get($field_params,true);
             $param=[];
             foreach($para_input as $key=>$value){

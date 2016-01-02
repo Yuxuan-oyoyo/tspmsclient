@@ -7,8 +7,6 @@
  * Time: 2:00 PM
  */
 class BB_issues {
-    //TODO: count hourly count
-    //TODO: no re auth before it expires
     //public  $oauth_endpoint = 'https://bitbucket.org/site/oauth2/access_token';
 
     public $_print_err = false;
@@ -22,7 +20,38 @@ class BB_issues {
     private function setEndpoint($repo_slug){
         return "https://api.bitbucket.org/1.0/repositories/".BB_ACCOUNT_NAME."/".$repo_slug."/issues";
     }
+    private function encode_attr_into_content($issue_array){
+        /*use xml to encode deadline, usecase, content (description) into content*/
+        if(isset($issue_array["content"])){
+            $text = "<content>".$issue_array["content"]."</content>";
+            if(isset($issue_array["deadline"])){
+                $text .="<deadline>".$issue_array["deadline"]."</deadline>";
+            }
+            if(isset($issue_array["usecase"])){
+                $text .="<usecase>".$issue_array["usecase"]."</usecase>";
+            }
+            $issue_array["content"] = $text;
+        }
+        return $issue_array;
+    }
 
+    /**
+     * @param $issue_array
+     */
+    private function decode_attr_from_content($issue_array){
+        if(isset($issue_array["content"])){
+            if(preg_match("/<deadline>(.*?)</deadline>/",$issue_array["content"],$display)){
+                $issue_array["deadline"] = $display[1];
+            }
+            if(preg_match("/<usecase>(.*?)</usecase>/",$issue_array["content"],$display)){
+                $issue_array["usecase"] = $display[1];
+            }
+            if(preg_match("/<content>(.*?)</content>/",$issue_array["content"],$display)){
+                $issue_array["content"] = $display[1];
+            }
+            return $issue_array;
+        }
+    }
     /**
      * @param $repo_slug
      * @param $id
@@ -48,11 +77,13 @@ class BB_issues {
             /*when server replies issue list*/
             foreach($result["issues"] as $key=>$issue){
                 $result["issues"][$key]["status"] = $this->map_status($issue["status"], false);
+                $result["issues"][$key] = $this->decode_attr_from_content($issue);
             }
             return $result;
         }else{
             /*when server replies single issue*/
             $result["status"] = $this->map_status($result["status"], false);
+            $result = $this->decode_attr_from_content($result);
             return $result;
         }
     }
@@ -219,6 +250,7 @@ class BB_issues {
         if(isset($id)){
             $endpoint =$endpoint."/".$id;
         }
+        $issue_array = $this->encode_attr_into_content($issue_array);
         if(isset($issue_array["status"])){
             $issue_array["status"] = $this->map_status($issue_array["status"], true);
         }

@@ -33,7 +33,15 @@ class Milestones extends CI_Controller{
             $deadline = new DateTime($deadline);
             $insert_milestone_array['deadline'] = $deadline->format('c');
             $insert_milestone_array['post_id'] =$post_id;
-            if($this->Milestone_model->insert($insert_milestone_array)==1){
+            /*****02 Jan 2016, Lu Ning********/
+            /*Get the milestone id for the inserted milestone*/
+            $insert_id = $this->Milestone_model->insert($insert_milestone_array);
+            if(isset($insert_id)){
+                /*need bb repo slug for the current project*/
+                $project = $this->Project_model->retrieve_by_id($project_id);
+                /*post it to bb server*/
+                $this->load->library("BB_Milestones");
+                $this->bb_milestones->postMilestone($project["bitbucket_repo_name"],$insert_id);
                 $this->session->set_userdata('message', 'New milestone created successfully.');
                 redirect('projects/view_updates/'.$project_id);
             }else{

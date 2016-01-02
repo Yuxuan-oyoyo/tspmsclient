@@ -19,15 +19,18 @@ class BB_milestones {
         $endpoint = $this->setEndpoint($repo_slug);
         $parameters["access_token"] = $token;
         $parameters["timestamp"] = time();
+        $url = $endpoint.'?'.http_build_query($parameters);
         /*construct endpoint*/
-        $result =  $this->sendGetRequest($endpoint);
+        $result =  $this->sendGetRequest($url);
         if(is_null($result)){
             $parameters["access_token"] = $CI->bb_shared->requestFromServer();
-            $result = $this->sendGetRequest($endpoint);
+            $url = $endpoint.'?'.http_build_query($parameters);
+            $result = $this->sendGetRequest($url);
         }
         //var_dump($result);
         return $result;
     }
+
     public function getMilestone($repo_slug, $milestone_id){
         /*settle the access token and etc*/
         $CI =& get_instance();
@@ -42,7 +45,6 @@ class BB_milestones {
             $parameters["access_token"] = $CI->bb_shared->requestFromServer();
             $result = $this->sendGetRequest($endpoint);
         }
-        //var_dump($result);
         return $result;
     }
     private function sendGetRequest($url){
