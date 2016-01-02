@@ -39,12 +39,30 @@ $class = [
 $this->load->view('common/pm_nav', $class);
 ?>
 
-
+<aside class="sidebar-left">
+    <div class="sidebar-links">
+        <a class="link-blue" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Project Overview</a>
+        <a class="link-blue " href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
+        <?php
+        if($project['bitbucket_repo_name']==null){
+            ?>
+            <a class="link-grey"><i class="fa fa-wrench"></i>Issues</a>
+        <?php
+        }else {
+            ?>
+            <a class="link-blue " href="<?= base_url() . 'Issues/list_all/' . $project["bitbucket_repo_name"] ?>"><i class="fa fa-wrench"></i>Issues</a>
+        <?php
+        }
+        ?>
+        <a class="link-blue  selected" href="#"><i class="fa fa-list"></i>Use Case List</a>
+        <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
+    </div>
+</aside>
 
 <div class="container content">
     <h1 class="page-header">
         Use Case List&nbsp;
-        <a href="<?= base_url() . 'Usecases/new_use_case/'.$project_id ?>"  class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Add</a>&nbsp;
+        <a href="<?= base_url() . 'Usecases/new_use_case/'.$project["project_id"] ?>"  class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Add</a>&nbsp;
     </h1>
     <?php if($this->session->userdata('message')):?>
         <div class="form-group">
@@ -74,7 +92,7 @@ $this->load->view('common/pm_nav', $class);
                     <td><?=$u['importance']?></td>
                     <td><?=$u['type']?></td>
                     <td><?=$u['last_updated']?></td>
-                    <td><button class="btn btn-default" type="button" ><i class="fa fa-pencil-square-o"></i></button>
+                    <td><a href="<?= base_url() . 'Usecases/edit_use_case/'.$u["usecase_id"] ?>" class="btn btn-default" type="button" ><i class="fa fa-pencil-square-o"></i></a>
                         <button class="btn btn-default" type="button" data-toggle="modal" data-target="#detailModal<?=$u['usecase_id']?>" ><i class="fa fa-eye"></i></button>
                         <button class="btn btn-default" type="button" onclick="deleteButtonClicked(<?=$u['usecase_id']?>)" ><i class="fa fa-trash" ></i></button>
                     </td>
@@ -110,12 +128,18 @@ $this->load->view('common/pm_nav', $class);
                         <h4>Use Case Detail</h4>
                     </div>
                     <div class="modal-body">
-                        <p><strong>Title: </strong> <?=$u['title']?></p>
-                        <p><strong>Stakeholders: </strong> <?=$u['stakeholders']?></p>
-                        <p><strong>Flow: </strong> <?=$u['flow']?></p>
+                        <p><strong>Title: </strong> </p>
+                        <?=$u['title']?>
+                        <hr>
+                        <p><strong>Stakeholders: </strong> </p>
+                        <?=$u['stakeholders']?>
+                        <hr>
+                        <p><strong>Flow: </strong> </p>
+                        <?=$u['flow']?>
+
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

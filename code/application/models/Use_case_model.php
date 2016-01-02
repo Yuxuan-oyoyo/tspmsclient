@@ -23,8 +23,8 @@ class Use_case_model extends CI_Model{
     }
 
     public function get_sub_id($project_id){
-        $query = $this->db->query("select max(sub_id) from use_case where project_id=".$project_id);
-        return $query->row(1);
+        $query = $this->db->query("select max(sub_id)as id from use_case where project_id=".$project_id);
+        return $query->row_array()['id'];
     }
 
     public function retrieve_by_id($uc_id){

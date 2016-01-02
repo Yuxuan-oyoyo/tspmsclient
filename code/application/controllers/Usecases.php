@@ -12,6 +12,7 @@ class Usecases extends CI_Controller
     {
         parent::__construct();
         // Your own constructor code
+        $this->load->helper('form');
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->helper("date");
@@ -25,8 +26,7 @@ class Usecases extends CI_Controller
            $usecases = $this->Use_case_model->retrieve_by_project_id($project_id);
 
             $this->load->view('project/usecases', $data=[
-                //"project"=>$this->Project_model->retrieve_by_id($project_id),
-                "project_id"=>$project_id,
+                "project" => $this->Project_model->retrieve_by_id($project_id),
                 "usecases"=>$usecases,
 
             ]);
@@ -71,6 +71,38 @@ class Usecases extends CI_Controller
             }else{
                 $this->load->view('project/use_case_new', $data = ["project" => $this->Project_model->retrieve_by_id($project_id)]);
             }
+
+        }else{
+            $this->session->set_userdata('message','You have not login / have no access rights. ');
+            redirect('/internal_authentication/login/');
+        }
+    }
+
+    public function edit_use_case($uc_id){
+        if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
+            $usecase = $this->Use_case_model->retrieve_by_id($uc_id);
+                if ($this->input->post("submit")) {
+                    $usecase['title'] = $this->input->post("title");
+                    $usecase['issue_id'] = $this->input->post("issue_id");
+                    $usecase['flow'] = $this->input->post("flow");
+                    $usecase['importance'] = $this->input->post("importance");
+                    $usecase['stakeholders'] = $this->input->post("stakeholders");
+                    $usecase['type'] = $this->input->post("type");
+
+                    if ($this->Use_case_model->update($usecase) > 0) {
+                        $this->session->set_userdata('message', 'Use case has been changed successfully.');
+                        redirect('usecases/list_all/' . $usecase['project_id']);
+                    } else {
+                        $this->session->set_userdata('message', 'Cannot edit usecase,please contact administrator.');
+                        $this->load->view('project/use_case_edit', $data = ["usecase" => $usecase,
+                            "project" => $this->Project_model->retrieve_by_id($usecase['project_id'])
+                        ]);
+                    }
+                } else {
+                    $this->load->view('project/use_case_edit',$data = ["usecase" => $usecase,
+                        "project" => $this->Project_model->retrieve_by_id($usecase['project_id'])
+                    ]);
+                }
 
         }else{
             $this->session->set_userdata('message','You have not login / have no access rights. ');

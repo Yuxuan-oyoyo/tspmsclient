@@ -40,58 +40,58 @@ $this->load->view('common/pm_nav', $class);
 </aside>
 <div class="container content">
         <h1 class="page-header">
-            New Use Case&nbsp;
+            Edit Use Case&nbsp;
             <a href="<?= base_url() . 'Usecases/list_all/'.$project['project_id'] ?>" class="btn btn-primary"><i class="fa fa-backward"></i>&nbsp;Back</a>
         </h1>
-        <form  data-parsley-validate role="form" action="<?=base_url().'Usecases/new_use_case/'.$project['project_id']?>" method="post">
+        <form  data-parsley-validate role="form" action="<?=base_url().'Usecases/edit_use_case/'.$usecase['usecase_id']?>" method="post">
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="title">Title:</label>
-                    <input name="title" id="title"  type="text" class="form-control" data-parsley-required>
+                    <input name="title" id="title"  type="text" class="form-control" value="<?=$usecase['title']?>" data-parsley-required>
                 </div>
                 <div class="form-group">
                     <label for="issue_id">Issue:</label>
                     <select class="form-control" id="issue_id" name="issue_id" >
-                        <option value="1">1</option>
+                        <option value="1" <?=set_select("issue_id","1",($usecase['issue_id']=="1"));?> >1</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="flow">Flow:</label>
-                       <textarea name="flow" id="flow" rows="3" ></textarea>
+                    <textarea name="flow" id="flow" rows="3" ><?=$usecase['flow']?></textarea>
                     <script>
                         CKEDITOR.replace( 'flow' );
                     </script>
                 </div>
                 <div class="form-group">
                     <label for="stakeholders">Stakeholders:</label>
-                    <textarea class="form-control" name="stakeholders" id="stakeholders" rows="2" ></textarea>
+                    <textarea class="form-control" name="stakeholders" id="stakeholders" rows="2" ><?=$usecase['stakeholders']?></textarea>
                 </div>
             </div>
-                <div class="col-lg-6">
+            <div class="col-lg-6">
                 <div class="form-group">
                     <label for="importance">Importance:</label>
                     <select class="form-control" id="importance" name="importance" data-parsley-required>
-                        <option value="Low">Low</option>
-                        <option value="Medium">Medium</option>
-                        <option value="High">High</option>
+                        <option value="Low" <?=set_select("importance","Low",$usecase['importance']=="Low")?>>Low</option>
+                        <option value="Medium" <?=set_select("importance","Medium",$usecase['importance']=="Medium")?>>Medium</option>
+                        <option value="High"<?=set_select("importance","High",$usecase['importance']=="High")?>>High</option>
                     </select>
                 </div>
-                </div>
-                <div class="col-lg-6">
+            </div>
+            <div class="col-lg-6">
                 <div class="form-group">
                     <label for="type">Type:</label>
                     <select class="form-control" id="type" name="type" data-parsley-required>
-                        <option value="Internal">Internal</option>
-                        <option value="External">External</option>
+                        <option value="Internal"<?=set_select("type","Internal",$usecase['type']=="Internal")?>>Internal</option>
+                        <option value="External" <?=set_select("type","External",$usecase['type']=="External")?>>External</option>
                     </select>
                 </div>
-                </div>
+            </div>
 
-                <div class="col-lg-12 pull-right">
-                    <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
-                    <!--<a href="//?base_url().'Customers/edit/'.$c["c_id"]?" class="btn btn-primary">Submit</a>-->
-                    <a href="<?= base_url() . 'Usecases/list_all/'.$project['project_id'] ?>" class="btn btn-default">Cancel</a>
-                </div>
+            <div class="col-lg-12 pull-right">
+                <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
+                <!--<a href="//?base_url().'Customers/edit/'.$c["c_id"]?" class="btn btn-primary">Submit</a>-->
+                <a href="<?= base_url() . 'Usecases/list_all/'.$project['project_id'] ?>" class="btn btn-default">Cancel</a>
+            </div>
 
 
         </form>
