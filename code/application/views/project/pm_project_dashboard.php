@@ -58,6 +58,7 @@ function _ago($tm,$rcs = 0) {
             <?php
         }
         ?>
+        <a class="link-blue" href="<?=base_url().'Usecases/list_all/'.$project["project_id"]?>"><i class="fa fa-list"></i>Use Case List</a>
         <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
     </div>
 </aside>
