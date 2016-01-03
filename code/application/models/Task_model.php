@@ -75,6 +75,12 @@ class Task_model extends CI_Model{
         $query = $this->db->update('task', $update_array, array('task_id' => $task_id));
         return $this->db->affected_rows();
     }
+    public function delete($task_id){
+        if(isset($task_id)){
+            $this->db->delete('task', array('task_id' => $task_id));
+        }
+        return $this->db->affected_rows();
+    }
     //  Urgency = 1/ days left
     public function get_urgency($task_id){
         $t = $this->retrieve_by_id($task_id);

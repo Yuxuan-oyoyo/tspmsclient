@@ -57,7 +57,7 @@ $this->load->view('common/pm_nav', $class);
             <div class="col-lg-10 customer-info">
                 <div class="form-group">
                     <label for="content">Content:</label>
-                    <input name="content" id="content" type="text" class="form-control" value="<?=$t['content']?>" data-parsley-required>
+                    <textarea name="content" rows="2" id="content" class="form-control" data-parsley-required><?=$t['content']?></textarea>
                 </div>
                 <div class="form-group">
                     <label for="importance">Importance:</label>
@@ -70,10 +70,6 @@ $this->load->view('common/pm_nav', $class);
                 <div class="form-group">
                     <label for="targeted_end_datetime">Targeted End Datetime:</label>
                     <input type="text" name="targeted_end_datetime" id="targeted_end_datetime" class="form-control clsDatePicker" value="<?=$t['targeted_end_datetime']?>" data-parsley-required>
-                </div>
-                <div class="form-group">
-                    <label for="start_datetime">Start Datetime:</label>
-                    <input type="text" name="start_datetime" id="start_datetime" class="form-control clsDatePicker" value="<?=$t['start_datetime']?>">
                 </div>
 
                 <div class="pull-right">

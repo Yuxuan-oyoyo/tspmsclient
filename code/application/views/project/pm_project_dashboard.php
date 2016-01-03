@@ -24,13 +24,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 altFormat: "yy-mm-dd"
             });
         });
+        function startTaskButtonClicked(task_id) {
+            $('#taskStartModal').data('task_id', task_id).modal('show');
+        }
         function completeTaskButtonClicked(task_id) {
             $('#taskCompletionModal').data('task_id', task_id).modal('show');
+        }
+        function deleteTaskButtonClicked(task_id) {
+            $('#taskDeleteModal').data('task_id', task_id).modal('show');
+        }
+        function confirmTaskStart() {
+            var tid = $('#taskStartModal').data('task_id');
+            var start_t_url = "<?= base_url() . 'Tasks/start_task_confirmation/' . $project['project_id'] . '/' ?>" + tid;
+            window.location.href = start_t_url;
         }
         function confirmTaskComplete() {
             var tid = $('#taskCompletionModal').data('task_id');
             var complete_t_url = "<?= base_url() . 'Tasks/complete_task_confirmation/' . $project['project_id'] . '/' ?>" + tid;
             window.location.href = complete_t_url;
+        }
+        function confirmTaskDelete() {
+            var tid = $('#taskDeleteModal').data('task_id');
+            var delete_t_url = "<?= base_url() . 'Tasks/delete_task_confirmation/' . $project['project_id'] . '/' ?>" + tid;
+            window.location.href = delete_t_url;
         }
     </script>
     <style>
@@ -170,8 +186,20 @@ function sortTasksByDaysLeft($a, $b) {
                             <tr id="1">
                                 <td><span class="badge" style="background-color: indianred"><?=$t['days_left']?> days</span></td>
                                 <td><?=$t['content']?></td>
-                                <td><a href="<?=base_url().'Tasks/edit_task/'.$project['project_id'].'/'.$t["task_id"]?>" class="btn btn-primary" type="button" ><i class="fa fa-pencil-square-o"></i></a>
-                                <button class="btn btn-success" onclick="completeTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-check"></button></td>
+                                <?php
+                                    if(!isset($t['start_datetime'])){
+                                ?>
+                                        <td><button class="btn" onclick="startTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-play"></button></td>
+                                <?php
+                                    }else{
+                                ?>
+                                        <td></td>
+                                <?php
+                                    }
+                                ?>
+                                <td><a href="<?=base_url().'Tasks/edit_task/'.$project['project_id'].'/'.$t["task_id"]?>" class="btn btn-primary" type="button" ><i class="fa fa-pencil-square-o"></i></a></td>
+                                <td><button class="btn btn-success" onclick="completeTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-check"></button></td>
+                                <td><button class="btn btn-danger" onclick="deleteTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-trash"></button></td>
                             </tr>
                         <?php
                         }
@@ -250,7 +278,7 @@ function sortTasksByDaysLeft($a, $b) {
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="content">Task Content:</label>
-                            <input name="content" type="text" class="form-control" id="content" data-parsley-required>
+                            <textarea name="content" rows="2" id="content" class="form-control" data-parsley-required></textarea>
                         </div>
                         <div class="form-group">
                             <label for="importance">Task Importance:</label>
@@ -275,6 +303,24 @@ function sortTasksByDaysLeft($a, $b) {
         </div>
     </div>
 <!--End of New Task Modal-->
+<!--Task Start Modal-->
+<div class="modal fade" id="taskStartModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong>Start Task</strong>
+            </div>
+            <div class="modal-body">
+                Do you wish to start this task?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelStart()">Cancel</button>
+                <input type="submit" name="submit" id="submit" class="btn btn-success" onclick="confirmTaskStart()" value="Start">
+            </div>
+        </div>
+    </div>
+</div>
+<!--End of Task Start Modal-->
 <!--Task Completion Modal-->
     <div class="modal fade" id="taskCompletionModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -293,6 +339,24 @@ function sortTasksByDaysLeft($a, $b) {
         </div>
     </div>
 <!--End of Task Completion Modal-->
+<!--Task Delete Modal-->
+<div class="modal fade" id="taskDeleteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong>Delete Task</strong>
+            </div>
+            <div class="modal-body">
+                Do you wish to delete this task?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelDelete()">Cancel</button>
+                <input type="submit" name="submit" id="submit" class="btn btn-success" onclick="confirmTaskDelete()" value="Delete">
+            </div>
+        </div>
+    </div>
+</div>
+<!--End of Task Delete Modal-->
 
 </div>
 </body>

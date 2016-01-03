@@ -62,14 +62,29 @@ class Tasks extends CI_Controller{
 
     public function start_task_confirmation($project_id,$task_id){
         if($this->Task_model->start($task_id)){
-            redirect('projects/view_dashboard/'.$project_id);
+            $this->session->set_userdata('message', 'Task started successfully.');
+        }else{
+            $this->session->set_userdata('message', 'An error occurred, please contact administrator.');
         }
+        redirect('projects/view_dashboard/'.$project_id);
     }
 
     public function complete_task_confirmation($project_id,$task_id){
         if($this->Task_model->complete($task_id)){
-            redirect('projects/view_dashboard/'.$project_id);
+            $this->session->set_userdata('message', 'Task completed successfully.');
+        }else{
+            $this->session->set_userdata('message', 'An error occurred, please contact administrator.');
         }
+        redirect('projects/view_dashboard/'.$project_id);
+    }
+
+    public function delete_task_confirmation($project_id,$task_id){
+        if($this->Task_model->delete($task_id)){
+            $this->session->set_userdata('message', 'Task deleted successfully.');
+        }else{
+            $this->session->set_userdata('message', 'An error occurred, please contact administrator.');
+        }
+        redirect('projects/view_dashboard/'.$project_id);
     }
 
 }
