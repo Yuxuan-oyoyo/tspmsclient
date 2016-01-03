@@ -19,7 +19,7 @@ class Task_model extends CI_Model{
 
     public function retrieve_all_by_project_id($project_id){
         if(isset($project_id)){
-            $query = $this->db->query("select * from project p,task t where p.project_id=t.project_id and p.project_id=?",[$project_id]);
+            $query = $this->db->query("select * from task t where t.project_id and t.project_id=?",[$project_id]);
             return $query->result_array();
         }
         return null;
@@ -27,7 +27,7 @@ class Task_model extends CI_Model{
 
     public function retrieve_all_uncompleted_by_project_id($project_id){
         if(isset($project_id)){
-            $query = $this->db->query("select * from project p,task t where p.project_id=t.project_id and t.if_completed=0 and p.project_id=?",[$project_id]);
+            $query = $this->db->query("select * from task t where t.if_completed=0 and t.project_id=?",[$project_id]);
             return $query->result_array();
         }
         return null;
@@ -35,7 +35,7 @@ class Task_model extends CI_Model{
 
     public function retrieve_all_completed_by_project_id($project_id){
         if(isset($project_id)){
-            $query = $this->db->query("select * from project p,task t where p.project_id=t.project_id and t.if_completed=1 and p.project_id=?",[$project_id]);
+            $query = $this->db->query("select * from task t where t.if_completed=1 and t.project_id=?",[$project_id]);
             return $query->result_array();
         }
         return null;
@@ -43,6 +43,9 @@ class Task_model extends CI_Model{
 
     public function insert($insert_array){
         $insert_array['if_completed'] = 0;
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
+        $insert_array['last_updated'] = $date->format('c');
+        $insert_array['datetime_created'] = $date->format('c');
         return $this->db->insert('task', $insert_array);
     }
 
@@ -50,7 +53,7 @@ class Task_model extends CI_Model{
         $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
         $update_array['last_updated'] = $date->format('c');
         $query = $this->db->update('task', $update_array, array('task_id' => $update_array['task_id']));
-        //print_r($query);
+        //var_dump($update_array);
         return $this->db->affected_rows();
     }
 
@@ -69,7 +72,25 @@ class Task_model extends CI_Model{
         $update_array['last_updated'] = $date->format('c');
         $update_array['end_datetime'] = $date->format('c');
         $update_array['if_completed'] = 1;
-        $query = $this->db->update('task', $update_array, array('task_id' => $update_array['task_id']));
+        $query = $this->db->update('task', $update_array, array('task_id' => $task_id));
         return $this->db->affected_rows();
+    }
+    //  Urgency = 1/ days left
+    public function get_urgency($task_id){
+        $t = $this->retrieve_by_id($task_id);
+        $targeted_end_datetime = $t['targeted_end_datetime'];
+        $current_datetime = new DateTime("now",new DateTimeZone(DATETIMEZONE));
+        $diff = $current_datetime->diff($targeted_end_datetime);
+        $days_left = $diff->format('%R%a');
+        $urgency = 1/ $days_left;
+        return $urgency;
+    }
+    public function get_days_left($task_id){
+        $t = $this->retrieve_by_id($task_id);
+        $targeted_end_datetime = new DateTime($t['targeted_end_datetime']);
+        $current_datetime = new DateTime("now",new DateTimeZone(DATETIMEZONE));
+        $diff = $current_datetime->diff($targeted_end_datetime);
+        $days_left = $diff->format('%R%a');
+        return $days_left;
     }
 }

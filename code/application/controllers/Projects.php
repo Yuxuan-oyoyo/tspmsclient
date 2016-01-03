@@ -25,6 +25,7 @@ class Projects extends CI_Controller {
         $this->load->model("Milestone_model");
         $this->load->model("Update_model");
         $this->load->model("Phase_model");
+        $this->load->model("Task_model");
     }
 
     public function index()
@@ -238,6 +239,13 @@ class Projects extends CI_Controller {
             //phase
             $project = $this->Project_model->retrieve_by_id($project_id);
             $phases=$this->Project_phase_model->retrieve_by_project_id($project_id);
+            $tasks = $this->Task_model->retrieve_all_uncompleted_by_project_id($project_id);
+            $newTasks = array();
+            foreach($tasks as $t){
+                $days_left = substr($this->Task_model->get_days_left($t['task_id']),1);
+                $t['days_left'] = $days_left;
+                array_push($newTasks,$t);
+            }
             //customer_name
             $c_id = $project['c_id'];
             $customer = $this->Customer_model->retrieve($c_id);
@@ -247,7 +255,8 @@ class Projects extends CI_Controller {
             $data = [
                 "project"=>$project,
                 "phases"=>$phases,
-                "customer"=>$customer
+                "customer"=>$customer,
+                "tasks"=>$newTasks
             ];
             $this->load->view('project/pm_project_dashboard',$data);
         }else{

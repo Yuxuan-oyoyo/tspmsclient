@@ -7,6 +7,32 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 <head>
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
+    <script>
+        $(document).ready(function(){
+            $('#targeted_start_datetime').datepicker({
+                dateFormat: 'yy-mm-dd 00:00:00',
+                minDate: '+0d',
+                changeMonth: true,
+                changeYear: true,
+                altFormat: "yy-mm-dd"
+            });
+            $('#targeted_end_datetime').datepicker({
+                dateFormat: 'yy-mm-dd 00:00:00',
+                minDate: '+0d',
+                changeMonth: true,
+                changeYear: true,
+                altFormat: "yy-mm-dd"
+            });
+        });
+        function completeTaskButtonClicked(task_id) {
+            $('#taskCompletionModal').data('task_id', task_id).modal('show');
+        }
+        function confirmTaskComplete() {
+            var tid = $('#taskCompletionModal').data('task_id');
+            var complete_t_url = "<?= base_url() . 'Tasks/complete_task_confirmation/' . $project['project_id'] . '/' ?>" + tid;
+            window.location.href = complete_t_url;
+        }
+    </script>
     <style>
         .stat-td{
             vertical-align: middle;
@@ -41,6 +67,10 @@ function _ago($tm,$rcs = 0) {
     if(($rcs == 1)&&($v >= 1)&&(($cur_tm-$_tm) > 0)) $x .= time_ago($_tm);
     return $x;
 }
+function sortTasksByDaysLeft($a, $b) {
+    return $a['days_left'] - $b['days_left'];
+}
+
 ?>
 
 <aside class="sidebar-left">
@@ -124,35 +154,35 @@ function _ago($tm,$rcs = 0) {
                 </div>
                 <?php $this->session->unset_userdata('message') ?>
             <?php endif;?>
-            <div class="col-lg-offset-1 col-lg-5">
-            <table class="stat-table" style="border: solid 1px #1abc9c;table-layout: fixed">
-                <tr>
-                    <td colspan="2" rowspan="2" class="col-lg-6" style=" border: solid 2px #1abc9c">
-                        <div>
-                            <div style="padding:5px; text-align:center;width: 100%"><strong>Developers:</strong></div>
-                            <div style="padding:5px; text-align:center;width: 100%">Will, Dave</div>
-                            <div style="padding:5px; text-align:center;width: 100%"><strong>Last Updated:</strong></div>
-                            <!--td><?=_ago(strtotime($project['last_updated']))?> ago</td-->
-                            <div style="padding:5px; text-align:center;width: 100%"><?=date("M j Y",strtotime($project['last_updated']))?></div>
-                        </div>
-                    </td>
-                    <td class="stat-td">
-                        <div><h2>5</h2>TASKS</div>
-                    </td>
-                    <td class="stat-td">
-                        <div><h2><?=$project['no_of_use_cases']?></h2>USE CASES</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="stat-td">
-                        <div><h2>$<?=(round($project['project_value'],-2)/1000)." k"?></h2>PROJECT VALUE</div>
-                    </td>
-                    <td class="stat-td">
-                        <div><h2>15</h2>PENDING ISSUES</div>
-                    </td>
-                </tr>
-            </table>
+
+<!--Task CRUD-->
+            <div class="col-lg-offset-1 col-lg-4">
+                <div class="box box-primary box-solid">
+                    <div class="box-header">
+                        <h3 class="box-title">Task List</h3>
+                        <button class="btn btn-default btn-small pull-right" data-toggle="modal" data-target="#newTaskModal"><i class="fa fa-plus"></i></button>
+                    </div>
+                    <table class="table table-condensed">
+                        <?php
+                            usort($tasks, 'sortTasksByDaysLeft');
+                            foreach ($tasks as $t){
+                        ?>
+                            <tr id="1">
+                                <td><span class="badge" style="background-color: indianred"><?=$t['days_left']?> days</span></td>
+                                <td><?=$t['content']?></td>
+                                <td><a href="<?=base_url().'Tasks/edit_task/'.$project['project_id'].'/'.$t["task_id"]?>" class="btn btn-primary" type="button" ><i class="fa fa-pencil-square-o"></i></a>
+                                <button class="btn btn-success" onclick="completeTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-check"></button></td>
+                            </tr>
+                        <?php
+                        }
+                        ?>
+
+                    </table>
+                </div>
             </div>
+
+<!--End of Task Box-->
+
             <div class="col-lg-4">
                 <div class="panel info-panel">
                     <div class="panel-heading">Project Detail</div>
@@ -207,9 +237,73 @@ function _ago($tm,$rcs = 0) {
 
 
     </div>
+<!--new task modal-->
+    <div class="modal fade" id="newTaskModal" tabindex="-1" role="dialog" >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" >New Task</h4>
+                </div>
 
-    <!-- /#page-content-wrapper -->
+                <form id="newTask" data-parsley-validate role="form" action="<?=base_url().'Tasks/add_new_task/'.$project['project_id']?>" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="content">Task Content:</label>
+                            <input name="content" type="text" class="form-control" id="content" data-parsley-required>
+                        </div>
+                        <div class="form-group">
+                            <label for="importance">Task Importance:</label>
+                            <input type="number" name="importance" id="importance" class="form-control clsDatePicker" data-parsley-required>
+                        </div>
+                        <div class="form-group">
+                            <label for="targeted_start_datetime">Targeted Start Datetime:</label>
+                            <input type="text" name="targeted_start_datetime" id="targeted_start_datetime" class="form-control clsDatePicker" data-parsley-required>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="targeted_end_datetime">Targeted End Datetime:</label>
+                            <input type="text" name="targeted_end_datetime" id="targeted_end_datetime" class="form-control clsDatePicker" data-parsley-required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<!--End of New Task Modal-->
+<!--Task Completion Modal-->
+    <div class="modal fade" id="taskCompletionModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong>Complete Task</strong>
+                </div>
+                <div class="modal-body">
+                    Do you wish to complete this task?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelComplete()">Cancel</button>
+                    <input type="submit" name="submit" id="submit" class="btn btn-success" onclick="confirmTaskComplete()" value="Complete">
+                </div>
+            </div>
+        </div>
+    </div>
+<!--End of Task Completion Modal-->
 
 </div>
 </body>
 </html>
+<script type="text/javascript">
+    var _mfq = _mfq || [];
+    (function() {
+        var mf = document.createElement("script");
+        mf.type = "text/javascript"; mf.async = true;
+        mf.src = "//cdn.mouseflow.com/projects/5e3cc2e8-d8e9-4dd1-a35a-8419f1b9aa45.js";
+        document.getElementsByTagName("head")[0].appendChild(mf);
+    })();
+</script>
+    <!-- /#page-content-wrapper -->
