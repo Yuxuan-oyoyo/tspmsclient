@@ -149,13 +149,19 @@ if($this->session->userdata('internal_type')=='Developer') {
             <div class="form-part">
                 <div class="form-label">Use case</div>
                 <div class="form-input">
-                    <?php //get all use cases!!!?>
-                    <select name="priority" class="form-control">
-                        <?php foreach($priorities as $k):?>
-                            <?php if($i["priority"]==$k):?>
-                                <option selected value="<?=$k?>"><?=$k?></option>
+                    <?php
+                    //get all use cases!!!
+                    $ci->load->model('Use_case_model');
+                    $usecases = $ci->Use_case_model->retrieve_by_project_repo_slug($repo_slug);
+                    var_dump($usecases);
+                    ?>
+
+                    <select name="usecase" class="form-control">
+                        <?php foreach($usecases as $uc):?>
+                            <?php if($i["usecase"]==$uc["usecase_id"]):?>
+                                <option selected value="<?=$uc["usecase_id"]?>"><?=$uc["title"]?></option>
                             <?php else:?>
-                                <option value="<?=$k?>"><?=$k?></option>
+                                <option value="<?=$uc["usecase_id"]?>"><?=$uc["title"]?></option>
                             <?php endif?>
                         <?php endforeach?>
                     </select>

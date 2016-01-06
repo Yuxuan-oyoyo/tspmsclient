@@ -45,6 +45,15 @@ class Use_case_model extends CI_Model{
         }
         return null;
     }
+    public function retrieve_by_project_repo_slug($repo_slug){
+        if(isset($repo_slug)){
+            $query = $this->db->query("SELECT usecase_id, sub_id,title,importance FROM use_case u, project p
+                      WHERE u.project_id =p.project_id AND bitbucket_repo_name=? ORDER BY importance DESC ", [$repo_slug]);
+            //$this->db->order_by("sub_id", "asc");
+            return $query->result_array();
+        }
+        return null;
+    }
 
     public function update($update_array){
         //$date = date('Y-m-d H:i:s');
