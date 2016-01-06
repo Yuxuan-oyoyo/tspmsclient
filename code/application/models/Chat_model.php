@@ -13,16 +13,17 @@ class Chat_model extends CI_Model{
         parent::__construct();
         $this->load->helper("date");
         $this->load->library("session");
+
     }
 
     public function retrieve($input_id, $user_type){
         if(isset($input_id)&& isset($user_type)){
-            $sql = "select c.first_name as user1, customer_id, ".//convert customer id to user1
+            $sql = "select message_id, c.first_name as user1, customer_id, ".//convert customer id to user1
                 "i.name as user2,pm_id , project_id, to_pm, body as content, ".
-                "seen, time_created as timestamp from message m ".
+                "seen, time_created as timestamp, is_file from message m ".
                 ", customer c, internal_user i where m.pm_id=i.u_id and m.customer_id=c.c_id ".
                 " and (pm_id=? or customer_id=? )".
-               " order by time_created";
+                " order by time_created";
             /*use trick to bind query*/
             $filter = $user_type=="pm"? [$input_id,-1]:[-1,$input_id];
             $query = $this->db->query($sql,$filter);
@@ -46,6 +47,7 @@ class Chat_model extends CI_Model{
                 foreach ($result as $rKey=>$row){
                     $row["msgID"] = $i;
                     $row["seen"]   = $row["seen"]==1?true:false;
+
                     if(isset($tMsgs[$row[$other_user]])) {
                         array_push($tMsgs[$row[$other_user]], $row);
 
@@ -70,14 +72,15 @@ class Chat_model extends CI_Model{
                 $k = 1;
                 foreach($tMsgs as $key=>$value){
                     $last_message = end($value);
-                     array_push($threads,[
-                         'chatID'        => $k,
-                         'user1'         => $last_message["user1"],
-                         'user2'         => $last_message["user2"],
-                         'seen'          => $last_message["seen"]==1?true:false,
-                         'lastMsgTimeStamp' => $last_message["timestamp"],
-                         'lastMessage'   => $last_message["content"],
-                         'messages'      => $value
+                    array_push($threads,[
+                        'chatID'        => $k,
+                        'user1'         => $last_message["user1"],
+                        'user2'         => $last_message["user2"],
+                        'seen'          => $last_message["seen"]==1?true:false,
+                        'lastMsgTimeStamp' => $last_message["timestamp"],
+                        'lastMessage'   => $last_message["content"],
+                        'is_file'       => $last_message["is_file"],
+                        'messages'      => $value
                     ]);
                     $this->session->set_userdata("chat_id_".$k,[
                         'customer_id'=> $last_message["customer_id"],
@@ -104,14 +107,21 @@ class Chat_model extends CI_Model{
                 //"to_pm"=>($values["user2"]==$values["m_author"])?0:1,
                 "to_pm"=>($fromSession["pm_id"]==$values["m_author"])?0:1,
                 "body"=> $values["m_content"],
+                "is_file"=> $values["m_type"],
                 "time_created"=>time()
 
             ];
-            print_r($message);
+//            print_r($message);
 //            $sql = "insert into message (customer_id, pm_id, project_id, to_pm, body, file_id, timestamp) VALUES (?, ?, 0, ?,?,0, ?)";
 //            $this->db->query($sql,[$values["user2"],$values["user1"],$values["user2"],$values["m_author"]],time());
             $this->db->insert("message",$message);
+            // for debugging purposes
             print_r($this->db->error());
+
+            // use unique db id for directory name
+            $insert_id = $this->db->insert_id();
+
+            return $insert_id;
         }
     }
 }

@@ -18,7 +18,9 @@ $user_id = $user_id;
     <script src="https://fb.me/react-dom-0.14.3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/1.7.2/moment.min.js"></script>
-
+    <script src="js/vendor/jquery.ui.widget.js"></script>
+    <script src="js/jquery.iframe-transport.js"></script>
+    <script src="js/jquery.fileupload.js"></script>
 </head>
 <body>
 <?php
@@ -53,39 +55,39 @@ if($this->session->userdata('Customer_cid')){
             var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
             d.setUTCSeconds(ts);
             /*
-            var month = d.getMonth()+1;
-            var date = d.getDate()+"."+month+"."+d.getFullYear();
-            console.log("moo moo");
-            */
+             var month = d.getMonth()+1;
+             var date = d.getDate()+"."+month+"."+d.getFullYear();
+             console.log("moo moo");
+             */
             var dates = moment(d).format('LL');
 
             if(c_id == this.props.data.chatID)
             {
                 return (
                     <li className="thread-list-item active" onClick={this.props.handleClickOnLeftUser.bind(null, this.props.data)}>
-                        <h5 className="thread-name"> {DisplayName} </h5>
-                        <div className="thread-time">
-                            {dates}
-                        </div>
-                        <div className="thread-last-message">
-                            {this.props.data.lastMessage}
-                        </div>
-                    </li>
-                );
+            <h5 className="thread-name"> {DisplayName} </h5>
+                <div className="thread-time">
+                {dates}
+                </div>
+                <div className="thread-last-message">
+                {this.props.data.lastMessage}
+            </div>
+            </li>
+            );
             }
             else
             {
                 return (
                     <li className="thread-list-item" onClick={this.props.handleClickOnLeftUser.bind(null, this.props.data)}>
-                        <h5 className="thread-name"> {DisplayName} </h5>
-                        <div className="thread-time">
-                            {dates}
-                        </div>
-                        <div className="thread-last-message">
-                            {this.props.data.lastMessage}
-                        </div>
-                    </li>
-                );
+            <h5 className="thread-name"> {DisplayName} </h5>
+                <div className="thread-time">
+                {dates}
+                </div>
+                <div className="thread-last-message">
+                {this.props.data.lastMessage}
+            </div>
+            </li>
+            );
             }
         }
     });
@@ -108,7 +110,7 @@ if($this->session->userdata('Customer_cid')){
 
             return (
                 <ul className="thread-list">
-                    {userNodes}
+                {userNodes}
                 </ul>
 
             );
@@ -122,17 +124,38 @@ if($this->session->userdata('Customer_cid')){
 
 
     var RightMessage = React.createClass({
-
         render: function(){
 
-            return (
+            var msg = this.props.msg;
+            // @formatter:off
+            var url = "<?=base_url()."chat/filesys/"?>";
+            url = url.concat(msg.message_id);
+            url = url.concat("/");
+            url = url.concat(msg.content);
 
-                <li className="message-list-item">
-                    <h5 className="message-author-name"> {this.props.msg.author} </h5>
-                    <div className="message-time"> </div>
-                    <div className="message-text"> {this.props.msg.content}</div>
-                </li>
-            )
+            if(msg.is_file == 1)
+            {
+                return (
+
+                    <li className="message-list-item">
+                        <h5 className="message-author-name"> {this.props.msg.author} </h5>
+                        <div className="message-time"> </div>
+                        <div className="message-text"> <a href={url}> {this.props.msg.content} </a></div>
+                    </li>
+                )
+            }
+            else
+            {
+                return (
+
+                    <li className="message-list-item">
+                        <h5 className="message-author-name"> {this.props.msg.author} </h5>
+                        <div className="message-time"> </div>
+                        <div className="message-text"> {this.props.msg.content}</div>
+                    </li>
+                )
+            }
+
         }
 
     })
@@ -154,8 +177,9 @@ if($this->session->userdata('Customer_cid')){
         },
         successHandler: function(data)
         {
+            var text = ' -- Name -- ';
             this.state.options.push(
-                <option selected disabled> -- Name --</option>
+                <option selected disabled> {text} </option>
             )
             for(var i = 0; i < data.length; i++)
             {
@@ -171,6 +195,7 @@ if($this->session->userdata('Customer_cid')){
         {
 
         },
+
         handleWrite: function()
         {
             console.log('handleWrite');
@@ -192,15 +217,22 @@ if($this->session->userdata('Customer_cid')){
 
 
     var RightMessageComposerBox = React.createClass({
-
+        // @formatter:off
         getInitialState: function() {
 
-            return {text: ''};
+            return  {
+                        text: '',
+                    };
         },
         handleChange: function(event) {
             this.setState({text: event.target.value});
         },
-        handleWrite: function() {
+        handleText: function()
+        {
+            this.setState({text: ''});
+        },
+        handleWrite: function()
+        {
             var text = this.state.text.trim();
             if (text)
             {
@@ -209,12 +241,19 @@ if($this->session->userdata('Customer_cid')){
                 var threadID = this.props.thread.chatID
                 var datetime = new Date() / 1000;
                 var url = "<?=base_url()."chat/write"?>";
+                console.log(threadID + " " + CurrentUser)
                 $.ajax({
                     type: "GET",
                     data: {chatID:threadID, timeStamp: datetime, author: CurrentUser ,content: text },
                     url : url,
-                    success: function(msg){
+                    success: function(){
                         console.log("success");
+                        console.log(data);
+                        this.handleText()
+                    },
+                    error: function()
+                    {
+                        console.log("errback");
                     }
 
                 })
@@ -235,18 +274,117 @@ if($this->session->userdata('Customer_cid')){
         },
         render: function(){
 
+            console.log(this.props.filey)
+            // if user uploaded file
+            if (this.props.filey !== null)
+            {
+                var up_text = "Upload " + this.props.filey;
+                return(
+                    <div >
+                        <textarea placeholder={up_text} className="message-composer" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled/>
+                        <div>
+                            <FileForm threadID={this.props.thread.chatID} text_handler={this.textHandler} filey={this.props.filey} fu_handler={this.props.fu_handler}/>
+                        </div>
 
-            return(
-                <div >
-                    <textarea placeholder="Type message here" className="message-composer" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
-                    <div>
-                        <button onClick={this.handleWrite} type="button">Reply </button>
                     </div>
-                </div>
 
-            )
+                )
+            }
+            else
+            {
+                // if user did not upload file
+                return(
+                    <div >
+                        <textarea placeholder="Type message here" className="message-composer" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
+                        <div>
+                            <FileForm threadID={this.props.thread.chatID} fu_handler={this.props.fu_handler}/>
+                        </div>
+                        <div>
+                            <button onClick={this.handleWrite} type="button">Reply </button>
+                        </div>
+                    </div>
+
+                )
+            }
         }
     })
+
+    var FileForm = React.createClass({
+        getInitialState: function() {
+            return {
+                data_uri: null,
+                extension: null,
+                f_name: null,
+            };
+        },
+        // prevent form from submitting; we are going to capture the file contents
+        handleSubmit: function(e) {
+            e.preventDefault();
+            var url = "<?=base_url()."chat/write"?>";
+            var threadID = this.props.threadID;
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                        test_data:this.state.data_uri,
+                        ext: this.state.extension,
+                        f_name: this.state.f_name,
+                        author: CurrentUser,
+                        chatID:threadID,
+                      },
+                success: function() {
+                    // do stuff
+                    this.props.text_handler();
+                }.bind(this),
+                error: function() {
+                    // do stuff
+                }.bind(this)
+            });
+            return false;
+        },
+        handleFile: function(e)
+        {
+            var self = this;
+            var reader = new FileReader();
+            var file = e.target.files[0];
+            var ext = e.target.files[0].name.split('.').pop().toLowerCase()
+            var file_name =      e.target.files[0].name.split('.')[0]
+
+            this.props.fu_handler(e.target.files[0].name);
+            console.log("after")
+            reader.onload = function(upload) {
+                self.setState({
+                    data_uri: upload.target.result,
+                    extension: ext,
+                    f_name: file_name
+                });
+            }
+
+            reader.readAsDataURL(file);
+        },
+        render: function() {
+            // @formatter:off
+            if(this.props.filey != null)
+            {
+                return (
+                    <form onSubmit={this.handleSubmit} encType="multipart/form-data">
+                    <input type="file" onChange={this.handleFile} />
+                    <input type="submit" value="Reply" />
+                    </form>
+                );
+            }
+            else
+            {
+                return (
+                    <form onSubmit={this.handleSubmit} encType="multipart/form-data">
+                    <input type="file" onChange={this.handleFile} />
+                    <input type="hidden" value="Reply" />
+                    </form>
+                );
+            }
+        },
+    });
+
 
     var RightMessageBox = React.createClass({
 
@@ -300,6 +438,7 @@ if($this->session->userdata('Customer_cid')){
                         return (
                             <RightMessage msg={msg} key={msg.msgID}> </RightMessage>
                         )
+
                     })
                 } else {
                     msgNodes = "not selected yet"
@@ -316,7 +455,7 @@ if($this->session->userdata('Customer_cid')){
                         <ul className="message-list" ref="messageList">
                             {msgNodes}
                         </ul>
-                        <RightMessageComposerBox thread={this.props.chat} refreshFunc={this.props.refreshFunc} />
+                        <RightMessageComposerBox filey={this.props.filey} fu_handler={this.props.fu_handler} thread={this.props.chat} refreshFunc={this.props.refreshFunc} />
 
                     </div>
                 )
@@ -332,7 +471,8 @@ if($this->session->userdata('Customer_cid')){
         _scrollToBottom: function() {
             if(this.props.chat != "new_message")
             {
-                var ul = this.refs.messageList.getDOMNode();
+                //var ul = this.refs.messageList.getDOMNode();
+                var ul = this.refs.messageList;
                 ul.scrollTop = ul.scrollHeight;
             }
         },
@@ -345,9 +485,20 @@ if($this->session->userdata('Customer_cid')){
             //var url = "http://localhost:8000/ws_a.php";
 
             $.get(url, function(data, status) {
-                this.setState({chats: data})
+                console.log(data[0]);
+                //TODO: Sort array by timestamp before returning
+
+                this.setState({chats: data, chatID: data[0].chatID})
+
+
             }.bind(this))
             //console.log(this)
+        },
+        fileUploadHandler: function(data)
+        {
+
+            this.setState({file:data})
+
         },
         getUnreadCount:function(){
             // TODO
@@ -359,7 +510,7 @@ if($this->session->userdata('Customer_cid')){
         },
         componentDidMount: function(){
             this.getInitialData();
-            this.interval = setInterval(this.tick, 2000);
+            this.interval = setInterval(this.tick, 10000);
             //console.log("component did mount")
         },
         getInitialState: function() {
@@ -367,6 +518,7 @@ if($this->session->userdata('Customer_cid')){
                 chatId : "",
                 chats : [],
                 unreadCount : 0,
+                file: null,
                 //chats: this.props.chats
             };
         },
@@ -421,6 +573,8 @@ if($this->session->userdata('Customer_cid')){
                                 refreshFunc={this.getInitialData}
                                 chat_id = {this.state.chatID}
                                 clickFunc={this.handleClickOnLeftUser}
+                                fu_handler={this.fileUploadHandler}
+                                filey={this.state.file}
                                 />
                         </div>
                     </div>
@@ -446,6 +600,8 @@ if($this->session->userdata('Customer_cid')){
                                 refreshFunc={this.getInitialData}
                                 chat_id = {this.state.chatID}
                                 clickFunc={this.handleClickOnLeftUser}
+                                fu_handler={this.fileUploadHandler}
+                                filey={this.state.file}
                                 />
                         </div>
                     </div>
