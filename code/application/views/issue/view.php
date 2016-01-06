@@ -277,18 +277,28 @@ if($this->session->userdata('internal_type')=='Developer') {
             </div>
             <div class="well" style="background-color: white;width: 250px;margin-top:10px">
                 <table>
-                    <tr>
-                        <td style="text-align: right;padding-right: 20px">Assignee</td><td><?=isset($i["responsible"])?$i["responsible"]["display_name"]:"-"?></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;padding-right: 20px">Priority</td><td><?=$i["priority"]?></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;padding-right: 20px">Type</td><td><?=$i["metadata"]["kind"]?></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;padding-right: 20px">Status</td><td><?=$i["status"]?></td>
-                    </tr>
+                    <?php
+                    $ci->load->model('Use_case_model');
+                    $usecase = null;
+                    if(isset($i["usecase"])){
+                        $usecase = $ci->Use_case_model->retrieve_by_id($i["usecase"]);
+                    }
+                    $attr_array = [
+                        "Assignee"=>isset($i["responsible"])?$i["responsible"]["display_name"]:"-",
+                        "Priority"=>$i["priority"],
+                        "Type"=>$i["metadata"]["kind"],
+                        "Status"=>$i["status"],
+                        "Use case"=>isset($usecase)?$usecase["title"]:"-",
+                        "Deadline"=>isset($i["deadline"])?$i["deadline"]:"-",
+                        "Milestone"=>$i["metadata"]["milestone"]
+                    ]
+                    ?>
+                    <?php foreach($attr_array as $key=>$value):?>
+                        <tr>
+                            <td class="attribute-name"><?=$key?></td>
+                            <td><?=$value?></td>
+                        </tr>
+                    <?php endforeach?>
                 </table>
             </div>
         </div>
