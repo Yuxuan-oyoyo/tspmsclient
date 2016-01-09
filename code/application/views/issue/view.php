@@ -245,7 +245,7 @@ if($this->session->userdata('internal_type')=='Developer') {
         <div class="col-sm-6">
             <div class="issue-tool-bar">
                 <script>
-                    $("div").on("mousedown",".update-btn",function(e){
+                    $("div").on("click",".update-btn",function(e){
                         e.preventDefault();
                         var param = $(this).attr("param");
                         var value = $(this).attr("value");
@@ -279,9 +279,14 @@ if($this->session->userdata('internal_type')=='Developer') {
                 <table>
                     <?php
                     $ci->load->model('Use_case_model');
+                    $ci->load->model('Milestone_model');
                     $usecase = null;
+                    $milestone = null;
                     if(isset($i["usecase"])){
                         $usecase = $ci->Use_case_model->retrieve_by_id($i["usecase"]);
+                    }
+                    if(isset($i["metadata"]["milestone"])){
+                        $milestone = $ci->Milestone_model->retrieve_milestone_by_id($i["metadata"]["milestone"]);
                     }
                     $attr_array = [
                         "Assignee"=>isset($i["responsible"])?$i["responsible"]["display_name"]:"-",
@@ -290,7 +295,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                         "Status"=>$i["status"],
                         "Use case"=>isset($usecase)?$usecase["title"]:"-",
                         "Deadline"=>isset($i["deadline"])?$i["deadline"]:"-",
-                        "Milestone"=>$i["metadata"]["milestone"]
+                        "Milestone"=>isset($milestone)?$milestone["header"]:"-"
                     ]
                     ?>
                     <?php foreach($attr_array as $key=>$value):?>

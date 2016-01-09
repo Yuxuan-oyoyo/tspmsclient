@@ -98,7 +98,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                     ]?>
                     <select name="status" class="form-control">
                         <?php foreach($status as $k):?>
-                            <option value="<?=$k?>"><?=$k?></option>
+                            <option value="<?=$k?>"><?=ucwords($k)?></option>
                         <?php endforeach?>
                     </select>
                 </div>
@@ -109,7 +109,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                     <?php $kinds = ["bug","enhancement","proposal","task"]?>
                     <select name="kind" class="form-control">
                         <?php foreach($kinds as $k):?>
-                            <option value="<?=$k?>"><?=$k?></option>
+                            <option value="<?=$k?>"><?=ucwords($k)?></option>
                         <?php endforeach?>
                     </select>
                 </div>
@@ -120,9 +120,73 @@ if($this->session->userdata('internal_type')=='Developer') {
                     <?php $priorities = ["trivial","minor","major","critical","blocker"]?>
                     <select name="priority" class="form-control">
                         <?php foreach($priorities as $k):?>
-                            <option value="<?=$k?>"><?=$k?></option>
+                            <option value="<?=$k?>"><?=ucwords($k)?></option>
                         <?php endforeach?>
                     </select>
+                </div>
+            </div>
+            <div class="form-part">
+                <div class="form-label">Use case</div>
+                <div class="form-input">
+                    <?php
+                    $ci->load->model('Use_case_model');
+                    $usecases = $ci->Use_case_model->retrieve_by_project_repo_slug($repo_slug);
+                    ?>
+                    <?php if (empty($usecases)):?>
+                        <div><i>No use case defined. Please add new use cases in project management page</i></div>
+                    <?php else:?>
+                        <select name="usecase" class="form-control">
+                            <option value="nil">NIL</option>
+                            <?php foreach($usecases as $uc):?>
+                                <option value="<?=$uc["usecase_id"]?>"><?=$uc["title"]?></option>
+                            <?php endforeach?>
+                        </select>
+                    <?php endif?>
+                </div>
+            </div>
+            <div class="form-part">
+                <div class="form-label">Milestone</div>
+                <div class="form-input">
+                    <?php
+                    $ci->load->library('BB_milestones');
+                    $ci->load->model('Milestone_model');
+                    $bb_milestone_names = [];
+                    $bb_milestones = $ci->bb_milestones->getAllMilestones($repo_slug);
+                    foreach($bb_milestones as $key=>$value){
+                        array_push($bb_milestone_names, $value["name"]);
+                    }
+                    $local_milestones= $ci->Milestone_model->retrieve_by_project_repo_slug($repo_slug);
+                    $milestone_options = [];
+                    foreach($local_milestones as $key=>$value){
+                        $bb_milestone_name = $value["milestone_id"];
+                        if(in_array($bb_milestone_name, $bb_milestone_names)){
+                            $milestone_options[$bb_milestone_name] = $value["header"];
+                        }
+                    }
+                    ?>
+                    <select name="milestone" class="form-control">
+                        <option value="nil">NIL</option>
+                        <?php foreach($milestone_options as $key=>$value):?>
+                           <option value="<?=$key?>"><?=$value?></option>
+                        <?php endforeach?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-part">
+                <div class="form-label">Deadline</div>
+                <script>
+                    $(document).ready(function() {
+                        $('.datepicker').datepicker({
+                            dateFormat: 'yy-mm-dd',
+                            minDate: '+0d',
+                            changeYear: true,
+                            changeMonth: true
+                        });
+                    });
+                </script>
+                <div class="form-input">
+                    <input name="deadline" required class="form-control datepicker" data-parsley-pattern="/^(19|20)\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/"
+                           placeholder="yy-mm-dd" >
                 </div>
             </div>
             <div class="form-part">

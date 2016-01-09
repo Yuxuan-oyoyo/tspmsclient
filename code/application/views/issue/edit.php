@@ -86,7 +86,7 @@ if($this->session->userdata('internal_type')=='Developer') {
         <div class="form-part">
             <div class="form-label">Title <span class="cmpl"></span></div>
             <div class="form-input">
-                <input name="title"  required class="form-control" value="<?=$i["title"]?>">
+                <input name="title" required class="form-control" value="<?=$i["title"]?>">
             </div>
         </div>
         <div class="form-part">
@@ -123,9 +123,9 @@ if($this->session->userdata('internal_type')=='Developer') {
                 <select name="kind" class="form-control">
                     <?php foreach($kinds as $k):?>
                         <?php if($i["metadata"]["kind"]==$k):?>
-                            <option selected value="<?=$k?>"><?=$k?></option>
+                            <option selected value="<?=$k?>"><?=ucwords($k)?></option>
                         <?php else:?>
-                            <option value="<?=$k?>"><?=$k?></option>
+                            <option value="<?=$k?>"><?=ucwords($k)?></option>
                         <?php endif?>
                     <?php endforeach?>
                 </select>
@@ -138,9 +138,9 @@ if($this->session->userdata('internal_type')=='Developer') {
                 <select name="priority" class="form-control">
                     <?php foreach($priorities as $k):?>
                         <?php if($i["priority"]==$k):?>
-                            <option selected value="<?=$k?>"><?=$k?></option>
+                            <option selected value="<?=$k?>"><?=ucwords($k)?></option>
                         <?php else:?>
-                            <option value="<?=$k?>"><?=$k?></option>
+                            <option value="<?=$k?>"><?=ucwords($k)?></option>
                         <?php endif?>
                     <?php endforeach?>
                 </select>
@@ -150,15 +150,14 @@ if($this->session->userdata('internal_type')=='Developer') {
                 <div class="form-label">Use case</div>
                 <div class="form-input">
                     <?php
-                    //get all use cases!!!
                     $ci->load->model('Use_case_model');
                     $usecases = $ci->Use_case_model->retrieve_by_project_repo_slug($repo_slug);
-                    var_dump($usecases);
                     ?>
                     <?php if (empty($usecases)):?>
                         <div><i>No use case defined. Please add new use cases in project management page</i></div>
                     <?php else:?>
                         <select name="usecase" class="form-control">
+                            <option value="nil">NIL</option>
                             <?php foreach($usecases as $uc):?>
                                 <?php if($i["usecase"]==$uc["usecase_id"]):?>
                                     <option selected value="<?=$uc["usecase_id"]?>"><?=$uc["title"]?></option>
@@ -174,20 +173,49 @@ if($this->session->userdata('internal_type')=='Developer') {
                 <div class="form-label">Milestone</div>
                 <div class="form-input">
                 <?php
-                    $ci->load->library('BB_milestones');
-                    $ci->load->model('Milestone_model');
-                    $milestones = $ci->bb_milestones->getAllMilestones($repo_slug);
+                $ci->load->library('BB_milestones');
+                $ci->load->model('Milestone_model');
+                $bb_milestone_names = [];
+                $bb_milestones = $ci->bb_milestones->getAllMilestones($repo_slug);
+                foreach($bb_milestones as $key=>$value){
+                    array_push($bb_milestone_names, $value["name"]);
+                }
+                $local_milestones= $ci->Milestone_model->retrieve_by_project_repo_slug($repo_slug);
+                $milestone_options = [];
+                foreach($local_milestones as $key=>$value){
+                    $bb_milestone_name = $value["milestone_id"];
+                    if(in_array($bb_milestone_name, $bb_milestone_names)){
+                        $milestone_options[$bb_milestone_name] = $value["header"];
+                    }
+                }
                 ?>
                     <select name="milestone" class="form-control">
-                        <option selected value="0">NIL</option>
-                        <?php foreach($milestones as $m):?>
-                            <?php if($i["metadata"]["milestone"]==$m["id"]):?>
-                                <option selected value="<?=$m["id"]?>"><?=print_r($ci->Milestone_model->retrieve_by_id($m["name"]))?></option>
+                        <option value="nil">NIL</option>
+                        <?php foreach($milestone_options as $key=>$value):?>
+                            <?php if($i["metadata"]["milestone"]==$key):?>
+                                <option selected value="<?=$key?>"><?=$value?></option>
                             <?php else:?>
-                                <option value="<?=$m["id"]?>"><?=print_r($ci->Milestone_model->retrieve_by_id($m["name"]))?></option>
+                                <option value="<?=$key?>"><?=$value?></option>
                             <?php endif?>
                         <?php endforeach?>
                     </select>
+                </div>
+            </div>
+            <div class="form-part">
+                <div class="form-label">Deadline</div>
+                <script>
+                    $(document).ready(function() {
+                        $('.datepicker').datepicker({
+                            dateFormat: 'yy-mm-dd',
+                            minDate: '+0d',
+                            changeYear: true,
+                            changeMonth: true
+                        });
+                    });
+                </script>
+                <div class="form-input">
+                    <input name="deadline" required class="form-control datepicker" data-parsley-pattern="/^(19|20)\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/"
+                           placeholder="yy-mm-dd" value="<?=isset($i["deadline"])? $i["deadline"]:""?>">
                 </div>
             </div>
             <div class="form-part">

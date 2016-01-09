@@ -102,7 +102,7 @@ if($this->session->userdata('internal_type')=='Developer') {
             $filter_str =http_build_query($filter_arr);
             $filter_str = empty($filter_str)? "": $filter_str."&";
             unset($filter_arr["sort"]);
-
+            $milestone_mapping = [];
             ?>
             <div style="width: 100%;height:34px">
                 <div style="float: left">
@@ -181,7 +181,27 @@ if($this->session->userdata('internal_type')=='Developer') {
                                 <?=ucwords($d["status"]=="to deploy"?"to dep":($d["status"]=="to develop"?"to dev":$d["status"]))?>
                             </a>
                         </td>
-                        <td></td>
+                        <td class="milestone">
+                            <?php
+                                $ci->load->model("Milestone_model");
+
+                                $milestone_id = isset($d['metadata']["milestone"])&&$d['metadata']["milestone"]!="nil"?$d['metadata']["milestone"]:null;
+                                $milestone = "";
+                                if(isset($milestone_id)){
+                                    if(isset($milestone_mapping[$milestone_id]))$milestone = $milestone_mapping[$milestone_id];
+                                    else {
+                                        $milestone_array = $ci->Milestone_model->retrieve_milestone_by_id($milestone_id);
+                                        if(isset($milestone_array)){
+                                            $milestone = $milestone_array["header"];
+                                            $milestone_mapping[$milestone_id] = $milestone;
+                                        }
+                                    }
+                                }
+                            ?>
+                            <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."milestone=".$milestone?>"
+                               class="milestone-link" title="Filter by milestone: <?=ucwords($milestone)?>"><?=$milestone?></a>
+                        </td>
+
                         <td class="user">
                             <div>
                                 <?php if(isset($d["responsible"])):?>
@@ -247,5 +267,23 @@ if($this->session->userdata('internal_type')=='Developer') {
         </div>
     </div>
 </div>
+<script>
+//    $(document).ready(function(){
+//        var $ids = [];
+//        $(".milestone-link").each(function(index, value) {
+//            var $id = $(this).attr("milestone-id");
+//            if(!$.inArray($id,$ids))
+//            $.ajax({
+//                url: "<?//=base_url().'Issues/ajax_get_milestone_name/'?>//" + $id,
+//                success: function (response) {
+//                    console.log(response);
+//                    if (response != "null") {
+//                        $(this).text(response);
+//                    }
+//                }
+//            });
+//        })
+//    })
+</script>
 </body>
 </html>
