@@ -22,7 +22,7 @@ class Usecases extends CI_Controller
     }
 
     public function list_all($project_id){
-        if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
+        if($this->session->userdata('internal_uid')) {
            $usecases = $this->Use_case_model->retrieve_by_project_id($project_id);
 
             $this->load->view('project/usecases', $data=[
@@ -37,7 +37,7 @@ class Usecases extends CI_Controller
     }
 
     public function delete_usecase($uc_id){
-        if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
+        if($this->session->userdata('internal_uid')) {
             $usecase = $this->Use_case_model->retrieve_by_id($uc_id);
             $this->Use_case_model->delete_usecase($uc_id);
             $this->session->set_userdata('message', 'Use Case deleted successfully.');
@@ -49,13 +49,12 @@ class Usecases extends CI_Controller
     }
 
     public function new_use_case($project_id){
-        if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
+        if($this->session->userdata('internal_uid')) {
             if($this->input->post("submit")) {
                 $insert_array = array(
                     'project_id' => $project_id,
                     'sub_id' => ($this->Use_case_model->get_sub_id($project_id) + 1),
                     'title' => $this->input->post("title"),
-                    'issue_id' => $this->input->post("issue_id"),
                     'flow' => $this->input->post("flow"),
                     'importance' => $this->input->post("importance"),
                     'stakeholders' => $this->input->post("stakeholders"),
@@ -79,11 +78,10 @@ class Usecases extends CI_Controller
     }
 
     public function edit_use_case($uc_id){
-        if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
+        if($this->session->userdata('internal_uid')) {
             $usecase = $this->Use_case_model->retrieve_by_id($uc_id);
                 if ($this->input->post("submit")) {
                     $usecase['title'] = $this->input->post("title");
-                    $usecase['issue_id'] = $this->input->post("issue_id");
                     $usecase['flow'] = $this->input->post("flow");
                     $usecase['importance'] = $this->input->post("importance");
                     $usecase['stakeholders'] = $this->input->post("stakeholders");

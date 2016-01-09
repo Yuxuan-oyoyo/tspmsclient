@@ -35,6 +35,15 @@ $class = [
 ];
 if($this->session->userdata('internal_type')=='Developer') {
     $this->load->view('common/dev_nav', $class);
+    ?>
+    <aside class="sidebar-left">
+        <div class="sidebar-links">
+            <a class="link-blue selected" href="<?=base_url()?>Issues/list_all/<?=$repo_slug?>"><i class="fa fa-wrench"></i>Issues</a>
+            <a class="link-blue" href="<?=base_url().'Usecases/list_all/'.$project["project_id"]?>"><i class="fa fa-list"></i>Use Case List</a>
+        </div>
+
+    </aside>
+    <?php
 }else {
     $this->load->view('common/pm_nav', $class);
 ?>
@@ -43,6 +52,7 @@ if($this->session->userdata('internal_type')=='Developer') {
             <a class="link-blue" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Project Overview</a>
             <a class="link-blue " href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
             <a class="link-blue selected" href="<?=base_url()?>Issues/list_all/<?=$repo_slug?>"><i class="fa fa-wrench"></i>Issues</a>
+            <a class="link-blue" href="<?=base_url().'Usecases/list_all/'.$project["project_id"]?>"><i class="fa fa-list"></i>Use Case List</a>
             <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
         </div>
 
@@ -145,7 +155,8 @@ if($this->session->userdata('internal_type')=='Developer') {
                 <tr>
                     <?php foreach($headers as $h):?>
                         <th class="text sorter-false tablesorter-header">
-                            <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."sort=".$h["sort"]?>" title="Sort by: <?=$h["sort"] ?>>"><?=$h["display"]?></a>
+                            <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."sort=".$h["sort"]?>"
+                               title="Sort by: <?=$h["sort"]?>"><?=$h["display"]?></a>
                             <?php if(isset($sorted_header) && "-".$sorted_header==$h["sort"]):?>
                                 <i class="glyphicon glyphicon-triangle-top" style="color: grey"></i>
                             <?php elseif(isset($sorted_header) && $sorted_header==$h["sort"]):?>
@@ -162,22 +173,22 @@ if($this->session->userdata('internal_type')=='Developer') {
                         <td class="" style="width: 35%">
                             <a class="execute" href="<?=base_url()."Issues/detail/".$repo_slug."/".$d["local_id"]?>" title="View Details">#<?=$d["local_id"]?>: <?=$d["title"]?></a>
                         </td>
-                        <td class="icon-col">
+                        <td class="icon-col" style="text-align: center">
                             <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."kind=".$d["metadata"]["kind"]?>"
-                               class="icon-bug" title="Filter by type:<?=$d["metadata"]["kind"]?>">
-                                <?=$d["metadata"]["kind"]?>
+                               class="icon icon-<?=$d["metadata"]["kind"]?>" title="Filter by type: <?=ucwords($d["metadata"]["kind"])?>">
+                                <?=ucwords($d["metadata"]["kind"])?>
                             </a>
                         </td>
-                        <td class="icon-col">
+                        <td class="icon-col"  style="text-align: center">
                             <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."priority=".$d["priority"]?>"
-                               class=" icon-major" title="Filter by priority:"<?=$d["priority"]?>>
-                                <?=$d["priority"]?>
+                               class="icon icon-<?=$d["priority"]?>" title="Filter by priority: <?=ucwords($d["priority"])?>">
+                                <?=ucwords($d["priority"])?>
                             </a>
                         </td>
                         <td class="state">
                             <a class="aui-lozenge" href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."status=".$d["status"]?>"
-                               title="Filter by status: <?=$d["status"]?>" style="color: <?=$status_color[$d["status"]]?>">
-                                <?=$d["status"]=="to deploy"?"to dep":($d["status"]=="to develop"?"to dev":$d["status"])?>
+                               title="Filter by status: <?=ucwords($d["status"])?>" style="color: <?=$status_color[$d["status"]]?>">
+                                <?=ucwords($d["status"]=="to deploy"?"to dep":($d["status"]=="to develop"?"to dev":$d["status"]))?>
                             </a>
                         </td>
                         <td></td>
@@ -191,7 +202,9 @@ if($this->session->userdata('internal_type')=='Developer') {
                                             <!--img src="https://bitbucket.org/account/czyang_jessie/avatar/32/?ts=1443338247" alt="" /-->
                                         </div>
                                     </div>
-                                    <span title="<?=$d["responsible"]["username"]?>"><?=$d["responsible"]["display_name"]?></span>
+                                    <span title="<?=$d["responsible"]["username"]?>">
+                                        <?=$d["responsible"]["display_name"]?>
+                                    </span>
                                 </a>
                                 <?php else:?>
                                 -

@@ -122,8 +122,8 @@ $this->load->view('common/pm_nav', $class);
             </div>
             <div class="col-lg-5">
                 <div class="form-group">
-                    <label for="no_of_use_cases">Number of usecases</label>
-                    <input class="form-control" name="no_of_use_cases" value="<?=set_value("no_of_usecase")?>" data-parsley-type="number" min="0">
+                    <label for="priority">Priority(1-5)</label>
+                    <input class="form-control" name="priority" value="<?=set_value("priority")?>" data-parsley-type="number" min="1" max="5">
                 </div>
             </div>
             <div class="col-lg-offset-1 col-lg-6">

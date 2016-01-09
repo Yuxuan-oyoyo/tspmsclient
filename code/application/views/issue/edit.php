@@ -61,6 +61,7 @@ if($this->session->userdata('internal_type')=='Developer') {
             <a class="link-blue" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Project Overview</a>
             <a class="link-blue " href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
             <a class="link-blue selected" href="<?=base_url()?>Issues/list_all/<?=$repo_slug?>"><i class="fa fa-wrench"></i>Issues</a>
+            <a class="link-blue" href="<?=base_url().'Usecases/list_all/'.$project["project_id"]?>"><i class="fa fa-list"></i>Use Case List</a>
             <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
         </div>
 
@@ -149,16 +150,25 @@ if($this->session->userdata('internal_type')=='Developer') {
             <div class="form-part">
                 <div class="form-label">Use case</div>
                 <div class="form-input">
-                    <?php //get all use cases!!!?>
-                    <select name="priority" class="form-control">
-                        <?php foreach($priorities as $k):?>
-                            <?php if($i["priority"]==$k):?>
-                                <option selected value="<?=$k?>"><?=$k?></option>
-                            <?php else:?>
-                                <option value="<?=$k?>"><?=$k?></option>
-                            <?php endif?>
-                        <?php endforeach?>
-                    </select>
+                    <?php
+                    //get all use cases!!!
+                    $ci->load->model('Use_case_model');
+                    $usecases = $ci->Use_case_model->retrieve_by_project_repo_slug($repo_slug);
+                    var_dump($usecases);
+                    ?>
+                    <?php if (empty($usecases)):?>
+                        <div><i>No use case defined. Please add new use cases in project management page</i></div>
+                    <?php else:?>
+                        <select name="usecase" class="form-control">
+                            <?php foreach($usecases as $uc):?>
+                                <?php if($i["usecase"]==$uc["usecase_id"]):?>
+                                    <option selected value="<?=$uc["usecase_id"]?>"><?=$uc["title"]?></option>
+                                <?php else:?>
+                                    <option value="<?=$uc["usecase_id"]?>"><?=$uc["title"]?></option>
+                                <?php endif?>
+                            <?php endforeach?>
+                        </select>
+                    <?php endif?>
                 </div>
             </div>
             <div class="form-part">

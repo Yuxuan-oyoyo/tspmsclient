@@ -27,6 +27,11 @@ class Use_case_model extends CI_Model{
         return $query->row_array()['id'];
     }
 
+    public function get_no_of_usecase_by_project($project_id){
+        $query = $this->db->query("select count(*)as number from use_case where project_id=".$project_id);
+        return $query->row_array()['number'];
+    }
+
     public function retrieve_by_id($uc_id){
         if(isset($uc_id)){
             $query = $this->db->get_where("use_case",["usecase_id"=>$uc_id]);
@@ -42,6 +47,15 @@ class Use_case_model extends CI_Model{
             //$this->db->order_by("sub_id", "asc");
             return $query->result_array();
 
+        }
+        return null;
+    }
+    public function retrieve_by_project_repo_slug($repo_slug){
+        if(isset($repo_slug)){
+            $query = $this->db->query("SELECT usecase_id, sub_id,title,importance FROM use_case u, project p
+                      WHERE u.project_id =p.project_id AND bitbucket_repo_name=? ORDER BY importance DESC ", [$repo_slug]);
+            //$this->db->order_by("sub_id", "asc");
+            return $query->result_array();
         }
         return null;
     }

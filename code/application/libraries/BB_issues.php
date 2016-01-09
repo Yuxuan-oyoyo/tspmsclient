@@ -40,17 +40,18 @@ class BB_issues {
      */
     private function decode_attr_from_content($issue_array){
         if(isset($issue_array["content"])){
-            if(preg_match("/<deadline>(.*?)</deadline>/",$issue_array["content"],$display)){
+            if(preg_match("/\<deadline\>(.*?)\<\/deadline\>/",$issue_array["content"],$display)){
                 $issue_array["deadline"] = $display[1];
             }
-            if(preg_match("/<usecase>(.*?)</usecase>/",$issue_array["content"],$display)){
+            if(preg_match("/\<usecase\>(.*?)\<\/usecase\>/",$issue_array["content"],$display)){
                 $issue_array["usecase"] = $display[1];
             }
-            if(preg_match("/<content>(.*?)</content>/",$issue_array["content"],$display)){
+            if(preg_match("/\<content\>(.*?)\<\/content\>/",$issue_array["content"],$display)){
                 $issue_array["content"] = $display[1];
             }
             return $issue_array;
         }
+        return $issue_array;
     }
     /**
      * @param $repo_slug
@@ -76,25 +77,28 @@ class BB_issues {
         if(isset($result['issues'])){
             /*when server replies issue list*/
             foreach($result["issues"] as $key=>$issue){
-                $result["issues"][$key]["status"] = $this->map_status($issue["status"], false);
                 $result["issues"][$key] = $this->decode_attr_from_content($issue);
+                //die(var_dump($result["issues"][$key]));
+                $result["issues"][$key]["status"] = $this->map_status($issue["status"], false);
             }
             return $result;
         }else{
             /*when server replies single issue*/
-            $result["status"] = $this->map_status($result["status"], false);
-            $result = $this->decode_attr_from_content($result);
-            return $result;
+            $result_decoded = $this->decode_attr_from_content($result);
+            //die(var_dump($result_decoded));
+            $result_decoded["status"] = $this->map_status($result_decoded["status"], false);
+
+            return $result_decoded;
         }
     }
-    private function map_status($status, $fromDefined = true){
+    private function map_status($status, $fromLocal = true){
         $negate = false;
         $result = false;
         if(substr($status,0,1)=="!"){
             /*temporarily detach the negate sign if any*/
             $status = substr($status,1);$negate = true;
         }
-        if($fromDefined) {
+        if($fromLocal) {
             $index = array_search($status, $this->defined_status);
             /*return index or false*/
             if($index!==false) {/*make sure it's indeed false, not 0*/
@@ -294,6 +298,7 @@ class BB_issues {
             if(isset($reply_array['error'])){
                 if($this->_print_err) echo var_dump($reply_array);
             }else{
+                $reply_array = $this->decode_attr_from_content($reply_array);
                 $reply_array["status"] = $this->map_status($reply_array["status"], false);
                 return $reply_array;
             }

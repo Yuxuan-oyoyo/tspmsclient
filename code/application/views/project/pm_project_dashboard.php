@@ -229,6 +229,14 @@ function sortTasksByDaysLeft($a, $b) {
                                 <td><?=$project['file_repo_name']?></td>
                             </tr>
                             <tr>
+                                <td><strong>Priority </strong></td>
+                                <td><?=$project['priority']?></td>
+                            </tr>
+                            <tr>
+                                <td><strong>No. of Use Cases </strong></td>
+                                <td><?=$no_of_usecases?></td>
+                            </tr>
+                            <tr>
                                 <td><strong>Status </strong></td>
                                 <td><?php
                                     if($project['is_ongoing']==1){

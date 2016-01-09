@@ -43,6 +43,8 @@ class Internal_users extends CI_Controller
                 $update_array["name"] = $this->input->post("name");
                 $update_array["username"] = $this->input->post("username");
                 $update_array["bb_username"] = $this->input->post("bb_username");
+                $update_array["bb_oauth_key"] = $this->input->post("bb_oauth_key");
+                $update_array["bb_oauth_secret"] = $this->input->post("bb_oauth_secret");
                 $update_array["type"] = $this->input->post("type");
                 $update_array["is_active"] = 1;
                 $update_array["password_hash"] = password_hash($this->input->post("password"), PASSWORD_DEFAULT);
@@ -91,6 +93,8 @@ class Internal_users extends CI_Controller
                 if ($this->input->post('submit')) {
                     $update_array["name"]=$this->input->post("name");
                     $update_array["bb_username"]=$this->input->post("bb_username");
+                    $update_array["bb_oauth_key"] = $this->input->post("bb_oauth_key");
+                    $update_array["bb_oauth_secret"] = $this->input->post("bb_oauth_secret");
                     $update_array["type"]=$this->input->post("type");
                     $update_array["is_active"]=$this->input->post("is_active");
                     if ($this->Internal_user_model->update($update_array)==1) {
