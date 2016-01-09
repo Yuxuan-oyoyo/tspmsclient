@@ -55,7 +55,6 @@ class Usecases extends CI_Controller
                     'project_id' => $project_id,
                     'sub_id' => ($this->Use_case_model->get_sub_id($project_id) + 1),
                     'title' => $this->input->post("title"),
-                    'issue_id' => $this->input->post("issue_id"),
                     'flow' => $this->input->post("flow"),
                     'importance' => $this->input->post("importance"),
                     'stakeholders' => $this->input->post("stakeholders"),
@@ -83,7 +82,6 @@ class Usecases extends CI_Controller
             $usecase = $this->Use_case_model->retrieve_by_id($uc_id);
                 if ($this->input->post("submit")) {
                     $usecase['title'] = $this->input->post("title");
-                    $usecase['issue_id'] = $this->input->post("issue_id");
                     $usecase['flow'] = $this->input->post("flow");
                     $usecase['importance'] = $this->input->post("importance");
                     $usecase['stakeholders'] = $this->input->post("stakeholders");

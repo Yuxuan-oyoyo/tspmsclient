@@ -78,7 +78,6 @@ $this->load->view('common/pm_nav', $class);
         <thead>
         <th>ID</th>
         <th>Title</th>
-        <th>Issue</th>
         <th>Importance</th>
         <th>Type</th>
         <th>Last Updated</th>
@@ -88,7 +87,6 @@ $this->load->view('common/pm_nav', $class);
             <?php foreach($usecases as $u):?>
                 <tr><td><?=$u['sub_id']?></td>
                     <td><?=$u['title']?></td>
-                    <td><?=$u['issue_id']?></td>
                     <td><?=$u['importance']?></td>
                     <td><?=$u['type']?></td>
                     <td><?=$u['last_updated']?></td>
