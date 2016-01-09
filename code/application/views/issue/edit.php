@@ -156,16 +156,19 @@ if($this->session->userdata('internal_type')=='Developer') {
                     $usecases = $ci->Use_case_model->retrieve_by_project_repo_slug($repo_slug);
                     var_dump($usecases);
                     ?>
-
-                    <select name="usecase" class="form-control">
-                        <?php foreach($usecases as $uc):?>
-                            <?php if($i["usecase"]==$uc["usecase_id"]):?>
-                                <option selected value="<?=$uc["usecase_id"]?>"><?=$uc["title"]?></option>
-                            <?php else:?>
-                                <option value="<?=$uc["usecase_id"]?>"><?=$uc["title"]?></option>
-                            <?php endif?>
-                        <?php endforeach?>
-                    </select>
+                    <?php if (empty($usecases)):?>
+                        <div><i>No use case defined. Please add new use cases in project management page</i></div>
+                    <?php else:?>
+                        <select name="usecase" class="form-control">
+                            <?php foreach($usecases as $uc):?>
+                                <?php if($i["usecase"]==$uc["usecase_id"]):?>
+                                    <option selected value="<?=$uc["usecase_id"]?>"><?=$uc["title"]?></option>
+                                <?php else:?>
+                                    <option value="<?=$uc["usecase_id"]?>"><?=$uc["title"]?></option>
+                                <?php endif?>
+                            <?php endforeach?>
+                        </select>
+                    <?php endif?>
                 </div>
             </div>
             <div class="form-part">
