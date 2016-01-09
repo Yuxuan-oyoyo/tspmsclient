@@ -37,6 +37,28 @@ class Milestone_model extends CI_Model{
         }
         return null;
     }
+    /*retrieve this milestone in one query*/
+    public function retrieve_milestone_by_id($milestone_id){
+        if(isset($milestone_id)){
+            $query = $this->db->query(
+                "SELECT p.header FROM post p, milestone m where p.post_id=m.post_id AND m.milestone_id=?",
+                [$milestone_id]
+            );
+            if( $query->num_rows()>0){
+                return $query->row_array();
+            }
+        }
+        return null;
+    }
+    public function retrieve_by_project_repo_slug($repo_slug){
+        if(isset($repo_slug)){
+            $query = $this->db->query("select p.header,p.body, m.deadline, m.if_completed, m.milestone_id from post p, milestone m, project pr, project_phase pp
+where p.post_id=m.post_id and p.project_phase_id=pp.project_phase_id
+and pr.project_id=pp.project_id and pr.bitbucket_repo_name=?",[$repo_slug]);
+            return $query->result_array();
+        }
+        return null;
+    }
     public function insert($insert_array){
         $insert_array['if_completed'] = 0;
         $this->db->insert('milestone', $insert_array);

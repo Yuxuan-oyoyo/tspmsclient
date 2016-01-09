@@ -64,6 +64,7 @@ class Issues extends CI_Controller {
                 //TODO:validate parameters
                 /*Get all issues*/
                 $response = $this->bb_issues->retrieveIssues($repo_slug,null, $para);
+
                 /*Get user bb_username to pass on to the page*/
                 $this->load->model("Internal_user_model");
                 $data= [
@@ -112,11 +113,14 @@ class Issues extends CI_Controller {
      */
     public function process_create($repo_slug){
         if($this->session->userdata('internal_uid')) {
-            $field_params = ["status","priority","title","responsible","content","kind","milestone"];
+            $field_params = ["status","priority","title","responsible","content","kind","milestone","deadline","usecase"];
             $para_input = $this->input->get($field_params,true);
             $param=[];
             foreach($para_input as $key=>$value){
                 if(!empty($value)){
+                    if(in_array($key,["usecase","milestone"]) && $value==0){
+                        continue;
+                    }
                     $param[$key] = $value;
                 }
             }
@@ -251,8 +255,14 @@ class Issues extends CI_Controller {
             foreach($para_input as $key=>$value){
                 if(!empty($value)){
                     $param[$key] = $value;
+                    if($key=="milestone" && !is_int($value)){
+                        $this->load->library('BB_milestones');
+                        $this->bb_milestones->postMilestone($repo_slug,"nil");
+                        //var_dump($id);
+                    }
                 }
             }
+            //var_dump($param);
             $issue = $this->bb_issues->updateIssue($repo_slug,$issue_id, $param);
             $this->session->set_flashdata("issue_last_updated",$issue);
             /*brings user back to this issue*/
@@ -262,5 +272,19 @@ class Issues extends CI_Controller {
             redirect('/internal_authentication/login/');
         }
     }
+
+    /*
+    public function ajax_get_milestone_name($milestone_id=null){
+        if(isset($milestone_id)){
+            $this->load->model('Milestone_model');
+            $milestone = $this->Milestone_model->retrieve_milestone_by_id($milestone_id);
+            if(isset($milestone)){
+                return $milestone["header"];
+            }
+        }
+        return "null";
+    }
+    */
+
 
 }

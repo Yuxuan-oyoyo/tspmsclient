@@ -160,7 +160,6 @@ class BB_issues {
      */
     public function postNewIssue($repo_slug, array $issue_array){
         return $this->sendIssueRequest($repo_slug,null,$issue_array,"POST");
-        //TODO: may need a confirmation
     }
     /**
      * @param $repo_slug
@@ -260,7 +259,6 @@ class BB_issues {
         }
         $_trial = 2;
         $issue_array['access_token'] = $token;
-
         while($_trial>=0) {
             $_trial -= 1;/*IMPORTANT*/
             $ch = curl_init();
@@ -293,17 +291,34 @@ class BB_issues {
                 $issue_array['access_token'] = $CI->bb_shared->requestFromServer();
             }
         }
-        //var_dump($response);
         if(($reply_array = json_decode($response,true))!=null){
             if(isset($reply_array['error'])){
                 if($this->_print_err) echo var_dump($reply_array);
             }else{
                 $reply_array = $this->decode_attr_from_content($reply_array);
                 $reply_array["status"] = $this->map_status($reply_array["status"], false);
+                /*process log  =====*/
+                $this->log($reply_array,$repo_slug);
+                /*process log  =====*/
                 return $reply_array;
             }
         }
         return null;
+
+    }
+    public function log($issue_array, $repo_slug){
+        $ci =&get_instance();
+        $ci->load->library('session');
+        $ci->load->model('logs/Issue_log_model');
+        $user_id = $ci->session->userdata('internal_uid');
+        $log_array=[
+            "issue_id"=>$issue_array["local_id"],
+            "repo_slug"=>$repo_slug,
+            "updated_by"=>$user_id,
+            "title"=>$issue_array["title"],
+            "status"=>$issue_array["status"]
+        ];
+        $ci->Issue_log_model->insert($log_array);
 
     }
 
