@@ -17,6 +17,16 @@ class Task_model extends CI_Model{
         return null;
     }
 
+    public function retrieve_by_ids($project_id, $phase_id){
+        if(isset($project_id)&&isset($phase_id)){
+            $query = $this->db->get_where("task",["project_id"=>$project_id]&& array("phase_id"=>$phase_id));
+            if( $query->num_rows()>0){
+                return $query->row_array();
+            }
+        }
+        return null;
+    }
+
     public function retrieve_all_by_project_id($project_id){
         if(isset($project_id)){
             $query = $this->db->query("select * from task t where t.project_id and t.project_id=?",[$project_id]);

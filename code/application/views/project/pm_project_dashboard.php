@@ -282,7 +282,25 @@ function sortTasksByDaysLeft($a, $b) {
                         </div>
                         <div class="form-group">
                             <label for="importance">Task Importance:</label>
-                            <input type="number" name="importance" id="importance" class="form-control clsDatePicker" data-parsley-required>
+                            <input type="number" name="importance" id="importance" class="form-control" data-parsley-required min="1" max="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="phase_id">Corresponding Project Phase:</label>
+                            <select name="phase_id" class="form-control">
+                                <?php
+                                    foreach($phases as $phase) {
+                                        if ($phase['phase_name']===$current_phase_name) {
+                                            ?>
+                                            <option value="<?= $phase['phase_id'] ?>" selected><?= $phase['phase_name'] ?></option>
+                                            <?php
+                                        } else {
+                                            ?>
+                                            <option value="<?= $phase['phase_id'] ?>"><?= $phase['phase_name'] ?></option>
+                                            <?php
+                                        }
+                                    }
+                                ?>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="targeted_start_datetime">Targeted Start Datetime:</label>

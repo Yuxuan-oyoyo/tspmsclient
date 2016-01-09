@@ -108,4 +108,10 @@ class Project_phase_model extends CI_Model {
         $query = $this->db->query("select phase_name from phase order by phase_id");
         return $query->result_array();
     }
+
+    public function retrieve_phase_name_by_id($project_phase_id){
+        $sql = "select phase_name from phase, project_phase where phase.phase_id = project_phase.phase_id and project_phase.project_phase_id=?";
+        $query=$this->db->query($sql,array($project_phase_id));
+        return $query->result_array();
+    }
 }

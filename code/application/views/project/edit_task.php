@@ -61,7 +61,28 @@ $this->load->view('common/pm_nav', $class);
                 </div>
                 <div class="form-group">
                     <label for="importance">Importance:</label>
-                    <input type="number" name="importance" id="importance" class="form-control" value="<?=$t['importance']?>">
+                    <input type="number" name="importance" id="importance" class="form-control" value="<?=$t['importance']?>" data-parsley-required min="1" max="5">
+                </div>
+                <div class="form-group">
+                    <label for="phase_id">Corresponding Project Phase:</label>
+                    <select name="phase_id" class="form-control">
+                        here!
+                        <?php
+                        var_dump($t['phase_id']);
+                        foreach($phases as $phase) {
+                            var_dump($phase['phase_id']);
+                            if ($phase['phase_id']===$t['phase_id']) {
+                                ?>
+                                <option value="<?= $phase['phase_id'] ?>" selected><?= $phase['phase_name'] ?></option>
+                                <?php
+                            } else {
+                                ?>
+                                <option value="<?= $phase['phase_id'] ?>"><?= $phase['phase_name'] ?></option>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="targeted_start_datetime">Targeted Start Datetime:</label>
