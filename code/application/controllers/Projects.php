@@ -26,6 +26,7 @@ class Projects extends CI_Controller {
         $this->load->model("Update_model");
         $this->load->model("Phase_model");
         $this->load->model("Task_model");
+        $this->load->model("Use_case_model");
     }
 
     public function index()
@@ -97,9 +98,9 @@ class Projects extends CI_Controller {
                     'staging_link' => $this->input->post("staging_link"),
                     'production_link' => $this->input->post("production_link"),
                     'customer_preview_link' => $this->input->post("customer_preview_link"),
-                    'no_of_use_cases' => $this->input->post("no_of_use_cases"),
                     'bitbucket_repo_name' => $this->input->post("bitbucket_repo_name"),
                     'project_value' => $this->input->post("project_value"),
+                    'priority' => $this->input->post("priority"),
                     'current_project_phase_id' => 0
                 );
                 if ($this->insert($insert_array)) {
@@ -150,7 +151,7 @@ class Projects extends CI_Controller {
                 $original_array = $this->Project_model->retrieve_by_id($project_id);
                 $name_array = ["c_id", "project_title"
                     , "project_description", "tags", "remarks"
-                    , "file_repo_name", "no_of_use_cases"
+                    , "file_repo_name", "priority"
                     , "bitbucket_repo_name", "project_value", "staging_link", "production_link", "customer_preview_link"];
                 $input = $this->input->post($name_array, true);
                 $customer_option = $this->input->post('customer-option');
@@ -249,14 +250,14 @@ class Projects extends CI_Controller {
             //customer_name
             $c_id = $project['c_id'];
             $customer = $this->Customer_model->retrieve($c_id);
-            $first_name = $customer['first_name'];
-            $last_name = $customer['last_name'];
-            $customer_name = $first_name.' '.$last_name;
+           $no_of_usecases = $this->Use_case_model->get_no_of_usecase_by_project($project_id);
+
             $data = [
                 "project"=>$project,
                 "phases"=>$phases,
                 "customer"=>$customer,
-                "tasks"=>$newTasks
+                "tasks"=>$newTasks,
+                "no_of_usecases"=>$no_of_usecases
             ];
             $this->load->view('project/pm_project_dashboard',$data);
         }else{

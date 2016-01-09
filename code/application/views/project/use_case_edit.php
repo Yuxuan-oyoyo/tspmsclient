@@ -50,12 +50,6 @@ $this->load->view('common/pm_nav', $class);
                     <input name="title" id="title"  type="text" class="form-control" value="<?=$usecase['title']?>" data-parsley-required>
                 </div>
                 <div class="form-group">
-                    <label for="issue_id">Issue:</label>
-                    <select class="form-control" id="issue_id" name="issue_id" >
-                        <option value="1" <?=set_select("issue_id","1",($usecase['issue_id']=="1"));?> >1</option>
-                    </select>
-                </div>
-                <div class="form-group">
                     <label for="flow">Flow:</label>
                     <textarea name="flow" id="flow" rows="3" ><?=$usecase['flow']?></textarea>
                     <script>

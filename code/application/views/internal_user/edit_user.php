@@ -56,16 +56,24 @@ $this->load->view('common/pm_nav', $class);
 
             <div class=" customer-info">
                 <div class="form-group">
-                    <label for="existing_password">Username*</label>
+                    <label for="username">Username*</label>
                     <input disabled class="form-control" type="text" id="username" name="username" value="<?=$u['username']?>" data-parsley-required >
                 </div>
                 <div class="form-group">
-                    <label for="existing_password">Name*</label>
+                    <label for="name">Name*</label>
                     <input class="form-control" type="text" id="name" name="name"  value="<?=$u['name']?>" data-parsley-required >
                 </div>
                 <div class="form-group">
-                    <label for="existing_password">BB username</label>
+                    <label for="bb_username">BB username</label>
                     <input class="form-control" type="text" id="bb_username" name="bb_username"  value="<?=$u['bb_username']?>" >
+                </div>
+                <div class="form-group">
+                    <label for="bb_oauth_key">BB Oauth Key</label>
+                    <input class="form-control" type="text" id="bb_oauth_key" name="bb_oauth_key"  value="<?=$u['bb_oauth_key']?>" >
+                </div>
+                <div class="form-group">
+                    <label for="bb_oauth_secret">BB Oauth Secret</label>
+                    <input class="form-control" type="text" id="bb_oauth_secret" name="bb_oauth_secret"  value="<?=$u['bb_oauth_secret']?>" >
                 </div>
                 <div class="form-group">
                     <label for="type">Type</label>

@@ -35,6 +35,15 @@ $class = [
 ];
 if($this->session->userdata('internal_type')=='Developer') {
     $this->load->view('common/dev_nav', $class);
+    ?>
+    <aside class="sidebar-left">
+        <div class="sidebar-links">
+            <a class="link-blue selected" href="<?=base_url()?>Issues/list_all/<?=$repo_slug?>"><i class="fa fa-wrench"></i>Issues</a>
+            <a class="link-blue" href="<?=base_url().'Usecases/list_all/'.$project["project_id"]?>"><i class="fa fa-list"></i>Use Case List</a>
+        </div>
+
+    </aside>
+    <?php
 }else {
     $this->load->view('common/pm_nav', $class);
 ?>
@@ -43,6 +52,7 @@ if($this->session->userdata('internal_type')=='Developer') {
             <a class="link-blue" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Project Overview</a>
             <a class="link-blue " href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
             <a class="link-blue selected" href="<?=base_url()?>Issues/list_all/<?=$repo_slug?>"><i class="fa fa-wrench"></i>Issues</a>
+            <a class="link-blue" href="<?=base_url().'Usecases/list_all/'.$project["project_id"]?>"><i class="fa fa-list"></i>Use Case List</a>
             <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
         </div>
 

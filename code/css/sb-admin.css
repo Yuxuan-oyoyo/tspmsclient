@@ -133,28 +133,8 @@ ul.alert-dropdown {
     .project-info{
         color:#27918b;
     }
-    .project-info input{
-        border:2px solid lightgrey;
-        border-radius: 0;
-    }
-    .project-info textarea{
-        border:2px solid  lightgrey ;
-        border-radius: 0;
-    }
     .customer-info{
         color:#8e44ad;
-    }
-    .customer-info input{
-        border:2px solid  lightgrey;
-        border-radius: 0;
-    }
-    .customer-info select{
-        border:2px solid  lightgrey;
-        border-radius: 0;
-    }
-    .customer-info textarea{
-        border:2px solid #1abc9c;
-        border-radius: 0;
     }
     .ongoing-panel{
         margin-top: 10px;

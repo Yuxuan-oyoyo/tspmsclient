@@ -27,6 +27,11 @@ class Use_case_model extends CI_Model{
         return $query->row_array()['id'];
     }
 
+    public function get_no_of_usecase_by_project($project_id){
+        $query = $this->db->query("select count(*)as number from use_case where project_id=".$project_id);
+        return $query->row_array()['number'];
+    }
+
     public function retrieve_by_id($uc_id){
         if(isset($uc_id)){
             $query = $this->db->get_where("use_case",["usecase_id"=>$uc_id]);
