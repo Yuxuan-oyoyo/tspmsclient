@@ -53,7 +53,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                 </div>
             </div>
             <?php endif;?>
-        <div class=" customer-info">
+        <div class="customer-info">
             <div class="form-group">
                 <label for="existing_password">Existing Password*</label>
                 <input class="form-control" type="password" id="existing_password" name="existing_password" data-parsley-required >
