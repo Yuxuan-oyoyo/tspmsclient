@@ -113,7 +113,7 @@ class Chat extends CI_Controller {
 
 
 
-
+        session_write_close();
 
         if( $this->input->server('REQUEST_METHOD') == 'GET') {
             // m_type: if file 1 else 0
@@ -174,6 +174,6 @@ class Chat extends CI_Controller {
 
             }
         }
-
+        session_write_close();
     }
 }
