@@ -32,77 +32,54 @@ class Chat extends CI_Controller {
             return ["user_id"=>$customer_id, "user_type"=>"customer"];
         }
     }
+
+
     public function get(){
         header('Content-type: application/json');
         header("Access-Control-Allow-Origin: *");
 
+
+        session_write_close();
         $user = $this->getUserInfo();
         //TODO: fetch data with model
-          $threads =  $this->Chat_model->retrieve($user["user_id"], $user["user_type"]);
-          echo json_encode($threads);
-//        foreach($result as $row) {
-//            $new_m = ['author'  => $row["author_id"],
-//                'msgID'         => $row["msg_id"],
-//                'content'       => $row["content"],
-//                'timeStamp'     => $row["timestamp"],
-//            ];
-//            if (!in_array($row["chatid"], $thread_tracker)) {
-//                //add chatid to tracked threads
-//                array_push($thread_tracker, $row["chatid"]);
-//                // make the thread;
-//                $new_t = ['chatID'  => $row["chatid"],
-//                    'user1'         => $row["user1"],
-//                    'user2'         => $row["user2"],
-//                    'seen'          => $row["seen"],
-//                    'lastMsgTimeStamp' => $row["lastMsgTimeStamp"],
-//                    'lastMessage'   => $row["lastMessage"],
-//                    'messages'      => [$new_m],
-//                ];
-//                array_push($result_col, $new_t);
-//            } else {
-//                $chat_id = $row["chatid"];
-//                foreach ($result_col as $k=>$v) {
-//                    if ($v['chatID'] == $chat_id)
-//                        array_push($result_col[$k]['messages'], $new_m);
-//                }
-//            }
-//        }
-//        echo json_encode($result_col);
+        $threads =  $this->Chat_model->retrieve($user["user_id"], $user["user_type"]);
+
+        //session_write_close();
+
+        echo json_encode($threads);
+        //echo " ";
+        //print_r($this->session->all_userdata());
+        session_write_close();
+
     }
 
-    /*
-    public function filey()
+    public function new_write()
     {
+        header('Content-type: application/json');
+        header("Access-Control-Allow-Origin: *");
 
+        //   data: {partner:target_partner, timeStamp: datetime, author: CurrentUser ,content: text },
 
-        $base_file = $_POST['test_data'];
-        $f_name = $_POST['f_name'];
-        $ext = $_POST['ext'];
+        $values = [
+            "partner_id" => $this->input->get("partner"),
+            "m_author" => $this->input->get("author"),
+            "m_content" => $this->input->get("content", true),
+            "m_type" => 0,
+        ];
+        //TODO: link up with model
 
-        if(! isset($base_file))
-        {
-            echo "sian man";
-            $error = array('error' => $this->upload->display_errors());
-            echo $error;
+        $this->Chat_model->new_write($values);
 
-
-        }
-        else
-        {
-            $data = explode(',', $base_file);
-            $content = base64_decode($data[1]);
-            $outfile = "./uploads/";
-            $outfile .= $f_name;
-            $outfile .= ".";
-            $outfile .= $ext;
-            file_put_contents($outfile, $content);
-
-
-
-        }
     }
-    // EOL: prototyping function
-    */
+
+    public function conversation_list()
+    {
+        session_write_close();
+        $partners = $this->Chat_model->convo_pm();
+        echo json_encode($partners);
+        session_write_close();
+    }
+
 
     public function filesys($msgid, $fn)
     {

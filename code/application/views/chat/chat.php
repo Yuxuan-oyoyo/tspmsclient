@@ -166,54 +166,80 @@ if($this->session->userdata('Customer_cid')){
         getInitialState: function()
         {
             return {
-                options: []
+                options: [],
+
             }
         },
         componentDidMount: function()
         {
-            // ajax call, assume success
-            var data_arr = ['yuxuan', 'Luning','chengzhen','fwleong','tiantong']
-            this.successHandler(data_arr)
+            var url = "<?=base_url()."chat/conversation_list"?>";
+            var data_arr = [];
+
+            $.ajax({
+                type: "GET",
+                data: {woof:"one", meow:"two" },
+                url : url,
+                success: function(data){
+                    console.log(data);
+                    data_arr = data;
+                    this.successHandler(data_arr)
+
+                }.bind(this),
+                error: function()
+                {
+                    console.log("errback");
+                }
+
+            })
+
         },
         successHandler: function(data)
         {
+            // Causes react to have an error for some reason *fixed*
             var text = ' -- Name -- ';
             this.state.options.push(
-                <option selected disabled> {text} </option>
+                <option key="0" value="default_v" disabled> {text} </option>
             )
-            for(var i = 0; i < data.length; i++)
+
+            var json = JSON.parse(data)
+
+            for(var i = 0; i < json.length; i++)
             {
-                var option = data[i];
+
+
+                var val = json[i].type
+                val = val + "_"
+                val = val + json[i].user_id
+
+                var name = json[i].title.concat(" ");
+                name = name.concat(json[i].f_name);
+                name = name.concat(" ");
+                name = name.concat(json[i].l_name)
+
+
                 this.state.options.push(
-                    <option key={i} value={option}> {option} </option>
+                    <option key={val} value={val} > {name} </option>
                 )
             }
+
             this.forceUpdate();
 
-        },
-        handleChange: function(event)
-        {
-
-        },
-
-        handleWrite: function()
-        {
-            console.log('handleWrite');
         },
         render: function(){
 
 
             return(
                 <div>
-                    <select> {this.state.options}</select>
+                    <span> To: <select onChange={this.props.changeHandler} value={this.props.val}> {this.state.options}</select> </span>
                     <div>
-                        <button onClick={this.handleWrite} type="button">New conversation </button>
+                       <br />
                     </div>
                 </div>
 
             )
         }
     })
+
 
 
     var RightMessageComposerBox = React.createClass({
@@ -260,7 +286,7 @@ if($this->session->userdata('Customer_cid')){
                 // push to server
                 // callback to server to refresh
                 //console.log(JSON.stringify(this.state.refreshFunc, null, 4));
-                this.props.refreshFunc();
+                //this.props.refreshFunc();
 
             }
             this.setState({text: ''})
@@ -275,7 +301,9 @@ if($this->session->userdata('Customer_cid')){
         render: function(){
 
             console.log(this.props.filey)
+
             // if user uploaded file
+
             if (this.props.filey !== null)
             {
                 var up_text = "Upload " + this.props.filey;
@@ -293,6 +321,7 @@ if($this->session->userdata('Customer_cid')){
             else
             {
                 // if user did not upload file
+
                 return(
                     <div >
                         <textarea placeholder="Type message here" className="message-composer" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
@@ -385,10 +414,99 @@ if($this->session->userdata('Customer_cid')){
         },
     });
 
+    var RightTrollComposerBox = React.createClass({
+        // @formatter:off
+        getInitialState: function() {
+
+            return  {
+                        text: '',
+                    };
+        },
+        handleChange: function(event) {
+            this.setState({text: event.target.value});
+        },
+        handleText: function()
+        {
+            this.setState({text: ''});
+        },
+        handleWrite: function()
+        {
+            var text = this.state.text.trim();
+            if (text)
+            {
+
+
+                var target_partner = this.props.value;
+                var datetime = new Date() / 1000;
+
+                var url = "<?=base_url()."chat/new_write"?>";
+
+                $.ajax({
+                    type: "GET",
+                    data: {partner:target_partner, timeStamp: datetime, author: CurrentUser ,content: text },
+                    url : url,
+                    success: function(){
+                        console.log("success");
+                        console.log(data);
+                        this.handleText()
+                    },
+                    error: function()
+                    {
+                        console.log("errback");
+                    }
+
+                })
+                // push to server
+                // callback to server to refresh
+                //console.log(JSON.stringify(this.state.refreshFunc, null, 4));
+                //this.props.refreshFunc();
+
+            }
+            this.setState({text: ''})
+        },
+        handleKeyDown: function(evt) {
+            if (evt.keyCode == 13 ) { //code 13 enter
+                event.preventDefault()
+
+                this.handleWrite();
+            }
+        },
+        render: function()
+        {
+
+            //console.log(this.props.value)
+
+            return(
+                <div >
+                    <textarea placeholder="Type message here" className="message-composer" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
+                    <div>
+
+                    </div>
+                    <div>
+                        <button onClick={this.handleWrite} type="button">Reply </button>
+                    </div>
+                </div>
+
+            )
+        }
+    })
 
     var RightMessageBox = React.createClass({
 
         // @formatter:off
+        getInitialState: function()
+        {
+            return {
+                val: "default_v",
+
+            }
+        },
+        changeHandler: function(event)
+        {
+            console.log(event.target.value)
+            this.replaceState({val : event.target.value})
+
+        },
         render: function() {
 
             var parentProps = this.props;
@@ -396,6 +514,7 @@ if($this->session->userdata('Customer_cid')){
 
             if(this.props.chat == "new_message")
             {
+                // New Message
 
                 return(
                     <div className="message-section">
@@ -404,7 +523,11 @@ if($this->session->userdata('Customer_cid')){
                         </div>
 
 
-                        <RightNewMessageBox thread={this.props.chat} refreshFunc={this.props.refreshFunc} />
+                        <RightNewMessageBox thread={this.props.chat} refreshFunc={this.props.refreshFunc} changeHandler={this.changeHandler} val={this.state.val}/>
+                        <ul className="message-list-disabled" ref="messageList">
+
+                        </ul>
+                        <RightTrollComposerBox value={this.state.val}  />
 
                     </div>
                 )
@@ -481,18 +604,43 @@ if($this->session->userdata('Customer_cid')){
     // PARENT component
     var MainChat = React.createClass({
         getInitialData: function(){
-            var url = "<?=base_url()."chat/get/"?>"+CurrentUser;
-            //var url = "http://localhost:8000/ws_a.php";
 
+
+            var url = "<?=base_url()."chat/get/"?>"+CurrentUser;
+
+            /*
             $.get(url, function(data, status) {
                 console.log(data[0]);
                 //TODO: Sort array by timestamp before returning
 
                 this.setState({chats: data, chatID: data[0].chatID})
-
-
             }.bind(this))
-            //console.log(this)
+            */
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                async: true,
+                cache: false,
+                timeout: 50000,
+                success: function(data)
+                {
+                    console.log(data[0])
+                    if(this.state.chatID != "new_message") {
+                        this.setState({chats: data, chatID: data[0].chatID})
+                    }
+                    setTimeout(this.getInitialData, 3000)
+                }.bind(this),
+                error: function(XMLHttpRequest,textStatus, errorThrown)
+                {
+                    console.log("Polling error")
+                    setTimeout(this.getInitialData, 15000);
+                }.bind(this)
+            })
+
+
+
+
         },
         fileUploadHandler: function(data)
         {
@@ -510,7 +658,7 @@ if($this->session->userdata('Customer_cid')){
         },
         componentDidMount: function(){
             this.getInitialData();
-            this.interval = setInterval(this.tick, 10000);
+            //this.interval = setInterval(this.tick, 10000);
             //console.log("component did mount")
         },
         getInitialState: function() {
@@ -526,14 +674,17 @@ if($this->session->userdata('Customer_cid')){
             //console.log("handleClickOnLeftUser");
             // console.log("chat id is");
             // console.log(data.chatID);
+            console.log(data);
             if(data == "new_message")
             {
-                this.setState({chatID: "new_message"})
+                this.setState({chatID: "new_message"});
             }
             else
             {
                 this.setState({chatID: data.chatID});
             }
+            console.log("some stuff");
+            console.log(this.state.chatID);
         },
         // @formatter:off
         render: function() {
