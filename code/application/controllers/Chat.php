@@ -113,6 +113,8 @@ class Chat extends CI_Controller {
 
 
 
+
+
         if( $this->input->server('REQUEST_METHOD') == 'GET') {
             // m_type: if file 1 else 0
             $values = [

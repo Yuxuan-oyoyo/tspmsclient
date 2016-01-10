@@ -48,6 +48,7 @@ class Chat_model extends CI_Model{
 
     public function retrieve($input_id, $user_type){
         if(isset($input_id)&& isset($user_type)){
+            session_start();
             $sql = "select message_id, c.first_name as user1, customer_id, ".//convert customer id to user1
                 "i.name as user2,pm_id , project_id, to_pm, body as content, ".
                 "seen, time_created as timestamp, is_file from message m ".
@@ -118,6 +119,7 @@ class Chat_model extends CI_Model{
                     ]);
                     $k++;
                 }
+                session_write_close();
                 return $threads;
             }
         }
@@ -142,7 +144,7 @@ class Chat_model extends CI_Model{
             // pm selects client('c') as partner
 
             $to_the_pm = 0;
-            $pm_id = 5;
+            $p_id = 5;
             $c_id = $partner_id;
         }
 
@@ -164,9 +166,9 @@ class Chat_model extends CI_Model{
         $fromSession = $this->session->userdata("chat_id_".$values["chat_id"]);
         print_r($values);
         //print_r("space\n\n\n");
-        print_r($fromSession);
 
-
+        //$cc = $this->session->all_userdata();
+        //echo json_encode($cc);
 
         if(isset($values)){
             $message =[

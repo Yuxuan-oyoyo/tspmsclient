@@ -263,8 +263,11 @@ if($this->session->userdata('Customer_cid')){
             if (text)
             {
 
-                console.log("handle composer [enter]")
+                //console.log("handle composer [enter]")
+
                 var threadID = this.props.thread.chatID
+
+
                 var datetime = new Date() / 1000;
                 var url = "<?=base_url()."chat/write"?>";
                 console.log(threadID + " " + CurrentUser)
@@ -414,7 +417,7 @@ if($this->session->userdata('Customer_cid')){
         },
     });
 
-    var RightTrollComposerBox = React.createClass({
+    var RightNewComposerBox = React.createClass({
         // @formatter:off
         getInitialState: function() {
 
@@ -449,10 +452,12 @@ if($this->session->userdata('Customer_cid')){
                         console.log("success");
                         console.log(data);
                         this.handleText()
-                    },
+                        window.location.reload(true);
+                    }.bind(this),
                     error: function()
                     {
                         console.log("errback");
+                        window.location.reload(true);
                     }
 
                 })
@@ -469,6 +474,7 @@ if($this->session->userdata('Customer_cid')){
                 event.preventDefault()
 
                 this.handleWrite();
+
             }
         },
         render: function()
@@ -498,7 +504,7 @@ if($this->session->userdata('Customer_cid')){
         {
             return {
                 val: "default_v",
-
+                just_on: true,
             }
         },
         changeHandler: function(event)
@@ -527,7 +533,7 @@ if($this->session->userdata('Customer_cid')){
                         <ul className="message-list-disabled" ref="messageList">
 
                         </ul>
-                        <RightTrollComposerBox value={this.state.val}  />
+                        <RightNewComposerBox value={this.state.val} handleState={this.props.clickFunc} />
 
                     </div>
                 )
@@ -627,7 +633,13 @@ if($this->session->userdata('Customer_cid')){
                 {
                     console.log(data[0])
                     if(this.state.chatID != "new_message") {
-                        this.setState({chats: data, chatID: data[0].chatID})
+                        if(this.state.just_on == true) {
+                            this.setState({chats: data, chatID: data[0].chatID})
+                        }
+                        else
+                        {
+                            this.setState({chats: data })
+                        }
                     }
                     setTimeout(this.getInitialData, 3000)
                 }.bind(this),
