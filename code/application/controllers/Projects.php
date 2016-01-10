@@ -241,8 +241,12 @@ class Projects extends CI_Controller {
             $project = $this->Project_model->retrieve_by_id($project_id);
             $phases=$this->Project_phase_model->retrieve_by_project_id($project_id);
             $tasks = $this->Task_model->retrieve_all_uncompleted_by_project_id($project_id);
-            $current_phase_name = $this->Project_phase_model->retrieve_phase_name_by_id($project['current_project_phase_id']);
-            $current_phase_name = $current_phase_name[0]['phase_name'];
+            if(intval($project['current_project_phase_id'])===0){
+                $current_phase_name = "Lead";
+            }else{
+                $current_phase_name = $this->Project_phase_model->retrieve_phase_name_by_id($project['current_project_phase_id']);
+                $current_phase_name = $current_phase_name[0]['phase_name'];
+            }
             $newTasks = array();
             foreach($tasks as $t){
                 $days_left = substr($this->Task_model->get_days_left($t['task_id']),1);
