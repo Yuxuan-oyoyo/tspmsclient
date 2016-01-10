@@ -97,10 +97,11 @@ $db['default'] = array(
 
 $db['aws'] = array(
 	'dsn'	=> "",
-	'hostname' => "aa12knljt3k98di.cheyugrrq3jx.us-west-2.rds.amazonaws.com:3306",
+	'hostname' => isset($_SERVER["DB_HOSTNAME"])?$_SERVER["DB_HOSTNAME"]:
+		"aa12knljt3k98di.cheyugrrq3jx.us-west-2.rds.amazonaws.com:3306",
 	//'port'	   => $_SERVER['RDS_PORT'],
-	'username' => "smuremix",
-	'password' => "smuremix",
+	'username' => isset($_SERVER["DB_USERNAME"])?$_SERVER["DB_USERNAME"]:"smuremix",
+	'password' => isset($_SERVER["DB_PASSWORD"])?$_SERVER["DB_PASSWORD"]:"smuremix",
 	'database' => "tspms",
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

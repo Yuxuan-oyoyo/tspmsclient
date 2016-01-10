@@ -84,7 +84,7 @@ class BB_milestones {
             'access_token' => $token,
             'name' => $name
         ];
-        while ($_trial >= 0) {
+        while ($_trial > 0) {
             $_trial -= 1;/*IMPORTANT*/
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $endpoint);
@@ -96,16 +96,24 @@ class BB_milestones {
             $response = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
-            if ($code == 200) break;/*IMPORTANT*/
+            /*debug-------------------------------------------
+           curl_setopt($ch, CURLOPT_VERBOSE, true);
+
+           $verbose = fopen('php://temp', 'w+');
+           curl_setopt($ch, CURLOPT_STDERR, $verbose);
+           $response = curl_exec($ch);
+           rewind($verbose);
+           $verboseLog = stream_get_contents($verbose);
+           echo "Verbose information:\n<pre>", htmlspecialchars($verboseLog), "</pre>\n";
+           debug --------------------------------------------*/
+            if ($code == 200 || $code== 400) break;/*IMPORTANT*/
             else {
                 $issue_array['access_token'] = $CI->bb_shared->requestFromServer();
             }
         }
         if (isset($response)) {
             if (($reply_array = json_decode($response, true)) != null) {
-                if (isset($reply_array['error'])) {
-                    if ($this->_print_err) echo var_dump($reply_array);
-                } else {
+                if (!isset($reply_array['error'])) {
                     return $reply_array["id"];
                 }
             }

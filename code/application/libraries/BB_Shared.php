@@ -61,8 +61,7 @@ class BB_Shared {
         debug --------------------------------------------*/
         $response = curl_exec($ch);
         if($response ==false){
-            echo curl_error($ch);
-            return null;
+            die( curl_error($ch));
         }
 
         /*process response*/

@@ -12,7 +12,6 @@ class Issues extends CI_Controller {
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->library('BB_issues');
-        $this->load->library('Parsedown');
     }
 
     /**
@@ -244,6 +243,7 @@ class Issues extends CI_Controller {
      * @param $issue_id
      */
     public function process_edit($repo_slug=null, $issue_id){
+
         if($this->session->userdata('internal_uid')) {
             /*params expected*/
             $field_params = [
@@ -258,7 +258,6 @@ class Issues extends CI_Controller {
                     if($key=="milestone" && !is_int($value)){
                         $this->load->library('BB_milestones');
                         $this->bb_milestones->postMilestone($repo_slug,"nil");
-                        //var_dump($id);
                     }
                 }
             }
@@ -266,7 +265,9 @@ class Issues extends CI_Controller {
             $issue = $this->bb_issues->updateIssue($repo_slug,$issue_id, $param);
             $this->session->set_flashdata("issue_last_updated",$issue);
             /*brings user back to this issue*/
-            redirect(base_url()."Issues/detail/".$repo_slug."/".$issue_id);
+
+            header("Location: ".base_url()."issues/detail/".$repo_slug."/".$issue_id);
+            //redirect(base_url()."issues/detail/".$repo_slug."/".$issue_id);
         }else{
             $this->session->set_userdata('message','Please login first.');
             redirect('/internal_authentication/login/');

@@ -3,13 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 define('DEFAULT_PASSWORD',"000000");
 
-//define('BB_OAUTH_KEY','8vXufhWDTtZzABhm9F');
-//define('BB_OAUTH_SECRET','QVmgEWjVfzCCkkxCNZe7GBZGBrn8wTAz');
-define('BB_OAUTH_KEY','XveH53vHkVSZ2vu473');
-define('BB_OAUTH_SECRET','MBCwpRSXX5H2xJYgsk58vNhRnqepsJr5');
-
-define('BB_ACCOUNT_NAME','smuremix');
-//define('BB_ACCOUNT_NAME','luning1994');
+define('BB_ACCOUNT_NAME',isset($_SERVER["BB_ACCOUNT_NAME"])?$_SERVER["BB_ACCOUNT_NAME"]:"smuremix");
 /*
 |--------------------------------------------------------------------------
 | File and Directory Modes

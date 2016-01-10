@@ -190,6 +190,9 @@ if($this->session->userdata('internal_type')=='Developer') {
                     }
                 }
                 ?>
+                    <?php if (empty($milestone_options)):?>
+                        <div><i>No use case defined. Please add new use cases in project management page</i></div>
+                    <?php else:?>
                     <select name="milestone" class="form-control">
                         <option value="nil">NIL</option>
                         <?php foreach($milestone_options as $key=>$value):?>
@@ -200,6 +203,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                             <?php endif?>
                         <?php endforeach?>
                     </select>
+                    <?php endif?>
                 </div>
             </div>
             <div class="form-part">
