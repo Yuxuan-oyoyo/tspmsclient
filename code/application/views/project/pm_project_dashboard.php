@@ -173,11 +173,12 @@ function sortTasksByDaysLeft($a, $b) {
 
 <!--Task CRUD-->
             <div class="col-lg-offset-1 col-lg-4">
-                <div class="box box-primary box-solid">
-                    <div class="box-header">
-                        <h3 class="box-title">Task List</h3>
+                <div class="panel info-panel">
+                    <div class="panel-heading">
+                        Task List
                         <button class="btn btn-default btn-small pull-right" data-toggle="modal" data-target="#newTaskModal"><i class="fa fa-plus"></i></button>
                     </div>
+                    <br>
                     <table class="table table-condensed">
                         <?php
                             usort($tasks, 'sortTasksByDaysLeft');
