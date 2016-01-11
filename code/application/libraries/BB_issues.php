@@ -39,17 +39,18 @@ class BB_issues {
      * @param $issue_array
      */
     private function decode_attr_from_content($issue_array){
+        $new_array = $issue_array;
         if(isset($issue_array["content"])){
             if(preg_match("/\<deadline\>(.*?)\<\/deadline\>/",$issue_array["content"],$display)){
-                $issue_array["deadline"] = $display[1];
+                $new_array["deadline"] = $display[1];
             }
             if(preg_match("/\<usecase\>(.*?)\<\/usecase\>/",$issue_array["content"],$display)){
-                $issue_array["usecase"] = $display[1];
+                $new_array["usecase"] = $display[1];
             }
-            if(preg_match("/\<content\>(.*?)\<\/content\>/",$issue_array["content"],$display)){
-                $issue_array["content"] = $display[1];
+            if(preg_match("/\<content\>((.|\n)*)\<\/content\>/",$issue_array["content"],$display)){
+                $new_array["content"] = $display[1];
             }
-            return $issue_array;
+            return $new_array;
         }
         return $issue_array;
     }
