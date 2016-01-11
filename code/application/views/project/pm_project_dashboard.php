@@ -182,6 +182,7 @@ function sortTasksByDaysLeft($a, $b) {
                     <table class="table table-condensed">
                         <?php
                             usort($tasks, 'sortTasksByDaysLeft');
+                            $color =[""];
                             foreach ($tasks as $t){
                         ?>
                             <tr id="1">

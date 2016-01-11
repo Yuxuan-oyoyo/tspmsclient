@@ -151,19 +151,36 @@ $this->load->view('common/customer_nav', $class);
     <!-- /.row -->
     <div class="row">
     <div class="col-lg-offset-1 no-gutter">
-        <?php foreach($phases as $phase){
+        <?php
+        $current_phase;
+        foreach($phases as $phase){
+            $past_project_phase = $phase;
+            $phase_end_time = $phase['end_time'];
+            if(!isset($phase_end_time)){
+                $phase_end_time = "now";
+            }
             $img_tag='img/future.png';
-                if(isset($phase['project_phase_id'])){
+            if(isset($phase['project_phase_id'])){
+                if(!$phase['phase_id']==0) {
                     $img_tag = 'img/done.png';
-                    if ($phase['project_phase_id'] == $project['current_project_phase_id']){
-                        $img_tag = 'img/current.png';
-                    }
 
-                echo'<div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2 " align="center" data-toggle="tooltip"
-                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase['end_time'].'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
-      }else{
-                    echo' <div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
-     } }?>
+                    if ($phase['project_phase_id'] == $project['current_project_phase_id']) {
+                        $img_tag = 'img/current.png';
+                        $current_phase=$phase;
+                    }
+                    echo'<div data-id="'.$phase['project_phase_id'].'" id="'.$phase['phase_name'].'" class="test col-sm-2 " align="center" data-toggle="tooltip"
+                data-placement="bottom" title="'.$phase['start_time'].' to '.$phase_end_time.'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+                }else{
+                    $current_phase=$phase;
+                }
+            }else{
+                echo' <div  class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+            }
+        }
+        if($project['current_project_phase_id']==-1){
+            $current_phase = $past_project_phase;
+        }
+        ?>
 
     </div>
     </div>
@@ -172,7 +189,7 @@ $this->load->view('common/customer_nav', $class);
 
         <div class="col-lg-12">
             <div class="col-lg-7">
-                <h3>Recent Updates - <small class="phase">Build</small></h3><hr>
+                <h3>Recent Updates - <small class="phase"><?=$current_phase['phase_name']?></small></h3><hr>
                 <ul class="timeline" id="timeline">
                     <?php foreach($updates as $update):?>
                     <li><!---Time Line Element--->
@@ -194,7 +211,7 @@ $this->load->view('common/customer_nav', $class);
             </div>
             <div class="col-lg-4">
 
-                <h3>Milestones - <small class="phase">Build</small></h3><hr>
+                <h3>Milestones - <small class="phase"><?=$current_phase['phase_name']?></small></h3><hr>
                 <div id="milestone">
                     <?php foreach($milestones as $milestone):
                         $month = date('M',strtotime($milestone['deadline']));
