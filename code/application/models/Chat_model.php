@@ -16,8 +16,39 @@ class Chat_model extends CI_Model{
 
     }
 
+    public function convo_pm()
+    {
+        // create dictionary of id:username
+        $partners = [];
+
+
+
+        $query = $this->db->query('SELECT c_id, title, first_name, last_name FROM customer');
+
+        if( $query-> num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                // echo $row->c_id; (working)
+
+                array_push($partners, [
+                    'type'      => "c",
+                    'user_id'   => $row->c_id,
+                    'title'     => $row->title,
+                    'f_name'    => $row->first_name,
+                    'l_name'    => $row->last_name
+                ]);
+            }
+        }
+        //echo json_encode($partners);
+
+        return $partners;
+
+
+
+    }
+
     public function retrieve($input_id, $user_type){
         if(isset($input_id)&& isset($user_type)){
+
             $sql = "select message_id, c.first_name as user1, customer_id, ".//convert customer id to user1
                 "i.name as user2,pm_id , project_id, to_pm, body as content, ".
                 "seen, time_created as timestamp, is_file from message m ".
@@ -82,22 +113,65 @@ class Chat_model extends CI_Model{
                         'is_file'       => $last_message["is_file"],
                         'messages'      => $value
                     ]);
+                    session_start();
                     $this->session->set_userdata("chat_id_".$k,[
                         'customer_id'=> $last_message["customer_id"],
                         'pm_id'=> $last_message["pm_id"]
                     ]);
+                    session_write_close();
                     $k++;
                 }
+                session_write_close();
                 return $threads;
             }
         }
+
         return null;
     }
+
+    public function new_write(array $values)
+    {
+        // TODO: set users precisely
+        //            "partner_id" => $this->input->get("partner"),
+        //              "m_author" => $this->input->get("author"),
+        //    "m_content" => $this->input->get("content", true),
+        //$fromSession = $this->session->userdata("chat_id_".$values["chat_id"]);
+
+        $out = explode("_", $values["partner_id"]);
+        $to_the_pm = 0;
+        $partner_id = $out[1];
+        $c_id = 0;
+        $p_id = 0;
+        if($out[0] == 'c')
+        {
+            // pm selects client('c') as partner
+
+            $to_the_pm = 0;
+            $p_id = 5;
+            $c_id = $partner_id;
+        }
+
+        $message = [
+            "customer_id"   =>  $c_id,
+            "pm_id"         =>  $p_id,
+            "project_id"    =>  0,
+            "to_pm"         =>  $to_the_pm,
+            "body"          =>  $values["m_content"],
+            "is_file"       =>  0,
+            "time_created"  =>  time()
+        ];
+
+        $this->db->insert("message",$message);
+    }
+
+
     public function write(array $values){
         $fromSession = $this->session->userdata("chat_id_".$values["chat_id"]);
         print_r($values);
         //print_r("space\n\n\n");
-        print_r($fromSession);
+
+        //$cc = $this->session->all_userdata();
+        //echo json_encode($cc);
 
         if(isset($values)){
             $message =[
