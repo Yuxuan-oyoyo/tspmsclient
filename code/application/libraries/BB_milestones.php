@@ -96,6 +96,7 @@ class BB_milestones {
             $response = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
+            //var_dump($_trial);
             /*debug-------------------------------------------
            curl_setopt($ch, CURLOPT_VERBOSE, true);
 
@@ -108,12 +109,13 @@ class BB_milestones {
            debug --------------------------------------------*/
             if ($code == 200 || $code== 400) break;/*IMPORTANT*/
             else {
+                //var_dump("re-authen");
                 $issue_array['access_token'] = $CI->bb_shared->requestFromServer();
             }
         }
         if (isset($response)) {
             if (($reply_array = json_decode($response, true)) != null) {
-                if (!isset($reply_array['error'])) {
+                if (isset($reply_array['id'])) {
                     return $reply_array["id"];
                 }
             }
