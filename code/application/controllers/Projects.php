@@ -79,7 +79,7 @@ class Projects extends CI_Controller {
                         'hp_number' => $this->input->post("hp_number"),
                         'other_number' => $this->input->post("other_number"),
                         'username' => $this->input->post("c_username"),
-                        'password_hash' => password_hash($this->input->post('c_password'), PASSWORD_DEFAULT)
+                        'password_hash' => password_hash($this->input->post('password'), PASSWORD_DEFAULT)
                     );
                     $c_id = $this->Customer_model->insert($new_customer);
                     if ($c_id < 0) {
@@ -146,7 +146,7 @@ class Projects extends CI_Controller {
     public function process_edit($project_id){
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
             $this->load->library('form_validation');
-            $this->form_validation->set_rules('c_username', 'Customer Username', 'is_unique[customer.username]');
+            $this->form_validation->set_rules('username', 'Customer Username', 'is_unique[customer.username]');
             if ($this->form_validation->run()) {
                 $original_array = $this->Project_model->retrieve_by_id($project_id);
                 $name_array = ["c_id", "project_title"

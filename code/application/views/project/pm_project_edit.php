@@ -37,8 +37,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     '<input type="text" class="form-control" name="other_number" id="other_number" >'+
                     '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="username">Username</label>'+
                     '<input type="text" class="form-control" name="username" id="username" data-parsley-required>'+
-                    '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="password_hash">Password</label>'+
-                    '<input type="password" class="form-control" name="password_hash" id="password_hash" value="<?=DEFAULT_PASSWORD?>">'+
+                    '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="password">Password</label>'+
+                    '<input type="password" class="form-control" name="password" id="passwor" value="<?=DEFAULT_PASSWORD?>">'+
                     '</div> </div>';
                 $('#new_customer').append(htmlText2);
             }
