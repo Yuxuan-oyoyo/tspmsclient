@@ -166,7 +166,9 @@ class Chat_model extends CI_Model{
 
 
     public function write(array $values){
+        session_start();
         $fromSession = $this->session->userdata("chat_id_".$values["chat_id"]);
+        session_write_close();
         print_r($values);
         //print_r("space\n\n\n");
 
@@ -174,6 +176,7 @@ class Chat_model extends CI_Model{
         //echo json_encode($cc);
 
         if(isset($values)){
+            session_start();
             $message =[
                 "customer_id"=>$fromSession["customer_id"],
                 "pm_id"=>$fromSession["pm_id"],
@@ -185,6 +188,7 @@ class Chat_model extends CI_Model{
                 "time_created"=>time()
 
             ];
+            session_write_close();
 //            print_r($message);
 //            $sql = "insert into message (customer_id, pm_id, project_id, to_pm, body, file_id, timestamp) VALUES (?, ?, 0, ?,?,0, ?)";
 //            $this->db->query($sql,[$values["user2"],$values["user1"],$values["user2"],$values["m_author"]],time());

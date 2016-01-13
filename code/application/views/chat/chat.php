@@ -21,6 +21,13 @@ $user_id = $user_id;
     <script src="js/vendor/jquery.ui.widget.js"></script>
     <script src="js/jquery.iframe-transport.js"></script>
     <script src="js/jquery.fileupload.js"></script>
+    <style>
+        .headerStyle{
+            color: grey;
+            pointer-events:none;
+            opacity:0.4;
+        }
+    </style>
 </head>
 <body>
 <?php
@@ -44,10 +51,15 @@ if($this->session->userdata('Customer_cid')){
 <div id="container"></div>
 <script type="text/babel">
     var CurrentUser = <?=$user_id?>;
-    var get_data = [];
+    var UserName = <?php echo json_encode($this->session->userdata('internal_username')); ?>;
 
+    console.log("uname")
+    console.log(UserName)
+
+    var get_data = [];
     var LeftUser = React.createClass({
         render: function() {
+
             var DisplayName = (this.props.data.user1 == CurrentUser) ? this.props.data.user2: this.props.data.user1;
             var c_id = this.props.c_id;
 
@@ -126,15 +138,17 @@ if($this->session->userdata('Customer_cid')){
     var RightMessage = React.createClass({
         render: function(){
 
+
             var msg = this.props.msg;
             // @formatter:off
-            var url = "<?=base_url()."chat/filesys/"?>";
-            url = url.concat(msg.message_id);
-            url = url.concat("/");
-            url = url.concat(msg.content);
 
             if(msg.is_file == 1)
             {
+                var url = "<?=base_url()."chat/filesys/"?>";
+                url = url.concat(msg.message_id);
+                url = url.concat("/");
+                url = url.concat(msg.content);
+
                 return (
 
                     <li className="message-list-item">
@@ -248,6 +262,7 @@ if($this->session->userdata('Customer_cid')){
 
             return  {
                         text: '',
+                        current_user: '',
                     };
         },
         handleChange: function(event) {
@@ -267,6 +282,8 @@ if($this->session->userdata('Customer_cid')){
 
                 var threadID = this.props.thread.chatID
 
+
+                this.props.fast_msg(text)
 
                 var datetime = new Date() / 1000;
                 var url = "<?=base_url()."chat/write"?>";
@@ -444,6 +461,8 @@ if($this->session->userdata('Customer_cid')){
 
                 var url = "<?=base_url()."chat/new_write"?>";
 
+
+
                 $.ajax({
                     type: "GET",
                     data: {partner:target_partner, timeStamp: datetime, author: CurrentUser ,content: text },
@@ -457,6 +476,7 @@ if($this->session->userdata('Customer_cid')){
                     error: function()
                     {
                         console.log("errback");
+                        //this.forceUpdate();
                         window.location.reload(true);
                     }
 
@@ -481,7 +501,6 @@ if($this->session->userdata('Customer_cid')){
         {
 
             //console.log(this.props.value)
-
             return(
                 <div >
                     <textarea placeholder="Type message here" className="message-composer" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
@@ -505,7 +524,13 @@ if($this->session->userdata('Customer_cid')){
             return {
                 val: "default_v",
                 just_on: true,
+                msgnodes: [],
+
             }
+        },
+        msgUpdater: function(text)
+        {
+
         },
         changeHandler: function(event)
         {
@@ -517,6 +542,7 @@ if($this->session->userdata('Customer_cid')){
 
             var parentProps = this.props;
             //console.log("user 1 is " + this.props.chat.user1)
+
 
             if(this.props.chat == "new_message")
             {
@@ -530,10 +556,10 @@ if($this->session->userdata('Customer_cid')){
 
 
                         <RightNewMessageBox thread={this.props.chat} refreshFunc={this.props.refreshFunc} changeHandler={this.changeHandler} val={this.state.val}/>
-                        <ul className="message-list-disabled" ref="messageList">
-
+                        <ul className="message-list-disabled" >
+                            <li className="headerStyle">  </li>
                         </ul>
-                        <RightNewComposerBox value={this.state.val} handleState={this.props.clickFunc} />
+                        <RightNewComposerBox fast_msg={this.props.fastMsg} value={this.state.val} handleState={this.props.clickFunc} />
 
                     </div>
                 )
@@ -569,6 +595,10 @@ if($this->session->userdata('Customer_cid')){
                         )
 
                     })
+                    this.state.msgnodes = msgNodes;
+                    console.log("msgnodes")
+                    console.log(this.state.msgnodes)
+
                 } else {
                     msgNodes = "not selected yet"
                 }
@@ -582,9 +612,9 @@ if($this->session->userdata('Customer_cid')){
                         </div>
 
                         <ul className="message-list" ref="messageList">
-                            {msgNodes}
+                            {this.state.msgnodes}
                         </ul>
-                        <RightMessageComposerBox filey={this.props.filey} fu_handler={this.props.fu_handler} thread={this.props.chat} refreshFunc={this.props.refreshFunc} />
+                        <RightMessageComposerBox fast_msg={this.props.fastMsg} filey={this.props.filey} fu_handler={this.props.fu_handler} thread={this.props.chat} refreshFunc={this.props.refreshFunc} />
 
                     </div>
                 )
@@ -628,13 +658,13 @@ if($this->session->userdata('Customer_cid')){
                 url: url,
                 async: true,
                 cache: false,
-                timeout: 50000,
+                timeout: 5000,
                 success: function(data)
                 {
                     console.log(data[0])
                     if(this.state.chatID != "new_message") {
                         if(this.state.just_on == true) {
-                            this.setState({chats: data, chatID: data[0].chatID})
+                            this.setState({chats: data, chatID: data[0].chatID, just_on: false})
                         }
                         else
                         {
@@ -646,7 +676,7 @@ if($this->session->userdata('Customer_cid')){
                 error: function(XMLHttpRequest,textStatus, errorThrown)
                 {
                     console.log("Polling error")
-                    setTimeout(this.getInitialData, 15000);
+                    setTimeout(this.getInitialData, 5000);
                 }.bind(this)
             })
 
@@ -679,6 +709,7 @@ if($this->session->userdata('Customer_cid')){
                 chats : [],
                 unreadCount : 0,
                 file: null,
+                theThreadIWantToPass: {},
                 //chats: this.props.chats
             };
         },
@@ -695,25 +726,55 @@ if($this->session->userdata('Customer_cid')){
             {
                 this.setState({chatID: data.chatID});
             }
-            console.log("some stuff");
-            console.log(this.state.chatID);
+
+        },
+        fast_msg: function(data){
+
+            var fast_thread = this.state.theThreadIWantToPass
+            var last_msg_length = fast_thread["messages"].length - 1
+
+            //var fast_msg = fast_thread["messages"][last_msg_length]
+            var fast_msg = $.extend(true,{}, fast_thread["messages"][last_msg_length])
+
+
+            // TODO: set author
+
+            fast_msg.author = UserName;
+            fast_msg.content = data
+            fast_msg.timestamp = fast_msg.timestamp + 2
+            fast_msg.msgID = fast_msg.msgID + 2
+
+            console.log(fast_msg["msgID"])
+
+            fast_thread["messages"].push(fast_msg);
+            //this.setState({theThreadIWantToPass: fast_thread})
+
+            this.setState({theThreadIWantToPass: fast_thread})
+
+
+
         },
         // @formatter:off
         render: function() {
 
             var theThreadIWantToPass = {};
+
+
             for(var i = 0; i < this.state.chats.length; i++)
             {
                 //console.log("chat: " + this.state.chats[i].chatID);
                 if (this.state.chats[i].chatID === this.state.chatID) {
-                    theThreadIWantToPass = this.state.chats[i];
+                    this.state.theThreadIWantToPass = this.state.chats[i];
                     break;
                 }
             }
 
+            console.log("the thread i want to pass")
+            console.log(this.state.theThreadIWantToPass)
+
             var unread = this.state.unreadCount === 0 ?
                 <span>Unread threads: 0 </span>
-                :   <span>Unread threads: {this.state.unreadCount} </span>;
+                :  <span>Unread threads: {this.state.unreadCount} </span>;
 
             if(this.state.chatID == "new_message")
             {
@@ -745,6 +806,8 @@ if($this->session->userdata('Customer_cid')){
             }
             else
             {
+                console.log("render the thread I want to pass")
+                console.log(this.state.theThreadIWantToPass)
                 return (
                     <div className="chatapp">
                         <div className="thread-section">
@@ -759,7 +822,8 @@ if($this->session->userdata('Customer_cid')){
                         </div>
                         <div>
                             <RightMessageBox
-                                chat={theThreadIWantToPass}
+                                chat={this.state.theThreadIWantToPass}
+                                fastMsg={this.fast_msg}
                                 refreshFunc={this.getInitialData}
                                 chat_id = {this.state.chatID}
                                 clickFunc={this.handleClickOnLeftUser}
