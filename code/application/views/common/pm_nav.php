@@ -22,7 +22,7 @@
             <a href="<?=base_url().'projects/list_all'?>"><i class="fa fa-fw fa-bar-chart-o"></i> Projects</a>
         </li>
         <li class="<?=$message_class?>">
-            <a href="<?=base_url().'chat'?>"><i class="fa fa-fw fa-comment"></i> Message&nbsp;<span class="badge" style="background-color:red">1</span></a>
+            <a href="<?=base_url().'chat'?>"><i class="fa fa-fw fa-comment"></i> Message&nbsp;<span class="badge" style="background-color:red">4</span></a>
         </li>
         <li class="<?=$customers_class?>">
             <a href="<?=base_url().'customers/list_all'?>"><i class="fa fa-fw fa-users"></i>Customers</a>

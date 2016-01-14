@@ -137,6 +137,7 @@ ul.alert-dropdown {
 
 }
 .notifications a.content {
+    margin-left: 0;
     text-decoration:none;
     background:#ccc;
 
