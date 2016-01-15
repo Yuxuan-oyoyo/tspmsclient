@@ -27,6 +27,7 @@ class Projects extends CI_Controller {
         $this->load->model("Phase_model");
         $this->load->model("Task_model");
         $this->load->model("Use_case_model");
+        $this->load->library('BB_issues');
     }
 
     public function index()
@@ -37,7 +38,15 @@ class Projects extends CI_Controller {
     public function list_all($include_hidden=false){
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
             $projects = $this->Project_model->retrieve_all_ongoing();
-            $this->load->view('project/pm_all_ongoing_projects',$data=array('projects'=>$projects));
+            $no_of_issues=[];
+            foreach($projects as $p){
+                if($p['bitbucket_repo_name']!= null) {
+                    if(isset($this->bb_issues->retrieveIssues($p['bitbucket_repo_name'],null)['count'])) {
+                        $no_of_issues[$p['project_id']] =$this->bb_issues->retrieveIssues($p['bitbucket_repo_name'],null)['count'] ;
+                    }
+                }
+            }
+            $this->load->view('project/pm_all_ongoing_projects',$data=array('projects'=>$projects,'no_of_issues'=>$no_of_issues));
         }else{
             $this->session->set_userdata('message','You have not login / have no access rights. ');
             redirect('/internal_authentication/login/');
@@ -321,7 +330,17 @@ class Projects extends CI_Controller {
 
     public function dev_page(){
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="Developer") {
-            $data["projects"]=$this->Project_model->retrieve_all_ongoing();
+            $projects=$this->Project_model->retrieve_all_ongoing();
+            $no_of_issues=[];
+            foreach($projects as $p){
+                if($p['bitbucket_repo_name']!= null) {
+                    if(isset($this->bb_issues->retrieveIssues($p['bitbucket_repo_name'],null)['count'])) {
+                        $no_of_issues[$p['project_id']] =$this->bb_issues->retrieveIssues($p['bitbucket_repo_name'],null)['count'] ;
+                    }
+                }
+            }
+            $data["projects"]=$projects;
+            $data["no_of_issues"]=$no_of_issues;
             $this->load->view('project/developer_dashboard',$data);//to add developer page
         }else{
             $this->session->set_userdata('message','You have not login / have no access rights. ');
