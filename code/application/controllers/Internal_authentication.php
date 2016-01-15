@@ -122,7 +122,7 @@ class Internal_authentication extends CI_Controller {
                     for ($i = 0; $i < 7; $i++) {
                         $randomString .= $characters[rand(0, $charactersLength - 1)];
                     }
-                    $this->email->from('donotreply@tspms.com', 'Your Name');
+                    $this->email->from('donotreply@tspms.com', 'TSPMS');
                     $this->email->to($email);
 
                     $this->email->subject('Password Reset Email form The Shipyard Project Management System');
@@ -132,7 +132,7 @@ class Internal_authentication extends CI_Controller {
                         $new_hash = password_hash($randomString,PASSWORD_DEFAULT);
                         $user['password_hash'] = $new_hash;
                         if ($this->Internal_user_model->update($user) == 1) {
-                            $this->session->set_userdata('message', 'Your new password has been sent to the following email: '.$email.'please login with the new password');
+                            $this->session->set_userdata('message', 'Your new password has been sent to the following email: '.$email.' . Please login with the new password');
                             //logMessage
                             //$this->User_log_model->log_message('Admin password has been changed successfully.');
                         } else {

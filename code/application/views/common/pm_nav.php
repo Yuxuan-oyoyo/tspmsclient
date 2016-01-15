@@ -22,7 +22,7 @@
             <a href="<?=base_url().'projects/list_all'?>"><i class="fa fa-fw fa-bar-chart-o"></i> Projects</a>
         </li>
         <li class="<?=$message_class?>">
-            <a href="<?=base_url().'chat'?>"><i class="fa fa-fw fa-comment"></i> Message</a>
+            <a href="<?=base_url().'chat'?>"><i class="fa fa-fw fa-comment"></i> Message&nbsp;<span class="badge" style="background-color:red">4</span></a>
         </li>
         <li class="<?=$customers_class?>">
             <a href="<?=base_url().'customers/list_all'?>"><i class="fa fa-fw fa-users"></i>Customers</a>
@@ -33,6 +33,7 @@
         <li class="<?=$analytics_class?>">
             <a href="#"><i class="fa fa-fw fa-line-chart"></i>Analytics</a>
         </li>
+
         <!---
         <li>
             <a href="forms.html"><i class="fa fa-fw fa-edit"></i> Issue Tracker</a>
@@ -46,6 +47,56 @@
         --->
     </ul>
     <ul class="nav navbar-right top-nav">
+        <li class="dropdown">
+            <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
+                <i class="fa fa-fw fa-bell"></i>Notifications&nbsp;<span class="badge" style="background-color:red">4</span>
+            </a>
+
+            <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
+
+                <div class="notification-heading"><h4 class="menu-title">Notifications</h4>
+                </div>
+                <li class="divider"></li>
+                <div class="notifications-wrapper">
+
+                    <a class="content" href="#">
+                        <div class="notification-item-green">
+                            <h4 class="item-title">Evaluation Deadline 1 · day ago</h4>
+                            <p class="item-info">Marketing 101, Video Assignment</p>
+                        </div>
+                    </a>
+                    <a class="content" href="#">
+                        <div class="notification-item-yellow">
+                            <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
+                            <p class="item-info">Marketing 101, Video Assignment</p>
+                        </div>
+                    </a>
+                    <a class="content" href="#">
+                        <div class="notification-item-pink">
+                            <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
+                            <p class="item-info">Marketing 101, Video Assignment</p>
+                        </div>
+                    </a>
+                    <a class="content" href="#">
+                        <div class="notification-item-green">
+                            <h4 class="item-title">Evaluation Deadline 1 · day ago</h4>
+                            <p class="item-info">Marketing 101, Video Assignment</p>
+                        </div>
+                    </a>
+                    <a class="content" href="#">
+                        <div class="notification-item-yellow">
+                            <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
+                            <p class="item-info">Marketing 101, Video Assignment</p>
+                        </div>
+                    </a>
+
+
+                </div>
+                <li class="divider"></li>
+                <div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
+            </ul>
+
+        </li>
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>&nbsp;<?=$this->session->userdata('internal_username')?><b class="caret"></b></a>
             <ul class="dropdown-menu">
