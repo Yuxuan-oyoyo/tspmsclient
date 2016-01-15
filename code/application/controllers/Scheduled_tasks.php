@@ -3,17 +3,46 @@
 /**
  * Created by PhpStorm.
  * User: Alex
- * Date: 10/5/2015
- * Time: 11:57 AM
+ * Date: 1/15/2016
+ * Time: 2:26 PM
  */
-class Issues extends CI_Controller {
+class Scheduled_tasks extends CI_Controller{
     public function __construct() {
         parent::__construct();
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->library('BB_issues');
     }
+    function calibrate_bb_milestones(){
+        $this->load->model("Milestone_model");
+        $this->load->library("BB_milestones");
+        $db_milestones = $this->Milestone_model->retrieve_all();
+        $m_ids = [];/*reponame=>mid*/
+        foreach($db_milestones as $m) {
+            if(isset($m["bitbucket_repo_name"])) {//make sure there is a repo name
+                if (isset($m_ids[$m["bitbucket_repo_name"]])) {
+                    array_push($m_ids[$m["bitbucket_repo_name"]], $m["milestone_id"]);
+                } else {
+                    $m_ids[$m["bitbucket_repo_name"]] = [];
+                }
+            }
+        }
+        foreach($m_ids as $repo_slug=>$id_arr){
+            $bb_milestones = $this->BB_milestones->getAllMilestones($repo_slug);
+            foreach($bb_milestones as $id=>$name){//search for extra and remove
+                if(!in_array($name, $id_arr)){
+                    $delete_outcome = $this->BB_milestone->deleteMilestone($repo_slug, $id);
+                }
+            }
+            $new_milestones = array_diff($id_arr, array_values($bb_milestones));
+            foreach($new_milestones as $m){
+                
+            }
 
+        }
+
+
+    }
     /**
      * List all issues of given repo page
      * @param null $repo_slug
@@ -219,7 +248,7 @@ class Issues extends CI_Controller {
      */
     public function edit($repo_slug=null, $issue_id){
         if($this->session->userdata('internal_uid')) {
-        //$issue_id = $this->input->get("local_id");
+            //$issue_id = $this->input->get("local_id");
             if (isset($repo_slug)&&isset($issue_id)) {
                 $data =[
                     "issue_details"=>$this->retrie_by_id($repo_slug,$issue_id),
@@ -296,6 +325,5 @@ class Issues extends CI_Controller {
         }
         return "false";
     }
-
 
 }

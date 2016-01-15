@@ -65,6 +65,8 @@ class BB_milestones {
                 /*this is expected*/
                 return $reply_array;
             }
+        }else{
+            die(print_r($response));
         }
         return null;
     }
@@ -110,17 +112,58 @@ class BB_milestones {
             if ($code == 200 || $code== 400) break;/*IMPORTANT*/
             else {
                 //var_dump("re-authen");
-                $issue_array['access_token'] = $CI->bb_shared->requestFromServer();
+                $data['access_token'] = $CI->bb_shared->requestFromServer();
             }
         }
         if (isset($response)) {
-            if (($reply_array = json_decode($response, true)) != null) {
+            $reply_array = json_decode($response, true);
+            if (!is_null($reply_array)) {
                 if (isset($reply_array['id'])) {
                     return $reply_array["id"];
                 }
+            }else{
+                die("Repository \"$repo_slug\" is not accessible on BitBucket.
+                Please make sure it's a valid repository name");
             }
         }
         return null;
+    }
+    public function deleteMilestone($repo_slug, $id){
+        $CI =& get_instance();
+        $CI->load->library('BB_shared');
+        $token = $CI->bb_shared->getDefaultOauthToken();
+        $endpoint = $this->setEndpoint($repo_slug)."/".$id;
+        $parameters["access_token"] = $token;
+        $_trial = 2;
+        while ($_trial > 0) {
+            $_trial -= 1;/*IMPORTANT*/
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $endpoint);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
+            $response = curl_exec($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            //var_dump($_trial);
+            /*debug-------------------------------------------
+           curl_setopt($ch, CURLOPT_VERBOSE, true);
+
+           $verbose = fopen('php://temp', 'w+');
+           curl_setopt($ch, CURLOPT_STDERR, $verbose);
+           $response = curl_exec($ch);
+           rewind($verbose);
+           $verboseLog = stream_get_contents($verbose);
+           echo "Verbose information:\n<pre>", htmlspecialchars($verboseLog), "</pre>\n";
+           debug --------------------------------------------*/
+            if ($code == 204) return true;/*IMPORTANT*/
+            elseif($code >400 && $code< 404) {
+                //var_dump("re-authen");
+                $data['access_token'] = $CI->bb_shared->requestFromServer();
+            }
+        }
+        return false;
     }
 
 }

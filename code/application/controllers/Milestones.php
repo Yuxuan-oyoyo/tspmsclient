@@ -40,12 +40,13 @@ class Milestones extends CI_Controller{
                 /*need bb repo slug for the current project*/
                 $project = $this->Project_model->retrieve_by_id($project_id);
                 /*post it to bb server*/
-                $this->load->library("BB_Milestones");
+                $this->load->library("BB_milestones");
                 $bb_milestone_id = $this->bb_milestones->postMilestone($project["bitbucket_repo_name"],$insert_id);
                 if(!isset($bb_milestone_id)) {
                     $this->session->set_userdata('message', 'An error occurred when uploading this milestone to bitbucket.');
+                }else{
+                    $this->session->set_userdata('message', 'New milestone created successfully.');
                 }
-                $this->session->set_userdata('message', 'New milestone created successfully.');
                 redirect('projects/view_updates/'.$project_id);
             }else{
                 $this->session->set_userdata('message', 'An error occurred, please contact administrator.');

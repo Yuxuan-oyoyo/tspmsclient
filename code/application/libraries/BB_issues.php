@@ -79,14 +79,12 @@ class BB_issues {
             /*when server replies issue list*/
             foreach($result["issues"] as $key=>$issue){
                 $result["issues"][$key] = $this->decode_attr_from_content($issue);
-                //die(var_dump($result["issues"][$key]));
                 $result["issues"][$key]["status"] = $this->map_status($issue["status"], false);
             }
             return $result;
         }else{
             /*when server replies single issue*/
             $result_decoded = $this->decode_attr_from_content($result);
-            //die(var_dump($result_decoded));
             $result_decoded["status"] = $this->map_status($result_decoded["status"], false);
 
             return $result_decoded;
@@ -126,12 +124,11 @@ class BB_issues {
         $response = curl_exec($ch);
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        if($code==200 && ($reply_array = json_decode($response,true))!=null){
+        if($code==200 && ($reply_array = json_decode($response,true))!==null){
             //echo ($response);
             if(isset($reply_array['error'])){
                 if($this->_print_err) var_dump($reply_array);
             }else{
-                /*this is expected*/
                 return $reply_array;
             }
         }

@@ -72,7 +72,15 @@ class BB_Shared {
                 $ttl = $response_array["expires_in"];
                 if($this->_save_in_file) $this->writeToFile($token, $ttl);
                 return $token;
+            }else{
+                die($response."</br>"."Please make sure to provide valid OAuth key and secret.<br>
+            <i>To check it, please go to the setting penal of the internal user on BitBucket.
+            Find Access Management -> OAuth -> OAuth consumer-> Add consumer -> give it full permission.
+            Update the key and secret in internal user panel of TSPMS</i><br>
+            Make sure the member himself/herself has right to access issues");
             }
+        }else{
+            die("Error in bitbucket authentication ".$response);
         }
         return null;
     }
