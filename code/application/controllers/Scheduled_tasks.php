@@ -36,7 +36,7 @@ class Scheduled_tasks extends CI_Controller{
             }
             $new_milestones = array_diff($id_arr, array_values($bb_milestones));
             foreach($new_milestones as $m){
-                
+
             }
 
         }
