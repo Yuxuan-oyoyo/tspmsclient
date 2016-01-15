@@ -46,7 +46,7 @@ $this->load->view('common/pm_nav', $class);
                             <table class="table table-condensed">
                                 <tr>
                                     <td> <i class="fa fa-link"></i>&nbsp;<strong>Production link </strong></td>
-                                    <td> <a href="<?=$p['production_link']?>">Click here</a></td>
+                                    <td> <a href="<?=$p['production_link']?>" target="_blank">Click here</a></td>
                                 </tr>
                             </table>
 
