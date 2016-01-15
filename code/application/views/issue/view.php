@@ -34,6 +34,7 @@ $project = $ci->Project_model->retrieve_by_repo_slug($repo_slug);
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.3.0/showdown.min.js"></script>
+    <script src="<?= base_url() . 'js/profile_factory.js' ?>"></script>
     <link rel="stylesheet" href="<?= base_url() . 'css/sidebar-left.css' ?>">
     <link rel="stylesheet" href="<?= base_url() . 'css/issues.css' ?>">
 
@@ -119,7 +120,22 @@ if($this->session->userdata('internal_type')=='Developer') {
                             <div class="user">
                                 <div class="avatar avatar-medium" style="position: absolute;left: 0;">
                                     <div class="avatar-inner">
-                                        <img src="https://bitbucket.org/account/luning1994/avatar/32/?ts=0" alt="">
+                                        <?php
+                                         $ci->load->model("Internal_user_model");
+                                         $ci->load->library('session');
+                                         $user_id = $ci->session->userdata('internal_uid');
+                                         $user = $ci->Internal_user_model->retrieve($user_id);
+
+                                        ?>
+                                        <?php if(isset($user["bb_username"])):?>
+                                            <img src="https://bitbucket.org/account/<?=$user["bb_username"]?>/avatar/32/?ts=0" alt="">
+                                        <?php elseif(isset($user["name"])):?>
+
+                                            <canvas id="avatar-initial" width="32" height="32" style="border-radius: 3px;"></canvas>
+                                            <script>
+                                                generateProfile("<?=ucwords($user["name"][0])?>","avatar-initial", 1);
+                                            </script>
+                                        <?php endif?>
                                     </div>
                                 </div>
                             </div>
