@@ -243,7 +243,7 @@ if($this->session->userdata('internal_type')=='Developer') {
     </form>
         <div class="issue-tool-bar" style="padding:7pt">
             <script>
-                $("div").on("mousedown",".update-btn",function(e){
+                $("div").on("click",".update-btn",function(e){
                     e.preventDefault();
                     var param = $(this).attr("param");
                     var value = $(this).attr("value");
