@@ -24,13 +24,18 @@ class Chat extends CI_Controller {
         $this->load->view("chat/chat",["user_id"=>$user["user_id"]]);
     }
     private function getUserInfo(){
+
+        //session_start();
         $pm_id = $this->session->userdata('internal_uid');
         $customer_id = $this->session->userdata('Customer_cid');
         if(isset($pm_id)){
+            session_write_close();
             return ["user_id"=>$pm_id, "user_type"=>"pm"];
         }else{
+            session_write_close();
             return ["user_id"=>$customer_id, "user_type"=>"customer"];
         }
+
     }
 
 
@@ -74,10 +79,25 @@ class Chat extends CI_Controller {
 
     public function conversation_list()
     {
+
+        $user_type = $this->session->userdata('internal_type');
         session_write_close();
-        $partners = $this->Chat_model->convo_pm();
-        echo json_encode($partners);
-        session_write_close();
+
+        if($user_type == 'PM') {
+            session_write_close();
+            $partners = $this->Chat_model->convo_pm();
+            echo json_encode($partners);
+            session_write_close();
+        }
+        else
+        {
+            session_write_close();
+            $c_id = $this->session->userdata('Customer_cid');
+            $c_id =  (int) $c_id;
+            $partners = $this->Chat_model->convo_client($c_id);
+            echo json_encode($partners);
+            session_write_close();
+        }
     }
 
 
