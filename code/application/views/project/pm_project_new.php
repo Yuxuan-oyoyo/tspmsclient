@@ -34,7 +34,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 '<input type="text" class="form-control" name="company_name" id="company_name" value="<?=set_value("company_name")?>" data-parsley-required>'+
                 '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="email">Email</label>'+
                 '<input type="email" class="form-control" name="email" id="email" data-parsley-type="email" value="<?=set_value("email")?>" data-parsley-required>'+
-                '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="hp_number">HP Number</label>'+
+                '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="hp_number">Contact Number</label>'+
                 '<input type="text" class="form-control" name="hp_number" id="hp_number" value="<?=set_value("hp_number")?>" data-parsley-required>'+
                 '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="other_number">Other Number</label>'+
                 '<input type="text" class="form-control" name="other_number" value="<?=set_value("other_number")?>" id="other_number">'+

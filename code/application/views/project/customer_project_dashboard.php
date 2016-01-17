@@ -132,6 +132,7 @@ $this->load->view('common/customer_nav', $class);
 <aside class="sidebar-left">
     <div class="sidebar-links">
         <a class="link-blue selected" href="#"><i class="fa fa-flag"></i>Update & Milestone</a>
+        <a class="link-blue" href="<?=base_url().'Usecases/customer_usecases/'.$project["project_id"]?>"><i class="fa fa-list"></i>Use Case List</a>
         <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
     </div>
 
@@ -185,6 +186,13 @@ $this->load->view('common/customer_nav', $class);
     </div>
     </div>
     <hr>
+    <?php
+    if(!isset($current_phase)) {
+        ?>
+        <div class="alert alert-warning" role="alert"><strong>This project hasn't been started.</strong></div>
+    <?php
+    }else{
+    ?>
     <div class="row">
 
         <div class="col-lg-12">
@@ -249,6 +257,7 @@ $this->load->view('common/customer_nav', $class);
 
 
     </div>
+    <?php }?>
 </div>
 
 </body>

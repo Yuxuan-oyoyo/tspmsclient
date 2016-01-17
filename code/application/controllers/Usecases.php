@@ -36,6 +36,21 @@ class Usecases extends CI_Controller
         }
     }
 
+    public function customer_usecases($project_id){
+        if($this->session->userdata('Customer_cid')) {
+            $usecases = $this->Use_case_model->retrieve_external_by_project_id($project_id);
+
+            $this->load->view('project/customer_usecases', $data=[
+                "project" => $this->Project_model->retrieve_by_id($project_id),
+                "usecases"=>$usecases,
+
+            ]);
+        }else{
+            $this->session->set_userdata('message','You have not login / have no access rights. ');
+            redirect('/customer_authentication/login/');
+        }
+    }
+
     public function delete_usecase($uc_id){
         if($this->session->userdata('internal_uid')) {
             $usecase = $this->Use_case_model->retrieve_by_id($uc_id);

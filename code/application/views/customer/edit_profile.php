@@ -55,7 +55,7 @@ $this->load->view('common/customer_nav', $class);
                     <input class="form-control" type="text" id="company_name" name="company_name" value="<?=$customer['company_name']?>"  >
                 </div>
                 <div class="form-group">
-                    <label for="hp_number">HP Number*</label>
+                    <label for="hp_number">Contact Number*</label>
                     <input class="form-control" type="text" id="hp_number" name="hp_number" value="<?=$customer['hp_number']?>" data-parsley-required >
                 </div>
                 <div class="form-group">

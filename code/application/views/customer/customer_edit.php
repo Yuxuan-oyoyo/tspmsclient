@@ -68,7 +68,7 @@ $this->load->view('common/pm_nav', $class);
             </div>
             <div class="col-lg-offset-1 col-lg-5 customer-info">
                 <div class="form-group">
-                    <label for="hp_number">hp number:</label>
+                    <label for="hp_number">Contact number:</label>
                     <input name="hp_number" id="hp_number" type="text" class="form-control" value="<?=$c['hp_number']?>" data-parsley-required>
                 </div>
                 <div class="form-group">
