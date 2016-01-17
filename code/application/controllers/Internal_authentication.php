@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH.'libraries/mandrill/Mandrill.php';
 
 class Internal_authentication extends CI_Controller {
 
@@ -104,15 +105,21 @@ class Internal_authentication extends CI_Controller {
         }
     }
 
-    public function reset_password(){
-
+    public function reset_password()
+    {
+        try {
             $this->load->library('form_validation');
             $this->form_validation->set_rules('email', 'Email', 'required');
             if ($this->form_validation->run() == FALSE) {
-               $this->load->view('internal_user/login');
+                $this->load->view('internal_user/login');
             } else {
                 $email = $this->input->post('email');
-                if($this->Internal_user_model->retrieve_by_email($email)!=null){
+                $send_to[]= array(
+                    'email' => $email,
+                    'name' => 'user',
+                    'type' => 'to'
+                );
+                if ($this->Internal_user_model->retrieve_by_email($email) != null) {
                     $user = $this->Internal_user_model->retrieve_by_email($email);
                     $this->load->library('encrypt');
                     $this->load->library('email');
@@ -122,6 +129,25 @@ class Internal_authentication extends CI_Controller {
                     for ($i = 0; $i < 7; $i++) {
                         $randomString .= $characters[rand(0, $charactersLength - 1)];
                     }
+                    /*
+                    $message = array(
+                        'html' => '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1">
+                            <title>Password Reset Request</title><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+                            </head><body><p>Hi. This is your new password for The Shipyard Project Management System: <strong>' . $randomString . '</strong></p><p>Thank you.</p></body></html>',
+                        'subject' => 'Password Reset Email form The Shipyard Project Management System',
+                        'from_email' => 'donotreply@tspms.com',
+                        'from_name' => TSPMS,
+                        'to' => $send_to,
+                        'important' => false,
+                        'track_opens' => true,
+                        'track_clicks' => false,
+                        'auto_text' => true,
+                        'auto_html' => false,
+                        'inline_css' => false,
+                    );
+                    $mandrill = new Mandrill(MANDRILL_API_KEY);
+                    $result = $mandrill->messages->send($message);
+                    */
                     $this->email->from('donotreply@tspms.com', 'TSPMS');
                     $this->email->to($email);
 
@@ -144,12 +170,19 @@ class Internal_authentication extends CI_Controller {
                         show_error($this->email->print_debugger());
                         $this->session->set_userdata('message', 'Unable to send email.');
                     }
-                }else{
-                    $this->session->set_userdata('message','Email does not exist');
+
+                } else {
+
                 }
                 redirect('internal_authentication/login');
             }
 
+
+        } catch (Mandrill_Error $e) {
+            // Mandrill errors are thrown as exceptions
+            $this->session->set_userdata('message', $e);
+            redirect('internal_authentication/login');
+        }
     }
 
 

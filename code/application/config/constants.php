@@ -96,3 +96,12 @@ define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 |
 */
 define('DATETIMEZONE',		'Asia/Singapore');
+/*
+|--------------------------------------------------------------------------
+| Mandrill API Key
+|--------------------------------------------------------------------------
+|
+| This is used for authenticating into Mandrill for the sending of emails
+|
+*/
+define('MANDRILL_API_KEY',            'PZmFMnOmtGhZAJvt6njHag');
