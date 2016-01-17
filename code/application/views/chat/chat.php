@@ -52,9 +52,11 @@ if($this->session->userdata('Customer_cid')){
 <script type="text/babel">
     var CurrentUser = <?=$user_id?>;
     var UserName = <?php echo json_encode($this->session->userdata('internal_username')); ?>;
+    var UserType = <?php echo json_encode($this->session->userdata('internal_type')); ?>;
 
-    console.log("uname")
-    console.log(UserName)
+
+    //console.log("utype")
+    //console.log(UserType)
 
     var get_data = [];
     var LeftUser = React.createClass({
@@ -217,23 +219,42 @@ if($this->session->userdata('Customer_cid')){
 
             var json = JSON.parse(data)
 
-            for(var i = 0; i < json.length; i++)
+            if(UserType == "PM") {
+                for (var i = 0; i < json.length; i++) {
+
+
+                    var val = json[i].type
+                    val = val + "_"
+                    val = val + json[i].user_id
+
+                    var name = json[i].title.concat(" ");
+                    name = name.concat(json[i].f_name);
+                    name = name.concat(" ");
+                    name = name.concat(json[i].l_name)
+
+
+                    this.state.options.push(
+                        < option key={val} value={val} > {name} < /option >
+                    )
+                }
+            }
+            else
             {
+                // else client trying to create new message
+                //console.log(json)
+                for (var i = 0; i < json.length; i++)
+                {
+                    var val = json[i].type
+                    val = val + "_"
+                    val = val + json[i].pm_id;
 
+                    var name = json[i].name;
 
-                var val = json[i].type
-                val = val + "_"
-                val = val + json[i].user_id
+                    this.state.options.push(
+                        <option key={val} value={val}> {name} </option>
+                    )
+                }
 
-                var name = json[i].title.concat(" ");
-                name = name.concat(json[i].f_name);
-                name = name.concat(" ");
-                name = name.concat(json[i].l_name)
-
-
-                this.state.options.push(
-                    <option key={val} value={val} > {name} </option>
-                )
             }
 
             this.forceUpdate();
@@ -459,9 +480,9 @@ if($this->session->userdata('Customer_cid')){
                 var target_partner = this.props.value;
                 var datetime = new Date() / 1000;
 
+                //alert(target_partner)
+                //alert(text)
                 var url = "<?=base_url()."chat/new_write"?>";
-
-
 
                 $.ajax({
                     type: "GET",

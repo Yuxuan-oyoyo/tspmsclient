@@ -16,6 +16,35 @@ class Chat_model extends CI_Model{
 
     }
 
+    public function convo_client($c_id)
+    {
+        $partners = [];
+
+
+
+        $sql = "select * from internal_user where u_id in " .
+                "(select pm_id from pm_project where project_id IN " .
+                "(select project_id from project where c_id = ?))";
+
+        $query=$this->db->query($sql, array($c_id));
+        //print_r($this->db->error());
+        //print_r($query->result_array());
+        if ($query -> num_rows() > 0)
+        {
+            foreach($query -> result() as $row)
+            {
+                array_push($partners, [
+                    'type'  => "PM",
+                    "pm_id" => $row->u_id,
+                    "name"  => $row->name,
+                    "email" => $row->email
+                ]);
+            }
+        }
+
+        return $partners;
+    }
+
     public function convo_pm()
     {
         // create dictionary of id:username
@@ -148,7 +177,15 @@ class Chat_model extends CI_Model{
 
             $to_the_pm = 0;
             $p_id = 5;
-            $c_id = $partner_id;
+            $c_id = $this->session->userdata('internal_uid');
+        }
+        else
+        {
+            // client starting new_conversation with pm
+            $to_the_pm = 1;
+            $p_id = $partner_id;
+            $c_id = $this->session->userdata('Customer_cid');
+
         }
 
         $message = [
