@@ -60,6 +60,7 @@ if($this->session->userdata('Customer_cid')){
 
     var get_data = [];
     var LeftUser = React.createClass({
+        // @formatter:off
         render: function() {
 
             var DisplayName = (this.props.data.user1 == CurrentUser) ? this.props.data.user2: this.props.data.user1;
@@ -79,29 +80,34 @@ if($this->session->userdata('Customer_cid')){
             {
                 return (
                     <li className="thread-list-item active" onClick={this.props.handleClickOnLeftUser.bind(null, this.props.data)}>
-            <h5 className="thread-name"> {DisplayName} </h5>
-                <div className="thread-time">
-                {dates}
-                </div>
-                <div className="thread-last-message">
-                {this.props.data.lastMessage}
-            </div>
-            </li>
-            );
+                    <h5 className="thread-name"> {DisplayName} </h5>
+                        <div className="thread-time">
+                        {dates}
+                        </div>
+                        <div className="thread-last-message">
+                        {this.props.data.lastMessage}
+                    </div>
+                    </li>
+                );
             }
             else
             {
+                var text = "10 new"
                 return (
                     <li className="thread-list-item" onClick={this.props.handleClickOnLeftUser.bind(null, this.props.data)}>
-            <h5 className="thread-name"> {DisplayName} </h5>
-                <div className="thread-time">
-                {dates}
-                </div>
-                <div className="thread-last-message">
-                {this.props.data.lastMessage}
-            </div>
-            </li>
-            );
+                        <h5 className="thread-name"> {DisplayName} </h5>
+                            <div className="thread-time">
+                            {dates}
+                            </div>
+                            <div className="thread-last-message">
+                            {this.props.data.lastMessage}
+
+                            <div className="thread-time">
+                                {text}
+                            </div>
+                            </div>
+                    </li>
+                );
             }
         }
     });
@@ -114,6 +120,11 @@ if($this->session->userdata('Customer_cid')){
             var current_id = this.props.chat_id
 
             var parentProps = this.props;
+
+            //console.log("!")
+            //console.log(this.props.chats)
+            //console.log("?")
+
             var userNodes = this.props.chats.map(function(data){
                 return (
                     <LeftUser data={data} handleClickOnLeftUser={parentProps.clickFunc} key={data.chatID} c_id={current_id}> </LeftUser>
@@ -124,7 +135,7 @@ if($this->session->userdata('Customer_cid')){
 
             return (
                 <ul className="thread-list">
-                {userNodes}
+                    {userNodes}
                 </ul>
 
             );
@@ -617,8 +628,8 @@ if($this->session->userdata('Customer_cid')){
 
                     })
                     this.state.msgnodes = msgNodes;
-                    console.log("msgnodes")
-                    console.log(this.state.msgnodes)
+                    //console.log("msgnodes")
+                    //console.log(this.state.msgnodes)
 
                 } else {
                     msgNodes = "not selected yet"
@@ -682,16 +693,37 @@ if($this->session->userdata('Customer_cid')){
                 timeout: 5000,
                 success: function(data)
                 {
-                    console.log(data[0])
-                    if(this.state.chatID != "new_message") {
-                        if(this.state.just_on == true) {
-                            this.setState({chats: data, chatID: data[0].chatID, just_on: false})
-                        }
-                        else
+                    //console.log("!")
+                    //console.log(data[0])
+                    //console.log("?")
+
+                    console.log("!")
+                    console.log(data)
+                    console.log("?")
+
+                    var counter = 0;
+                    for(var thread in data)
+                    {
+                        var messages = data[thread]["messages"]
+                        for(var msg in messages)
                         {
-                            this.setState({chats: data })
+                            var m = messages[msg].seen
+                            if(m == false) {
+                                counter = counter + 1;
+                            }
+                            //console.log(messages[msg].seen)
                         }
                     }
+
+                    if(this.state.just_on == true)
+                    {
+                        this.setState({unread:counter, just_on: false, chats: data, chatID: data[0].chatID, just_on: false})
+                    }
+                    else
+                    {
+                        this.setState({chats: data, unread:counter })
+                    }
+
                     setTimeout(this.getInitialData, 3000)
                 }.bind(this),
                 error: function(XMLHttpRequest,textStatus, errorThrown)
@@ -713,7 +745,10 @@ if($this->session->userdata('Customer_cid')){
         },
         getUnreadCount:function(){
             // TODO
-            this.setState({unreadCount: this.state.chats.length})
+            console.log("getUnreadCount");
+            console.log(this.state.chats)
+
+            //this.setState({unreadCount: this.state.chats.length})
         },
         tick: function(){
             this.getInitialData()
@@ -728,9 +763,10 @@ if($this->session->userdata('Customer_cid')){
             return {
                 chatId : "",
                 chats : [],
-                unreadCount : 0,
+                unread : 0,
                 file: null,
                 theThreadIWantToPass: {},
+                just_on: true,
                 //chats: this.props.chats
             };
         },
@@ -790,15 +826,14 @@ if($this->session->userdata('Customer_cid')){
                 }
             }
 
-            console.log("the thread i want to pass")
-            console.log(this.state.theThreadIWantToPass)
+            //console.log("the thread i want to pass")
+            //console.log(this.state.theThreadIWantToPass)
 
-            var unread = this.state.unreadCount === 0 ?
-                <span>Unread threads: 0 </span>
-                :  <span>Unread threads: {this.state.unreadCount} </span>;
+            var unread = <span>Unread threads: {this.state.unread} </span>;
 
             if(this.state.chatID == "new_message")
             {
+                // dead function fml
                 //console.log("new_message")
                 return (
                     <div className="chatapp">
@@ -827,8 +862,8 @@ if($this->session->userdata('Customer_cid')){
             }
             else
             {
-                console.log("render the thread I want to pass")
-                console.log(this.state.theThreadIWantToPass)
+                //console.log("render the thread I want to pass")
+                //console.log(this.state.theThreadIWantToPass)
                 return (
                     <div className="chatapp">
                         <div className="thread-section">

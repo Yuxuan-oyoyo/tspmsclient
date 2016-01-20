@@ -50,7 +50,7 @@ class Chat extends CI_Controller {
         $threads =  $this->Chat_model->retrieve($user["user_id"], $user["user_type"]);
 
         //session_write_close();
-
+        //echo json_encode($user);
         echo json_encode($threads);
         //echo " ";
         //print_r($this->session->all_userdata());
