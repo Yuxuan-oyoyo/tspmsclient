@@ -192,7 +192,7 @@ $this->load->view('common/pm_nav', $class);
                         <table class="table table-condensed">
                             <?php foreach($pms as $pm):?>
                             <tr>
-                                <td><label><input type="radio" name="pm_option"  value="<?=$pm['u_id']?>" required></label></td>
+                                <td><label><input type="radio" name="pm_id"  value="<?=$pm['u_id']?>" required></label></td>
                                 <td><?=$pm['name']?></td>
                             </tr>
                             <?php endforeach?>
