@@ -239,4 +239,13 @@ class Chat_model extends CI_Model{
             return $insert_id;
         }
     }
+
+    public function initialize_new($insert_array){
+
+        $insert_array['is_file'] = 0;
+        $insert_array['to_pm'] = 0;
+        $insert_array['time_created'] = time();
+        $this->db->insert('message', $insert_array);
+        return $this->db->insert_id();
+    }
 }

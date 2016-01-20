@@ -180,7 +180,26 @@ $this->load->view('common/pm_nav', $class);
             </div>
 
             <div id="new_customer">
+            </div>
 
+            <div class="pm-info">
+            <hr>
+            <h3>PM Information</h3>
+            <hr>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="pm_option"> PM in charge</label>
+                        <table class="table table-condensed">
+                            <?php foreach($pms as $pm):?>
+                            <tr>
+                                <td><label><input type="radio" name="pm_option"  value="<?=$pm['u_id']?>" required></label></td>
+                                <td><?=$pm['name']?></td>
+                            </tr>
+                            <?php endforeach?>
+                        </table>
+
+                    </div>
+                </div>
             </div>
         </div>
     </form>
