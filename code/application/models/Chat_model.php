@@ -160,6 +160,13 @@ class Chat_model extends CI_Model{
         return null;
     }
 
+    public function read_msg(array $values)
+    {
+        $sql = "update message set seen=1 where customer_id = ? AND pm_id = ? AND to_pm = ?";
+        $this->db->query($sql, array($values["c_id"], $values["pm_id"], $values["to_pm"]));
+
+    }
+
     public function new_write(array $values)
     {
         // TODO: set users precisely

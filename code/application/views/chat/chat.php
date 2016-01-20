@@ -55,12 +55,34 @@ if($this->session->userdata('Customer_cid')){
     var UserType = <?php echo json_encode($this->session->userdata('internal_type')); ?>;
 
 
-    //console.log("utype")
-    //console.log(UserType)
+    console.log("utype")
+    console.log(UserType)
 
     var get_data = [];
     var LeftUser = React.createClass({
         // @formatter:off
+        componentDidMount: function()
+        {
+            /*
+            var counter = 0;
+            var messages = this.props.data["messages"]
+            for(var msg in messages)
+            {
+
+                //console.log(messages[msg].seen)
+                if(messages[msg].seen == false)
+                {
+                    counter = counter + 1
+                }
+
+            }
+            console.log("spawn")
+            if(this.props.c_id == this.props.data.chatID)
+            {
+                this.props.handleUnread(counter);
+            }
+            */
+        },
         render: function() {
 
             var DisplayName = (this.props.data.user1 == CurrentUser) ? this.props.data.user2: this.props.data.user1;
@@ -69,17 +91,36 @@ if($this->session->userdata('Customer_cid')){
             var ts = this.props.data.lastMsgTimeStamp;
             var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
             d.setUTCSeconds(ts);
-            /*
-             var month = d.getMonth()+1;
-             var date = d.getDate()+"."+month+"."+d.getFullYear();
-             console.log("moo moo");
-             */
             var dates = moment(d).format('LL');
+
+
+            //console.log("puffy")
+            //console.log(this.props.data)
+            var counter = 0;
+            var messages = this.props.data["messages"]
+            for(var msg in messages)
+            {
+                //console.log(messages)
+                if(UserType == "PM" && messages[msg].to_pm =="1" && messages[msg].seen == false)
+                {
+                    //console.log(messages[msg].seen)
+                    counter = counter + 1
+                }
+                else if (UserType != "PM" && messages[msg].to_pm == "0" && messages[msg].seen == false)
+                {
+                    counter = counter + 1
+                }
+            }
+            //console.log("puzzy")
+
+
+
+            // TODO (if messages too long cut it short..)
 
             if(c_id == this.props.data.chatID)
             {
                 return (
-                    <li className="thread-list-item active" onClick={this.props.handleClickOnLeftUser.bind(null, this.props.data)}>
+                    <li className="thread-list-item active" onClick={this.props.handleClickOnLeftUser.bind(null, [this.props.data, counter])}>
                     <h5 className="thread-name"> {DisplayName} </h5>
                         <div className="thread-time">
                         {dates}
@@ -92,9 +133,9 @@ if($this->session->userdata('Customer_cid')){
             }
             else
             {
-                var text = "10 new"
+
                 return (
-                    <li className="thread-list-item" onClick={this.props.handleClickOnLeftUser.bind(null, this.props.data)}>
+                    <li className="thread-list-item" onClick={this.props.handleClickOnLeftUser.bind(null, [this.props.data, counter])}>
                         <h5 className="thread-name"> {DisplayName} </h5>
                             <div className="thread-time">
                             {dates}
@@ -103,7 +144,7 @@ if($this->session->userdata('Customer_cid')){
                             {this.props.data.lastMessage}
 
                             <div className="thread-time">
-                                {text}
+                                {counter} new
                             </div>
                             </div>
                     </li>
@@ -114,7 +155,6 @@ if($this->session->userdata('Customer_cid')){
 
     // WORKINGON
     var LeftUserList = React.createClass({
-
         render: function() {
             //console.log("= = = LeftUserList Render = = =")
             var current_id = this.props.chat_id
@@ -127,7 +167,11 @@ if($this->session->userdata('Customer_cid')){
 
             var userNodes = this.props.chats.map(function(data){
                 return (
-                    <LeftUser data={data} handleClickOnLeftUser={parentProps.clickFunc} key={data.chatID} c_id={current_id}> </LeftUser>
+                    <LeftUser data={data}
+                        handleClickOnLeftUser={parentProps.clickFunc}
+                        handleUnread={parentProps.unreadFunc}
+                        key={data.chatID}
+                        c_id={current_id}> </LeftUser>
                 )
             })
 
@@ -638,9 +682,7 @@ if($this->session->userdata('Customer_cid')){
                     <div className="message-section">
                         <div>
                             <h3 className="message-thread-heading">{j}</h3>
-                            <div>
-                                <button onClick={this.props.clickFunc.bind(null, "new_message")} className="message-thread-heading" type="button">+ New Message</button>
-                            </div>
+
                         </div>
 
                         <ul className="message-list" ref="messageList">
@@ -697,18 +739,28 @@ if($this->session->userdata('Customer_cid')){
                     //console.log(data[0])
                     //console.log("?")
 
-                    console.log("!")
-                    console.log(data)
-                    console.log("?")
+                    //console.log("!")
+                    //console.log(data)
+                    //console.log("?")
 
-                    var counter = 0;
+                    var counter = 0
+                    var am_i_pm = 0
+                    if(UserType == "PM")
+                        am_i_pm = 1;
+
                     for(var thread in data)
                     {
                         var messages = data[thread]["messages"]
                         for(var msg in messages)
                         {
                             var m = messages[msg].seen
-                            if(m == false) {
+                            var tpm = messages[msg].to_pm
+                            if(UserType == "PM" && m == false && tpm == 1 )
+                            {
+                                counter = counter + 1;
+                            }
+                            else if(UserType != "PM" && m == false && tpm == 0)
+                            {
                                 counter = counter + 1;
                             }
                             //console.log(messages[msg].seen)
@@ -743,12 +795,12 @@ if($this->session->userdata('Customer_cid')){
             this.setState({file:data})
 
         },
-        getUnreadCount:function(){
-            // TODO
-            console.log("getUnreadCount");
-            console.log(this.state.chats)
+        handleUnread:function(data){
 
-            //this.setState({unreadCount: this.state.chats.length})
+            console.log("Handle Unread");
+            var update_unread = this.state.unread - data;
+
+            this.setState({unread: update_unread})
         },
         tick: function(){
             this.getInitialData()
@@ -770,18 +822,54 @@ if($this->session->userdata('Customer_cid')){
                 //chats: this.props.chats
             };
         },
-        handleClickOnLeftUser: function(data){
+        handleClickOnLeftUser: function(arr){
             //console.log("handleClickOnLeftUser");
             // console.log("chat id is");
             // console.log(data.chatID);
-            console.log(data);
+            //console.log(data);
+
+            console.log("sphere")
+            var data = arr["0"]
+            console.log(data)
+
+            var to_pm = 0
+            if(UserType == "PM")
+                to_pm = 1
+
+
+
+            if(arr[1] > 0)
+            {
+                var pm_id = data["messages"][0]["pm_id"]
+                var c_id = data["messages"][0]["customer_id"]
+                var url = "<?=base_url()."chat/readmsg/"?>";
+                $.ajax({
+                    type: "GET",
+                    data: {pmid: pm_id, cid: c_id, topm: to_pm},
+                    url : url,
+                    success: function(data)
+                    {
+                        console.log("Handle clicks success")
+                        //this.setstate
+                        //setTimeout(this.getInitialData, 3000)
+                    }.bind(this),
+                    error: function(XMLHttpRequest,textStatus, errorThrown)
+                    {
+                        console.log("Handle clicks error")
+                        //setTimeout(this.getInitialData, 5000);
+                    }.bind(this)
+                })
+            }
+            // database needs c_id, pm_id, to_pm
+
             if(data == "new_message")
             {
                 this.setState({chatID: "new_message"});
             }
             else
             {
-                this.setState({chatID: data.chatID});
+                var unread_count = this.state.unread - arr[1]
+                this.setState({chatID: data.chatID, unread:unread_count});
             }
 
         },
@@ -873,6 +961,7 @@ if($this->session->userdata('Customer_cid')){
                             <LeftUserList
                                 chat_id={this.state.chatID}
                                 chats={this.state.chats}
+                                unreadFunc={this.handleUnread}
                                 clickFunc={this.handleClickOnLeftUser} // ***important
                                 />
                         </div>

@@ -38,6 +38,19 @@ class Chat extends CI_Controller {
 
     }
 
+    public function readmsg()
+    {
+        session_write_close();
+        $values = [
+            "pm_id" => $this->input->get("pmid"),
+            "c_id" => $this->input->get("cid"),
+            "to_pm" => $this->input->get("topm"),
+        ];
+
+        //echo json_encode($values);
+        $this->Chat_model->read_msg($values);
+
+    }
 
     public function get(){
         header('Content-type: application/json');
