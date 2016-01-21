@@ -48,6 +48,11 @@ $class = [
     'internal_user_class'=>'',
     'analytics_class'=>''
 ];
+$status_color=[
+    "new"=>"#34495e","open"=>"#AD5E19 ","resolved"=>"#1D7D46",
+    "on hold"=>"#015B96","invalid"=>"#B31A0C","duplicate"=>"#613873",
+    "wontfix"=>"#95a5a6","closed"=>"#7f8c8d"
+];
 if($this->session->userdata('internal_type')=='Developer') {
     $this->load->view('common/dev_nav', $class);
 }else {
@@ -66,6 +71,11 @@ if($this->session->userdata('internal_type')=='Developer') {
     <?php
 }
 ?>
+<script>
+    $(document).ready(function() {
+
+    });
+</script>
 
 <div class="col-sm-offset-1 content" style="margin-left:10%">
     <div class="row">
@@ -74,7 +84,9 @@ if($this->session->userdata('internal_type')=='Developer') {
                 <span style="color: #777777;padding-right: 10px">#<?=$i["local_id"]?></span>
                 <?=$i["title"]?>
                 <div style="height: 100%;display: inline;position:relative">
-                    <div class="aui-lozenge" style="background-color: #fcf8e3;vertical-align:middle">
+                    <div class="aui-lozenge" style="color: <?=$status_color[$i["status"]]?>;
+                        border-color: <?=$status_color[$i["status"]]?>;vertical-align:middle;
+                        font-size: 14px;padding:2px 4px;">
                         <?=$i["status"]?>
                     </div>
                 </div>
@@ -98,13 +110,11 @@ if($this->session->userdata('internal_type')=='Developer') {
                     </span>
                 </div>
                 <div class="issue-description">
-                    <span>
-                        <?php if($i["content"]):?>
-                            <?=htmlspecialchars($i["content"])?>
-                        <?php else:?>
-                            <em>No description provided.</em>
-                        <?php endif?>
-                    </span>
+                    <?php if($i["content"]):?>
+                        <span style="font: 16px serif"></spam><?=htmlspecialchars($i["content"])?></span>
+                    <?php else:?>
+                        <em>No description provided.</em>
+                    <?php endif?>
                 </div>
             </div>
             <div>
@@ -148,7 +158,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                                 </div>
                                 <div class="buttons" id="new-comment-btn" style="display:none">
                                     <button class="btn btn-primary btn-sm disabled submit-button" type="submit" disabled>Comment</button>
-                                    <a href="#" class="cancel" onmousedown="clean()">Cancel</a>
+                                    <a href="#" class="cancel" id="cancel-input" >Cancel</a>
                                 </div>
                                 <div class="mask"></div>
                             </form>
@@ -198,10 +208,27 @@ if($this->session->userdata('internal_type')=='Developer') {
             </div>
             <script>
                 $(document).ready(function(){
-                    var $comments = $('#issues-comments');
-                    var $comment_body_content=null;
-                    var $comment_id =null;
-                    $comments.on('mousedown', '.edit-comment-link', function (e) {
+                    var $comment_body_content = null;
+                    var $comment_id = null;
+
+                    function cancelNewInput() {
+                        $('#new-comment').text('');
+                        $('#new-comment-btn').hide();
+                        $('textarea').css("height","34px");
+                        return false;
+                    }
+                    var clean = function() {
+                        cancelNewInput();
+                        if ($comment_id != null && $comment_body_content != null) {
+                            var $comment = $('.issue-comment[comment-id="' + $comment_id + '"]');
+                            $comment.find('.comment-body').html($comment_body_content);
+                            $comment_body_content = null;
+                            $comment_id = null;
+                        }
+                    };
+                    $('#issues-comments').on("mousedown","#cancel-input",function(){
+                        clean();return false;
+                    }).on('mousedown', '.edit-comment-link', function (e) {
                         e.preventDefault();
                         clean();
                         $comment_id = $(this).closest('.issue-comment').attr("comment-id");
@@ -212,24 +239,10 @@ if($this->session->userdata('internal_type')=='Developer') {
                         $comment_body.find('.input-form-proto').removeAttr("id");
                         $comment_body.find(".input-comment-content").text($comment_content_original);
                         $comment_body.find(".input-comment-id").val($comment_id);
-                    });
-                    $comments.on('click', '.input-cancel', function (e) {
+                    }).on('click', '.input-cancel', function (e) {
                         e.preventDefault();
                         clean();
-                    });
-                    function cancelNewInput(){
-                        $('#new-comment').text('');$('#new-comment-btn').hide();return false;
-                    }
-                    function clean(){
-                        cancelNewInput();
-                        if($comment_id!=null && $comment_body_content!=null){
-                            var $comment = $('.issue-comment[comment-id="'+$comment_id+'"]');
-                            $comment.find('.comment-body').html($comment_body_content);
-                            $comment_body_content= null;$comment_id =null;
-                        }
-                    }
-                    //disable/enable form submit
-                    $comments.on('keyup', '.input-comment-content',function(e) {
+                    }).on('keyup', '.input-comment-content',function(e) {
                         var val = $.trim( this.value );
                         if(val.length == 0) {
                             $(this).closest("form").find(".submit-button").addClass("disabled");
@@ -238,23 +251,19 @@ if($this->session->userdata('internal_type')=='Developer') {
                             $(this).closest("form").find(".submit-button").removeClass("disabled");
                             $(this).closest("form").find(".submit-button").removeAttr("disabled");
                         }
-                    });
-                    $comments.on('focus', 'textarea', function () {
+                    }).on('focus', 'textarea', function () {
                         console.log("in focus");
                         $(this).css("height","96px");
                         if($(this).attr("id")=="new-comment"){
                             $('#new-comment-btn').css("display","block");
                         }
-                    });
-                    $comments.on('click', '.comment-delete', function () {
+                    }).on('click', '.comment-delete', function () {
                         $(this).closest('form').submit();
                         return false;
+                    }).on('blur', 'textarea', function () {
+                        $(this).css("height","34px");
                     });
-                    /*
-                    $comments.on('blur', 'textarea', function () {
-                        $(this).css("height","32px");
-                    });
-                    */
+
 
                 });
             </script>
@@ -266,7 +275,14 @@ if($this->session->userdata('internal_type')=='Developer') {
                         e.preventDefault();
                         var param = $(this).attr("param");
                         var value = $(this).attr("value");
-                        window.location.replace("<?=base_url()."Issues/update/".$repo_slug."/".$i["local_id"]."?"?>"+"param="+param+"&value="+value);
+                        if(param==="workflow"){
+                            window.location.replace("<?=base_url()."Issues/update/".$repo_slug."/".$i["local_id"]."?"?>"
+                                +"param="+param+"&value="+value+"&title="+<?=$i["title"]?>);
+                        }else{
+                            window.location.replace("<?=base_url()."Issues/update/".$repo_slug."/".$i["local_id"]."?"?>"
+                                +"param="+param+"&value="+value);
+                        }
+
                     });
                 </script>
                 <div class="btn-group">
@@ -274,25 +290,34 @@ if($this->session->userdata('internal_type')=='Developer') {
                         <a href="#" class="btn btn-primary update-btn" param="status" value="new">Open</a>
                     <?php else:?>
                         <a href="#" class="btn btn-primary update-btn" param="status" value="resolved">Resolve</a>
-
-
-                    <a href="<?=base_url()."/Issues/update/".$repo_slug."/".$i["local_id"]."?status=resolved"?>"
-                       class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" class="update-btn" param="status" value="new">new</a></li>
-                        <li><a href="#" class="update-btn" param="status" value="to develop">to develop</a></li>
-                        <li><a href="#" class="update-btn" param="status" value="to test">to test</a></li>
-                        <li><a href="#" class="update-btn" param="status" value="to deploy">to deploy</a></li>
-                        <li><a href="#" class="update-btn" param="status" value="invalid">invalid</a></li>
-                        <li><a href="#" class="update-btn" param="status" value="wontfix">wontfix</a></li>
-                        <li><a href="#" class="update-btn" param="status" value="resolved">resolved</a></li>
-                    </ul>
+                        <a href="<?=base_url()."/Issues/update/".$repo_slug."/".$i["local_id"]."?status=resolved"?>"
+                           class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <?php
+                            $server_status = [
+                                "new","open","resolved","on hold","invalid","duplicate","wontfix","closed"
+                            ];
+                            ?>
+                            <?php foreach ($server_status as $s):?>
+                                <li><a href="#" class="update-btn" param="status" value="<?=$s?>"><?=ucwords($s)?></a></li>
+                            <?php endforeach?>
+                        </ul>
                     <?php endif?>
-                </div>
 
+                </div>
+                <?php $workflow_next= [
+                    "to develop"=>"to test","to test"=>"ready for deployment",
+                    "ready for deployment"=>"to deploy"
+                ];?>
+                <?php if($i["status"]!="resolved"):?>
+                    <?php if(in_array($i["workflow"],$workflow_next )):?>
+                        <a href="#" class="btn btn-default update-btn" param="workflow" style="margin-left:7px"
+                           value="<?=$workflow_next[$i["workflow"]]?>"><?=ucwords($workflow_next[$i["workflow"]])?></a>
+                    <?php endif;?>
+                <?php endif;?>
                 <a class="btn btn-default" style="margin-left:7px" href="<?= base_url()."Issues/edit/".$repo_slug."/".$i["local_id"]?>">Edit</a>
             </div>
-            <div class="well" style="background-color: white;width: 250px;margin-top:10px">
+            <div class="well" style="background-color: white;width: 250px;margin-top:25px">
                 <table>
                     <?php
                     $ci->load->model('Use_case_model');

@@ -4,7 +4,7 @@
     $repo_slug = $repo_slug;
     function _ago($tm,$rcs = 0) {
         $cur_tm = time(); $dif = $cur_tm-$tm;
-        $pds = array('sec','min','hour','day','week','month','year','decade');
+        $pds = array('sec','min','hr','day','wk','mth','yr','decade');
         $lngh = array(1,60,3600,86400,604800,2630880,31570560,315705600);
         for($v = sizeof($lngh)-1; ($v >= 0)&&(($no = $dif/$lngh[$v])<=1); $v--); if($v < 0) $v = 0; $_tm = $cur_tm-($dif%$lngh[$v]);
 
@@ -75,7 +75,7 @@ if($this->session->userdata('internal_type')=='Developer') {
 
     <hr>
     <div class="row" style="margin-right: auto">
-        <div class=" col-xs-10" style="padding-left:30px">
+        <div class=" col-xs-11" style="padding-left:30px">
         <?php
             $filter_arr =$para_raw;
             $issues = $issues;
@@ -93,9 +93,9 @@ if($this->session->userdata('internal_type')=='Developer') {
                 "utc_last_updated"=>["display"=>"Updated" ,"sort"=>"utc_last_updated"],
             ];
             $status_color=[
-                "new"=>"#34495e","to develop"=>"#e67e22 ","resolved"=>"#2ecc71",
-                "to test"=>"#3498db","invalid"=>"#e74c3c","to deploy"=>"#9b59b6 ",
-                "wontfix"=>"#95a5a6","closed"=>"#7f8c8d "
+                "new"=>"#34495e","open"=>"#AD5E19 ","resolved"=>"#1D7D46",
+                "on hold"=>"#015B96","invalid"=>"#B31A0C","duplicate"=>"#613873",
+                "wontfix"=>"#95a5a6","closed"=>"#7f8c8d"
             ];
 
             unset($filter_arr["page"]);
@@ -123,9 +123,10 @@ if($this->session->userdata('internal_type')=='Developer') {
                             <button type="button" class="btn dropdown-toggle btn-default" data-toggle="dropdown">
                                 Workflow <span class="caret"></span></button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="./<?=$repo_slug?>?status=to develop">To develop</a></li>
-                                <li><a href="./<?=$repo_slug?>?status=to test">To test</a></li>
-                                <li><a href="./<?=$repo_slug?>?status=to deploy">To deploy</a></li>
+                                <li><a href="./<?=$repo_slug?>?title=~[to develop]">To develop</a></li>
+                                <li><a href="./<?=$repo_slug?>?title=~[to test]">To test</a></li>
+                                <li><a href="./<?=$repo_slug?>?title=~[to deploy]">To deploy</a></li>
+                                <li><a href="./<?=$repo_slug?>?title=~[ready for deployment]">Ready for Deployment</a></li>
                             </ul>
                         </div>
                         <a class="btn btn-default" style="margin-right:15px" href="./<?=$repo_slug?>?responsible=luning1994">My Issues</a>
@@ -142,7 +143,7 @@ if($this->session->userdata('internal_type')=='Developer') {
             </div>
             <div style="width: 100%;font-size: 1.2em;margin: 7px 5px">
 
-                <b>Showing issues (<?=$num_per_page * ($current_page -1)?>-<?=min($count,$num_per_page*$current_page)?> of <?=$count?>) </b>
+                <b>Showing issues (<?=$num_per_page * ($current_page -1)+1?>-<?=min($count,$num_per_page*$current_page)?> of <?=$count?>) </b>
                 <?php if(!empty($filter_arr)):?>|
                     <?php foreach($filter_arr as $key=>$value):?>
                         <span style="color: grey"><b><?=$key?></b>: "<?=$value?>"</span>
@@ -153,8 +154,9 @@ if($this->session->userdata('internal_type')=='Developer') {
             <table class="table table-striped" data-sort-by="updated_on" data-modules="components/follow-list">
                 <thead>
                 <tr>
+                    <th class="text sorter-false" style="padding: 8px 4px"></th>
                     <?php foreach($headers as $h):?>
-                        <th class="text sorter-false tablesorter-header">
+                        <th class="text sorter-false tablesorter-header" style="padding: 8px 4px">
                             <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."sort=".$h["sort"]?>"
                                title="Sort by: <?=$h["sort"]?>"><?=$h["display"]?></a>
                             <?php if(isset($sorted_header) && "-".$sorted_header==$h["sort"]):?>
@@ -170,8 +172,30 @@ if($this->session->userdata('internal_type')=='Developer') {
 
                 <?php foreach($issues as $d):?>
                     <tr class="" data-state="open">
-                        <td class="" style="width: 35%">
-                            <a class="execute" href="<?=base_url()."Issues/detail/".$repo_slug."/".$d["local_id"]?>" title="View Details">#<?=$d["local_id"]?>: <?=$d["title"]?></a>
+
+                        <td style="padding-right: 0;padding-top:10px;vertical-align: middle">
+                            <?php $workflow_color= [
+                                "to develop"=>["#F30000","#FF5154"],"to test"=>["#FFFF45","#E8E05C"],
+                                "ready for deployment"=>["#008400","#6ABB6B"],"to deploy"=>["#32A299","#6CBBB6"],
+                            ];
+                            ?>
+                            <?php if(empty($d["workflow"])):?>
+                                <div class="workflow-dot" style=""></div>
+                            <?php else:?>
+                                <?php if(isset($workflow_color[$d["workflow"]])):?>
+                                    <a href="./<?=$repo_slug?>?title=~[<?=$d["workflow"]?>]" title="Filter by: <?=ucwords($d["workflow"])?>">
+                                        <div class="workflow-dot"
+                                             style="background:<?=$workflow_color[$d["workflow"]][0]?>;border: <?=$workflow_color[$d["workflow"]][1]?>"></div>
+                                    </a>
+                                <?php else:?>
+                                    <a href="./<?=$repo_slug?>?title=~[<?=$d["workflow"]?>]" title="Filter by: <?=ucwords($d["workflow"])?>">
+                                        <div class="workflow-dot" style="background:#808080;border: #B5B5B5"></div>
+                                    </a>
+                                <?php endif;?>
+                            <?php endif;?>
+                        </td>
+                        <td class="" style="width: 40%">
+                            <a href="<?=base_url()."Issues/detail/".$repo_slug."/".$d["local_id"]?>" title="View Details">#<?=$d["local_id"]?>: <?=$d["title"]?></a>
                         </td>
                         <td class="icon-col" style="text-align: center">
                             <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."kind=".$d["metadata"]["kind"]?>"
@@ -185,10 +209,15 @@ if($this->session->userdata('internal_type')=='Developer') {
                                 <?=ucwords($d["priority"])?>
                             </a>
                         </td>
-                        <td class="state">
+                        <td class="state" style="padding-right: 0px">
                             <a class="aui-lozenge" href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."status=".$d["status"]?>"
-                               title="Filter by status: <?=ucwords($d["status"])?>" style="color: <?=$status_color[$d["status"]]?>">
-                                <?=ucwords($d["status"]=="to deploy"?"to dep":($d["status"]=="to develop"?"to dev":$d["status"]))?>
+                               title="Filter by status: <?=ucwords($d["status"])?>"
+                               style="color: <?=$status_color[$d["status"]]?>;border-color: <?=$status_color[$d["status"]]?>">
+                                <?php
+                                    switch($d["status"]){case "duplicate": echo "dupl.";break; case "resolved" : echo "rslvd";break;
+                                        default: echo $d["status"];
+                                    }
+                                ?>
                             </a>
                         </td>
                         <td class="milestone">
@@ -208,8 +237,10 @@ if($this->session->userdata('internal_type')=='Developer') {
                                     }
                                 }
                             ?>
+                            <?php if(!empty($milestone)):?>
                             <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."milestone=".$milestone?>"
                                class="milestone-link" title="Filter by milestone: <?=ucwords($milestone)?>"><?=$milestone?></a>
+                            <?php else:?>-<?php endif;?>
                         </td>
 
                         <td class="user">
@@ -217,13 +248,14 @@ if($this->session->userdata('internal_type')=='Developer') {
                                 <?php if(isset($d["responsible"])):?>
                                 <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]."?".$filter_str."responsible=".$d["responsible"]["username"]?>"
                                    title="Filter issues assigned to: <?=$d["responsible"]["display_name"]?>">
-                                    <div class="aui-avatar aui-avatar-xsmall">
-                                        <div class="aui-avatar-inner">
-                                            <!--img src="https://bitbucket.org/account/czyang_jessie/avatar/32/?ts=1443338247" alt="" /-->
+                                    <div class="avatar avatar-xsmall">
+                                        <div class="avatar-inner avatar-xsmall">
+                                            <img src="https://bitbucket.org/account/<?=$d["responsible"]["username"]?>/avatar/32/?ts=1443338247" alt="" >
                                         </div>
                                     </div>
-                                    <span title="<?=$d["responsible"]["username"]?>">
-                                        <?=$d["responsible"]["display_name"]?>
+                                    <span">
+                                        <?=strlen($d["responsible"]["display_name"]) > 10 ?
+                                            substr($d["responsible"]["display_name"],0,10)."..." : $d["responsible"]["display_name"];?>
                                     </span>
                                 </a>
                                 <?php else:?>
