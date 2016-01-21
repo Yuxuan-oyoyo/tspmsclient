@@ -1,25 +1,23 @@
 <?php
 class File extends CI_Model {
 
-    function get_by_fid($fid=FALSE)
-    {
+    function get_by_fid($fid=FALSE){
         $query = $this->db->get_where('upload', array('fid' => $fid));
         return $query->row_array();
     }
 
 
-    function insert($featured_image=FALSE)
-    {
-        if($featured_image){
+    function insert($file_to_upload=FALSE){
+        if($file_to_upload){
             $temp_array = array(
-                'image_url'=>$featured_image['file_url'],
-                'image_key'=>$featured_image['file_key'],
-                'filename'=>$featured_image['filename']
+                'file_url'=>$file_to_upload['file_url'],
+                'file_key'=>$file_to_upload['file_key'],
+                'filename'=>$file_to_upload['filename']
             );
 
             $now = new DateTime("now", new DateTimeZone(DATETIMEZONE));
             $this->db->set('last_updated', $now->format('c'));
-            $this->db->insert('featured_image', $temp_array);
+            $this->db->insert('file_to_upload', $temp_array);
             return $this->db->insert_id();
 
         }else{
@@ -27,8 +25,7 @@ class File extends CI_Model {
         }
     }
 
-    function delete_by_fiid($fid=FALSE)
-    {
+    function delete_by_fid($fid=FALSE){
         if($fid){
             $this->db->delete('upload', array('fid' => $fid));
             return $this->db->affected_rows();
