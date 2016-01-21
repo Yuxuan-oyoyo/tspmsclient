@@ -277,7 +277,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                         var value = $(this).attr("value");
                         if(param==="workflow"){
                             window.location.replace("<?=base_url()."Issues/update/".$repo_slug."/".$i["local_id"]."?"?>"
-                                +"param="+param+"&value="+value+"&title="+<?=$i["title"]?>);
+                                +"param="+param+"&value="+value+"&title=<?=$i["title"]?>");
                         }else{
                             window.location.replace("<?=base_url()."Issues/update/".$repo_slug."/".$i["local_id"]."?"?>"
                                 +"param="+param+"&value="+value);
@@ -290,30 +290,43 @@ if($this->session->userdata('internal_type')=='Developer') {
                         <a href="#" class="btn btn-primary update-btn" param="status" value="new">Open</a>
                     <?php else:?>
                         <a href="#" class="btn btn-primary update-btn" param="status" value="resolved">Resolve</a>
-                        <a href="<?=base_url()."/Issues/update/".$repo_slug."/".$i["local_id"]."?status=resolved"?>"
-                           class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <?php
-                            $server_status = [
-                                "new","open","resolved","on hold","invalid","duplicate","wontfix","closed"
-                            ];
-                            ?>
-                            <?php foreach ($server_status as $s):?>
-                                <li><a href="#" class="update-btn" param="status" value="<?=$s?>"><?=ucwords($s)?></a></li>
-                            <?php endforeach?>
-                        </ul>
                     <?php endif?>
+                    <a href="#"
+                       class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <?php
+                        $server_status = [
+                            "new","open","resolved","on hold","invalid","duplicate","wontfix","closed"
+                        ];
+                        ?>
+                        <?php foreach ($server_status as $s):?>
+                            <?php if($s!=$i["status"]):?>
+                                <li><a href="#" class="update-btn" param="status" value="<?=$s?>"><?=ucwords($s)?></a></li>
+                            <?php endif;?>
+                        <?php endforeach?>
+                    </ul>
+
 
                 </div>
                 <?php $workflow_next= [
-                    "to develop"=>"to test","to test"=>"ready for deployment",
-                    "ready for deployment"=>"to deploy"
+                    "to develop"=>"to test","to test"=>"ready for deployment","ready for deployment"=>"to deploy"
                 ];?>
                 <?php if($i["status"]!="resolved"):?>
-                    <?php if(in_array($i["workflow"],$workflow_next )):?>
+                    <?php $next_workflow = isset($workflow_next[$i["workflow"]])?$workflow_next[$i["workflow"]]: "to develop";?>
+                    <div class="btn-group">
                         <a href="#" class="btn btn-default update-btn" param="workflow" style="margin-left:7px"
-                           value="<?=$workflow_next[$i["workflow"]]?>"><?=ucwords($workflow_next[$i["workflow"]])?></a>
-                    <?php endif;?>
+                           value="<?=$next_workflow?>"><?=ucwords($next_workflow)?></a>
+                        <a href="#"class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <?php $workflows = ["to develop","to test","ready for deployment","to deploy"];?>
+                            <?php foreach ($workflows as $s):?>
+                                <?php if($s!=$i["workflow"]):?>
+                                    <li><a href="#" class="update-btn" param="status" value="<?=$s?>"><?=ucwords($s)?></a></li>
+                                <?php endif;?>
+                            <?php endforeach?>
+                        </ul>
+
+                    </div>
                 <?php endif;?>
                 <a class="btn btn-default" style="margin-left:7px" href="<?= base_url()."Issues/edit/".$repo_slug."/".$i["local_id"]?>">Edit</a>
             </div>
@@ -330,11 +343,30 @@ if($this->session->userdata('internal_type')=='Developer') {
                     if(isset($i["metadata"]["milestone"])){
                         $milestone = $ci->Milestone_model->retrieve_milestone_by_id($i["metadata"]["milestone"]);
                     }
+                    $workflow_color= [
+                        "to develop"=>["#F30000","#FF5154"],"to test"=>["#FFFF45","#E8E05C"],
+                        "ready for deployment"=>["#008400","#6ABB6B"],"to deploy"=>["#32A299","#6CBBB6"],
+                    ];
+                    //get workflow icon
+                    if(!empty($i["workflow"])){
+                        if(isset($workflow_color[$i["workflow"]])){
+                            $workflow_icon = '<div class="workflow-dot attribute-icon"style="background:'
+                                .$workflow_color[$i["workflow"]][0].';border:'.$workflow_color[$i["workflow"]][1].';margin:0 4px 0 2px"></div>';
+                        }else{
+                            $workflow_icon = '<div class="workflow-dot attribute-icon" style="background:#808080;border: #B5B5B5;margin:0 4px 0 2px"></div>';
+                        }
+                    }else{
+                        $workflow_icon = '<div class="workflow-dot attribute-icon" style="margin:0 4px 0 2px"></div>';
+                    }
                     $attr_array = [
-                        "Assignee"=>isset($i["responsible"])?$i["responsible"]["display_name"]:"-",
-                        "Priority"=>$i["priority"],
-                        "Type"=>$i["metadata"]["kind"],
-                        "Status"=>$i["status"],
+                        "Assignee"=>isset($i["responsible"])?
+                            '<div class="avatar avatar-xsmall attribute-icon"><div class="avatar-inner avatar-xsmall">'.
+                            '<img src="https://bitbucket.org/account/'.
+                            $i["responsible"]["username"].'/avatar/32/?ts=1443338247" alt="" class="attribute-icon" >'.
+                            '</div></div>'.$i["responsible"]["display_name"]:"-",
+                        "Priority"=>'<div class="icon icon-'.$i["priority"].' attribute-icon"></div>'.ucwords($i["priority"]),
+                        "Type"=>'<div class="icon icon-'.$i["metadata"]["kind"].' attribute-icon"></div>'.ucwords($i["metadata"]["kind"]),
+                        "Workflow"=>isset($i["workflow"])?$workflow_icon.ucwords($i["workflow"]):"-",
                         "Use case"=>isset($usecase)?$usecase["title"]:"-",
                         "Deadline"=>isset($i["deadline"])?$i["deadline"]:"-",
                         "Milestone"=>isset($milestone)?$milestone["header"]:"-"

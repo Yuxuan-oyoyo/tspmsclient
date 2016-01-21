@@ -117,7 +117,7 @@ class BB_issues {
         }else{
             /*when server replies single issue*/
             $result_decoded = $this->decode_attr_from_content($result);
-            $result_decoded = $this->decode_workflow_status_from_title($result);
+            $result_decoded = $this->decode_workflow_status_from_title($result_decoded);
             //$result_decoded["status"] = $this->map_status($result_decoded["status"], false);
 
             return $result_decoded;
@@ -298,8 +298,8 @@ class BB_issues {
             $endpoint =$endpoint."/".$id;
         }
         $issue_array = $this->encode_attr_into_content($issue_array);
-        if(isset($issue_array["status"])){
-            $issue_array["status"] = $this->map_status($issue_array["status"], true);
+        if(isset($issue_array["workflow"]) && isset($issue_array["title"])){
+            $issue_array = $this->encode_workflow_status_into_title($issue_array);
         }
         $_trial = 2;
         $issue_array['access_token'] = $token;
@@ -335,12 +335,12 @@ class BB_issues {
                 $issue_array['access_token'] = $CI->bb_shared->requestFromServer();
             }
         }
-        if(($reply_array = json_decode($response,true))!=null){
+        if(isset($response)&&($reply_array = json_decode($response,true))!==null){
             if(isset($reply_array['error'])){
-                if($this->_print_err) echo var_dump($reply_array);
+                if($this->_print_err) var_dump($reply_array);
             }else{
                 $reply_array = $this->decode_attr_from_content($reply_array);
-                $reply_array["status"] = $this->map_status($reply_array["status"], false);
+                $reply_array = $this->decode_workflow_status_from_title($reply_array);
                 /*process log  =====*/
                 $this->log($reply_array,$repo_slug);
                 /*process log  =====*/
