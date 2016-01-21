@@ -22,7 +22,6 @@ class Issues extends CI_Controller {
 
         $user_id = $this->session->userdata('internal_uid');
         if(isset($user_id)) {
-
             if(isset($repo_slug)) {
                 /*define constants*/
                 $num_per_page = 25;
@@ -60,7 +59,6 @@ class Issues extends CI_Controller {
                         }
                     }
                 }
-                //TODO:validate parameters
                 /*Get all issues*/
                 $response = $this->bb_issues->retrieveIssues($repo_slug,null, $para);
 
@@ -74,7 +72,7 @@ class Issues extends CI_Controller {
                     "para_raw"=>$para_raw,
                     "user" =>$this->Internal_user_model->retrieve($user_id)
                 ];
-                //var_dump($data[]);
+                //var_dump($data);
                 //die(var_dump($data["issues"]));
                 $this->session->set_userdata('issue_list'.$repo_slug, $response["issues"]);
                 $this->load->view("issue/all_2", $data);

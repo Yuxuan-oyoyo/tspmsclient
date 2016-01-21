@@ -236,7 +236,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                 </div>
             </div>
             <div class="form-part">
-                <div class="form-label">Deadline</div>
+                <div class="form-label">Deadline <span class="cmpl"></span></div>
                 <script>
                     $(document).ready(function() {
                         $('.datepicker').datepicker({

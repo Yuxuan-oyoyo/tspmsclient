@@ -47,15 +47,16 @@ class BB_issues {
      */
     private function decode_attr_from_content($issue_array){
         $new_array = $issue_array;
+        $display1 = $display2 = $display3  = [];
         if(isset($issue_array["content"])){
-            if(preg_match("/\<deadline\>(.*?)\<\/deadline\>/",$issue_array["content"],$display)){
-                $new_array["deadline"] = $display[1];
+            if(preg_match("/\<deadline\>(.*?)\<\/deadline\>/",$issue_array["content"],$display1)){
+                $new_array["deadline"] = $display1[1];
             }
-            if(preg_match("/\<usecase\>(.*?)\<\/usecase\>/",$issue_array["content"],$display)){
-                $new_array["usecase"] = $display[1];
+            if(preg_match("/\<usecase\>(.*?)\<\/usecase\>/",$issue_array["content"],$display2)){
+                $new_array["usecase"] = $display2[1];
             }
-            if(preg_match("/\<content\>((.|\n)*)\<\/content\>/",$issue_array["content"],$display)){
-                $new_array["content"] = $display[1];
+            if(preg_match("/\<content\>((.|\n)*)\<\/content\>/",$issue_array["content"],$display3)){
+                $new_array["content"] = $display3[1];
             }
             return $new_array;
         }
@@ -119,7 +120,6 @@ class BB_issues {
             $result_decoded = $this->decode_attr_from_content($result);
             $result_decoded = $this->decode_workflow_status_from_title($result_decoded);
             //$result_decoded["status"] = $this->map_status($result_decoded["status"], false);
-
             return $result_decoded;
         }
     }
