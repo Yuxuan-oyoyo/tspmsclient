@@ -38,6 +38,19 @@ class Chat extends CI_Controller {
 
     }
 
+    public function readmsg()
+    {
+        session_write_close();
+        $values = [
+            "pm_id" => $this->input->get("pmid"),
+            "c_id" => $this->input->get("cid"),
+            "to_pm" => $this->input->get("topm"),
+        ];
+
+        //echo json_encode($values);
+        $this->Chat_model->read_msg($values);
+
+    }
 
     public function get(){
         header('Content-type: application/json');
@@ -50,7 +63,7 @@ class Chat extends CI_Controller {
         $threads =  $this->Chat_model->retrieve($user["user_id"], $user["user_type"]);
 
         //session_write_close();
-
+        //echo json_encode($user);
         echo json_encode($threads);
         //echo " ";
         //print_r($this->session->all_userdata());

@@ -92,9 +92,11 @@ class Chat_model extends CI_Model{
                 $tMsgs = [];
                 $result = $query->result_array();
 
+                //print_r($result);
+
                 /*translate direction to author id*/
                 foreach( $result as $rKey=>$row){
-                    /*depends on uer's nature and direction*/
+                    /*depends on user's nature and direction*/
                     if ($row["to_pm"]==1)$result[$rKey]["author"]=$row["user1"];
                     else $result[$rKey]["author"]=$row["user2"];
                     //unset($result[$rKey]["to_pm"]);
@@ -102,7 +104,7 @@ class Chat_model extends CI_Model{
 
                 /*group chats into threads based on other user.
                 One other user means another thread*/
-                $other_user = $user_type=="pm"? "user1":"user2";
+                $other_user = $user_type=="pm"? "customer_id":"pm_id";
                 $i = 1;
                 foreach ($result as $rKey=>$row){
                     $row["msgID"] = $i;
@@ -158,6 +160,13 @@ class Chat_model extends CI_Model{
         return null;
     }
 
+    public function read_msg(array $values)
+    {
+        $sql = "update message set seen=1 where customer_id = ? AND pm_id = ? AND to_pm = ?";
+        $this->db->query($sql, array($values["c_id"], $values["pm_id"], $values["to_pm"]));
+
+    }
+
     public function new_write(array $values)
     {
         // TODO: set users precisely
@@ -177,15 +186,18 @@ class Chat_model extends CI_Model{
 
             $to_the_pm = 0;
             $p_id = 5;
+            session_start();
             $c_id = $this->session->userdata('internal_uid');
+            session_write_close();
         }
         else
         {
             // client starting new_conversation with pm
             $to_the_pm = 1;
             $p_id = $partner_id;
+            session_start();
             $c_id = $this->session->userdata('Customer_cid');
-
+            session_write_close();
         }
 
         $message = [
@@ -238,5 +250,14 @@ class Chat_model extends CI_Model{
 
             return $insert_id;
         }
+    }
+
+    public function initialize_new($insert_array){
+
+        $insert_array['is_file'] = 0;
+        $insert_array['to_pm'] = 0;
+        $insert_array['time_created'] = time();
+        $this->db->insert('message', $insert_array);
+        return $this->db->insert_id();
     }
 }
