@@ -1,3 +1,5 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +20,7 @@
 
         function upload_file(){
             $.ajax({
-                url: '<?='upload/file_upload'?>',
+                url: '<?=base_url().'upload/file_upload'?>',
                 type: 'POST',
                 data: new FormData($('#upload_image_form')[0]),
                 cache: false,
