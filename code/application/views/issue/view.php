@@ -275,7 +275,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                         e.preventDefault();
                         var param = $(this).attr("param");
                         var value = $(this).attr("value");
-                        if(param==="workflow"){
+                        if(param=="workflow"){
                             window.location.replace("<?=base_url()."Issues/update/".$repo_slug."/".$i["local_id"]."?"?>"
                                 +"param="+param+"&value="+value+"&title=<?=$i["title"]?>");
                         }else{
@@ -321,7 +321,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                             <?php $workflows = ["to develop","to test","ready for deployment","to deploy"];?>
                             <?php foreach ($workflows as $s):?>
                                 <?php if($s!=$i["workflow"]):?>
-                                    <li><a href="#" class="update-btn" param="status" value="<?=$s?>"><?=ucwords($s)?></a></li>
+                                    <li><a href="#" class="update-btn" param="workflow" value="<?=$s?>"><?=ucwords($s)?></a></li>
                                 <?php endif;?>
                             <?php endforeach?>
                         </ul>

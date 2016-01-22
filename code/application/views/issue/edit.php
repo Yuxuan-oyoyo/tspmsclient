@@ -131,21 +131,21 @@ if($this->session->userdata('internal_type')=='Developer') {
                 </select>
             </div>
         </div>
-            <div class="form-part">
-                <div class="form-label">Workflow</div>
-                <div class="form-input">
-                    <select name="workflow" class="form-control">
-                        <?php $server_workflow = ["to develop","to test","ready for deployment","to deploy"];?>
-                        <?php foreach($server_workflow as $s):?>
-                            <?php if($s==$i["workflow"]):?>
-                                <option selected value="<?=$s?>"><?=ucwords($s)?></option>
-                            <?php else:?>
-                                <option value="<?=$s?>"><?=ucwords($s)?></option>
-                            <?php endif?>
-                        <?php endforeach?>
-                    </select>
-                </div>
+        <div class="form-part">
+            <div class="form-label">Workflow</div>
+            <div class="form-input">
+                <select name="workflow" class="form-control">
+                    <?php $server_workflow = ["to develop","to test","ready for deployment","to deploy"];?>
+                    <?php foreach($server_workflow as $s):?>
+                        <?php if($s==$i["workflow"]):?>
+                            <option selected value="<?=$s?>"><?=ucwords($s)?></option>
+                        <?php else:?>
+                            <option value="<?=$s?>"><?=ucwords($s)?></option>
+                        <?php endif?>
+                    <?php endforeach?>
+                </select>
             </div>
+        </div>
         <div class="form-part">
             <div class="form-label">Kind</div>
             <div class="form-input">

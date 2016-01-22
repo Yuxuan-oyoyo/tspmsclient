@@ -81,7 +81,7 @@ class BB_issues {
     }
     private function encode_workflow_status_into_title($issue_array){
         //use in_array here instead to bypass issue title is empty
-        if(in_array("title",$issue_array)&& isset($issue_array["workflow"])){
+        if(isset($issue_array["title"])&& isset($issue_array["workflow"])){
             $issue_array["title"] = "[".$issue_array["workflow"]."]".$issue_array["title"];
             unset($issue_array["workflow"]);
         }

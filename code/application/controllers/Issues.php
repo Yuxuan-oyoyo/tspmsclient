@@ -190,7 +190,7 @@ class Issues extends CI_Controller {
             $value = $this->input->get("value",true);
             $title = $this->input->get("title",true);
             /*update to server*/
-            $data= ($param=="workflow")?[$param=>$value,"title"=>$title]:["title"=>$title];
+            $data= ($param=="workflow")?[$param=>$value,"title"=>$title]:[$param=>$value];
             $issue = $this->bb_issues->updateIssue($repo_slug,$issue_id, $data);
             $this->session->set_flashdata("issue_last_updated",$issue);
             redirect(base_url()."Issues/detail/".$repo_slug."/".$issue_id);
