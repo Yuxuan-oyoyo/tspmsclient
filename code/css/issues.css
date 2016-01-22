@@ -42,9 +42,13 @@ img {
     margin-top: 12px;
     padding-left: 42px;
 }
+.attribute-icon{
+    margin-right: 4px;
+}
 .issue-description {
     padding-left: 42px;
-    font-family: Arial,sans-serif;
+    padding-top: 10px;
+    padding-bottom: 20px;
 }
 
 .avatar img {
@@ -63,7 +67,13 @@ img {
     display: inline-block;
     vertical-align: text-bottom;
 }
-
+.workflow-dot{
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display:inline-block;
+    border-width: 2px;
+}
 .issue-author .avatar {
     position: absolute;
     top: 3px;
@@ -75,6 +85,8 @@ img {
 {height:32px;width:32px}
 .avatar-medium .avatar-inner img
 {max-height:32px;max-width:32px}
+.avatar-xsmall
+{height:16px;width:16px}
 .form-part {
     display: table-row;
 }
@@ -153,6 +165,7 @@ h1 + .comments-list > .comment:first-child {
 .comments-list .comment {
     position: relative;
     border-top: 1px solid #cccccc;
+    padding-bottom: 5px;
 }
 .comments-list .comment article {
     padding-top: 10px;
@@ -238,7 +251,7 @@ h1 + .comments-list > .comment:first-child {
 /* Comment forms */
 .comments-list .new-comment {
     position: relative;
-    margin: 10px 0 10px 0;
+    margin: 10px 0 18px 0;
 }
 .comments-list .new-comment .user .aui-avatar {
     position: absolute;
@@ -263,9 +276,18 @@ h1 + .comments-list > .comment:first-child {
 }
 textarea {
     width: 100%;
-    height: 32px;
+    height: 34px;
     overflow: hidden;
-    padding: 7px;
+    display: block;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
 }
 .comments-list .editor.previewing textarea {
     display: none;

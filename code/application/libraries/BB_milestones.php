@@ -22,7 +22,7 @@ class BB_milestones {
         $url = $endpoint.'?'.http_build_query($parameters);
         /*construct endpoint*/
         $result =  $this->sendGetRequest($url);
-        if(is_null($result)){
+        if($result===null){
             $parameters["access_token"] = $CI->bb_shared->requestFromServer();
             $url = $endpoint.'?'.http_build_query($parameters);
             $result = $this->sendGetRequest($url);
@@ -41,7 +41,7 @@ class BB_milestones {
         $parameters["timestamp"] = time();
         /*construct endpoint*/
         $result =  $this->sendGetRequest($endpoint);
-        if(is_null($result)){
+        if($result===null){
             $parameters["access_token"] = $CI->bb_shared->requestFromServer();
             $result = $this->sendGetRequest($endpoint);
         }
@@ -117,7 +117,7 @@ class BB_milestones {
         }
         if (isset($response)) {
             $reply_array = json_decode($response, true);
-            if (!is_null($reply_array)) {
+            if (!$reply_array===null) {
                 if (isset($reply_array['id'])) {
                     return $reply_array["id"];
                 }
