@@ -12,6 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <body>
 <?php
 $class = [
+    'dashboard_class'=>'',
     'projects_class'=>'',
     'message_class'=>'',
     'customers_class'=>'',

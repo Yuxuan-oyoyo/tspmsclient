@@ -15,7 +15,7 @@
     </div>
     <!-- Top Menu Items -->
     <ul class="nav navbar-nav">
-        <li>
+        <li  class="<?=$dashboard_class?>">
             <a href="#"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
         </li>
         <li  class="<?=$projects_class?>">

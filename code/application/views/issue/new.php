@@ -30,6 +30,7 @@ $user = $user;
 
 <?php
 $class = [
+    'dashboard_class'=>'',
     'projects_class'=>'active',
     'message_class'=>'',
     'customers_class'=>'',
