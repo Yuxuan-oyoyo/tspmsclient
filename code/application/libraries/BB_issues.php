@@ -13,44 +13,77 @@ class BB_issues {
     public $server_status = [
         "new","open","resolved","on hold","invalid","duplicate","wontfix","closed"
     ];
-    public $defined_status=[
-        "new","to develop","resolved","to test","invalid","to deploy","wontfix","closed"
+    public $workflow_status = [
+        'to develop', 'to verify', 'to test', 'ready for deployment', 'to deploy'
     ];
 
     private function setEndpoint($repo_slug){
         return "https://api.bitbucket.org/1.0/repositories/".BB_ACCOUNT_NAME."/".$repo_slug."/issues";
     }
+
     private function encode_attr_into_content($issue_array){
         /*use xml to encode deadline, usecase, content (description) into content*/
         if(isset($issue_array["content"])){
             $text = "<content>".$issue_array["content"]."</content>";
             if(isset($issue_array["deadline"])){
                 $text .="<deadline>".$issue_array["deadline"]."</deadline>";
+                unset($issue_array["deadline"]);
             }
             if(isset($issue_array["usecase"])){
                 $text .="<usecase>".$issue_array["usecase"]."</usecase>";
+                unset($issue_array["usecase"]);
             }
             $issue_array["content"] = $text;
         }
         return $issue_array;
     }
 
+
     /**
+     * This function extracts deadline, usecase from xml encoded issue content field
+     * into separate attributes
      * @param $issue_array
+     * @return $issue_array with deadline, usecase fields
      */
     private function decode_attr_from_content($issue_array){
         $new_array = $issue_array;
+        $display1 = $display2 = $display3  = [];
         if(isset($issue_array["content"])){
-            if(preg_match("/\<deadline\>(.*?)\<\/deadline\>/",$issue_array["content"],$display)){
-                $new_array["deadline"] = $display[1];
+            if(preg_match("/\<deadline\>(.*?)\<\/deadline\>/",$issue_array["content"],$display1)){
+                $new_array["deadline"] = $display1[1];
             }
-            if(preg_match("/\<usecase\>(.*?)\<\/usecase\>/",$issue_array["content"],$display)){
-                $new_array["usecase"] = $display[1];
+            if(preg_match("/\<usecase\>(.*?)\<\/usecase\>/",$issue_array["content"],$display2)){
+                $new_array["usecase"] = $display2[1];
             }
-            if(preg_match("/\<content\>((.|\n)*)\<\/content\>/",$issue_array["content"],$display)){
-                $new_array["content"] = $display[1];
+            if(preg_match("/\<content\>((.|\n)*)\<\/content\>/",$issue_array["content"],$display3)){
+                $new_array["content"] = $display3[1];
             }
             return $new_array;
+        }
+        return $issue_array;
+    }
+    /**
+     * This function extracts workflow statuses from issue title.
+     * The status must be marked up with square brackets at the beginning of the title text
+     * @param $issue_array
+     */
+    private function decode_workflow_status_from_title($issue_array){
+        $new_array = $issue_array;
+        $new_array["workflow"] = "";
+        if(isset($issue_array["content"])){
+            if(preg_match("/^\s*\[(.*?)\]/",$issue_array["title"],$display)){
+                $new_array["workflow"] = $display[1];
+                $new_array["title"] = explode($display[0], $issue_array["title"])[1];
+            }
+            return $new_array;
+        }
+        return $issue_array;
+    }
+    private function encode_workflow_status_into_title($issue_array){
+        //use in_array here instead to bypass issue title is empty
+        if(isset($issue_array["title"])&& isset($issue_array["workflow"])){
+            $issue_array["title"] = "[".$issue_array["workflow"]."]".$issue_array["title"];
+            unset($issue_array["workflow"]);
         }
         return $issue_array;
     }
@@ -70,7 +103,7 @@ class BB_issues {
         $parameters["timestamp"] = time();
         $url = $endpoint.'?'.$this->construct_paras($parameters);
         $result =  $this->sendGetRequest($url);
-        if(is_null($result)){
+        if($result===null){
             $parameters["access_token"] = $CI->bb_shared->requestFromServer();
             $url = $endpoint.'?'.$this->construct_paras($parameters);
             $result = $this->sendGetRequest($url);
@@ -79,33 +112,40 @@ class BB_issues {
             /*when server replies issue list*/
             foreach($result["issues"] as $key=>$issue){
                 $result["issues"][$key] = $this->decode_attr_from_content($issue);
-                //die(var_dump($result["issues"][$key]));
-                $result["issues"][$key]["status"] = $this->map_status($issue["status"], false);
+                $result["issues"][$key] = $this->decode_workflow_status_from_title($issue);
             }
             return $result;
         }else{
             /*when server replies single issue*/
             $result_decoded = $this->decode_attr_from_content($result);
-            //die(var_dump($result_decoded));
-            $result_decoded["status"] = $this->map_status($result_decoded["status"], false);
-
+            $result_decoded = $this->decode_workflow_status_from_title($result_decoded);
+            //$result_decoded["status"] = $this->map_status($result_decoded["status"], false);
             return $result_decoded;
         }
     }
+
+    /*
+     * [deprecated] This function two-way convert server-defined statuses
+     * with customized statuses in status field
+     * @param $status
+     * @param bool|true $fromLocal
+     * @return bool|string
+     */
+    /*
     private function map_status($status, $fromLocal = true){
         $negate = false;
         $result = false;
         if(substr($status,0,1)=="!"){
-            /*temporarily detach the negate sign if any*/
+            /*temporarily detach the negate sign if any/
             $status = substr($status,1);$negate = true;
         }
         if($fromLocal) {
             $index = array_search($status, $this->defined_status);
-            /*return index or false*/
-            if($index!==false) {/*make sure it's indeed false, not 0*/
+            /*return index or false/
+            if($index!==false) {/*make sure it's indeed false, not 0/
                 $result = $this->server_status[$index];
             }
-        }else{/*from server*/
+        }else{/*from server/
             $index = array_search($status, $this->server_status);
             if($index!==false) {
                 $result = $this->defined_status[$index];
@@ -114,6 +154,7 @@ class BB_issues {
         if($negate && $result) return "!".$result;
         else return $result;
     }
+    */
 
 
     private function sendGetRequest($url){
@@ -126,12 +167,11 @@ class BB_issues {
         $response = curl_exec($ch);
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        if($code==200 && ($reply_array = json_decode($response,true))!=null){
+        if($code==200 && ($reply_array = json_decode($response,true))!==null){
             //echo ($response);
             if(isset($reply_array['error'])){
                 if($this->_print_err) var_dump($reply_array);
             }else{
-                /*this is expected*/
                 return $reply_array;
             }
         }
@@ -147,9 +187,12 @@ class BB_issues {
         if($parameters==false){/*when param is empty*/
             return '';
         }else{
+            /*
             if(isset($parameters["status"])){
                 $parameters["status"] = $this->map_status($parameters["status"], true);
             }
+            */
+
             return http_build_query($parameters);
         }
     }
@@ -183,7 +226,7 @@ class BB_issues {
         /*construct endpoint*/
         $url = $endpoint.'?'.$this->construct_paras($parameters);
         $result =  $this->sendGetRequest($url);
-        if(is_null($result)){
+        if($result===null){
             $parameters["access_token"] = $CI->bb_shared->requestFromServer();
             $url = $endpoint.'?'.$this->construct_paras($parameters);
             $result = $this->sendGetRequest($url);
@@ -255,8 +298,8 @@ class BB_issues {
             $endpoint =$endpoint."/".$id;
         }
         $issue_array = $this->encode_attr_into_content($issue_array);
-        if(isset($issue_array["status"])){
-            $issue_array["status"] = $this->map_status($issue_array["status"], true);
+        if(isset($issue_array["workflow"]) && isset($issue_array["title"])){
+            $issue_array = $this->encode_workflow_status_into_title($issue_array);
         }
         $_trial = 2;
         $issue_array['access_token'] = $token;
@@ -292,12 +335,12 @@ class BB_issues {
                 $issue_array['access_token'] = $CI->bb_shared->requestFromServer();
             }
         }
-        if(($reply_array = json_decode($response,true))!=null){
+        if(isset($response)&&($reply_array = json_decode($response,true))!==null){
             if(isset($reply_array['error'])){
-                if($this->_print_err) echo var_dump($reply_array);
+                if($this->_print_err) var_dump($reply_array);
             }else{
                 $reply_array = $this->decode_attr_from_content($reply_array);
-                $reply_array["status"] = $this->map_status($reply_array["status"], false);
+                $reply_array = $this->decode_workflow_status_from_title($reply_array);
                 /*process log  =====*/
                 $this->log($reply_array,$repo_slug);
                 /*process log  =====*/

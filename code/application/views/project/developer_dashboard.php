@@ -67,15 +67,21 @@ $this->load->view('common/dev_nav', $class);
                             </tr>
                             <tr>
                                 <td> <i class="fa fa-link"></i>&nbsp;<strong>Staging link </strong></td>
-                                <td> <a href="<?=$p['staging_link']?>">Click here</a></td>
+                                <td> <a href="<?=$p['staging_link']?>" target="_blank">Click here</a></td>
                             </tr>
                             <tr>
                                 <td> <i class="fa fa-link"></i>&nbsp;<strong>Production link</strong></td>
-                                <td> <a href="<?=$p['production_link']?>">Click here</a></td>
+                                <td> <a href="<?=$p['production_link']?>" target="_blank">Click here</a></td>
                             </tr>
                             <tr>
                                 <td>  <i class="fa fa-clock-o"></i>&nbsp;<strong>Number Of Issues </strong></td>
-                                <td> 3</td>
+                                <td> <?php
+                                    if(isset($no_of_issues[$p['project_id']])){
+                                        echo $no_of_issues[$p['project_id']];
+                                    }else{
+                                        echo "BB repo not set";
+                                    }
+                                    ?></td>
                             </tr>
                         </table>
 

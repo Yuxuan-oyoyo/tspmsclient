@@ -31,7 +31,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     '<input type="text" class="form-control" name="company_name" id="company_name" data-parsley-required>'+
                     '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="email">Email</label>'+
                     '<input type="email" class="form-control" name="email" id="email" data-parsley-type="email" data-parsley-required>'+
-                    '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="hp_number">HP Number</label>'+
+                    '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="hp_number">Contact Number</label>'+
                     '<input type="text" class="form-control" name="hp_number" id="hp_number" data-parsley-required>'+
                     '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="other_number">Other Number</label>'+
                     '<input type="text" class="form-control" name="other_number" id="other_number" >'+
@@ -48,6 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 <body onload="cus_option()">
 <?php
 $class = [
+    'dashboard_class'=>'',
     'projects_class'=>'active',
     'message_class'=>'',
     'customers_class'=>'',
@@ -181,6 +182,25 @@ $this->load->view('common/pm_nav', $class);
             <div id="new_customer">
 
 
+            </div>
+            <div class="pm-info">
+                <hr>
+                <h3>PM Information</h3>
+                <hr>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="pm_option"> PM in charge</label>
+                        <table class="table table-condensed">
+                            <?php foreach($pms as $pm):?>
+                                <tr>
+                                    <td><label><input type="radio" name="pm_id"  value="<?=$pm['u_id']?>" <?=set_radio("pm_id",$pm['u_id'],$pm['u_id']==$p['pm_id'])?> required></label></td>
+                                    <td><?=$pm['name']?></td>
+                                </tr>
+                            <?php endforeach?>
+                        </table>
+
+                    </div>
+                </div>
             </div>
         </div>
     </form>

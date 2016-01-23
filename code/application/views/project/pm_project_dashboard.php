@@ -66,6 +66,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 <body>
 <?php
 $class = [
+    'dashboard_class'=>'',
     'projects_class'=>'active',
     'message_class'=>'',
     'customers_class'=>'',
@@ -120,7 +121,7 @@ function sortTasksByDaysLeft($a, $b) {
             <?php endif?>
             <?php
             if($project['production_link']):?>
-                <a href="<?=$project['staging_link']?>" class="btn btn-info" target="_blank"><i class="fa fa-external-link"></i>&nbsp;Production</a>
+                <a href="<?=$project['production_link']?>" class="btn btn-info" target="_blank"><i class="fa fa-external-link"></i>&nbsp;Production</a>
             <?php endif?>
             <?php
             if($project['customer_preview_link']):?>

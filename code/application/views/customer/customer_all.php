@@ -18,6 +18,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 <body>
 <?php
 $class = [
+    'dashboard_class'=>'',
     'projects_class'=>'',
     'message_class'=>'',
     'customers_class'=>'active',
@@ -53,7 +54,7 @@ $this->load->view('common/pm_nav', $class);
                 <th>Last Name</th>
                 <th>Username</th>
                 <th>Company</th>
-                <th>hp number</th>
+                <th>Contact number</th>
                 <th>Other number</th>
                 <th>Email</th>
                 <th>Status</th>

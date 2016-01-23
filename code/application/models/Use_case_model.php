@@ -50,6 +50,16 @@ class Use_case_model extends CI_Model{
         }
         return null;
     }
+
+    public function retrieve_external_by_project_id($p_id){
+        if(isset($p_id)){
+            $query = $this->db->get_where("use_case",["project_id"=>$p_id,"type"=>"External"]);
+            //$this->db->order_by("sub_id", "asc");
+            return $query->result_array();
+
+        }
+        return null;
+    }
     public function retrieve_by_project_repo_slug($repo_slug){
         if(isset($repo_slug)){
             $query = $this->db->query("SELECT usecase_id, sub_id,title,importance FROM use_case u, project p

@@ -45,6 +45,7 @@ function _ago($tm,$rcs = 0) {
 
 <?php
 $class = [
+    'dashboard_class'=>'',
     'projects_class'=>'active',
     'message_class'=>'',
     'customers_class'=>'',
@@ -116,7 +117,36 @@ if($this->session->userdata('internal_type')=='Developer') {
                 </select>
             </div>
         </div>
-
+        <div class="form-part">
+            <div class="form-label">Status</div>
+            <div class="form-input">
+                <select name="status" class="form-control">
+                    <?php $server_status = ["new","open","resolved","on hold","invalid","duplicate","wontfix","closed"];?>
+                    <?php foreach($server_status as $s):?>
+                        <?php if($s==$i["status"]):?>
+                            <option selected value="<?=$s?>"><?=ucwords($s)?></option>
+                        <?php else:?>
+                            <option value="<?=$s?>"><?=ucwords($s)?></option>
+                        <?php endif?>
+                    <?php endforeach?>
+                </select>
+            </div>
+        </div>
+        <div class="form-part">
+            <div class="form-label">Workflow</div>
+            <div class="form-input">
+                <select name="workflow" class="form-control">
+                    <?php $server_workflow = ["to develop","to test","ready for deployment","to deploy"];?>
+                    <?php foreach($server_workflow as $s):?>
+                        <?php if($s==$i["workflow"]):?>
+                            <option selected value="<?=$s?>"><?=ucwords($s)?></option>
+                        <?php else:?>
+                            <option value="<?=$s?>"><?=ucwords($s)?></option>
+                        <?php endif?>
+                    <?php endforeach?>
+                </select>
+            </div>
+        </div>
         <div class="form-part">
             <div class="form-label">Kind</div>
             <div class="form-input">
@@ -207,7 +237,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                 </div>
             </div>
             <div class="form-part">
-                <div class="form-label">Deadline</div>
+                <div class="form-label">Deadline <span class="cmpl"></span></div>
                 <script>
                     $(document).ready(function() {
                         $('.datepicker').datepicker({
@@ -241,36 +271,6 @@ if($this->session->userdata('internal_type')=='Developer') {
 
         </div>
     </form>
-        <div class="issue-tool-bar" style="padding:7pt">
-            <script>
-                $("div").on("mousedown",".update-btn",function(e){
-                    e.preventDefault();
-                    var param = $(this).attr("param");
-                    var value = $(this).attr("value");
-                    window.location.replace("<?=base_url()."Issues/update/".$repo_slug."/".$i["local_id"]."?"?>"+"param="+param+"&value="+value);
-                });
-            </script>
-            <div class="btn-group">
-                <?php if($i["status"]=="resolved"):?>
-                    <a href="#" class="btn btn-primary update-btn" param="status" value="new">Open</a>
-                <?php else:?>
-                    <a href="#" class="btn btn-primary update-btn" param="status" value="resolved">Resolve</a>
-
-
-                    <a href="<?=base_url()."/Issues/update/".$repo_slug."/".$i["local_id"]."?status=resolved"?>"
-                       class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" class="update-btn" param="status" value="new">new</a></li>
-                        <li><a href="#" class="update-btn" param="status" value="to develop">to develop</a></li>
-                        <li><a href="#" class="update-btn" param="status" value="to test">to test</a></li>
-                        <li><a href="#" class="update-btn" param="status" value="to deploy">to deploy</a></li>
-                        <li><a href="#" class="update-btn" param="status" value="invalid">invalid</a></li>
-                        <li><a href="#" class="update-btn" param="status" value="wontfix">wontfix</a></li>
-                        <li><a href="#" class="update-btn" param="status" value="resolved">resolved</a></li>
-                    </ul>
-                <?php endif?>
-            </div>
-        </div>
     </div>
 </div>
 

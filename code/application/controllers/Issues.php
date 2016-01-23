@@ -22,7 +22,6 @@ class Issues extends CI_Controller {
 
         $user_id = $this->session->userdata('internal_uid');
         if(isset($user_id)) {
-
             if(isset($repo_slug)) {
                 /*define constants*/
                 $num_per_page = 25;
@@ -60,7 +59,6 @@ class Issues extends CI_Controller {
                         }
                     }
                 }
-                //TODO:validate parameters
                 /*Get all issues*/
                 $response = $this->bb_issues->retrieveIssues($repo_slug,null, $para);
 
@@ -75,6 +73,7 @@ class Issues extends CI_Controller {
                     "user" =>$this->Internal_user_model->retrieve($user_id)
                 ];
                 //var_dump($data);
+                //die(var_dump($data["issues"]));
                 $this->session->set_userdata('issue_list'.$repo_slug, $response["issues"]);
                 $this->load->view("issue/all_2", $data);
             }else{
@@ -112,7 +111,10 @@ class Issues extends CI_Controller {
      */
     public function process_create($repo_slug){
         if($this->session->userdata('internal_uid')) {
-            $field_params = ["status","priority","title","responsible","content","kind","milestone","deadline","usecase"];
+            $field_params = [
+                "status","priority","title","responsible","workflow",
+                "content","kind","milestone","deadline","usecase"
+            ];
             $para_input = $this->input->get($field_params,true);
             $param=[];
             foreach($para_input as $key=>$value){
@@ -142,13 +144,6 @@ class Issues extends CI_Controller {
         if($this->session->userdata('internal_uid')) {
             if (isset($repo_slug) && isset($issue_id)) {
                 $comments = $this->bb_issues->getCommentsForIssue($repo_slug, $issue_id);
-                /*if(!isset($comments)) $comments = [];
-
-                foreach($comments as $key=>$value){
-
-                }
-                $comments = $this->parsedown->text();
-                 */
                 $data =[
                     "issue_details"=>$this->retrie_by_id($repo_slug,$issue_id),
                     "repo_slug"=>$repo_slug,
@@ -183,7 +178,6 @@ class Issues extends CI_Controller {
     public function delete_comment($repo_slug, $issue_id) {
         $comment_id = $this->input->post("comment-id");
         $this->bb_issues->deleteCommentForIssue($repo_slug, $issue_id, $comment_id);
-        //redirect(base_url()."Issues/detail/".$repo_slug."/".$issue_id);
     }
 
     /**
@@ -194,16 +188,10 @@ class Issues extends CI_Controller {
         if($this->session->userdata('internal_uid')) {
             $param = $this->input->get("param",true);
             $value = $this->input->get("value",true);
-            /*retrieve from session for performance*/
-            if(($issue_list =$this->session->userdata("issue_list" . $repo_slug))!=null){
-                foreach($issue_list as $issue){
-                    if($issue["local_id"]==$issue_id) {
-                        $issue[$param] = $value;
-                        break;
-                    }
-                }
-            }
-            $issue = $this->bb_issues->updateIssue($repo_slug,$issue_id, [$param=>$value]);
+            $title = $this->input->get("title",true);
+            /*update to server*/
+            $data= ($param=="workflow")?[$param=>$value,"title"=>$title]:[$param=>$value];
+            $issue = $this->bb_issues->updateIssue($repo_slug,$issue_id, $data);
             $this->session->set_flashdata("issue_last_updated",$issue);
             redirect(base_url()."Issues/detail/".$repo_slug."/".$issue_id);
         }else{
@@ -248,7 +236,7 @@ class Issues extends CI_Controller {
             /*params expected*/
             $field_params = [
                 "status","priority","title","responsible","content",
-                "kind","milestone","comment","usecase","deadline"
+                "kind","milestone","comment","usecase","deadline","workflow"
             ];
             $para_input = $this->input->get($field_params,true);
             $param=[];
@@ -286,6 +274,16 @@ class Issues extends CI_Controller {
         return "null";
     }
     */
+    public function ajax_verify_account_name($repo_slug=null){
+        if(isset($milestone_id)){
+            $this->load->library('BB_issues');
+            $issues = $this->Milestone_model->retrieve_milestone_by_id($milestone_id);
+            if(isset($milestone)){
+                return $milestone["header"];
+            }
+        }
+        return "false";
+    }
 
 
 }

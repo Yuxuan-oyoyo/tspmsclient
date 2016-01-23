@@ -109,4 +109,17 @@ class Task_model extends CI_Model{
         $days_left = $diff->format('%R%a');
         return $days_left;
     }
+    public function retrieve_for_esenhower($urgencey_upper, $urgency_lower,$importance_upper,$importance_lower){
+
+            $query = $this->db->query("SELECT task.* ,DATEDIFF(targeted_end_datetime,NOW()) AS days from task where if_completed=0
+                                      and DATEDIFF(targeted_end_datetime,NOW())<=?
+                                      and DATEDIFF(targeted_end_datetime,NOW())>?
+                                       and importance<=?
+                                       and importance>?
+                                       order by days ASC
+                                       ;",[$urgencey_upper, $urgency_lower,$importance_upper,$importance_lower]);
+            return $query->result_array();
+
+    }
+
 }
