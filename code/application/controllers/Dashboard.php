@@ -27,7 +27,7 @@ class Dashboard extends CI_Controller
         $tasks_ui=$this->Task_model->retrieve_for_esenhower(7, -1000,5,3);
         $tasks_i=$this->Task_model->retrieve_for_esenhower(1000, 7,5,3);
         $tasks_u=$this->Task_model->retrieve_for_esenhower(7, -1000,3,0);
-        $tasks_none=$this->Task_model->retrieve_for_esenhower(7, 1000,3,0);
+        $tasks_none=$this->Task_model->retrieve_for_esenhower(1000, 7,3,0);
         $data["tasks_ui"]= $tasks_ui;
         $data["tasks_i"]= $tasks_i;
         $data["tasks_u"]= $tasks_u;
