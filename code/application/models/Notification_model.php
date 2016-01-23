@@ -57,13 +57,15 @@ class Notification_model extends CI_Model{
         return $this->db->insert_id();
     }
 
-    public function add_new_post_notifications($post_id,$change_type,$users){
+    public function add_new_post_notifications($project_id,$post_id,$change_type,$users){
         $insert_array['change_type']=$change_type;
-        $insert_array['post_id']=$post_id;
+        $insert_array['post_id']=intval($post_id);
+        $insert_array['project_id']=intval($project_id);
         $insert_array['if_read'] = 0;
 
         foreach($users as $u_id){
             $insert_array['user_id']=$u_id['u_id'];
+            var_dump($insert_array);
             $this->db->insert('notification', $insert_array);
         }
         return $this->db->insert_id();

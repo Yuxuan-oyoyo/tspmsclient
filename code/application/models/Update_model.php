@@ -38,8 +38,8 @@ class Update_model extends CI_Model{
 
     public function delete_($update_id){
         if(isset($update_id)){
-            $query = $this->db->query("delete from updates where update_id = $update_id");
+            return $this->db->query("delete from updates where update_id = $update_id");
         }
-        return null;
+        return false;
     }
 }

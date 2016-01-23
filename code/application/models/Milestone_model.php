@@ -80,9 +80,9 @@ and pr.project_id=pp.project_id and pr.bitbucket_repo_name=?",[$repo_slug]);
     }
     public function delete_($milestone_id){
         if(isset($milestone_id)){
-            $this->db->delete('milestone', array('milestone_id' => $milestone_id));
+            return $this->db->delete('milestone', array('milestone_id' => $milestone_id));
         }
-        return null;
+        return false;
     }
     /*
     public function mark_miss($milestone_id){
