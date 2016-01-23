@@ -17,6 +17,8 @@ class Updates extends CI_Controller{
         $this->load->model("Post_model");
         $this->load->model("Milestone_model");
         $this->load->model("Project_phase_model");
+        $this->load->model("Internal_user_model");
+        $this->load->model("Notification_model");
     }
 
     public function add_new_update($project_id,$current_project_phase_id){
@@ -32,6 +34,9 @@ class Updates extends CI_Controller{
             $insert_update_array['post_id'] =$post_id;
             if($this->Update_model->insert($insert_update_array)==1){
                 $this->session->set_userdata('message', 'New update created successfully.');
+                $change_type = "new update";
+                $users = $this->Internal_user_model->retrieve_all_pm();
+                $this->Notification_model->add_new_post_notifications($post_id,$change_type,$users);
                 redirect('projects/view_updates/'.$project_id);
             }else{
                 $this->session->set_userdata('message', 'An error occurred, please contact administrator.');
@@ -57,6 +62,9 @@ class Updates extends CI_Controller{
             $this->Update_model->delete_($update_id);
             if($this->Post_model->delete_($post_id)==null){
                 $this->session->set_userdata('message', 'Update deleted successfully.');
+                $change_type = "delete update";
+                $users = $this->Internal_user_model->retrieve_all_pm();
+                $this->Notification_model->add_new_post_notifications($post_id,$change_type,$users);
                 redirect('projects/view_updates/'.$project_id);
             }else{
                 $this->session->set_userdata('message', 'An error occurred, please contact administrator.');

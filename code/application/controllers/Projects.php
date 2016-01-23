@@ -27,6 +27,8 @@ class Projects extends CI_Controller {
         $this->load->model("Phase_model");
         $this->load->model("Task_model");
         $this->load->model("Use_case_model");
+        $this->load->model("Notification_model");
+        $this->load->model("Internal_user_model");
     }
 
     public function index()
@@ -54,9 +56,12 @@ class Projects extends CI_Controller {
     }
     public function insert($insert_array){
         $this->Project_model->insert($insert_array);
-        return $this->db->insert_id();
+        $new_project_id = $this->db->insert_id();
+        $change_type = "new project";
+        $users = $this->Internal_user_model->retrieve_all_pm();
+        $this->Notification_model->add_new_project_notifications($new_project_id,$change_type,$users);
+        return $new_project_id;
         //$this->Project_phase_model->create_phases_upon_new_project($project_id);
-
     }
 
     public function create_new_project()
@@ -179,6 +184,9 @@ class Projects extends CI_Controller {
                 }
                 if ($this->Project_model->update($original_array) == 1) {
                     $this->session->set_userdata('message', 'Project has been edited successfully.');
+                    $change_type = "edit project";
+                    $users = $this->Internal_user_model->retrieve_all_pm();
+                    $this->Notification_model->add_new_project_notifications($project_id,$change_type,$users);
                     redirect('projects/view_dashboard/'.$project_id);
                 }else{
                     $this->session->set_userdata('message', 'Cannot edit project,please contact administrator.');

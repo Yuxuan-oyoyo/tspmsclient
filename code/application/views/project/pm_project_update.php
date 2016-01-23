@@ -302,7 +302,17 @@ $this->load->view('common/pm_nav', $class);
                         <?=$this->session->userdata('message')?>
                     </div>
                 </div>
-                <?php $this->session->unset_userdata('message') ?>
+                <?php $this->session->unset_userdata('message')?>
+            <?php endif;?>
+            <?php if($this->session->userdata('bb_message')):?>
+                <div class="form-group">
+                    <div class="alert alert-danger " role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+                        </button>
+                        <?=$this->session->userdata('bb_message')?>
+                    </div>
+                </div>
+                <?php $this->session->unset_userdata('bb_message')?>
             <?php endif;?>
             <div class="col-lg-7">
 
