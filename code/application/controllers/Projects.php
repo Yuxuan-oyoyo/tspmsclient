@@ -20,7 +20,9 @@ class Projects extends CI_Controller {
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->model("Project_model");
+        $this->load->model("Chat_model");
         $this->load->model("Customer_model");
+        $this->load->model("Internal_user_model");
         $this->load->model("Project_phase_model");
         $this->load->model("Milestone_model");
         $this->load->model("Update_model");
@@ -29,6 +31,8 @@ class Projects extends CI_Controller {
         $this->load->model("Use_case_model");
         $this->load->model("Notification_model");
         $this->load->model("Internal_user_model");
+
+        $this->load->library('BB_issues');
     }
 
     public function index()
@@ -39,7 +43,15 @@ class Projects extends CI_Controller {
     public function list_all($include_hidden=false){
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
             $projects = $this->Project_model->retrieve_all_ongoing();
-            $this->load->view('project/pm_all_ongoing_projects',$data=array('projects'=>$projects));
+            $no_of_issues=[];
+            foreach($projects as $p){
+                if($p['bitbucket_repo_name']!= null) {
+                    if(isset($this->bb_issues->retrieveIssues($p['bitbucket_repo_name'],null)['count'])) {
+                        $no_of_issues[$p['project_id']] =$this->bb_issues->retrieveIssues($p['bitbucket_repo_name'],null)['count'] ;
+                    }
+                }
+            }
+            $this->load->view('project/pm_all_ongoing_projects',$data=array('projects'=>$projects,'no_of_issues'=>$no_of_issues));
         }else{
             $this->session->set_userdata('message','You have not login / have no access rights. ');
             redirect('/internal_authentication/login/');
@@ -106,18 +118,34 @@ class Projects extends CI_Controller {
                     'bitbucket_repo_name' => $this->input->post("bitbucket_repo_name"),
                     'project_value' => $this->input->post("project_value"),
                     'priority' => $this->input->post("priority"),
-                    'current_project_phase_id' => 0
+                    'current_project_phase_id' => 0,
+                    'pm_id'=>$this->input->post("pm_id")
                 );
+                $initial_chat = [
+                    "customer_id" => $c_id,
+                    "pm_id" => $this->input->post("pm_id"),
+                    "body" => "Hi, I am the project manager for your project [".$this->input->post("project_title")."]. Please contact me if you have any problem."
+                ];
+
                 if ($this->insert($insert_array)) {
-                    $this->session->set_userdata('message', 'New project has been created successfully.');
+                    if($this->Chat_model->initialize_new($initial_chat)>0) {
+                        $this->session->set_userdata('message', 'New project and chat thread has been created successfully.');
+                    }else{
+                        $this->session->set_userdata('message', 'New project and  has been created successfully.Error when creating chat thread.');
+                    }
                     redirect('projects/list_all');
                 } else {
                     $this->session->set_userdata('message', 'Cannot create new project,please contact administrator.');
-                    $this->load->view('project/pm_project_new', $data = ["customers" => $this->Customer_model->retrieveAll()]);
+                    $this->load->view('project/pm_project_new', $data = ["customers" => $this->Customer_model->retrieveAll(),
+                        "pms"=>$this->Internal_user_model->retrieve_by_type("PM")
+
+                    ]);
                 }
 
             } else {
-                $this->load->view('project/pm_project_new', $data = ["customers" => $this->Customer_model->retrieveAll()]);
+                $this->load->view('project/pm_project_new', $data = ["customers" => $this->Customer_model->retrieveAll(),
+                    "pms"=>$this->Internal_user_model->retrieve_by_type("PM")
+                ]);
             }
         }else{
             $this->session->set_userdata('message','You have not login / have no access rights. ');
@@ -140,7 +168,8 @@ class Projects extends CI_Controller {
                 $data=["project"=>$this->Project_model->retrieve_by_id($project_id),
                     "customers"=>$this->Customer_model->retrieveAll(),
                     "tags"=>json_encode($this->Project_model->getTags()),
-                    "phases"=>$this->Project_phase_model->retrievePhaseDef()
+                    "phases"=>$this->Project_phase_model->retrievePhaseDef(),
+                    "pms"=>$this->Internal_user_model->retrieve_by_type("PM")
                 ]);
         }else{
             $this->session->set_userdata('message','You have not login / have no access rights. ');
@@ -157,11 +186,20 @@ class Projects extends CI_Controller {
                 $name_array = ["c_id", "project_title"
                     , "project_description", "tags", "remarks"
                     , "file_repo_name", "priority"
-                    , "bitbucket_repo_name", "project_value", "staging_link", "production_link", "customer_preview_link"];
+                    , "bitbucket_repo_name", "project_value", "staging_link", "production_link", "customer_preview_link","pm_id"];
                 $input = $this->input->post($name_array, true);
-                $customer_option = $this->input->post('customer-option');
+                $customer_option = $this->input->post('customer_option');
+
                 if ($customer_option == 'from-existing') {
                     $input['c_id'] = $this->input->post('c_id');
+                    if($original_array['c_id']!== $this->input->post('c_id')){
+                        $initial_chat = [
+                            "customer_id" => $this->input->post('c_id'),
+                            "pm_id" => $this->input->post("pm_id"),
+                            "body" => "Hi, I am the project manager for your project [".$this->input->post("project_title")."]. Please contact me if you have any problem."
+                        ];
+                        $this->Chat_model->initialize_new($initial_chat);
+                    }
                 } else {
                     $customer_name_array = ["title", "first_name"
                         , "last_name", "company_name", "hp_number"
@@ -174,7 +212,14 @@ class Projects extends CI_Controller {
                         echo "something wrong happen when creating customer";
                     } else {
                         $input['c_id'] = $new_customer_id;
+                        $initial_chat = [
+                            "customer_id" => $new_customer_id,
+                            "pm_id" => $this->input->post("pm_id"),
+                            "body" => "Hi, I am the project manager for your project [".$this->input->post("project_title")."]. Please contact me if you have any problem."
+                        ];
+                        $this->Chat_model->initialize_new($initial_chat);
                     }
+
                 }
 
                 foreach ($input as $key => $value) {
@@ -329,7 +374,17 @@ class Projects extends CI_Controller {
 
     public function dev_page(){
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="Developer") {
-            $data["projects"]=$this->Project_model->retrieve_all_ongoing();
+            $projects=$this->Project_model->retrieve_all_ongoing();
+            $no_of_issues=[];
+            foreach($projects as $p){
+                if($p['bitbucket_repo_name']!= null) {
+                    if(isset($this->bb_issues->retrieveIssues($p['bitbucket_repo_name'],null)['count'])) {
+                        $no_of_issues[$p['project_id']] =$this->bb_issues->retrieveIssues($p['bitbucket_repo_name'],null)['count'] ;
+                    }
+                }
+            }
+            $data["projects"]=$projects;
+            $data["no_of_issues"]=$no_of_issues;
             $this->load->view('project/developer_dashboard',$data);//to add developer page
         }else{
             $this->session->set_userdata('message','You have not login / have no access rights. ');

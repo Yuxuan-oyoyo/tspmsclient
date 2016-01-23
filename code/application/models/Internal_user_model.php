@@ -91,4 +91,14 @@ class Internal_user_model extends CI_Model
         $query = $this->db->query("SELECT * FROM internal_user where type='PM'");
         return $query->result_array();
     }
+    public function retrieve_by_type($type){
+
+        if(isset($type)){
+            $query = $this->db->get_where("internal_user",["type"=>$type]);
+            if($query->num_rows()>0){
+                return $query->result_array();
+            }
+        }
+        return null;
+    }
 }
