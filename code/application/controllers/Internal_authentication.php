@@ -46,7 +46,7 @@ class Internal_authentication extends CI_Controller {
                         $this->session->set_userdata('internal_type', $user['type']);
                         //redirect to successpage
                         if($user['type']=='PM') {
-                            redirect('/projects/list_all/');
+                            redirect('/dashboard');
                         }else{
                             redirect('/projects/dev_page');
                         }
