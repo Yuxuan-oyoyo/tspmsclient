@@ -180,7 +180,7 @@ function sortTasksByDaysLeft($a, $b) {
                         <?php
                         if($current_phase_name!=='Ended'){
                         ?>
-                            <button class="btn btn-default btn-small pull-right" data-toggle="modal" data-target="#newTaskModal"><i class="fa fa-plus"></i></button>
+                            <button class="btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#newTaskModal"><i class="fa fa-plus"></i></button>
                         <?php
                         }
                         ?>
