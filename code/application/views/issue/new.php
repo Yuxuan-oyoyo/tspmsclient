@@ -18,10 +18,7 @@ $user = $user;
 ?>
 <!DOCTYPE html>
 <html>
-<?php
-//$repo_slug = $repo_slug;
-//$filter="status[]=new&status[]=open";
-?>
+
 <head lang="en">
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
@@ -33,6 +30,7 @@ $user = $user;
 
 <?php
 $class = [
+    'dashboard_class'=>'',
     'projects_class'=>'active',
     'message_class'=>'',
     'customers_class'=>'',
@@ -92,14 +90,16 @@ if($this->session->userdata('internal_type')=='Developer') {
                 </div>
             </div>
             <div class="form-part">
-                <div class="form-label">Status<span class="cmpl"></span></div>
+                <div class="form-label">Workflow</div>
                 <div class="form-input">
-                    <?php $status=[
-                        "new","to develop","to test","to deploy"
-                    ]?>
-                    <select name="status" class="form-control">
-                        <?php foreach($status as $k):?>
-                            <option value="<?=$k?>"><?=ucwords($k)?></option>
+                    <select name="workflow" class="form-control">
+                        <?php $server_workflow = ["to develop","to test","ready for deployment","to deploy"];?>
+                        <?php foreach($server_workflow as $s):?>
+                            <?php if($s==$i["workflow"]):?>
+                                <option selected value="<?=$s?>"><?=ucwords($s)?></option>
+                            <?php else:?>
+                                <option value="<?=$s?>"><?=ucwords($s)?></option>
+                            <?php endif?>
                         <?php endforeach?>
                     </select>
                 </div>
@@ -165,16 +165,20 @@ if($this->session->userdata('internal_type')=='Developer') {
                         }
                     }
                     ?>
+                    <?php if (empty($milestone_options)):?>
+                        <div><i>No milestone defined. Please add new use cases in project management page</i></div>
+                    <?php else:?>
                     <select name="milestone" class="form-control">
                         <option value="nil">NIL</option>
                         <?php foreach($milestone_options as $key=>$value):?>
                            <option value="<?=$key?>"><?=$value?></option>
                         <?php endforeach?>
                     </select>
+                    <?php endif;?>
                 </div>
             </div>
             <div class="form-part">
-                <div class="form-label">Deadline</div>
+                <div class="form-label">Deadline <span class="cmpl"></span></div>
                 <script>
                     $(document).ready(function() {
                         $('.datepicker').datepicker({

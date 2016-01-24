@@ -87,6 +87,10 @@ class Internal_user_model extends CI_Model
         return null;
     }
 
+    public function retrieve_all_pm(){
+        $query = $this->db->query("SELECT * FROM internal_user where type='PM'");
+        return $query->result_array();
+    }
     public function retrieve_by_type($type){
 
         if(isset($type)){
