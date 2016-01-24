@@ -26,13 +26,10 @@ class Notification_model extends CI_Model{
 
     public function retrieve_unread_notification($user_id){
         if(isset($user_id)){
-            $query = $this->db->query(
-                "SELECT * FROM notification where if_read = 0 AND user_id=?",
-                [$user_id]
-            );
-            if( $query->num_rows()>0){
-                return $query->row_array();
-            }
+            $sql = 'SELECT * from notification where user_id ='.$user_id;
+            $query=$this->db->query($sql);
+            $notifications = $query->result_array();
+            return $notifications;
         }
         return null;
     }
