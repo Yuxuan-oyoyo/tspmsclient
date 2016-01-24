@@ -137,6 +137,7 @@ if($this->session->userdata('internal_type')=='Developer') {
             <div class="form-input">
                 <select name="workflow" class="form-control">
                     <?php $server_workflow = ["to develop","to test","ready for deployment","to deploy"];?>
+                    <option value="default workflow">NIL</option>
                     <?php foreach($server_workflow as $s):?>
                         <?php if($s==$i["workflow"]):?>
                             <option selected value="<?=$s?>"><?=ucwords($s)?></option>
