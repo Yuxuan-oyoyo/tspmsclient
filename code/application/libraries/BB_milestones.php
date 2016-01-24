@@ -134,20 +134,21 @@ class BB_milestones {
         $token = $CI->bb_shared->getDefaultOauthToken();
         $endpoint = $this->setEndpoint($repo_slug)."/".$id;
         $parameters["access_token"] = $token;
-        $_trial = 2;
+        $_trial = 1;
         while ($_trial > 0) {
             $_trial -= 1;/*IMPORTANT*/
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $endpoint);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($parameters));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
             curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
-            $response = curl_exec($ch);
+            //$response = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
+            //curl_close($ch);
             //var_dump($_trial);
-            /*debug-------------------------------------------
+            //debug-------------------------------------------
            curl_setopt($ch, CURLOPT_VERBOSE, true);
 
            $verbose = fopen('php://temp', 'w+');
@@ -156,14 +157,14 @@ class BB_milestones {
            rewind($verbose);
            $verboseLog = stream_get_contents($verbose);
            echo "Verbose information:\n<pre>", htmlspecialchars($verboseLog), "</pre>\n";
-           debug --------------------------------------------*/
+           //debug --------------------------------------------*/
             if ($code == 204) return true;/*IMPORTANT*/
             elseif($code >400 && $code< 404) {
                 //var_dump("re-authen");
                 $data['access_token'] = $CI->bb_shared->requestFromServer();
             }
         }
-        return false;
+        die();
     }
 
 }

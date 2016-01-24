@@ -92,6 +92,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                 <div class="form-label">Workflow</div>
                 <div class="form-input">
                     <select name="workflow" class="form-control">
+                        <option value="default workflow">NIL</option>
                         <?php $server_workflow = ["to develop","to test","ready for deployment","to deploy"];?>
                         <?php foreach($server_workflow as $s):?>
                             <?php if($s==$i["workflow"]):?>

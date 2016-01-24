@@ -18,6 +18,7 @@ class Scheduled_tasks extends CI_Controller{
         $this->load->library("BB_milestones");
         $db_milestones = $this->Milestone_model->retrieve_all();
         $m_ids = [];/*reponame=>mid*/
+        $stats = ["added"=>0,"deleted"=>0];
         foreach($db_milestones as $m) {
             if(isset($m["bitbucket_repo_name"])) {//make sure there is a repo name
                 if (isset($m_ids[$m["bitbucket_repo_name"]])) {
@@ -27,28 +28,32 @@ class Scheduled_tasks extends CI_Controller{
                 }
             }
         }
-        foreach($m_ids as $repo_slug=>$id_arr){
-            $bb_milestones = $this->BB_milestones->getAllMilestones($repo_slug);
-            foreach($bb_milestones as $id=>$name){//search for extra and remove
-                if(!in_array($name, $id_arr)){
-                    $delete_outcome = $this->BB_milestone->deleteMilestone($repo_slug, $id);
+        foreach($m_ids as $repo_slug=>$id_arr){// $id_arr=[id1, id2, id3]
+            $bb_milestones = $this->bb_milestones->getAllMilestones($repo_slug);
+            $bb_milestone_names = [];
+            foreach($bb_milestones as $bb_m){//search for extra and remove
+                if(!isset($id_arr[$bb_m["name"]])){
+                    echo "deleting milestone from bitbucket    ".$bb_m["name"];
+                    $this->bb_milestones->deleteMilestone($repo_slug, $bb_m["id"]);
+                    $stats["deleted"] ++;
                 }
+                array_push($bb_milestone_names,$bb_m["name"]);
             }
-            $new_milestones = array_diff($id_arr, array_values($bb_milestones));
+            //send new milestone ids
+            $new_milestones = array_diff($id_arr, $bb_milestone_names);
             foreach($new_milestones as $m){
-
+                echo "adding milestone to bitbucket   ".$m;
+                $this->bb_milestones->postMilestone($repo_slug,$m);
+                $stats["added"] ++;
             }
 
         }
-
-
     }
     /**
      * List all issues of given repo page
      * @param null $repo_slug
      */
     public function list_all($repo_slug=null){
-
         $user_id = $this->session->userdata('internal_uid');
         if(isset($user_id)) {
 
