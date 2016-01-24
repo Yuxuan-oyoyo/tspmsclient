@@ -199,7 +199,7 @@ function sortTasksByDaysLeft($a, $b) {
                                 <?php
                                     if(!isset($t['start_datetime'])){
                                 ?>
-                                        <td><button class="btn" onclick="startTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-play"></button></td>
+                                        <td><button class="btn btn-sm" onclick="startTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-play"></button></td>
                                 <?php
                                     }else{
                                 ?>
