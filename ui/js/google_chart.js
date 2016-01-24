@@ -45,7 +45,19 @@ function drawChart() {
         ['3', 1.6, 'tooltip pending'],
         ['4', 0.5, 'tooltip pending'],
         ['5', 0.8, 'tooltip pending'],
-        ['7', 1.5, 'tooltip pending']
+		['11', 0.8, 'tooltip pending'],
+        ['13', 1.6, 'tooltip pending'],
+        ['14', 0.5, 'tooltip pending'],
+        ['15', 0.8, 'tooltip pending'],
+        ['17', 1.5, 'tooltip pending'],
+        ['23', 1.6, 'tooltip pending'],
+        ['24', 0.5, 'tooltip pending'],
+        ['25', 0.8, 'tooltip pending'],
+		['31', 0.8, 'tooltip pending'],
+        ['33', 1.6, 'tooltip pending'],
+        ['34', 0.5, 'tooltip pending'],
+        ['35', 0.8, 'tooltip pending'],
+        ['37', 1.5, 'tooltip pending']
     ]);
 
 
@@ -85,7 +97,9 @@ function drawChart() {
 
     var options3 = {
         title: 'Phase Analysis Chart',
-        vAxis: {
+		//legend:'bottom',
+        chartArea: { width: '90%',left: "5%" , height: '70%'},
+		vAxis: {
         },
         hAxis: {
         },
@@ -108,8 +122,8 @@ function drawChart() {
 
     var options4 = {
         'title': 'Issue Metrics Chart',
-        'width': 400,
-        'height': 300,
+		chartArea: { left: "5%"},
+        //'height': 300,
         tooltip: {
             isHtml: true
         },
@@ -124,9 +138,7 @@ function drawChart() {
     // Set chart options
     var options5 = {
         'title': 'Stage percentile analysis',
-        'width': 400,
-        'height': 300,
-
+		chartArea: { width: '100%',left: "15%",height: "80%" },
     };
     // Instantiate and draw our chart, passing in some options.
 
