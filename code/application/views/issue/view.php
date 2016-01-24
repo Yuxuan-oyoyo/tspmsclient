@@ -42,6 +42,7 @@ $project = $ci->Project_model->retrieve_by_repo_slug($repo_slug);
 <body>
 <?php
 $class = [
+    'dashboard_class'=>'',
     'projects_class'=>'active',
     'message_class'=>'',
     'customers_class'=>'',

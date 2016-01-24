@@ -45,6 +45,7 @@ function _ago($tm,$rcs = 0) {
 
 <?php
 $class = [
+    'dashboard_class'=>'',
     'projects_class'=>'active',
     'message_class'=>'',
     'customers_class'=>'',

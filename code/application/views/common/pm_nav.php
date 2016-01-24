@@ -15,8 +15,8 @@
     </div>
     <!-- Top Menu Items -->
     <ul class="nav navbar-nav">
-        <li>
-            <a href="#"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+        <li  class="<?=$dashboard_class?>">
+            <a href="<?=base_url().'dashboard'?>"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
         </li>
         <li  class="<?=$projects_class?>">
             <a href="<?=base_url().'projects/list_all'?>"><i class="fa fa-fw fa-bar-chart-o"></i> Projects</a>

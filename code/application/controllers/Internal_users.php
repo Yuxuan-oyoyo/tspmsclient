@@ -129,4 +129,7 @@ class Internal_users extends CI_Controller
     public function delete($cid){
         $this->Internal_user_model->delete($cid);
     }
+    public function retrieve_all_pm(){
+        return $this->Internal_user_model->retrieve_all_pm();
+    }
 }

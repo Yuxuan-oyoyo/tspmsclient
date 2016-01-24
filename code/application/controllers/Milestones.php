@@ -19,6 +19,8 @@ class Milestones extends CI_Controller{
         $this->load->model("Post_model");
         $this->load->model("Update_model");
         $this->load->model("Project_phase_model");
+        $this->load->model("Internal_user_model");
+        $this->load->model("Notification_model");
     }
 
     public function add_new_milestone($project_id,$current_project_phase_id){
@@ -47,6 +49,10 @@ class Milestones extends CI_Controller{
                 }else{
                     $this->session->set_userdata('message', 'New milestone created successfully.');
                 }
+
+                $change_type = "new milestone";
+                $users = $this->Internal_user_model->retrieve_all_pm();
+                $this->Notification_model->add_new_post_notifications($project_id,$post_id,$change_type,$users);
                 redirect('projects/view_updates/'.$project_id);
             }else{
                 $this->session->set_userdata('message', 'An error occurred, please contact administrator.');
@@ -87,6 +93,9 @@ class Milestones extends CI_Controller{
             $new_update_array['posted_by']=$this->session->userdata('internal_username');
             $new_update_array['post_id'] =$post_id;
             if($this->Update_model->insert($new_update_array)==1){
+                $change_type = "complete milestone";
+                $users = $this->Internal_user_model->retrieve_all_pm();
+                $this->Notification_model->add_new_post_notifications($project_id,$post_id,$change_type,$users);
                 redirect('projects/view_updates/'.$project_id);
             }
         }else{
@@ -99,9 +108,11 @@ class Milestones extends CI_Controller{
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
             $m = $this->Milestone_model->retrieve_by_id($milestone_id);
             $post_id = $m['post_id'];
-            $this->Milestone_model->delete_($milestone_id);
-            if($this->Post_model->delete_($post_id)==null){
+            if($this->Milestone_model->delete_($milestone_id)){
                 $this->session->set_userdata('message', 'Milestone deleted successfully.');
+                $change_type = "delete milestone";
+                $users = $this->Internal_user_model->retrieve_all_pm();
+                $this->Notification_model->add_new_post_notifications($project_id,$post_id,$change_type,$users);
                 redirect('projects/view_updates/'.$project_id);
             }else{
                 $this->session->set_userdata('message', 'An error occurred, please contact administrator.');

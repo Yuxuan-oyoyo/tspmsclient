@@ -32,6 +32,7 @@ $user_id = $user_id;
 <body>
 <?php
 $class = [
+    'dashboard_class'=>'',
     'projects_class'=>'',
     'message_class'=>'active',
     'customers_class'=>'',

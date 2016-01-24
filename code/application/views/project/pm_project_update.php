@@ -180,6 +180,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 <body>
 <?php
 $class = [
+    'dashboard_class'=>'',
     'projects_class'=>'active',
     'message_class'=>'',
     'customers_class'=>'',
@@ -302,7 +303,7 @@ $this->load->view('common/pm_nav', $class);
                         <?=$this->session->userdata('message')?>
                     </div>
                 </div>
-                <?php $this->session->unset_userdata('message') ?>
+                <?php $this->session->unset_userdata('message')?>
             <?php endif;?>
             <div class="col-lg-7">
 
