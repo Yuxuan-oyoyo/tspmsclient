@@ -13,6 +13,7 @@ class Issue_log_model extends CI_Model{
         parent::__construct();
         $this->load->helper("date");
         $this->load->library("session");
+
     }
     public function insert($issue_array){
         $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
@@ -25,13 +26,11 @@ class Issue_log_model extends CI_Model{
         if( $past_query->num_rows()>0){
             $past_status =  $past_query->row_array()["status"];
         }
-        //var_dump($past_status);
-        //die(var_dump($issue_array));
+        //check if the issue has been created before
         if(is_null($past_status)|| $past_status!=$issue_array["status"]){
             $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
             $issue_array['date_updated'] = $date->format('c');
             $this->db->insert('issue_log', $issue_array);
-            //die(var_dump($this->db->error()));
         }
     }
 }

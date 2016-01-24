@@ -356,14 +356,22 @@ class BB_issues {
         $ci =&get_instance();
         $ci->load->library('session');
         $ci->load->model('logs/Issue_log_model');
+        $ci->load->model("Internal_user_model");
         $user_id = $ci->session->userdata('internal_uid');
         $log_array=[
             "issue_id"=>$issue_array["local_id"],
             "repo_slug"=>$repo_slug,
             "updated_by"=>$user_id,
             "title"=>$issue_array["title"],
-            "status"=>$issue_array["status"]
+            "status"=>$issue_array["status"],
+            "date_created"=>$issue_array["utc_created_on"]
         ];
+        //convert assignee from bb username to id
+        $assignee_record = $ci->Internal_user_model->retrieve_by_bb_username($issue_array["responsible"]["username"]);
+        if($assignee_record!==null){
+
+            $log_array["assignee"] = $assignee_record["u_id"];
+        }
         $ci->Issue_log_model->insert($log_array);
 
     }

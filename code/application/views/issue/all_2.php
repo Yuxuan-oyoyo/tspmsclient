@@ -130,7 +130,11 @@ if($this->session->userdata('internal_type')=='Developer') {
                                 <li><a href="./<?=$repo_slug?>?title=~[ready for deployment]">Ready for Deployment</a></li>
                             </ul>
                         </div>
-                        <a class="btn btn-default" style="margin-right:15px" href="./<?=$repo_slug?>?responsible=luning1994">My Issues</a>
+                        <?php
+                            $user_id = $ci->session->userdata('internal_uid');
+                            $logged_in_user = $ci->Internal_user_model->retrieve($user_id);
+                        ?>
+                        <a class="btn btn-default" style="margin-right:15px" href="./<?=$repo_slug?>?responsible=<?=$logged_in_user["bb_username"]?>">My Issues</a>
                     </div>
                 </div>
                 <div style="float: right">

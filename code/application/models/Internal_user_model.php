@@ -76,6 +76,17 @@ class Internal_user_model extends CI_Model
         return null;
     }
 
+    public function retrieve_by_bb_username($bb_username){
+
+        if(isset($bb_username)){
+            $query = $this->db->get_where("internal_user",["bb_username"=>$bb_username]);
+            if($query->num_rows()>0){
+                return $query->row_array();
+            }
+        }
+        return null;
+    }
+
     public function retrieve_by_email($email){
 
         if(isset($email)){
