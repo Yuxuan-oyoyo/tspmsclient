@@ -15,15 +15,24 @@ class Notifications extends CI_Controller{
         $this->load->helper("date");
         $this->load->model("Notification_model");
         $this->load->model("Internal_user_model");
+        $this->load->model("Post_model");
     }
 
     public function check_unread_notification($internal_uid){
         return $this->Notification_model->retrieve_unread_notification($internal_uid);
     }
 
-    public function add_new_post_notifications(){
-        $users = $this->Internal_user_model->retrieve_all_pm();
-        $this->Notification_model->add_new_post_notifications(84,"test",$users);
+    public function read_notification($n_id){
+        $n = $this->Notification_model->retrieve_by_id($n_id);
+        $project_id = $n['project_id'];
+        $redirect = $n['redirect'];
+        $change_type = $n['change_type'];
+        if(strpos($change_type, 'Deleted') !== false){
+            $post_id = $n['post_id'];
+            $this->Post_model->delete_($post_id);
+        }
+        $this->Notification_model->delete_($n_id);
+        redirect('projects/'.$redirect.'/'.$project_id);
     }
 /*
     public function add_new_project_notifications($project_id,$change_type){

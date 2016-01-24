@@ -37,18 +37,17 @@ class Notification_model extends CI_Model{
         return null;
     }
 
-    public function mark_as_read($notification_id){
+    public function delete_($notification_id){
         if(isset($notification_id)){
-            $update_array = $this->retrieve_by_id($notification_id);
-            $update_array['if_read'] = 1;
-            return $this->db->update('notification', $update_array, array('notification_id' => $update_array['notification_id']));
+            return $this->db->delete('notification', array('notification_id' => $notification_id));
         }
+        return false;
     }
 
-    public function add_new_project_notifications($project_id,$change_type,$users){
+    public function add_new_project_notifications($project_id,$change_type,$redirect,$users){
         $insert_array['change_type']=$change_type;
+        $insert_array['redirect']=$redirect;
         $insert_array['project_id']=$project_id;
-        $insert_array['if_read'] = 0;
 
         foreach($users as $u_id){
             $insert_array['user_id']=$u_id['u_id'];
@@ -57,15 +56,14 @@ class Notification_model extends CI_Model{
         return $this->db->insert_id();
     }
 
-    public function add_new_post_notifications($project_id,$post_id,$change_type,$users){
+    public function add_new_post_notifications($project_id,$post_id,$change_type,$redirect,$users){
         $insert_array['change_type']=$change_type;
+        $insert_array['redirect']=$redirect;
         $insert_array['post_id']=intval($post_id);
         $insert_array['project_id']=intval($project_id);
-        $insert_array['if_read'] = 0;
 
         foreach($users as $u_id){
             $insert_array['user_id']=$u_id['u_id'];
-            var_dump($insert_array);
             $this->db->insert('notification', $insert_array);
         }
         return $this->db->insert_id();
