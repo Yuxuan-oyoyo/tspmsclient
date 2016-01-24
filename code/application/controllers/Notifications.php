@@ -16,10 +16,53 @@ class Notifications extends CI_Controller{
         $this->load->model("Notification_model");
         $this->load->model("Internal_user_model");
         $this->load->model("Post_model");
+        $this->load->model("Project_model");
     }
 
     public function check_unread_notification($internal_uid){
-        return $this->Notification_model->retrieve_unread_notification($internal_uid);
+        $notifications = $this->Notification_model->retrieve_unread_notification($internal_uid);
+        //var_dump($notifications);
+        if(sizeof($notifications)!==0){
+            echo
+            '<div class="notification-heading"><h4 class="menu-title">Notifications</h4>'
+            .'</div>'
+            .'<li class="divider"></li>'
+            .'<div class="notifications-wrapper">';
+
+            foreach($notifications as $n){
+                $project_id = $n['project_id'];
+                $p = $this->Project_model->retrieve_title($project_id);
+                 echo
+                '<a class="content" href="'
+                .base_url()."Notifications/read_notification/".$n["notification_id"]
+                .'">'
+                .'<div class="notification-item-green">'
+                .'<h4 class="item-info-large">'
+                .$n['change_type']
+                .'</h4>'
+                .'<p class="item-title">'
+                .$p['project_title']
+                .'</p>'
+                .'</div>'
+                .'</a>';
+            }
+            echo
+            '</div>'
+            .'<li class="divider"></li>';
+        }else{
+            echo
+            '<div class="notification-heading"><h4 class="menu-title">No new notifications</h4>';
+        }
+
+    }
+
+    public function get_notification_number($internal_uid){
+        $notifications = $this->Notification_model->retrieve_unread_notification($internal_uid);
+        if(sizeof($notifications)!==0){
+            echo sizeof($notifications);
+        }else{
+            return null;
+        }
     }
 
     public function read_notification($n_id){
@@ -34,40 +77,5 @@ class Notifications extends CI_Controller{
         $this->Notification_model->delete_($n_id);
         redirect('projects/'.$redirect.'/'.$project_id);
     }
-/*
-    public function add_new_project_notifications($project_id,$change_type){
-        $insert_array['change_type']=$change_type;
-        $insert_array['project_id']=$project_id;
-        $user_ids = $this->Internal_user_model->retrieve_all_pm();
-
-        foreach($user_ids as $u_id){
-            $insert_array['user_id']=$u_id;
-            if($this->Notification_model->insert($insert_array)==1){
-                echo "successful!";
-            }
-        }
-    }
-
-    public function add_new_post_notifications($post_id,$change_type){
-        $insert_array['change_type']=$change_type;
-        $insert_array['post_id']=$post_id;
-        $user_ids = $this->Internal_user_model->retrieve_all_pm();
-
-        foreach($user_ids as $u_id){
-            $insert_array['user_id']=$u_id;
-            $this->Notification_model->insert($insert_array);
-        }
-    }
-
-    public function mark_as_read($notification_id){
-        if(isset($notification_id)){
-            $update_array = $this->Notification_model->retrieve_by_id($notification_id);
-            if($this->Notification_model->update($update_array)==1){
-                $this->session->set_userdata('message', 'Task updated successfully.');
-            }
-            echo "successful";
-        }
-    }
-*/
 
 }
