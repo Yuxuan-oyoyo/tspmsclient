@@ -299,8 +299,12 @@ class Projects extends CI_Controller {
             if(intval($project['current_project_phase_id'])===0){
                 $current_phase_name = "Lead";
             }else{
-                $current_phase_name = $this->Project_phase_model->retrieve_phase_name_by_id($project['current_project_phase_id']);
-                $current_phase_name = $current_phase_name[0]['phase_name'];
+                if(intval($project['current_project_phase_id'])===-1){
+                    $current_phase_name = 'Ended';
+                }else{
+                    $current_phase_name = $this->Project_phase_model->retrieve_phase_name_by_id($project['current_project_phase_id']);
+                    $current_phase_name = $current_phase_name[0]['phase_name'];
+                }
             }
             $newTasks = array();
             foreach($tasks as $t){

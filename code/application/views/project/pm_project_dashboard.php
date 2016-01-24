@@ -177,7 +177,14 @@ function sortTasksByDaysLeft($a, $b) {
                 <div class="panel info-panel" >
                     <div class="panel-heading">
                         Task List
-                        <button class="btn btn-default btn-small pull-right" data-toggle="modal" data-target="#newTaskModal"><i class="fa fa-plus"></i></button>
+                        <?php
+                        if($current_phase_name!=='Ended'){
+                        ?>
+                            <button class="btn btn-default btn-small pull-right" data-toggle="modal" data-target="#newTaskModal"><i class="fa fa-plus"></i></button>
+                        <?php
+                        }
+                        ?>
+
                     </div>
                     <div class="panel-body" style="height: 370px;overflow-y: scroll;" >
                     <table class="table table-condensed">
