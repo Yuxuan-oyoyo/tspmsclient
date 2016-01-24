@@ -186,7 +186,7 @@ function sortTasksByDaysLeft($a, $b) {
                         ?>
 
                     </div>
-                    <div class="panel-body" style="height: 370px;overflow-y: scroll;" >
+                    <div class="panel-body" style="height: 380px;overflow-y: scroll;" >
                     <table class="table table-condensed">
                         <?php
                             usort($tasks, 'sortTasksByDaysLeft');
@@ -207,9 +207,9 @@ function sortTasksByDaysLeft($a, $b) {
                                 <?php
                                     }
                                 ?>
-                                <td><a href="<?=base_url().'Tasks/edit_task/'.$project['project_id'].'/'.$t["task_id"]?>" class="btn btn-primary" type="button" ><i class="fa fa-pencil-square-o"></i></a></td>
-                                <td><button class="btn btn-success" onclick="completeTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-check"></button></td>
-                                <td><button class="btn btn-danger" onclick="deleteTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-trash"></button></td>
+                                <td><a href="<?=base_url().'Tasks/edit_task/'.$project['project_id'].'/'.$t["task_id"]?>" class="btn btn-sm  btn-primary" type="button" ><i class="fa fa-pencil-square-o"></i></a></td>
+                                <td><button class="btn btn-sm btn-success" onclick="completeTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-check"></i></button></td>
+                                <td><button class="btn btn-sm  btn-danger" onclick="deleteTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-trash"></i></button></td>
                             </tr>
                         <?php
                         }
