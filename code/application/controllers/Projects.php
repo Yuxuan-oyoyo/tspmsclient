@@ -162,23 +162,25 @@ class Projects extends CI_Controller {
     }
      */
     /*changed function name to edit*/
-    public function edit($project_id){
-        if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
+    public function edit($project_id=null){
+        if(!isset($project_id)) {show_404();die();}
+        if ($this->session->userdata('internal_uid') && $this->session->userdata('internal_type') == "PM") {
             $this->load->library('form_validation');
             $this->load->view('project/pm_project_edit',
-                $data=["project"=>$this->Project_model->retrieve_by_id($project_id),
-                    "customers"=>$this->Customer_model->retrieveAll(),
-                    "tags"=>json_encode($this->Project_model->getTags()),
-                    "phases"=>$this->Project_phase_model->retrievePhaseDef(),
-                    "pms"=>$this->Internal_user_model->retrieve_by_type("PM")
+                $data = ["project" => $this->Project_model->retrieve_by_id($project_id),
+                    "customers" => $this->Customer_model->retrieveAll(),
+                    "tags" => json_encode($this->Project_model->getTags()),
+                    "phases" => $this->Project_phase_model->retrievePhaseDef(),
+                    "pms" => $this->Internal_user_model->retrieve_by_type("PM")
                 ]);
-        }else{
-            $this->session->set_userdata('message','You have not login / have no access rights. ');
+        } else {
+            $this->session->set_userdata('message', 'You have not login / have no access rights. ');
             redirect('/internal_authentication/login/');
         }
     }
     /*changed function name to process_edit*/
-    public function process_edit($project_id){
+    public function process_edit($project_id=null){
+        if(!isset($project_id)) {show_404();die();}
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
             $this->load->library('form_validation');
             $this->form_validation->set_rules('username', 'Customer Username', 'is_unique[customer.username]');
@@ -245,7 +247,8 @@ class Projects extends CI_Controller {
             redirect('/internal_authentication/login/');
         }
     }
-    public function project_by_id($project_id){
+    public function project_by_id($project_id=null){
+        if(!isset($project_id)) {show_404();die();}
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
             //TODO: edit title and username/password
             $this->load->view('project/project_details',$data=["project"=>$this->Project_model->retrieve_by_id($project_id),
@@ -261,7 +264,8 @@ class Projects extends CI_Controller {
         ]);
     }
 */
-    public function retrieveDataForProjectUpdatePage($project_id){
+    public function retrieveDataForProjectUpdatePage($project_id=null){
+        if(!isset($project_id)) {show_404();die();}
         //phase
         $project = $this->Project_model->retrieve_by_id($project_id);
         $current_project_phase_id = $project['current_project_phase_id'];
@@ -290,7 +294,8 @@ class Projects extends CI_Controller {
         return $data;
     }
 
-    public function view_dashboard($project_id){
+    public function view_dashboard($project_id=null){
+        if(!isset($project_id)) {show_404();die();}
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
             //phase
             $project = $this->Project_model->retrieve_by_id($project_id);
@@ -333,7 +338,8 @@ class Projects extends CI_Controller {
         //$this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
     }
 
-    public function view_updates($project_id){
+    public function view_updates($project_id=null){
+        if(!isset($project_id)) {show_404();die();}
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
             $data = $this->retrieveDataForProjectUpdatePage($project_id);
             $this->load->view('project/pm_project_update',$data);
@@ -362,6 +368,7 @@ class Projects extends CI_Controller {
     }
 
     public function customer_view($project_id){
+        if(!isset($project_id)) {$this->load->view("errors/html/error_404");die();}
         if($this->session->userdata('Customer_cid')) {
             $project = $this->Project_model->retrieve_by_id($project_id);
             if($project){

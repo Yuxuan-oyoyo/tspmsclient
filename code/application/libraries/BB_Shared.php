@@ -90,5 +90,12 @@ class BB_Shared {
         file_put_contents($this->file_path, $token."\t".(time()+$ttl-$buffer_time), LOCK_EX);
         flush();
     }
+    public function validate_repo_name_with_bb($repo_name=null){
+        if(!isset($repo_name)) return false;
+        $CI =& get_instance();
+        $CI->load->library('BB_issues');
+        $issue = $CI->bb_issues->retrieveIssues($repo_name, null, null, false);
+        return isset($issue)? true:false;
+    }
 
 }
