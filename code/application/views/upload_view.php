@@ -35,14 +35,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     }else{
                         display_upload_form_error(data.message)
                     }
-                },
-                error: function(jqXHR, textStatus, errorThrown)
+                }
+                /* error: function(jqXHR, textStatus, errorThrown)
                 {
                     // Handle errors here
                     display_upload_form_error('Ajax Error:'+textStatus);
                     console.log('ERRORS: ' + textStatus);
                     // STOP LOADING SPINNER
-                }
+                }*/
             });
             disable_upload_form();
         }
@@ -88,7 +88,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 <div class="modal-body">
                     <div class="alert alert-info alert-dismissible" role="alert" id="upload_message_alert">
                     </div>
-                    <form name="upload_image_form" id="upload_image_form" method="post" enctype="multipart/form-data" action="<?='upload/file_upload'?>">
+                    <form name="upload_image_form" id="upload_image_form" method="post" enctype="multipart/form-data" action="<?=base_url().'upload/file_upload'?>">
                         <div class="form-group">
                             <label for="file_input">Select file</label>
                             <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
