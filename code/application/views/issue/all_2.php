@@ -13,8 +13,7 @@
         return $x;
     }
     $ci =&get_instance();
-    $ci->load->model("Project_model");
-    $project = $ci->Project_model->retrieve_by_repo_slug($repo_slug);
+    $project = $project
 ?>
 <head lang="en">
     <?php $this->load->view('common/common_header');?>
@@ -156,6 +155,13 @@ if($this->session->userdata('internal_type')=='Developer') {
                     <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]?>">Clear</a>
                 <?php endif?>
             </div>
+            <?php if (!isset($issues)):?>
+                <div class="alert alert-danger">
+                    <strong>Oh snap!</strong> Bitbucket Issues are not accessible. This is probably caused by incorrect Bitbucket repository Slug.
+                        Please go to <a href="<?=base_url()?>Projects/edit/<?=$project["project_id"]?>" class="alert-link">Project Overview page</a> to update the repository slug.
+
+                </div>
+            <?php else://issues are set?>
             <table class="table table-striped" data-sort-by="updated_on" data-modules="components/follow-list">
                 <thead>
                 <tr>
@@ -258,7 +264,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                                             <img src="https://bitbucket.org/account/<?=$d["responsible"]["username"]?>/avatar/32/?ts=1443338247" alt="" >
                                         </div>
                                     </div>
-                                    <span">
+                                    <span>
                                         <?=strlen($d["responsible"]["display_name"]) > 10 ?
                                             substr($d["responsible"]["display_name"],0,10)."..." : $d["responsible"]["display_name"];?>
                                     </span>
@@ -286,6 +292,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                 <?php endforeach?>
                 </tbody>
             </table>
+
             <div>
                 <div align="center">
                 <ul class="pagination">
@@ -311,6 +318,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                 </ul>
                 </div>
             </div>
+            <?php endif;//end checking if issues are valid?>
         </div>
     </div>
 </div>
@@ -321,7 +329,7 @@ if($this->session->userdata('internal_type')=='Developer') {
 //            var $id = $(this).attr("milestone-id");
 //            if(!$.inArray($id,$ids))
 //            $.ajax({
-//                url: "<?//=base_url().'Issues/ajax_get_milestone_name/'?>//" + $id,
+//                url: "<-?=//base_url().'Issues/ajax_get_milestone_name/';?>//" + $id,
 //                success: function (response) {
 //                    console.log(response);
 //                    if (response != "null") {

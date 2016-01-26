@@ -74,6 +74,7 @@
 </nav>
 
 <script>
+    /* commented out on 25th Jan by ln
     function showNotification() {
         var n_message = new XMLHttpRequest();
         var n_umber = new XMLHttpRequest();
@@ -83,19 +84,20 @@
 
             }
             resource_timer = setTimeout(showNotification, 20000);
-        }
+        };
         n_umber.onreadystatechange = function() {
             if (n_umber.readyState == 4 && n_umber.status == 200) {
                 document.getElementById("n_number").innerHTML = n_umber.responseText;
 
             }
             resource_timer = setTimeout(showNotification, 20000);
-        }
+        };
         n_message.open("GET", "<?=base_url().'Notifications/check_unread_notification/'.$this->session->userdata('internal_uid')?>", true);
         n_umber.open("GET", "<?=base_url().'Notifications/get_notification_number/'.$this->session->userdata('internal_uid')?>", true);
         n_message.send();
         n_umber.send();
     }
+    */
 
-    $(document).ready(showNotification());
+    //$(document).ready(showNotification());
 </script>

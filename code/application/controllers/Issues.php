@@ -59,25 +59,33 @@ class Issues extends CI_Controller {
                         }
                     }
                 }
+                /*Get user bb_username to pass on to the page*/
+                $this->load->model("Internal_user_model");
+                $this->load->model("Project_model");
+                $project = $this->Project_model->retrieve_by_repo_slug($repo_slug);
+                if(!isset($project)) {
+                    show_404();
+                    die();
+                }
                 /*Get all issues*/
                 $response = $this->bb_issues->retrieveIssues($repo_slug,null, $para);
 
-                /*Get user bb_username to pass on to the page*/
-                $this->load->model("Internal_user_model");
                 $data= [
                     "issues"=>$response["issues"],
                     "count" => $response["count"],
                     "num_per_page" =>$num_per_page,
                     "repo_slug"=>$repo_slug,
                     "para_raw"=>$para_raw,
-                    "user" =>$this->Internal_user_model->retrieve($user_id)
+                    "user" =>$this->Internal_user_model->retrieve($user_id),
+                    "project"=>$project
                 ];
+
                 //var_dump($data);
                 //die(var_dump($data["issues"]));
                 $this->session->set_userdata('issue_list'.$repo_slug, $response["issues"]);
                 $this->load->view("issue/all_2", $data);
             }else{
-                //TODO: take user to 404 page
+                show_404();die();
             }
         }else{
             $this->session->set_userdata('message','Please login first.');
