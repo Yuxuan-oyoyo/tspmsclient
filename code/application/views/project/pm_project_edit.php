@@ -125,7 +125,7 @@ $this->load->view('common/pm_nav', $class);
                     var value = $(this).val();
                     $.ajax({
                         url:"<?=base_url()."Ajax_validate/bb_repo_name_ajax"?>",
-                        data:{repo_name:value},
+                        data:{repo_name:value,repo_id:<?=$p['project_id']?>},
                         success: function (result){
                             if(result=="true"){
                                 $("#bitbucket_repo_name_group").removeClass("has-error");

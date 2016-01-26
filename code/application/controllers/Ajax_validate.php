@@ -15,13 +15,14 @@ class Ajax_validate extends CI_Controller {
     }
     public function bb_repo_name_ajax(){
         $repo_name =  $this->input->get("repo_name");
-        echo $this->bb_repo_name($repo_name)? "true":"false";
+        $repo_id =  $this->input->get("repo_id");
+        echo $this->bb_repo_name($repo_name,$repo_id)? "true":"false";
     }
 
-    public function bb_repo_name($repo_name){
+    public function bb_repo_name($repo_name,$repo_id){
         $this->load->model('Project_model');
         $project_record = $this->Project_model->retrieve_by_repo_slug($repo_name);
-        if(!isset($project_record)){
+        if(!isset($project_record) || $project_record['project_id']==$repo_id){
             $this->load->library("BB_shared");
             return $this->bb_shared->validate_repo_name_with_bb($repo_name);
         }
