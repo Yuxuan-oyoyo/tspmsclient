@@ -13,6 +13,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/themes/default/style.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/jstree.min.js"></script>
+
     <script>
         function init(){
             reset_upload();
@@ -35,14 +38,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     }else{
                         display_upload_form_error(data.message)
                     }
-                }
-                /* error: function(jqXHR, textStatus, errorThrown)
+                },
+                error: function(jqXHR, textStatus, errorThrown)
                 {
-                    // Handle errors here
                     display_upload_form_error('Ajax Error:'+textStatus);
                     console.log('ERRORS: ' + textStatus);
-                    // STOP LOADING SPINNER
-                }*/
+                }
             });
             disable_upload_form();
         }
@@ -69,6 +70,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             $("#upload_button").show();
             $("#upload_cancel_button").show();
         }
+
+        $(function() {
+
+
+            $('#tree').jstree({
+                'core' : {
+                    'check_callback' : true,
+                    'data' : [
+                        {
+                            "text" : "Project Name",
+                            "state" : {"opened" : true },
+                            "children" : [
+                                {"text" : "Filename", "a_attr": { "href" : "https://s3-ap-southeast-1.amazonaws.com/test-upload-file/folder/66326_swiss_image.jpg" }}
+                            ]
+                        }
+                    ]
+                },
+                'plugins' : [
+                    "contextmenu", "search",
+                    "state", "types", "wholerow"
+                ]
+            }).on("select_node.jstree", function (e, data) {
+                window.open(data.instance.get_node(data.node, true).children('a').attr('href'))
+            }).on("delete_node.jstree", function(e, data) {
+                window.alert('delete');
+            })
+        });
     </script>
 </head>
 
@@ -111,6 +139,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     </div><!-- /.modal -->
 
 </div>
+<br><br><br>
+<div class="container">
+    <form id="search">
+        <input type="search" id="query"/>
+        <button type="submit">Search</button>
+    </form>
+    <br><br>
+    <div id="tree"></div>
+
+    <script>
+        $("#search").submit(function(e) {
+            e.preventDefault();
+            $("#tree").jstree(true).search($("#query").val());
+        });
+    </script>
+</div>
+
 </body>
 
 </html>
