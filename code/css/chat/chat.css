@@ -5,7 +5,7 @@
 }
 .msg-wrap-right{
     height: 400px;
-    overflow-y: scroll;
+    overflow-y: auto;
     margin-bottom: 10px;
 }
 .msg-active{
@@ -21,9 +21,11 @@
     background-color: #ececec;
 }
 .media-heading{
-    font-weight: 900;
+    font-weight: 600;
 }
-
+.media-body{
+    overflow: initial !important;
+}
 
 
 .direct-chat .box-body {
@@ -76,6 +78,7 @@
     margin: 5px 0 0 50px;
     color: #444;
     display:inline-block;
+    overflow: initial !important;
 }
 .direct-chat-text:after, .direct-chat-text:before {
     position: absolute;
@@ -98,9 +101,9 @@
 }
 .right .direct-chat-text {
     margin-top: 20px;
-    margin-right: -100px;
     color:#ffffff;
     background-color: royalblue;
+
 }
 .right a{
 
