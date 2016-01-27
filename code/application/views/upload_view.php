@@ -36,6 +36,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     console.log(data);
                     if(data.status==="success"){
                         reset_upload();
+                        refreshTree();
                     }else{
                         display_upload_form_error(data.message)
                     }
@@ -74,6 +75,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
         function disable_file_delete_modal(){
             $("#fileDeleteModal").modal('hide');
+        }
+
+        function refreshTree(){
+            $.post( "<?=site_url().'upload/get_all_files/'?>", function( data ) {
+                var new_data = [
+                    {
+                        "text": "Project Name",
+                        "state": {"opened": true},
+                        "children": data
+                    }
+                ]
+                $('#tree').jstree(true).settings.core.data = new_data;
+                $('#tree').jstree(true).refresh();
+            });
         }
 
         function initialize_tree() {
