@@ -24,6 +24,7 @@
     font-weight: 600;
 }
 
+
 .direct-chat .box-body {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
@@ -97,6 +98,7 @@
 }
 .right .direct-chat-text {
     margin-top: 20px;
+    margin-right: 5px;
     color:#ffffff;
     background-color: royalblue;
 

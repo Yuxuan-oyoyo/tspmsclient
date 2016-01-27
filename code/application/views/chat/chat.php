@@ -763,7 +763,7 @@ if($this->session->userdata('Customer_cid')){
                         </div>
 
                         <div className="msg-wrap-right" ref="messageList">
-                           <div className="col-lg-11">
+                           <div className="col-lg-12">
                             {this.state.msgnodes}
                             </div>
                         </div>
