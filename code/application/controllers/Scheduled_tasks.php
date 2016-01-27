@@ -12,6 +12,7 @@ class Scheduled_tasks extends CI_Controller{
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->library('BB_issues');
+        $this->session->userdata('internal_uid',1);
     }
     /* Calibrates bb milestones with database
      * prints {"added":num_added,"removed":num_removed,"time":time_taken}
@@ -78,6 +79,11 @@ class Scheduled_tasks extends CI_Controller{
         flush();
         echo $json_output;
     }
+    public function fetch_issues(){
+        redirect("");
+    }
+
+
 
 
 
