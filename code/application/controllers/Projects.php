@@ -338,6 +338,26 @@ class Projects extends CI_Controller {
         //$this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
     }
 
+    public function view_report($project_id=null){
+        if(!isset($project_id)) {show_404();die();}
+        if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
+            //phase
+            $project = $this->Project_model->retrieve_by_id($project_id);
+            $phases=$this->Project_phase_model->retrieve_by_project_id($project_id);
+
+            $newTasks = array();
+
+            $data = [
+                "project"=>$project,
+            ];
+            $this->load->view('project/project_report',$data);
+        }else{
+            $this->session->set_userdata('message','You have not login / have no access rights. ');
+            redirect('/internal_authentication/login/');
+        }
+        //$this->load->view('project/project_update',$data=["project"=>$project,"current_phase"=>$current_phase,"current_project_phase_id"=>$current_project_phase_id]);
+    }
+
     public function view_updates($project_id=null){
         if(!isset($project_id)) {show_404();die();}
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
