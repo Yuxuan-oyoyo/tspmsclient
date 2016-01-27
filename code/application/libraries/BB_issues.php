@@ -93,9 +93,10 @@ class BB_issues {
      * @param $repo_slug
      * @param $id
      * @param array|null $parameters
+     * @param boolean $try_twice
      * @return array|null
      */
-    public function retrieveIssues($repo_slug, $id, array $parameters=null){
+    public function retrieveIssues($repo_slug, $id, array $parameters=null, $try_twice = true){
         $CI =& get_instance();
         $CI->load->library('BB_shared');
         $token = $CI->bb_shared->getDefaultOauthToken();
@@ -105,24 +106,28 @@ class BB_issues {
         $parameters["timestamp"] = time();
         $url = $endpoint.'?'.$this->construct_paras($parameters);
         $result =  $this->sendGetRequest($url);
-        if($result===null){
+        if($result===null && $try_twice){
             $parameters["access_token"] = $CI->bb_shared->requestFromServer();
             $url = $endpoint.'?'.$this->construct_paras($parameters);
             $result = $this->sendGetRequest($url);
         }
-        if(isset($result['issues'])){
-            /*when server replies issue list*/
-            foreach($result["issues"] as $key=>$issue){
-                $result["issues"][$key] = $this->decode_attr_from_content($issue);
-                $result["issues"][$key] = $this->decode_workflow_status_from_title($issue);
+        if(isset($result)) {
+            if (isset($result['issues'])) {
+                /*when server replies issue list*/
+                foreach ($result["issues"] as $key => $issue) {
+                    $result["issues"][$key] = $this->decode_attr_from_content($issue);
+                    $result["issues"][$key] = $this->decode_workflow_status_from_title($issue);
+                }
+                return $result;
+            } else {
+                /*when server replies single issue*/
+                $result_decoded = $this->decode_attr_from_content($result);
+                $result_decoded = $this->decode_workflow_status_from_title($result_decoded);
+                //$result_decoded["status"] = $this->map_status($result_decoded["status"], false);
+                return $result_decoded;
             }
-            return $result;
         }else{
-            /*when server replies single issue*/
-            $result_decoded = $this->decode_attr_from_content($result);
-            $result_decoded = $this->decode_workflow_status_from_title($result_decoded);
-            //$result_decoded["status"] = $this->map_status($result_decoded["status"], false);
-            return $result_decoded;
+            return null;
         }
     }
 

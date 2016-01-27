@@ -1,6 +1,7 @@
 <?php
 
-require APPPATH.'libraries/aws/aws-autoloader.php';
+//require APPPATH.'libraries/vendor/autoload.php';
+require 'vendor/autoload.php';
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 
@@ -9,7 +10,6 @@ class Upload extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        // Your own constructor code
         $this->load->library('session');
         $this->load->helper('url');
     }
@@ -23,7 +23,6 @@ class Upload extends CI_Controller {
     }
 
     public function file_upload(){
-        //echo("as");
         if($file_to_upload=$this->upload_file_to_s3()){
             $this->load->model('File');
             if($fid=$this->File->insert($file_to_upload)){
@@ -51,7 +50,6 @@ class Upload extends CI_Controller {
     }
 
     private function upload_file_to_s3(){
-        //echo"here";
         $s3 = new S3Client([
             'credentials' => [
                 'key'    => 'AKIAJCISFJKSJ7DGAM5A',
