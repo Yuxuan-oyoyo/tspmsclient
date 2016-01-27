@@ -19,17 +19,8 @@ $user_id = $user_id;
     <script src="https://fb.me/react-dom-0.14.3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/1.7.2/moment.min.js"></script>
-    <script src="js/vendor/jquery.ui.widget.js"></script>
-    <script src="js/jquery.iframe-transport.js"></script>
-    <script src="js/jquery.fileupload.js"></script>
-    <script src="<?= base_url() . 'js/profile_factory.js' ?>"></script>
-    <style>
-        .headerStyle{
-            color: grey;
-            pointer-events:none;
-            opacity:0.4;
-        }
-    </style>
+    <script src='<?=base_url()."js/initial.js"?>'></script>
+
 </head>
 <body>
 <?php
@@ -116,8 +107,11 @@ if($this->session->userdata('Customer_cid')){
             }
             //console.log("puzzy")
 
-
-
+            var img_url = '<?=base_url()?>'+'img/avatars/'+DisplayName.substring(0, 1)+'.png'
+            var left_side_message = this.props.data.lastMessage;
+            if((this.props.data.lastMessage).length>=35){
+                left_side_message = left_side_message.substring(0,33) +' ...';
+            }
             // TODO (if messages too long cut it short..)
 
             if(c_id == this.props.data.chatID )
@@ -125,11 +119,11 @@ if($this->session->userdata('Customer_cid')){
                 return (
                 <div className="media conversation msg-active" onClick={this.props.handleClickOnLeftUser.bind(null, [this.props.data, counter])}>
                    <a className="pull-left" href="#">
-                    <img className="media-object profile-img" data-src={"holder.js/64x64"} alt={"64x64"} />
+                     <img className="media-object profile-img" src={img_url} alt={DisplayName} />
                   </a>
                    <div className="media-body">
                   <h5 className="media-heading">{DisplayName} &nbsp;  <small className="pull-right"><i className="fa fa-clock-o"/>&nbsp;{dates}</small></h5>
-                       {this.props.data.lastMessage}
+                       {left_side_message}
                   </div>
 
                 </div>
@@ -141,11 +135,11 @@ if($this->session->userdata('Customer_cid')){
                     return (
                     <div className="media conversation" onClick={this.props.handleClickOnLeftUser.bind(null, [this.props.data, counter])}>
                        <a className="pull-left" href="#">
-                        <img className="media-object profile-img" data-src={"holder.js/64x64"} alt={"64x64"} />
+                            <img className="media-object profile-img" src={img_url} alt={DisplayName} />
                       </a>
                       <div className="media-body">
                       <h5 className="media-heading">{DisplayName} &nbsp;  <small className="pull-right"><i className="fa fa-clock-o"/>&nbsp;{dates}</small></h5>
-                           {this.props.data.lastMessage}
+                           {left_side_message}
                       </div>
                     </div>
                     );
@@ -154,11 +148,11 @@ if($this->session->userdata('Customer_cid')){
                     <div className="media conversation" onClick={this.props.handleClickOnLeftUser.bind(null, [this.props.data, counter])}>
                        <a className="pull-left" href="#">
                        <span className="new-msg badge" >{counter}</span>
-                        <img className="media-object profile-img" data-src={"holder.js/64x64"} alt={"64x64"} />
+                        <img className="media-object profile-img" src={img_url} alt={DisplayName} />
                       </a>
                       <div className="media-body">
                       <h5 className="media-heading">{DisplayName} &nbsp;  <small className="pull-right"><i className="fa fa-clock-o"/>&nbsp;{dates}</small></h5>
-                           {this.props.data.lastMessage}
+                           {left_side_message}
                       </div>
                     </div>
                     );
@@ -222,9 +216,6 @@ if($this->session->userdata('Customer_cid')){
                     {
                             return (
                                 <div className="media">
-                                    <a className="pull-left" href="#">
-                                        <img className="media-object profile-img" data-src={"holder.js/64x64"} alt={"64x64"} />
-                                    </a>
                                     <div className="media-body ">
 
                                         <h5 className="media-heading">{this.props.msg.author}&nbsp; <small><i className="fa fa-clock-o"/>{dateString}</small> </h5>
@@ -242,9 +233,6 @@ if($this->session->userdata('Customer_cid')){
                         // else not for me
                          return (
                             <div className="media">
-                                    <a className="pull-right" href="#">
-                                        <img className="media-object profile-img" data-src={"holder.js/64x64"} alt={"64x64"} />
-                                    </a>
                                     <div className="media-body right">
 
                                         <h5 className="media-heading pull-right"> <small><i className="fa fa-clock-o"/>{dateString}</small>&nbsp;{this.props.msg.author}  </h5>
@@ -266,11 +254,7 @@ if($this->session->userdata('Customer_cid')){
                     {
                             return (
                                  <div className="media">
-                                    <a className="pull-left" href="#">
-                                        <img className="media-object profile-img" data-src={"holder.js/64x64"} alt={"64x64"}/>
-                                    </a>
                                     <div className="media-body">
-
                                         <h5 className="media-heading "> {this.props.msg.author}&nbsp;<small><i className="fa fa-clock-o"/>{dateString}</small> </h5>
                                          <div className="direct-chat-text">
                                           {this.props.msg.content}
@@ -284,9 +268,6 @@ if($this->session->userdata('Customer_cid')){
                         // else not for me
                          return (
                           <div className="media">
-                                    <a className="pull-right" href="#">
-                                        <img className="media-object profile-img" data-src={"holder.js/64x64"} alt={"64x64"}/>
-                                    </a>
                                     <div className="media-body right">
 
                                         <h5 className="media-heading pull-right"> <small><i className="fa fa-clock-o"/>{dateString}</small>&nbsp;{this.props.msg.author} </h5>
@@ -1101,6 +1082,12 @@ if($this->session->userdata('Customer_cid')){
 
 
     React.render(<MainChat />, document.getElementById('container'));
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.demo').initial({width:64,height:64});
+        console.log("avatar");
+    })
 </script>
 </body>
 </html>
