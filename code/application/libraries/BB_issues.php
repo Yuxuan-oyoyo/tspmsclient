@@ -55,7 +55,7 @@ class BB_issues {
             if(preg_match("/\<usecase\>(.*?)\<\/usecase\>/",$issue_array["content"],$display2)){
                 $new_array["usecase"] = $display2[1];
             }
-            if(preg_match("/\<content\>((.|\n)*)\<\/content\>/",$issue_array["content"],$display3)){
+            if(preg_match("/\<content\>((.|\n)*?)\<\/content\>/",$issue_array["content"],$display3)){
                 $new_array["content"] = $display3[1];
             }
             return $new_array;
@@ -116,14 +116,13 @@ class BB_issues {
                 /*when server replies issue list*/
                 foreach ($result["issues"] as $key => $issue) {
                     $result["issues"][$key] = $this->decode_attr_from_content($issue);
-                    $result["issues"][$key] = $this->decode_workflow_status_from_title($issue);
+                    $result["issues"][$key] = $this->decode_workflow_status_from_title($result["issues"][$key]);
                 }
                 return $result;
             } else {
                 /*when server replies single issue*/
                 $result_decoded = $this->decode_attr_from_content($result);
                 $result_decoded = $this->decode_workflow_status_from_title($result_decoded);
-                //$result_decoded["status"] = $this->map_status($result_decoded["status"], false);
                 return $result_decoded;
             }
         }else{

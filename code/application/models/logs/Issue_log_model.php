@@ -19,8 +19,8 @@ class Issue_log_model extends CI_Model{
         $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
         $insert_array['last_updated'] = $date->format('c');
         $past_query = $this->db->query(
-            "SELECT status FROM issue_log WHERE issue_id =? ORDER BY date_updated DESC LIMIT 1",
-            [$issue_array["issue_id"]]
+            "SELECT status FROM issue_log WHERE issue_id =? AND repo_slug=? ORDER BY date_updated DESC LIMIT 1",
+            [$issue_array["issue_id"], $issue_array["repo_slug"]]
         );
         $past_status = null;
         if( $past_query->num_rows()>0){
@@ -32,5 +32,13 @@ class Issue_log_model extends CI_Model{
             $issue_array['date_updated'] = $date->format('c');
             $this->db->insert('issue_log', $issue_array);
         }
+    }
+    public function retrieve($repo_slug, $issue_id){
+        $query=$this->db->query("SELECT * FROM issue_log WHERE issue_id=? AND repo_slug=? ORDER BY date_updated",
+            [$issue_id, $repo_slug]);
+        if( $query->num_rows()>0) {
+            return $query->result_array();
+        }
+        return null;
     }
 }
