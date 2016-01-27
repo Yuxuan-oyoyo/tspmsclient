@@ -13,21 +13,14 @@ $user_id = $user_id;
 <head>
     <meta charset="utf-8">
     <?php $this->load->view('common/common_header');?>
+    <link rel="stylesheet" href="<?=base_url()?>css/chat/chat.css" />
     <link rel="stylesheet" href="<?=base_url()?>css/chat/base.css" />
     <script src="https://fb.me/react-with-addons-0.14.3.js"></script>
     <script src="https://fb.me/react-dom-0.14.3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/1.7.2/moment.min.js"></script>
-    <script src="js/vendor/jquery.ui.widget.js"></script>
-    <script src="js/jquery.iframe-transport.js"></script>
-    <script src="js/jquery.fileupload.js"></script>
-    <style>
-        .headerStyle{
-            color: grey;
-            pointer-events:none;
-            opacity:0.4;
-        }
-    </style>
+    <script src='<?=base_url()."js/initial.js"?>'></script>
+
 </head>
 <body>
 <?php
@@ -54,7 +47,7 @@ if($this->session->userdata('Customer_cid')){
     var CurrentUser = <?=$user_id?>;
     var UserName = <?php echo json_encode($this->session->userdata('internal_username')); ?>;
     var UserType = <?php echo json_encode($this->session->userdata('internal_type')); ?>;
-
+    var UserId = <?php echo json_encode($this->session->userdata('internal_uid')); ?>;
 
     console.log("utype")
     console.log(UserType)
@@ -114,42 +107,56 @@ if($this->session->userdata('Customer_cid')){
             }
             //console.log("puzzy")
 
-
-
+            var img_url = '<?=base_url()?>'+'img/avatars/'+DisplayName.substring(0, 1)+'.png'
+            var left_side_message = this.props.data.lastMessage;
+            if((this.props.data.lastMessage).length>=35){
+                left_side_message = left_side_message.substring(0,33) +' ...';
+            }
             // TODO (if messages too long cut it short..)
 
-            if(c_id == this.props.data.chatID)
+            if(c_id == this.props.data.chatID )
             {
                 return (
-                    <li className="thread-list-item active" onClick={this.props.handleClickOnLeftUser.bind(null, [this.props.data, counter])}>
-                    <h5 className="thread-name"> {DisplayName} </h5>
-                        <div className="thread-time">
-                        {dates}
-                        </div>
-                        <div className="thread-last-message">
-                        {this.props.data.lastMessage}
-                    </div>
-                    </li>
+                <div className="media conversation msg-active" onClick={this.props.handleClickOnLeftUser.bind(null, [this.props.data, counter])}>
+                   <a className="pull-left" href="#">
+                     <img className="media-object profile-img" src={img_url} alt={DisplayName} />
+                  </a>
+                   <div className="media-body">
+                  <h5 className="media-heading">{DisplayName} &nbsp;  <small className="pull-right"><i className="fa fa-clock-o"/>&nbsp;{dates}</small></h5>
+                       {left_side_message}
+                  </div>
+
+                </div>
                 );
             }
             else
             {
-
-                return (
-                    <li className="thread-list-item" onClick={this.props.handleClickOnLeftUser.bind(null, [this.props.data, counter])}>
-                        <h5 className="thread-name"> {DisplayName} </h5>
-                            <div className="thread-time">
-                            {dates}
-                            </div>
-                            <div className="thread-last-message">
-                            {this.props.data.lastMessage}
-
-                            <div className="thread-time">
-                                {counter} new
-                            </div>
-                            </div>
-                    </li>
-                );
+                if(counter==0){
+                    return (
+                    <div className="media conversation" onClick={this.props.handleClickOnLeftUser.bind(null, [this.props.data, counter])}>
+                       <a className="pull-left" href="#">
+                            <img className="media-object profile-img" src={img_url} alt={DisplayName} />
+                      </a>
+                      <div className="media-body">
+                      <h5 className="media-heading">{DisplayName} &nbsp;  <small className="pull-right"><i className="fa fa-clock-o"/>&nbsp;{dates}</small></h5>
+                           {left_side_message}
+                      </div>
+                    </div>
+                    );
+                }else{
+                     return (
+                    <div className="media conversation" onClick={this.props.handleClickOnLeftUser.bind(null, [this.props.data, counter])}>
+                       <a className="pull-left" href="#">
+                       <span className="new-msg badge" >{counter}</span>
+                        <img className="media-object profile-img" src={img_url} alt={DisplayName} />
+                      </a>
+                      <div className="media-body">
+                      <h5 className="media-heading">{DisplayName} &nbsp;  <small className="pull-right"><i className="fa fa-clock-o"/>&nbsp;{dates}</small></h5>
+                           {left_side_message}
+                      </div>
+                    </div>
+                    );
+                }
             }
         }
     });
@@ -179,9 +186,9 @@ if($this->session->userdata('Customer_cid')){
             //console.log("= = = = = = = = = = = = = = = = = = = = = = ")
 
             return (
-                <ul className="thread-list">
+                <div className="msg-wrap-left">
                     {userNodes}
-                </ul>
+                </div>
 
             );
         }
@@ -191,13 +198,12 @@ if($this->session->userdata('Customer_cid')){
 
 
 
-
-
     var RightMessage = React.createClass({
         render: function(){
-
-
+            var dateString = moment.unix(this.props.msg.timestamp).format(" MM/DD/YYYY HH:mm");
             var msg = this.props.msg;
+
+
             // @formatter:off
 
             if(msg.is_file == 1)
@@ -206,26 +212,75 @@ if($this->session->userdata('Customer_cid')){
                 url = url.concat(msg.message_id);
                 url = url.concat("/");
                 url = url.concat(msg.content);
+                if((UserType == "PM" && this.props.msg.to_pm == 1) || (UserType != "PM" && this.props.msg.to_pm == 0))
+                    {
+                            return (
+                                <div className="media">
+                                    <div className="media-body ">
 
-                return (
+                                        <h5 className="media-heading">{this.props.msg.author}&nbsp; <small><i className="fa fa-clock-o"/>{dateString}</small> </h5>
+                                        <div className="direct-chat-text ">
+                                          File:<br/>
+                                        <a href={url}> {this.props.msg.content} </a><br/>
+                                        <small>(Click file name to download)</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        // this message is for me (left side)
+                    }
+                    {
+                        // else not for me
+                         return (
+                            <div className="media">
+                                    <div className="media-body right">
 
-                    <li className="message-list-item">
-                        <h5 className="message-author-name"> {this.props.msg.author} </h5>
-                        <div className="message-time"> </div>
-                        <div className="message-text"> <a href={url}> {this.props.msg.content} </a></div>
-                    </li>
-                )
+                                        <h5 className="media-heading pull-right"> <small><i className="fa fa-clock-o"/>{dateString}</small>&nbsp;{this.props.msg.author}  </h5>
+                                        <div className="direct-chat-text pull-right">
+                                        File:<br/>
+                                        <a href={url}> {this.props.msg.content} </a><br/>
+                                        <small>(Click file name to download)</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+
+                    }
+
             }
             else
             {
-                return (
+                 if((UserType == "PM" && this.props.msg.to_pm == 1) || (UserType != "PM" && this.props.msg.to_pm == 0))
+                    {
+                            return (
+                                 <div className="media">
+                                    <div className="media-body">
+                                        <h5 className="media-heading "> {this.props.msg.author}&nbsp;<small><i className="fa fa-clock-o"/>{dateString}</small> </h5>
+                                         <div className="direct-chat-text">
+                                          {this.props.msg.content}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        // this message is for me (left side)
+                    }
+                    {
+                        // else not for me
+                         return (
+                          <div className="media">
+                                    <div className="media-body right">
 
-                    <li className="message-list-item">
-                        <h5 className="message-author-name"> {this.props.msg.author} </h5>
-                        <div className="message-time"> </div>
-                        <div className="message-text"> {this.props.msg.content}</div>
-                    </li>
-                )
+                                        <h5 className="media-heading pull-right"> <small><i className="fa fa-clock-o"/>{dateString}</small>&nbsp;{this.props.msg.author} </h5>
+                                         <div className="direct-chat-text pull-right ">
+                                          {this.props.msg.content}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+
+                    }
+
+
             }
 
         }
@@ -358,16 +413,30 @@ if($this->session->userdata('Customer_cid')){
                 //console.log("handle composer [enter]")
 
                 var threadID = this.props.thread.chatID
+                var get_pm_id = 0;
+                var get_to_the_pm = 0;
 
+                if(this.props.thread["messages"][0]["pm_id"] != UserId)
+                {
+                    get_to_the_pm = 1;
+                    get_pm_id = this.props.thread["messages"][0]["pm_id"];
+                }
+
+                           console.log("here")
+                console.log(this.props.thread)
+                console.log(this.props.thread["messages"][0]["pm_id"])
+                console.log(get_to_the_pm)
+                console.log(get_pm_id)
+                console.log("there")
 
                 this.props.fast_msg(text)
 
                 var datetime = new Date() / 1000;
                 var url = "<?=base_url()."chat/write"?>";
-                console.log(threadID + " " + CurrentUser)
+                //console.log(threadID + " " + CurrentUser)
                 $.ajax({
                     type: "GET",
-                    data: {chatID:threadID, timeStamp: datetime, author: CurrentUser ,content: text },
+                    data: {chatID:threadID, timeStamp: datetime, author: CurrentUser ,content: text, to_the_pm: get_to_the_pm, pm_id: get_pm_id },
                     url : url,
                     success: function(){
                         console.log("success");
@@ -406,7 +475,7 @@ if($this->session->userdata('Customer_cid')){
                 var up_text = "Upload " + this.props.filey;
                 return(
                     <div >
-                        <textarea placeholder={up_text} className="message-composer" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled/>
+                        <textarea rows="4" placeholder={up_text} className=" form-control" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled/>
                         <div>
                             <FileForm threadID={this.props.thread.chatID} text_handler={this.textHandler} filey={this.props.filey} fu_handler={this.props.fu_handler}/>
                         </div>
@@ -421,12 +490,12 @@ if($this->session->userdata('Customer_cid')){
 
                 return(
                     <div >
-                        <textarea placeholder="Type message here" className="message-composer" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
+                        <textarea rows="4" placeholder="Type message here" className="form-control" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
                         <div>
                             <FileForm threadID={this.props.thread.chatID} fu_handler={this.props.fu_handler}/>
                         </div>
                         <div>
-                            <button onClick={this.handleWrite} type="button">Reply </button>
+                            <button  className="col-lg-2 text-right btn btn-primary pull-right" onClick={this.handleWrite} type="button">Reply </button>
                         </div>
                     </div>
 
@@ -446,6 +515,9 @@ if($this->session->userdata('Customer_cid')){
         // prevent form from submitting; we are going to capture the file contents
         handleSubmit: function(e) {
             e.preventDefault();
+
+
+
             var url = "<?=base_url()."chat/write"?>";
             var threadID = this.props.threadID;
             $.ajax({
@@ -494,8 +566,10 @@ if($this->session->userdata('Customer_cid')){
             {
                 return (
                     <form onSubmit={this.handleSubmit} encType="multipart/form-data">
-                    <input type="file" onChange={this.handleFile} />
-                    <input type="submit" value="Reply" />
+                   <span className="col-lg-2  btn btn-default pull-left btn-file">
+                            Add File <input type="file" onChange={this.handleFile}/>
+                    </span>
+                    <input className=" col-lg-2 text-right btn btn-primary pull-right"  type="submit" value="Reply" />
                     </form>
                 );
             }
@@ -503,8 +577,10 @@ if($this->session->userdata('Customer_cid')){
             {
                 return (
                     <form onSubmit={this.handleSubmit} encType="multipart/form-data">
-                    <input type="file" onChange={this.handleFile} />
-                    <input type="hidden" value="Reply" />
+                    <span className="col-lg-2  btn btn-default pull-left btn-file">
+                            Add File <input type="file" onChange={this.handleFile}/>
+                    </span>
+                    <input className=" col-lg-2 text-right btn btn-primary pull-right" type="hidden" value="Reply" />
                     </form>
                 );
             }
@@ -626,7 +702,7 @@ if($this->session->userdata('Customer_cid')){
                 // New Message
 
                 return(
-                    <div className="message-section">
+                    <div className="col-lg-10">
                         <div>
                             <h3 className="message-thread-heading">New Message</h3>
                         </div>
@@ -680,15 +756,17 @@ if($this->session->userdata('Customer_cid')){
                     msgNodes = "not selected yet"
                 }
                 return(
-                    <div className="message-section">
+                    <div  className="col-lg-8">
                         <div>
                             <h3 className="message-thread-heading">{j}</h3>
 
                         </div>
 
-                        <ul className="message-list" ref="messageList">
+                        <div className="msg-wrap-right" ref="messageList">
+                           <div className="col-lg-12">
                             {this.state.msgnodes}
-                        </ul>
+                            </div>
+                        </div>
                         <RightMessageComposerBox fast_msg={this.props.fastMsg} filey={this.props.filey} fu_handler={this.props.fu_handler} thread={this.props.chat} refreshFunc={this.props.refreshFunc} />
 
                     </div>
@@ -920,32 +998,40 @@ if($this->session->userdata('Customer_cid')){
 
             var unread = <span>Unread threads: {this.state.unread} </span>;
 
+            var user_name=  <?php echo json_encode($this->session->userdata('internal_username')); ?>;
+            if(!user_name){
+             user_name = <?php echo json_encode($this->session->userdata('Customer_username')); ?>;
+            }
             if(this.state.chatID == "new_message")
             {
-                // dead function fml
                 //console.log("new_message")
                 return (
-                    <div className="chatapp">
-                        <div className="thread-section">
-                            <div className="thread-count">
-                                {unread}
+                    <div className="col-lg-offset-1 col-lg-10 ">
+                    <h1 className="page-header top-header">Chat Box - {user_name}</h1>
+                       <div className="row">
+                           <div className="col-lg-3">
+
+                                    <div className="thread-count">
+                                        {unread}
+                                    </div>
+                                    <LeftUserList
+                                        chat_id={this.state.chatID}
+                                        chats={this.state.chats}
+                                        clickFunc={this.handleClickOnLeftUser} // ***important
+                                        />
+                                </div>
+                                <div  className="col-lg-9">
+                                    <RightMessageBox
+                                        chat="new_message"
+                                        refreshFunc={this.getInitialData}
+                                        chat_id = {this.state.chatID}
+                                        clickFunc={this.handleClickOnLeftUser}
+                                        fu_handler={this.fileUploadHandler}
+                                        filey={this.state.file}
+                                        />
+                                </div>
                             </div>
-                            <LeftUserList
-                                chat_id={this.state.chatID}
-                                chats={this.state.chats}
-                                clickFunc={this.handleClickOnLeftUser} // ***important
-                                />
-                        </div>
-                        <div>
-                            <RightMessageBox
-                                chat="new_message"
-                                refreshFunc={this.getInitialData}
-                                chat_id = {this.state.chatID}
-                                clickFunc={this.handleClickOnLeftUser}
-                                fu_handler={this.fileUploadHandler}
-                                filey={this.state.file}
-                                />
-                        </div>
+
                     </div>
                 );
             }
@@ -954,29 +1040,34 @@ if($this->session->userdata('Customer_cid')){
                 //console.log("render the thread I want to pass")
                 //console.log(this.state.theThreadIWantToPass)
                 return (
-                    <div className="chatapp">
-                        <div className="thread-section">
-                            <div className="thread-count">
-                                {unread}
+                    <div className="col-lg-offset-1 col-lg-10 ">
+                    <h1 className="page-header top-header">Chat Box - {user_name}</h1>
+                         <div className="row">
+                                <div className="col-lg-3">
+                                    <div className="thread-count">
+                                        {unread}
+                                    </div>
+                                    <LeftUserList
+                                        chat_id={this.state.chatID}
+                                        chats={this.state.chats}
+                                        unreadFunc={this.handleUnread}
+                                        clickFunc={this.handleClickOnLeftUser} // ***important
+                                        />
+
+                                </div>
+
+                                    <RightMessageBox
+                                        chat={this.state.theThreadIWantToPass}
+                                        fastMsg={this.fast_msg}
+                                        refreshFunc={this.getInitialData}
+                                        chat_id = {this.state.chatID}
+                                        clickFunc={this.handleClickOnLeftUser}
+                                        fu_handler={this.fileUploadHandler}
+                                        filey={this.state.file}
+                                        />
+
                             </div>
-                            <LeftUserList
-                                chat_id={this.state.chatID}
-                                chats={this.state.chats}
-                                unreadFunc={this.handleUnread}
-                                clickFunc={this.handleClickOnLeftUser} // ***important
-                                />
-                        </div>
-                        <div>
-                            <RightMessageBox
-                                chat={this.state.theThreadIWantToPass}
-                                fastMsg={this.fast_msg}
-                                refreshFunc={this.getInitialData}
-                                chat_id = {this.state.chatID}
-                                clickFunc={this.handleClickOnLeftUser}
-                                fu_handler={this.fileUploadHandler}
-                                filey={this.state.file}
-                                />
-                        </div>
+
                     </div>
                 );
             }
@@ -991,6 +1082,12 @@ if($this->session->userdata('Customer_cid')){
 
 
     React.render(<MainChat />, document.getElementById('container'));
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.demo').initial({width:64,height:64});
+        console.log("avatar");
+    })
 </script>
 </body>
 </html>

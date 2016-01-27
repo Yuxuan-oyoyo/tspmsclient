@@ -19,7 +19,7 @@ class File extends CI_Model {
 
             $now = new DateTime("now", new DateTimeZone(DATETIMEZONE));
             $this->db->set('last_updated', $now->format('c'));
-            $this->db->insert('file_to_upload', $temp_array);
+            $this->db->insert('upload', $temp_array);
             return $this->db->insert_id();
         }else{
             return FALSE;
@@ -33,5 +33,10 @@ class File extends CI_Model {
         }else{
             return 0;
         }
+    }
+
+    function retrieveAll(){
+        $query = $this->db->get("upload");
+        return $query->result_array();
     }
 }
