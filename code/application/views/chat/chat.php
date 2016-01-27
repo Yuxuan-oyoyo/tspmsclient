@@ -207,8 +207,6 @@ if($this->session->userdata('Customer_cid')){
     var RightMessage = React.createClass({
         render: function(){
             var dateString = moment.unix(this.props.msg.timestamp).format(" MM/DD/YYYY HH:mm");
-
-
             var msg = this.props.msg;
 
 
@@ -220,41 +218,88 @@ if($this->session->userdata('Customer_cid')){
                 url = url.concat(msg.message_id);
                 url = url.concat("/");
                 url = url.concat(msg.content);
+                if((UserType == "PM" && this.props.msg.to_pm == 1) || (UserType != "PM" && this.props.msg.to_pm == 0))
+                    {
+                            return (
+                                <div className="media">
+                                    <a className="pull-left" href="#">
+                                        <img className="media-object profile-img" data-src={"holder.js/64x64"} alt={"64x64"} />
+                                    </a>
+                                    <div className="media-body ">
 
-                return (
+                                        <h5 className="media-heading">{this.props.msg.author}&nbsp; <small><i className="fa fa-clock-o"/>{dateString}</small> </h5>
+                                        <div className="direct-chat-text ">
+                                          File:<br/>
+                                        <a href={url}> {this.props.msg.content} </a><br/>
+                                        <small>(Click file name to download)</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        // this message is for me (left side)
+                    }
+                    {
+                        // else not for me
+                         return (
+                            <div className="media">
+                                    <a className="pull-right" href="#">
+                                        <img className="media-object profile-img" data-src={"holder.js/64x64"} alt={"64x64"} />
+                                    </a>
+                                    <div className="media-body right">
 
-                   <div className="media">
-                        <a className="pull-right" href="#">
-                            <img className="media-object profile-img" data-src={"holder.js/64x64"} alt={"64x64"} />
-                        </a>
-                        <div className="media-body right ">
+                                        <h5 className="media-heading pull-right"> <small><i className="fa fa-clock-o"/>{dateString}</small>&nbsp;{this.props.msg.author}  </h5>
+                                        <div className="direct-chat-text pull-right">
+                                        File:<br/>
+                                        <a href={url}> {this.props.msg.content} </a><br/>
+                                        <small>(Click file name to download)</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
 
-                            <h5 className="media-heading pull-right"> <small><i className="fa fa-clock-o"/>{dateString}</small>&nbsp;{this.props.msg.author}  </h5>
-                            <div className="direct-chat-text pull-right ">
-                             <a href={url}> {this.props.msg.content} </a>
-                            </div>
-                        </div>
-                    </div>
+                    }
 
-                );
             }
             else
             {
-                return (
-                  <div className="media">
-                        <a className="pull-right" href="#">
-                            <img className="media-object profile-img" data-src={"holder.js/64x64"} alt={"64x64"}/>
-                        </a>
-                        <div className="media-body right">
+                 if((UserType == "PM" && this.props.msg.to_pm == 1) || (UserType != "PM" && this.props.msg.to_pm == 0))
+                    {
+                            return (
+                                 <div className="media">
+                                    <a className="pull-left" href="#">
+                                        <img className="media-object profile-img" data-src={"holder.js/64x64"} alt={"64x64"}/>
+                                    </a>
+                                    <div className="media-body">
 
-                            <h5 className="media-heading pull-right"> <small><i className="fa fa-clock-o"/>{dateString}</small>&nbsp;{this.props.msg.author} </h5>
-                             <div className="direct-chat-text pull-right ">
-                              {this.props.msg.content}
-                            </div>
-                        </div>
-                    </div>
+                                        <h5 className="media-heading "> {this.props.msg.author}&nbsp;<small><i className="fa fa-clock-o"/>{dateString}</small> </h5>
+                                         <div className="direct-chat-text">
+                                          {this.props.msg.content}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        // this message is for me (left side)
+                    }
+                    {
+                        // else not for me
+                         return (
+                          <div className="media">
+                                    <a className="pull-right" href="#">
+                                        <img className="media-object profile-img" data-src={"holder.js/64x64"} alt={"64x64"}/>
+                                    </a>
+                                    <div className="media-body right">
 
-                );
+                                        <h5 className="media-heading pull-right"> <small><i className="fa fa-clock-o"/>{dateString}</small>&nbsp;{this.props.msg.author} </h5>
+                                         <div className="direct-chat-text pull-right ">
+                                          {this.props.msg.content}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+
+                    }
+
+
             }
 
         }
