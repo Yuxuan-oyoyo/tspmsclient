@@ -144,6 +144,33 @@ class Project_overview extends CI_Controller{
     public function get_num_of_issues_per_phase($project_id){
         $this->load->model("Issue_report_model");
         $count_list = $this->Issue_report_model->get_num_of_issues_per_phase($project_id);
-        var_dump($count_list);
+        //ajax:
+        echo json_encode($count_list);
+    }
+    public function get_sum_time_spent_per_category($project_id){
+        $categories = ["priority","kind","phase"];
+        $input_raw = $this->input->get($categories, true);
+        $input_clean = [];
+        foreach($input_raw as $key=>$value){
+            if(isset($value)){
+                //verify the inputs
+                $input_clean[$key] = $value;
+            }
+        }
+        $this->load->model("Issue_report_model");
+        $count_list = $this->Issue_report_model->get_sum_time_spent_per_category($project_id,$input_clean);
+        //ajax:
+        echo json_encode($count_list);
+    }
+
+    /**
+     * For issue metrics
+     * @param $project_id
+     */
+    public function get_per_issue_data($project_id){
+        
+        $count_list = $this->Issue_report_model->get_num_of_issues_per_phase($project_id);
+        //ajax:
+        echo json_encode($count_list);
     }
 }
