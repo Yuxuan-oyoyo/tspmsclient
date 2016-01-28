@@ -19,15 +19,15 @@ class Issue_report_model extends CI_Model{
         var_dump(strtotime($time_last_updated));
         if(isset($time_last_updated) && strtotime($time_last_updated) <= $data_cleaning_threshold){
             var_dump("deleting all");
-            //$this->db->query("DELETE from issue_report");
+            $this->db->query("DELETE from issue_report");
         }elseif(isset($time_last_updated)){
             var_dump("deleting".$project_id);
-            /*
+
             $this->db->query(
                 "DELETE from issue_report WHERE project_id=?",
                 [$project_id]
             );
-            */
+            
         }
     }
     public function insert($issue_list,$project_id){
