@@ -53,24 +53,47 @@ class Chat extends CI_Controller {
     }
 
     public function get(){
+        // @formatter:off
         header('Content-type: application/json');
         header("Access-Control-Allow-Origin: *");
 
 
         session_write_close();
-        $user = $this->getUserInfo();
-        //TODO: fetch data with model
-        $threads =  $this->Chat_model->retrieve($user["user_id"], $user["user_type"]);
+        //$this->load->library('session');
 
-        //session_write_close();
+        $user = $this->getUserInfo();
+
+        $threads =  $this->Chat_model->retrieve($user["user_id"], $user["user_type"]);
+        $user_type = $this->session->userdata('internal_type');
+        $count_get = $this->session->userdata('count_get');
+
+
+        //echo $count_get;
+        //echo $user_type;
+        //print_r($this->session->all_userdata());
+
+        if($user_type == "PM")
+        {
+            $pm_id = $this->session->userdata('internal_uid');
+            // if %5 = 0, do db write
+            if ($count_get % 5 == 0) {
+                $this->Chat_model->online_update($user_type, $pm_id);
+            }
+            //echo $user_type;
+            //echo $pm_id;
+            //session_start();
+            $count_get = $count_get + 1;
+            $this->session->set_userdata('count_get', $count_get);
+            session_write_close();
+        }
+
+
         //echo json_encode($user);
         echo json_encode($threads);
-        //echo " ";
-        //print_r($this->session->all_userdata());
         session_write_close();
+        //print_r($this->session->all_userdata());
 
     }
-
     public function new_write()
     {
         header('Content-type: application/json');
@@ -84,7 +107,7 @@ class Chat extends CI_Controller {
             "m_content" => $this->input->get("content", true),
             "m_type" => 0,
         ];
-        //TODO: link up with model
+
 
         $this->Chat_model->new_write($values);
 
@@ -154,11 +177,63 @@ class Chat extends CI_Controller {
                 "chat_id" => $this->input->get("chatID", true),
                 "m_author" => $this->input->get("author", true),
                 "m_content" => $this->input->get("content", true),
+                "m_to_pm" => $this->input->get("to_the_pm"),
+                "m_pm_id" => $this->input->get("pm_id"),
                 "m_type" => 0,
             ];
-            //TODO: link up with model
+
+
+            //echo json_encode($values);
+
 
             $this->Chat_model->write($values);
+
+            $partner_status = 0;
+
+            if($values["m_to_pm"] == 1)
+            {
+                $partner_status = $this->Chat_model->is_user_online($values["m_pm_id"], "PM");
+
+                if($partner_status == 1)
+                {
+                    echo "partner is on";
+                }
+                else
+                {
+                    // if this message is to pm, author is definitely not pm
+                    echo "partner is off";
+                    $body = '<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+                            <title>TSPMS Offline Message</title><link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css\">
+                            </head><body><p> Hello, you have received an message from ';
+                    $body .= $values["m_author"];
+                    $body .= " at ";
+                    $body .= date('m-d-y h:m', time());
+                    $body .= " when you were offline. </p> <br><br> <p>";
+                    $body .= $values["m_content"];
+                    $body .= "</p> </body> </html>";
+                    /*
+                    $message = array(
+                        'html' => $body,
+                        'subject' => 'TSPMS Offline Message',
+                        'from_email' => 'donotreply@tspms.com',
+                        'from_name' => TSPMS,
+                        'to' => $send_to,
+                        'important' => false,
+                        'track_opens' => true,
+                        'track_clicks' => false,
+                        'auto_text' => true,
+                        'auto_html' => false,
+                        'inline_css' => false,
+                    );
+                    $mandrill = new Mandrill(MANDRILL_API_KEY);
+                    $result = $mandrill->messages->send($message);
+                    */
+                }
+            }
+            else
+            {
+                echo "You are PM, you do not need to know if ur partner is on/off";
+            }
         }
         else
         {
@@ -184,7 +259,7 @@ class Chat extends CI_Controller {
                     "m_content" => $full_fn,
                     "m_type" => 1,
                 ];
-                //TODO: link up with model
+
 
                 $retrieve_id = $this->Chat_model->write($values);
 

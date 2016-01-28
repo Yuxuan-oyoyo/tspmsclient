@@ -31,7 +31,7 @@
             <a href="<?=base_url().'internal_users/list_all'?>"><i class="fa fa-fw fa-users"></i>Internal Users</a>
         </li>
         <li class="<?=$analytics_class?>">
-            <a href="#"><i class="fa fa-fw fa-line-chart"></i>Analytics</a>
+            <a href="#"><i class="fa fa-fw fa-line-chart"></i>Historical Statistics</a>
         </li>
 
         <!---
@@ -49,51 +49,12 @@
     <ul class="nav navbar-right top-nav">
         <li class="dropdown">
             <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
-                <i class="fa fa-fw fa-bell"></i>Notifications&nbsp;<span class="badge" style="background-color:red">4</span>
+                <i class="fa fa-fw fa-bell"></i>Notifications&nbsp;<span class="badge" style="background-color:red" id="n_number"></span>
             </a>
 
-            <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
-
-                <div class="notification-heading"><h4 class="menu-title">Notifications</h4>
-                </div>
-                <li class="divider"></li>
-                <div class="notifications-wrapper">
-
-                    <a class="content" href="#">
-                        <div class="notification-item-green">
-                            <h4 class="item-title">Evaluation Deadline 1 · day ago</h4>
-                            <p class="item-info">Marketing 101, Video Assignment</p>
-                        </div>
-                    </a>
-                    <a class="content" href="#">
-                        <div class="notification-item-yellow">
-                            <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
-                            <p class="item-info">Marketing 101, Video Assignment</p>
-                        </div>
-                    </a>
-                    <a class="content" href="#">
-                        <div class="notification-item-pink">
-                            <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
-                            <p class="item-info">Marketing 101, Video Assignment</p>
-                        </div>
-                    </a>
-                    <a class="content" href="#">
-                        <div class="notification-item-green">
-                            <h4 class="item-title">Evaluation Deadline 1 · day ago</h4>
-                            <p class="item-info">Marketing 101, Video Assignment</p>
-                        </div>
-                    </a>
-                    <a class="content" href="#">
-                        <div class="notification-item-yellow">
-                            <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
-                            <p class="item-info">Marketing 101, Video Assignment</p>
-                        </div>
-                    </a>
+            <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel" id="n_message">
 
 
-                </div>
-                <li class="divider"></li>
-                <div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
             </ul>
 
         </li>
@@ -111,3 +72,32 @@
         </li>
     </ul>
 </nav>
+
+<script>
+    /* commented out on 25th Jan by ln
+    function showNotification() {
+        var n_message = new XMLHttpRequest();
+        var n_umber = new XMLHttpRequest();
+        n_message.onreadystatechange = function() {
+            if (n_message.readyState == 4 && n_message.status == 200) {
+                document.getElementById("n_message").innerHTML = n_message.responseText;
+
+            }
+            resource_timer = setTimeout(showNotification, 20000);
+        };
+        n_umber.onreadystatechange = function() {
+            if (n_umber.readyState == 4 && n_umber.status == 200) {
+                document.getElementById("n_number").innerHTML = n_umber.responseText;
+
+            }
+            resource_timer = setTimeout(showNotification, 20000);
+        };
+        n_message.open("GET", "<?=base_url().'Notifications/check_unread_notification/'.$this->session->userdata('internal_uid')?>", true);
+        n_umber.open("GET", "<?=base_url().'Notifications/get_notification_number/'.$this->session->userdata('internal_uid')?>", true);
+        n_message.send();
+        n_umber.send();
+    }
+    */
+
+    //$(document).ready(showNotification());
+</script>

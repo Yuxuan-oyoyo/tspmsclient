@@ -55,7 +55,7 @@ class BB_issues {
             if(preg_match("/\<usecase\>(.*?)\<\/usecase\>/",$issue_array["content"],$display2)){
                 $new_array["usecase"] = $display2[1];
             }
-            if(preg_match("/\<content\>((.|\n)*)\<\/content\>/",$issue_array["content"],$display3)){
+            if(preg_match("/\<content\>((.|\n)*?)\<\/content\>/",$issue_array["content"],$display3)){
                 $new_array["content"] = $display3[1];
             }
             return $new_array;
@@ -82,7 +82,9 @@ class BB_issues {
     private function encode_workflow_status_into_title($issue_array){
         //use in_array here instead to bypass issue title is empty
         if(isset($issue_array["title"])&& isset($issue_array["workflow"])){
-            $issue_array["title"] = "[".$issue_array["workflow"]."]".$issue_array["title"];
+            if($issue_array["workflow"]!="default workflow"){
+                $issue_array["title"] = "[".$issue_array["workflow"]."]".$issue_array["title"];
+            }
             unset($issue_array["workflow"]);
         }
         return $issue_array;
@@ -91,9 +93,10 @@ class BB_issues {
      * @param $repo_slug
      * @param $id
      * @param array|null $parameters
+     * @param boolean $try_twice
      * @return array|null
      */
-    public function retrieveIssues($repo_slug, $id, array $parameters=null){
+    public function retrieveIssues($repo_slug, $id, array $parameters=null, $try_twice = true){
         $CI =& get_instance();
         $CI->load->library('BB_shared');
         $token = $CI->bb_shared->getDefaultOauthToken();
@@ -103,24 +106,27 @@ class BB_issues {
         $parameters["timestamp"] = time();
         $url = $endpoint.'?'.$this->construct_paras($parameters);
         $result =  $this->sendGetRequest($url);
-        if($result===null){
+        if($result===null && $try_twice){
             $parameters["access_token"] = $CI->bb_shared->requestFromServer();
             $url = $endpoint.'?'.$this->construct_paras($parameters);
             $result = $this->sendGetRequest($url);
         }
-        if(isset($result['issues'])){
-            /*when server replies issue list*/
-            foreach($result["issues"] as $key=>$issue){
-                $result["issues"][$key] = $this->decode_attr_from_content($issue);
-                $result["issues"][$key] = $this->decode_workflow_status_from_title($issue);
+        if(isset($result)) {
+            if (isset($result['issues'])) {
+                /*when server replies issue list*/
+                foreach ($result["issues"] as $key => $issue) {
+                    $result["issues"][$key] = $this->decode_attr_from_content($issue);
+                    $result["issues"][$key] = $this->decode_workflow_status_from_title($result["issues"][$key]);
+                }
+                return $result;
+            } else {
+                /*when server replies single issue*/
+                $result_decoded = $this->decode_attr_from_content($result);
+                $result_decoded = $this->decode_workflow_status_from_title($result_decoded);
+                return $result_decoded;
             }
-            return $result;
         }else{
-            /*when server replies single issue*/
-            $result_decoded = $this->decode_attr_from_content($result);
-            $result_decoded = $this->decode_workflow_status_from_title($result_decoded);
-            //$result_decoded["status"] = $this->map_status($result_decoded["status"], false);
-            return $result_decoded;
+            return null;
         }
     }
 
@@ -354,14 +360,22 @@ class BB_issues {
         $ci =&get_instance();
         $ci->load->library('session');
         $ci->load->model('logs/Issue_log_model');
+        $ci->load->model("Internal_user_model");
         $user_id = $ci->session->userdata('internal_uid');
         $log_array=[
             "issue_id"=>$issue_array["local_id"],
             "repo_slug"=>$repo_slug,
             "updated_by"=>$user_id,
             "title"=>$issue_array["title"],
-            "status"=>$issue_array["status"]
+            "status"=>$issue_array["status"],
+            "date_created"=>$issue_array["utc_created_on"]
         ];
+        //convert assignee from bb username to id
+        $assignee_record = $ci->Internal_user_model->retrieve_by_bb_username($issue_array["responsible"]["username"]);
+        if($assignee_record!==null){
+
+            $log_array["assignee"] = $assignee_record["u_id"];
+        }
         $ci->Issue_log_model->insert($log_array);
 
     }

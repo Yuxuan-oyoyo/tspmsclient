@@ -13,9 +13,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/themes/default/style.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/jstree.min.js"></script>
+
     <script>
         function init(){
             reset_upload();
+            initialize_tree();
         }
 
         function upload_file(){
@@ -32,16 +36,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     console.log(data);
                     if(data.status==="success"){
                         reset_upload();
+                        refreshTree();
                     }else{
                         display_upload_form_error(data.message)
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown)
                 {
-                    // Handle errors here
                     display_upload_form_error('Ajax Error:'+textStatus);
                     console.log('ERRORS: ' + textStatus);
-                    // STOP LOADING SPINNER
                 }
             });
             disable_upload_form();
@@ -69,6 +72,85 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             $("#upload_button").show();
             $("#upload_cancel_button").show();
         }
+
+        function disable_file_delete_modal(){
+            $("#fileDeleteModal").modal('hide');
+        }
+
+        function refreshTree(){
+            $.post( "<?=site_url().'upload/get_all_files/'?>", function( data ) {
+                var new_data = [
+                    {
+                        "text": "Project Name",
+                        "state": {"opened": true},
+                        "children": data
+                    }
+                ]
+                $('#tree').jstree(true).settings.core.data = new_data;
+                $('#tree').jstree(true).refresh();
+            });
+        }
+
+        function initialize_tree() {
+            $.post( "<?=site_url().'upload/get_all_files/'?>", function( data ) {
+
+                $(function () {
+                    $('#tree').jstree({
+                        'core': {
+                            'check_callback': true,
+                            'data': [
+                                {
+                                    "text": "Project Name",
+                                    "state": {"opened": true},
+                                    "children": data
+                                }
+                            ]
+                        },
+                        'plugins': [
+                            "search", "state", "types", "wholerow"
+                        ]
+                    })
+                });
+
+            });
+        }
+
+        var selectedNode = null;
+
+        function deleteFileButtonClicked() {
+            selectedNode = $('#tree').jstree(true).get_selected('full',true)[0];
+            $('#fileDeleteModal').modal('show');
+        };
+
+        function confirmFileDeletion() {
+            $.post( "<?=site_url().'upload/delete_by_fid/'?>"+selectedNode.id, function( data ) {
+                if(data.status=='error'){
+                    alert(data.message);
+                }
+                $('#tree').jstree(true).delete_node(selectedNode);
+                selectedNode = null;
+            });
+
+            disable_file_delete_modal()
+        }
+
+        function open_file() {
+            selectedNode = $('#tree').jstree(true).get_selected('full',true)[0];
+            var link = selectedNode['original']['a_attr']['href'];
+
+            if(link != '#'){
+                window.open(link);
+            }
+        }
+
+        function rename_file() {
+            var ref = $('#tree').jstree(true),
+                sel = ref.get_selected();
+            if(!sel.length) { return false; }
+            sel = sel[0];
+            ref.edit(sel);
+        };
+
     </script>
 </head>
 
@@ -88,7 +170,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 <div class="modal-body">
                     <div class="alert alert-info alert-dismissible" role="alert" id="upload_message_alert">
                     </div>
-                    <form name="upload_image_form" id="upload_image_form" method="post" enctype="multipart/form-data" action="<?='upload/file_upload'?>">
+                    <form name="upload_image_form" id="upload_image_form" method="post" enctype="multipart/form-data" action="<?=base_url().'upload/file_upload'?>">
                         <div class="form-group">
                             <label for="file_input">Select file</label>
                             <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
@@ -110,7 +192,49 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+    <div class="modal fade" id="fileDeleteModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <strong>Delete File</strong>
+                </div>
+                <div class="modal-body">
+                    This action cannot be undone, do you wish to proceed?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="btnYes" onclick="confirmFileDeletion()"> Delete </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+<br><br><br>
+<div class="container">
+    <form id="search">
+        <input type="search" id="query"/>
+        <button type="submit">Search</button>
+    </form>
+    <br><br>
+    <div class="row">
+        <div class="col-md-4 col-sm-8 col-xs-8">
+             <button type="button"  onclick="open_file();">Open</button>
+           <!-- <button type="button"  onclick="rename_file();">Rename</button> -->
+            <button type="button"  onclick="deleteFileButtonClicked();">Delete</button>
+        </div>
+    </div>
+    <br>
+    <div id="tree"></div>
+
+    <script>
+        $("#search").submit(function(e) {
+            e.preventDefault();
+            $("#tree").jstree(true).search($("#query").val());
+        });
+    </script>
+</div>
+
 </body>
 
 </html>

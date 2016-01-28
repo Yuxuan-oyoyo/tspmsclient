@@ -147,4 +147,15 @@ left join phase on project_phase.phase_id = phase.phase_id where project.c_id= ?
         $project['current_project_phase_id'] = $current_project_phase_id;
         $this->update($project);
     }
+
+    public function retrieve_title($project_id){
+        if(isset($project_id)){
+            $sql = 'select project_title from project where project_id ='.$project_id;
+            $query=$this->db->query($sql);
+            if( $query->num_rows()>0){
+                return $query->row_array();
+            }
+        }
+        return null;
+    }
 }

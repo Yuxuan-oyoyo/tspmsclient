@@ -1,7 +1,11 @@
 <?php
 
 /**
- * Created by PhpStorm.
+ *
+ * Normal milestone {"id":bb_m_id,"name":db_m_id}
+ * Unused milestone {"id":bb_m_id,"name":"-".db_m_id}
+ *
+ *
  * User: Alex
  * Date: 10/5/2015
  * Time: 11:19 AM
@@ -27,8 +31,18 @@ class BB_milestones {
             $url = $endpoint.'?'.http_build_query($parameters);
             $result = $this->sendGetRequest($url);
         }
-        //var_dump($result);
-        return $result;
+        //$result is now set
+        if($result!==null) {
+            //this means to only keep milestones that have not been deleted
+            $valid_milestones = [];
+            foreach ($result as $m) {
+                if (isset($m["name"][0]) && $m["name"][0] != "-") {
+                    array_push($valid_milestones, $m);
+                }
+            }
+            return $valid_milestones;
+        }
+        return null;
     }
 
     public function getMilestone($repo_slug, $milestone_id){
@@ -45,6 +59,10 @@ class BB_milestones {
             $parameters["access_token"] = $CI->bb_shared->requestFromServer();
             $result = $this->sendGetRequest($endpoint);
         }
+        //this means the milestone has been deleted
+        if(isset($result["name"][0]) && $result["name"][0]=="-"){
+            return null;
+        }
         return $result;
     }
     private function sendGetRequest($url){
@@ -58,15 +76,11 @@ class BB_milestones {
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         if($code==200 && ($reply_array = json_decode($response,true))!=null){
-            //echo ($response);
-            if(isset($reply_array['error'])){
-                if($this->_print_err) var_dump($reply_array);
-            }else{
-                /*this is expected*/
+            if(!isset($reply_array['error'])){
                 return $reply_array;
             }
         }else{
-            die(print_r($response));
+            //die(print_r($response));
         }
         return null;
     }
@@ -98,7 +112,6 @@ class BB_milestones {
             $response = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
-            //var_dump($_trial);
             /*debug-------------------------------------------
            curl_setopt($ch, CURLOPT_VERBOSE, true);
 
@@ -111,7 +124,6 @@ class BB_milestones {
            debug --------------------------------------------*/
             if ($code == 200 || $code== 400) break;/*IMPORTANT*/
             else {
-                //var_dump("re-authen");
                 $data['access_token'] = $CI->bb_shared->requestFromServer();
             }
         }
@@ -122,8 +134,8 @@ class BB_milestones {
                     return $reply_array["id"];
                 }
             }else{
-                die("Repository \"$repo_slug\" is not accessible on BitBucket.
-                Please make sure it's a valid repository name");
+                //die("Repository \"$repo_slug\" is not accessible on BitBucket.
+                //Please make sure it's a valid repository name");
             }
         }
         return null;
@@ -134,19 +146,20 @@ class BB_milestones {
         $token = $CI->bb_shared->getDefaultOauthToken();
         $endpoint = $this->setEndpoint($repo_slug)."/".$id;
         $parameters["access_token"] = $token;
-        $_trial = 2;
+        $parameters["name"]="-".substr(base64_encode(rand ( 0 , 1000000)),0,10);
+        $_trial = 1;
         while ($_trial > 0) {
             $_trial -= 1;/*IMPORTANT*/
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $endpoint);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($parameters));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
             curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
             $response = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
-            //var_dump($_trial);
             /*debug-------------------------------------------
            curl_setopt($ch, CURLOPT_VERBOSE, true);
 
@@ -157,13 +170,12 @@ class BB_milestones {
            $verboseLog = stream_get_contents($verbose);
            echo "Verbose information:\n<pre>", htmlspecialchars($verboseLog), "</pre>\n";
            debug --------------------------------------------*/
-            if ($code == 204) return true;/*IMPORTANT*/
+            if ($code <300) return true;/*IMPORTANT*/
             elseif($code >400 && $code< 404) {
-                //var_dump("re-authen");
                 $data['access_token'] = $CI->bb_shared->requestFromServer();
             }
         }
-        return false;
+        return null;
     }
 
 }

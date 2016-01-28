@@ -34,9 +34,10 @@ class Updates extends CI_Controller{
             $insert_update_array['post_id'] =$post_id;
             if($this->Update_model->insert($insert_update_array)==1){
                 $this->session->set_userdata('message', 'New update created successfully.');
-                $change_type = "new update";
+                $change_type = "New Update Created";
+                $redirect = "view_updates";
                 $users = $this->Internal_user_model->retrieve_all_pm();
-                $this->Notification_model->add_new_post_notifications($project_id,$post_id,$change_type,$users);
+                $this->Notification_model->add_new_post_notifications($project_id,$post_id,$change_type,$redirect,$users);
                 redirect('projects/view_updates/'.$project_id);
             }else{
                 $this->session->set_userdata('message', 'An error occurred, please contact administrator.');
@@ -61,9 +62,10 @@ class Updates extends CI_Controller{
             $post_id = $u['post_id'];
             if($this->Update_model->delete_($update_id)){
                 $this->session->set_userdata('message', 'Update deleted successfully.');
-                $change_type = "delete update";
+                $change_type = "Update Deleted";
+                $redirect = "view_updates";
                 $users = $this->Internal_user_model->retrieve_all_pm();
-                $this->Notification_model->add_new_post_notifications($project_id,$post_id,$change_type,$users);
+                $this->Notification_model->add_new_post_notifications($project_id,$post_id,$change_type,$redirect,$users);
                 redirect('projects/view_updates/'.$project_id);
             }else{
                 $this->session->set_userdata('message', 'An error occurred, please contact administrator.');

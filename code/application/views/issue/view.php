@@ -296,9 +296,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                        class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <?php
-                        $server_status = [
-                            "new","open","resolved","on hold","invalid","duplicate","wontfix","closed"
-                        ];
+                        $server_status = [ "new","open","resolved","on hold","invalid","duplicate","wontfix","closed"];
                         ?>
                         <?php foreach ($server_status as $s):?>
                             <?php if($s!=$i["status"]):?>
@@ -310,7 +308,8 @@ if($this->session->userdata('internal_type')=='Developer') {
 
                 </div>
                 <?php $workflow_next= [
-                    "to develop"=>"to test","to test"=>"ready for deployment","ready for deployment"=>"to deploy"
+                    "to develop"=>"to test","to test"=>"ready for deployment",
+                    "ready for deployment"=>"to deploy","to deploy"=>"default workflow"
                 ];?>
                 <?php if($i["status"]!="resolved"):?>
                     <?php $next_workflow = isset($workflow_next[$i["workflow"]])?$workflow_next[$i["workflow"]]: "to develop";?>
@@ -319,6 +318,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                            value="<?=$next_workflow?>"><?=ucwords($next_workflow)?></a>
                         <a href="#"class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
                         <ul class="dropdown-menu">
+                            <li><a href="#" class="update-btn" param="workflow" value="default workflow">-Default Workflow-</a></li>
                             <?php $workflows = ["to develop","to test","ready for deployment","to deploy"];?>
                             <?php foreach ($workflows as $s):?>
                                 <?php if($s!=$i["workflow"]):?>

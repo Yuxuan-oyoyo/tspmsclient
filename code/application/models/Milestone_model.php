@@ -61,12 +61,9 @@ and pr.project_id=pp.project_id and pr.bitbucket_repo_name=?",[$repo_slug]);
         return null;
     }
     public function retrieve_all(){
-        if(isset($repo_slug)){
-            $query = $this->db->query("select pr.project_id,pr.bitbucket_repo_name, pr.project_title, p.header,p.body, m.deadline, m.if_completed, m.milestone_id from post p, milestone m, project pr, project_phase pp
-          where p.post_id=m.post_id and p.project_phase_id=pp.project_phase_id and pr.project_id=pp.project_id");
-            return $query->result_array();
-        }
-        return null;
+        $query = $this->db->query("select pr.project_id,pr.bitbucket_repo_name, pr.project_title, p.header,p.body, m.deadline, m.if_completed, m.milestone_id from post p, milestone m, project pr, project_phase pp
+      where p.post_id=m.post_id and p.project_phase_id=pp.project_phase_id and pr.project_id=pp.project_id");
+        return $query->result_array();
     }
     public function insert($insert_array){
         $insert_array['if_completed'] = 0;
