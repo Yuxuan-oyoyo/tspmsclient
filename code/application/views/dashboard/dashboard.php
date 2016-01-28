@@ -280,29 +280,28 @@ $this->load->view('common/pm_nav', $class);
     <br/></div>
 
     <div class="col-lg-5 tableContainer" align="center" >
-        <table  id="customerTable" class="scrollTable" align="center">
-            <thead class="fixedHeader">
-            <th style="width: 30%">Project Name</th>
-            <th style="width:20%">Current Phase</th>
-            <th style="width: 15%">Urgency Score</th>
-            <th style="width:30%;">Next Milestone</th>
-            <th style="width:5%;"></th>
+        <table class="table table-striped">
+            <thead>
+            <th>Project ID</th>
+            <th>Project Name</th>
+            <th>Current Phase</th>
+            <th>Urgency Score</th>
+            <th>Next Milestone</th>
+            <th></th>
             </thead>
-            <tbody class="scrollContent">
-                    <?php
-for ($x = 1; $x <= 9; $x++) {
-    ?>
-    <tr><td style="width: 30%">The Shipyard Project Management System</td>
-        <td style="width: 20%">Build</td>
-        <td style="width: 15%">132</td>
-        <td style="width:30%">Midterm</td>
-        <td style="width:5%;"><a href="#" ><i class="fa fa-eye"></i></a></td>
-    </tr>
-    <?php ;
-}
-?>
+            <tbody>
 
-
+            <?php if(!false == $projects):?>
+                <?php foreach($projects as $c):?>
+                    <tr><td><?=$c['project_id']?></td>
+                        <td><?=$c['project_title']?></td>
+                        <td>*pending*</td>
+                        <td>*pending*</td>
+                        <td>*pending*</td>
+                        <td><a href="<?=base_url().'Projects/view_dashboard/'.$c["project_id"]?>"><i class="fa fa-eye"></i></a></td>
+                    </tr>
+                <?php endforeach?>
+            <?php endif?>
 
 
             </tbody>
