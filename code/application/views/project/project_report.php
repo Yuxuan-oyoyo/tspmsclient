@@ -35,7 +35,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
     <aside class="sidebar-left">
         <div class="sidebar-links">
-            <a class="link-blue selected" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Project Overview</a>
+            <a class="link-blue" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Project Overview</a>
             <a class="link-blue " href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
             <?php
             if($project['bitbucket_repo_name']==null){
@@ -49,6 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             }
             ?>
             <a class="link-blue" href="<?=base_url().'Usecases/list_all/'.$project["project_id"]?>"><i class="fa fa-list"></i>Use Case List</a>
+            <a class="link-blue  selected" href="#"><i class="fa fa-bar-chart"></i>Analytics</a>
             <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
         </div>
     </aside>
