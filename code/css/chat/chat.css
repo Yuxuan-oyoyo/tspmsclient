@@ -2,6 +2,7 @@
 .msg-wrap-left{
     height: 500px;
     overflow-y: scroll;
+    margin-top: 5px;
 }
 .msg-wrap-right{
     height: 400px;
