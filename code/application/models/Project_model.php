@@ -122,6 +122,7 @@ left join phase on project_phase.phase_id = phase.phase_id and project.is_ongoin
         return $query->result_array();
     }
 
+
     public function retrieve_all_past(){
         $sql = 'SELECT project.* from  project where project.is_ongoing = 0';
         $query=$this->db->query($sql);
