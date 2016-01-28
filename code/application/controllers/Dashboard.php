@@ -65,10 +65,31 @@ class Dashboard extends CI_Controller
         $this->load->model("Task_model");
         $this->load->model("Project_phase_model");
         $phases= $this->Phase_model->retrieve_all_phases();
+
+
+
+        $table = array();
+        $table['cols'] = array(
+
+            // Labels for your chart, these represent the column titles
+            // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
+            array('label' => 'Phase', 'type' => 'string'),
+            array('label' => '#Task', 'type' => 'number'),
+            array('label' => '#Issue', 'type' => 'number'),
+            array('label' => '#Metrics', 'type' => 'number')
+
+        );
+
+        $rows = array();
+
+
+
+
+
         $container = [];
         //initialize phases
         foreach($phases as $value){
-            $container[$value["phase_name"]] = ["num_tasks"=>0,"num_issues"=>0, "metric"=>0];
+            $container[$value["phase_name"]] = ["pn"=>$value["phase_name"],"num_tasks"=>0,"num_issues"=>0, "metric"=>0];
         }
         //get issues
         $count_list_issue = $this->Issue_report_model->get_num_of_issues_per_phase($project_id);
@@ -91,8 +112,28 @@ class Dashboard extends CI_Controller
             }
         }
 
+        foreach($container as $value){
+            //echo $value["pn"];
+
+            $temp = array();
+
+            // the following line will be used to slice the Pie chart
+            $temp[] = array('v' => (string) $value["pn"]);
+
+            // Values of each slice
+            $temp[] = array('v' => $value["num_tasks"]);
+            $temp[] = array('v' => (int) $value["num_issues"]);
+            $temp[] = array('v' => $value["metric"]);
+            //var_dump($temp);
+            $rows[] = array('c' => $temp);
+        }
+
+        $table['rows'] = $rows;
+
+        $jsonTable = json_encode($table);
+        echo $jsonTable;
         //ajax:
-        echo json_encode($container);
+        //echo json_encode($container);
     }
 
     /**
@@ -139,18 +180,49 @@ class Dashboard extends CI_Controller
         $this->load->model("Issue_report_model");
         $issue_list = $this->Issue_report_model->get_per_issue_data($project_id);
         $result = [];
+
+        $table = array();
+
+        $table['cols'] = array(
+
+            // Labels for your chart, these represent the column titles
+            // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
+            array('label' => 'Issue ID', 'type' => 'string'),
+            array('label' => 'Metrics', 'type' => 'number'),
+            array('label' => 'Details', 'type' => 'string',"role"=>'tooltip')
+
+        );
+
+
+
+
+
+        //ajax:
+
+        $rows = array();
         foreach($issue_list as $v){
+            $temp = array();
             $metric = 0;
             if(isset($v["date_created"]) && isset($v["date_resolved"]) &&isset($v["date_due"])
                 && $v["date_due"]!=$v["date_created"]){
                 $actual = strtotime($v["date_resolved"])- strtotime($v["date_created"]);
                 $expected = strtotime($v["date_due"])- strtotime($v["date_created"]);
                 $metric = $actual/ $expected;
-                array_push($result,[$v["local_id"],$metric, $v["title"]]);
+                $temp[] = array('v' => (string) $v['local_id']);
+                $temp[] = array('v' =>  $metric);
+                $temp[] = array('v' => (string) $v['title']);
+                //echo json_encode($temp);
+
+                //array_push($result,[$v["local_id"],$metric, $v["title"]]);
+                $rows[] = array('c' => $temp);
             }
+
         }
-        //ajax:
-        echo json_encode($result);
+
+        $table['rows'] = $rows;
+
+        $jsonTable = json_encode($table);
+        echo $jsonTable;
     }
 
 
