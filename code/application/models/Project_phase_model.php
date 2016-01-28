@@ -114,4 +114,9 @@ class Project_phase_model extends CI_Model {
         $query=$this->db->query($sql,array($project_phase_id));
         return $query->result_array();
     }
+    public function get_times_per_phase($project_id){
+        $sql ="SELECT phase_name, start_time,end_time, estimated_end_time FROM project_phase pr, phase p WHERE p.phase_id=pr.phase_id AND project_id=?";
+        $query=$this->db->query($sql,[$project_id]);
+        return $query->result_array();
+    }
 }
