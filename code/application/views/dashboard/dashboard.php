@@ -165,8 +165,8 @@ $this->load->view('common/pm_nav', $class);
         <div class="col-lg-6 ">
             <div class="panel panel-info">
                 <div class="panel-heading">Important but not urgent</div>
-                <div class="panel-body" style="height: 200px;overflow-y: scroll;">
-                    <table class="table table-condensed " id="task_table">
+                <div class="panel-body" style="height: 200px;overflow-y: auto;">
+                    <table class="table table-condensed " >
                         <?php if(isset($tasks_i)):
                             foreach($tasks_i as $t):?>
                         <tr>
@@ -189,8 +189,8 @@ $this->load->view('common/pm_nav', $class);
         <div class="col-lg-6">
             <div class="panel panel-danger">
                 <div class="panel-heading">Important and Urgent</div>
-                <div class="panel-body" style="height: 200px;overflow-y: scroll;">
-                    <table class="table table-condensed " id="task_table">
+                <div class="panel-body" style="height: 200px;overflow-y: auto;">
+                    <table class="table table-condensed ">
                         <?php if(isset($tasks_ui)):
                             foreach($tasks_ui as $t):?>
                                 <tr>
@@ -214,8 +214,8 @@ $this->load->view('common/pm_nav', $class);
         <div class="col-lg-6 ">
             <div class="panel panel-success">
                 <div class="panel-heading">NOT Important OR Urgent</div>
-                <div class="panel-body" style="height: 200px;overflow-y: scroll;">
-                    <table class="table table-condensed " id="task_table">
+                <div class="panel-body" style="height: 200px;overflow-y: auto;">
+                    <table class="table table-condensed " >
                         <?php if(isset($tasks_none)):
                             foreach($tasks_none as $t):?>
                                 <tr>
@@ -239,8 +239,8 @@ $this->load->view('common/pm_nav', $class);
         <div class="col-lg-6">
             <div class="panel panel-warning">
                 <div class="panel-heading">Urgent but not Important</div>
-                <div class="panel-body" style="height: 200px;overflow-y: scroll;">
-                    <table class="table table-condensed " id="task_table">
+                <div class="panel-body" style="height: 200px;overflow-y:auto;">
+                    <table class="table table-condensed ">
                         <?php if(isset($tasks_u)):
                             foreach($tasks_u as $t):?>
                                 <tr>

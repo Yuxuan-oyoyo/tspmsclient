@@ -23,8 +23,8 @@ class Chat_model extends CI_Model{
 
 
         $sql = "select * from internal_user where u_id in " .
-                "(select pm_id from pm_project where project_id IN " .
-                "(select project_id from project where c_id = ?))";
+            "(select pm_id from pm_project where project_id IN " .
+            "(select project_id from project where c_id = ?))";
 
         $query=$this->db->query($sql, array($c_id));
         //print_r($this->db->error());
@@ -186,7 +186,7 @@ class Chat_model extends CI_Model{
 
             $to_the_pm = 0;
             $p_id = 5;
-            session_start();
+            //session_start();
             $c_id = $this->session->userdata('internal_uid');
             session_write_close();
         }
@@ -195,7 +195,7 @@ class Chat_model extends CI_Model{
             // client starting new_conversation with pm
             $to_the_pm = 1;
             $p_id = $partner_id;
-            session_start();
+            //session_start();
             $c_id = $this->session->userdata('Customer_cid');
             session_write_close();
         }
@@ -215,17 +215,17 @@ class Chat_model extends CI_Model{
 
 
     public function write(array $values){
-        session_start();
+        //session_start();
         $fromSession = $this->session->userdata("chat_id_".$values["chat_id"]);
         session_write_close();
-        print_r($values);
+        //print_r($values);
         //print_r("space\n\n\n");
 
         //$cc = $this->session->all_userdata();
         //echo json_encode($cc);
 
         if(isset($values)){
-            session_start();
+            //session_start();
             $message =[
                 "customer_id"=>$fromSession["customer_id"],
                 "pm_id"=>$fromSession["pm_id"],
@@ -243,7 +243,7 @@ class Chat_model extends CI_Model{
 //            $this->db->query($sql,[$values["user2"],$values["user1"],$values["user2"],$values["m_author"]],time());
             $this->db->insert("message",$message);
             // for debugging purposes
-            print_r($this->db->error());
+            //print_r($this->db->error());
 
             // use unique db id for directory name
             $insert_id = $this->db->insert_id();
@@ -260,4 +260,55 @@ class Chat_model extends CI_Model{
         $this->db->insert('message', $insert_array);
         return $this->db->insert_id();
     }
+
+    public function online_update($u_type, $u_id)
+    {
+        // TODO
+        $sql = "update online_user set timestamp = ? where user_id = ? AND user_type = ?";
+        $this->db->query($sql, array(time(), $u_id, $u_type));
+
+    }
+
+    public function online_add($u_type, $uid)
+    {
+        $insert_arr = [];
+        $insert_arr['user_id'] = $uid;
+        $insert_arr['user_type'] = $u_type;
+        $insert_arr['timestamp'] = 1;
+        $this->db->insert('online_user', $insert_arr);
+        return $this->db->insert_id();
+    }
+
+    public function is_user_online($u_id, $u_type)
+    {
+        //echo $u_id;
+        //echo $u_type;
+
+        $sql = "select timestamp from online_user where user_id = ? and user_type = ?";
+        $query = $this->db->query($sql, array($u_id, $u_type));
+
+        $u_timestamp = 0;
+
+
+        if ( $query->num_rows() > 0 )
+        {
+            $row = $query->row_array();
+            //echo json_encode($row);
+            $u_timestamp = $row["timestamp"];
+
+        }
+
+        if($u_timestamp > strtotime("-1 minutes"))
+        {
+            //echo "eh";
+            return true;
+        }
+        else
+        {
+            //echo "oh";
+            return false;
+        }
+
+    }
 }
+

@@ -13,18 +13,19 @@ class Upload extends CI_Controller {
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->model('File');
+        $this->load->model('Project_model');
     }
 
     public function index()
     {
-        $this->upload();
     }
-    public function upload(){
-        $this->load->view('upload_view');
+    public function upload($project_id){
+        $project = $this->Project_model->retrieve_by_id($project_id);
+        $this->load->view('upload_view',$data=['project'=>$project]);
     }
 
-    public function file_upload(){
-        if($file_to_upload=$this->upload_file_to_s3()){
+    public function file_upload($project_id){
+        if($file_to_upload=$this->upload_file_to_s3($project_id)){
             if($fid=$this->File->insert($file_to_upload)){
                 //$this->User_log_model->log_message('File record created|fid:'.$fid);
                 $json_response = array(
@@ -49,7 +50,7 @@ class Upload extends CI_Controller {
         }
     }
 
-    private function upload_file_to_s3(){
+    private function upload_file_to_s3($project_id){
         $s3 = new S3Client([
             'credentials' => [
                 'key'    => 'AKIAJCISFJKSJ7DGAM5A',
@@ -66,7 +67,7 @@ class Upload extends CI_Controller {
             $result = $s3 -> putObject(
                 array(
                     'Bucket'       => 'test-upload-file',
-                    'Key'          => $file_to_upload['file_key'],
+                    'Key'          => $project_id.'/'.$file_to_upload['file_key'],
                     'SourceFile'   => $_FILES['file_to_upload']['tmp_name'],
                     'ContentType'  => $_FILES['file_to_upload']['type'],
                     'ACL'          => 'public-read',
@@ -77,6 +78,7 @@ class Upload extends CI_Controller {
             );
 
             $file_to_upload['file_url'] = $result['ObjectURL'];
+            $file_to_upload['pid'] = $project_id;
 
             return $file_to_upload;
         } catch (S3Exception $e) {
@@ -99,7 +101,7 @@ class Upload extends CI_Controller {
             $s3 -> deleteObject(
                 array(
                     'Bucket'       => 'test-upload-file',
-                    'Key'          => $file_to_delete['file_key']
+                    'Key'          => $file_to_delete['pid'].'/'.$file_to_delete['file_key']
                 )
             );
 
@@ -120,8 +122,8 @@ class Upload extends CI_Controller {
         }
     }
 
-    public function get_all_files(){
-        $file_list=$this->File->retrieveAll();
+    public function get_all_files($project_id){
+        $file_list=$this->File->retrieveAll($project_id);
 
         $file_array=array();
         foreach($file_list as $value){
@@ -133,7 +135,6 @@ class Upload extends CI_Controller {
             );
             array_push($file_array, $file);
         }
-        //return json_encode($file_array);
         $this->output->set_content_type('application/json')->set_output(json_encode($file_array));
     }
 }

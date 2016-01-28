@@ -13,6 +13,6 @@
         <?php
         }
         ?>
-        <a class="link-blue" href="#"><i class="fa fa-folder"></i>File Repository</a>
+        <a class="link-blue " href="<?=base_url().'upload/upload/'.$project['project_id']?>"><i class="fa fa-folder"></i>File Repository</a>
     </div>
 </aside>

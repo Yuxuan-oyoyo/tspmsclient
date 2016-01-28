@@ -6,13 +6,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>File Repository</title>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-
-    <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-
+    <?php $this->load->view('common/common_header');?>
+    <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/themes/default/style.min.css" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.0.9/jstree.min.js"></script>
 
@@ -24,9 +19,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
         function upload_file(){
             $.ajax({
-                url: '<?=base_url().'upload/file_upload'?>',
+                url: '<?=base_url().'upload/file_upload/'.$project['project_id']?>',
                 type: 'POST',
-                data: new FormData($('#upload_image_form')[0]),
+                data: new FormData($('#upload_file_form')[0]),
                 cache: false,
                 dataType: 'json',
                 processData: false,
@@ -51,7 +46,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         }
 
         function reset_upload(){
-            $("#upload_image_modal").modal('hide');
+            $("#upload_file_modal").modal('hide');
             $("#upload_message_alert").empty();
             $("#upload_message_alert").hide();
             $("#upload_progress_bar").hide();
@@ -78,10 +73,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         }
 
         function refreshTree(){
-            $.post( "<?=site_url().'upload/get_all_files/'?>", function( data ) {
+            $.post( "<?=site_url().'upload/get_all_files/'.$project['project_id']?>", function( data ) {
                 var new_data = [
                     {
-                        "text": "Project Name",
+                        "text": "<?=$project['project_title']?>",
                         "state": {"opened": true},
                         "children": data
                     }
@@ -92,7 +87,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         }
 
         function initialize_tree() {
-            $.post( "<?=site_url().'upload/get_all_files/'?>", function( data ) {
+            $.post( "<?=site_url().'upload/get_all_files/'.$project['project_id']?>", function( data ) {
 
                 $(function () {
                     $('#tree').jstree({
@@ -100,7 +95,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                             'check_callback': true,
                             'data': [
                                 {
-                                    "text": "Project Name",
+                                    "text": "<?=$project['project_title']?>",
                                     "state": {"opened": true},
                                     "children": data
                                 }
@@ -155,22 +150,55 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 </head>
 
 <body onload="init()">
-<div class="container">
-    <a class="btn btn-default" onclick="$('#upload_image_modal').modal('show')">Upload new image</a>
-</div>
+<?php
+$class = [
+    'dashboard_class'=>'',
+    'projects_class'=>'active',
+    'message_class'=>'',
+    'customers_class'=>'',
+    'internal_user_class'=>'',
+    'analytics_class'=>''
+];
+$this->load->view('common/pm_nav', $class);
+?>
+<aside class="sidebar-left">
+    <div class="sidebar-links">
+        <a class="link-blue" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Project Overview</a>
+        <a class="link-blue " href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
+        <?php
+        if($project['bitbucket_repo_name']==null){
+            ?>
+            <a class="link-grey"><i class="fa fa-wrench"></i>Issues</a>
+            <?php
+        }else {
+            ?>
+            <a class="link-blue " href="<?= base_url() . 'Issues/list_all/' . $project["bitbucket_repo_name"] ?>"><i class="fa fa-wrench"></i>Issues</a>
+            <?php
+        }
+        ?>
+        <a class="link-blue" href="<?=base_url().'Usecases/list_all/'.$project["project_id"]?>"><i class="fa fa-list"></i>Use Case List</a>
+        <a class="link-blue" href="<?=base_url().'Projects/view_report/'.$project["project_id"]?>"><i class="fa fa-bar-chart"></i>Analytics</a>
+        <a class="link-blue selected" href="#"><i class="fa fa-folder"></i>File Repository</a>
+    </div>
+</aside>
 
-<div class="container">
 
-    <div class="modal fade" id="upload_image_modal" data-backdrop="static">
+<div class="col-lg-offset-1 content">
+    <!-- Page Content -->
+    <div class="col-lg-12">
+        <h1 class="page-header"> File Repository - <?=$project['project_title']?></h1>
+    </div>
+
+    <div class="modal fade" id="upload_file_modal" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">File Upload</h4>
+                    <h4 class="modal-title">File Upload - <?=$project['project_id']?></h4>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-info alert-dismissible" role="alert" id="upload_message_alert">
                     </div>
-                    <form name="upload_image_form" id="upload_image_form" method="post" enctype="multipart/form-data" action="<?=base_url().'upload/file_upload'?>">
+                    <form name="upload_file_form" id="upload_file_form" method="post" enctype="multipart/form-data" action="<?=base_url().'upload/file_upload'?>">
                         <div class="form-group">
                             <label for="file_input">Select file</label>
                             <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
@@ -209,23 +237,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         </div>
     </div>
 
-</div>
-<br><br><br>
-<div class="container">
     <form id="search">
-        <input type="search" id="query"/>
-        <button type="submit">Search</button>
-    </form>
-    <br><br>
-    <div class="row">
-        <div class="col-md-4 col-sm-8 col-xs-8">
-             <button type="button"  onclick="open_file();">Open</button>
-           <!-- <button type="button"  onclick="rename_file();">Rename</button> -->
-            <button type="button"  onclick="deleteFileButtonClicked();">Delete</button>
+        <div class="col-lg-3">
+            <input class="form-control" type="search" id="query"/>
         </div>
+        <div class="col-lg-9">
+            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i>&nbsp;Search</button>
+        </div>
+
+    </form>
+
+  <div class="col-lg-9" style="margin-top:10px;">
+        <div style ="margin-left=5px">
+            <button class="btn btn-sm btn-primary" onclick="$('#upload_file_modal').modal('show')"><i class="fa fa-plus"></i>&nbsp;Upload</button>
+            <button type="button" class="btn btn-success btn-sm"  onclick="open_file();"><i class="fa fa-folder"></i>&nbsp;Open</button>
+            <!-- <button type="button"  onclick="rename_file();">Rename</button> -->
+            <button type="button" class="btn btn-warning btn-sm" onclick="deleteFileButtonClicked();"><i class="fa fa-trash"></i>&nbsp;Delete</button>
+        </div>
+    <div id="tree" style="background-color: #f5f5f5"></div>
     </div>
-    <br>
-    <div id="tree"></div>
+
 
     <script>
         $("#search").submit(function(e) {
