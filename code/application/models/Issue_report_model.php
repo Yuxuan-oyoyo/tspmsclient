@@ -27,7 +27,7 @@ class Issue_report_model extends CI_Model{
                 "DELETE from issue_report WHERE project_id=?",
                 [$project_id]
             );
-            
+
         }
     }
     public function insert($issue_list,$project_id){
@@ -47,7 +47,7 @@ class Issue_report_model extends CI_Model{
 
     }
     public function get_num_of_issues_per_phase($project_id){
-        $record = $this->db->query("SELECT count(*) AS num, phase_name FROM issue_report i, phase p WHERE i.phase =p.phase_id AND  project_id=? GROUP BY phase",[$project_id]);
+        $record = $this->db->query("SELECT count(*) AS num, phase_name FROM issue_report i, phase p WHERE status='resolved' AND i.phase =p.phase_id AND  project_id=? GROUP BY phase",[$project_id]);
         return $record->result_array();
     }
 
@@ -65,7 +65,7 @@ class Issue_report_model extends CI_Model{
         }
         $sql = "SELECT sum(duration_1) AS du1, sum(duration_2) AS du2, ".
             "sum(duration_3) AS du3, sum(duration_4) AS du4, sum(duration_1) AS du5, ".
-            "phase_name FROM issue_report i, phase p WHERE i.phase =p.phase_id ".
+            "phase_name FROM issue_report i, phase p WHERE status='resolved' AND i.phase =p.phase_id ".
             "  AND ".$condition_clause." project_id=? GROUP BY phase";
         $query = $this->db->query($sql,[$project_id]);
         return $query->result_array();
@@ -73,7 +73,7 @@ class Issue_report_model extends CI_Model{
     public function get_per_issue_data($project_id){
         $query=$this->db->query("SELECT local_id, title, date_created, date_resolved, date_due, ".
             " phase, actual_duration/expected_duration as time_ratio ".
-            " FROM issue_report WHERE project_id=? ",[$project_id]);
+            " FROM issue_report WHERE status='resolved' AND project_id=? ",[$project_id]);
         return $query->result_array();
     }
 }

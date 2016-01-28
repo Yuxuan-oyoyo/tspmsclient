@@ -5,7 +5,6 @@ define('DEFAULT_PASSWORD',"000000");
 
 define('BB_ACCOUNT_NAME',isset($_SERVER["BB_ACCOUNT_NAME"])?$_SERVER["BB_ACCOUNT_NAME"]:"smuremix");
 
-define('PROJECT_ISSUE_NUMBER_PATH',"application/logs/num_issue_by_project.json");
 /*
 |--------------------------------------------------------------------------
 | File and Directory Modes

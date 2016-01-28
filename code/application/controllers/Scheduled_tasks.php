@@ -61,26 +61,13 @@ class Scheduled_tasks extends CI_Controller{
         echo json_encode($result);
     }
 
-    public function store_issue_count_by_repo(){
-        $file_path = PROJECT_ISSUE_NUMBER_PATH;
-        $this->load->library("BB_issues");
-        $this->load->model("Project_model");
-        $project_records = $this->Project_model->retrieveAll();
-        $result = [];
-        foreach($project_records as $p){
-            $repo_slug = $p["bitbucket_repo_name"];
-            $bb_reply = $this->bb_issues->retrieveIssues($repo_slug, null,["limit"=>1]);
-            if($bb_reply!==null && isset($bb_reply["count"])){
-                $result[$p["project_id"]] = $bb_reply["count"];
-            }
-        }
-        $json_output = json_encode($result);
-        file_put_contents($file_path,$json_output , LOCK_EX);
-        flush();
-        echo $json_output;
-    }
-    public function fetch_issues(){
-        redirect("");
+    /**
+     * This method can be called by scheduler and project list page(through ajax call)
+     */
+    public function fetch_issue_counts(){
+        $this->load->library("BB_scheduled_tasks");
+        $result = $this->bb_scheduled_tasks->fetch_issue_counts();
+        echo json_encode($result);
     }
 
 

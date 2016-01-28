@@ -136,7 +136,7 @@ class Dashboard extends CI_Controller
      * @param $project_id
      */
     public function get_per_issue_data($project_id){
-
+        $this->load->model("Issue_report_model");
         $issue_list = $this->Issue_report_model->get_per_issue_data($project_id);
         $result = [];
         foreach($issue_list as $v){
@@ -150,7 +150,7 @@ class Dashboard extends CI_Controller
             }
         }
         //ajax:
-        echo json_encode($metric);
+        echo json_encode($result);
     }
 
 

@@ -80,13 +80,7 @@ $this->load->view('common/pm_nav', $class);
                                 </tr>
                                 <tr>
                                     <td>  <i class="fa fa-clock-o"></i>&nbsp;<strong>Number Of Issues </strong></td>
-                                    <td> <?php
-                                         if(isset($no_of_issues[$p['project_id']])){
-                                             echo $no_of_issues[$p['project_id']];
-                                         }else{
-                                             echo "BB repo not set";
-                                         }
-                                        ?></td>
+                                    <td id="issue-count-<?=$p["issue_id"]?>"> <?=isset($p['issue_count'])?$p['issue_count']:"BB repo not set yet"?></td>
                                 </tr>
                             </table>
 

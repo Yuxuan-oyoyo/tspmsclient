@@ -40,24 +40,17 @@ class Projects extends CI_Controller {
 
     }
 
-    public function list_all($include_hidden=false){
+    public function list_all(){
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
             $projects = $this->Project_model->retrieve_all_ongoing();
-            $no_of_issues=[];
-            foreach($projects as $p){
-                if($p['bitbucket_repo_name']!= null) {
-                    if(isset($this->bb_issues->retrieveIssues($p['bitbucket_repo_name'],null)['count'])) {
-                        $no_of_issues[$p['project_id']] =$this->bb_issues->retrieveIssues($p['bitbucket_repo_name'],null)['count'] ;
-                    }
-                }
-            }
-            $this->load->view('project/pm_all_ongoing_projects',$data=array('projects'=>$projects,'no_of_issues'=>$no_of_issues));
+            //Changed on 28 Jan by LN to speed it up
+            $this->load->view('project/pm_all_ongoing_projects',$data=array('projects'=>$projects));
         }else{
             $this->session->set_userdata('message','You have not login / have no access rights. ');
             redirect('/internal_authentication/login/');
         }
     }
-    public function list_past_projects($include_hidden=false){
+    public function list_past_projects(){
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
             $projects = $this->Project_model->retrieve_all_past();
             $this->load->view('project/pm_all_past_project',$data=array('projects'=>$projects));

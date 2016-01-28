@@ -134,4 +134,64 @@ class BB_scheduled_tasks {
         }
         $CI->Issue_report_model->insert($issue_list,$project_id);
     }
+    function calibrate_bb_milestones(){
+        $CI =& get_instance();
+        $CI->load->model("Milestone_model");
+        $CI->load->library("BB_milestones");
+        $db_milestones = $CI->Milestone_model->retrieve_all();
+        $m_ids = [];/*reponame=>mid*/
+        $result = ["added"=>[],"deleted"=>[],"time-taken"=>0];
+        foreach($db_milestones as $m) {
+            if(isset($m["bitbucket_repo_name"])) {//make sure there is a repo name
+                if (isset($m_ids[$m["bitbucket_repo_name"]])) {
+                    array_push($m_ids[$m["bitbucket_repo_name"]], $m["milestone_id"]);
+                } else {
+                    $m_ids[$m["bitbucket_repo_name"]] = [];
+                }
+            }
+        }
+        foreach($m_ids as $repo_slug=>$id_arr){// $id_arr=[id1, id2, id3]
+            //get all ms from BB for current repo
+            $bb_milestones = $CI->bb_milestones->getAllMilestones($repo_slug);
+            if ($bb_milestones===null) break;
+            //extract names from the returned result
+            $bb_milestone_names = [];
+            foreach($bb_milestones as $bb_m){//search for extra and remove
+                if(!in_array($bb_m["name"], $id_arr)){
+                    //echo "deleting milestone from bitbucket    ".$bb_m["name"]."<br>";
+                    $delete_outcome = $CI->bb_milestones->deleteMilestone($repo_slug, $bb_m["id"]);
+                    if($delete_outcome) array_push($result["deleted"],$bb_m["name"]);
+                }else{
+                    array_push($bb_milestone_names,$bb_m["name"]);
+                }
+            }
+            //send new milestone ids
+            $new_milestones = array_diff($id_arr, $bb_milestone_names);
+            foreach($new_milestones as $m){
+                //echo "adding milestone to bitbucket   ".$m."<br>";
+                $post_outcome = $CI->bb_milestones->postMilestone($repo_slug,$m);
+                if($post_outcome) array_push($result["added"],$m);
+            }
+        }
+        return $result;
+    }
+    public function fetch_issue_counts($update_db =true){
+        $CI =& get_instance();
+        $CI->load->library("BB_issues");
+        $CI->load->model("Project_model");
+
+        $project_records = $CI->Project_model->retrieveAll();
+        $result = [];
+        foreach($project_records as $p){
+            $repo_slug = $p["bitbucket_repo_name"];
+            if(!empty($repo_slug) && $p["repo_name_valid"]){
+                $bb_reply = $CI->bb_issues->retrieveIssues($repo_slug, null,["limit"=>1]);
+                if($bb_reply!==null && isset($bb_reply["count"])){
+                    $CI->Project_model->set_issue_count($p["project_id"],$bb_reply["count"] );
+                    $result[$p["project_id"]] = $bb_reply["count"];
+                }
+            }
+        }
+        return $result;
+    }
 }

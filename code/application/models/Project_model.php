@@ -60,7 +60,7 @@ class Project_model extends CI_Model {
         $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
         $update_array['last_updated'] = $date->format('c');
         $query = $this->db->update('project', $update_array, array('project_id' => $update_array['project_id']));
-        print_r($query);
+        //print_r($query); -->commented out by ln 28 Jan
         return $this->db->affected_rows();
     }
     public function insert($insert_array){
@@ -158,5 +158,16 @@ left join phase on project_phase.phase_id = phase.phase_id where project.c_id= ?
             }
         }
         return null;
+    }
+
+    /**
+     * This will be called by a scheduled task controller to update issue counts
+     * @param $project_id
+     * @param $count
+     * @return mixed
+     */
+    public function set_issue_count($project_id, $count){
+        $this->db->update('project', ["issue_count"=>$count], ['project_id' => $project_id]);
+        return $this->db->affected_rows();
     }
 }
