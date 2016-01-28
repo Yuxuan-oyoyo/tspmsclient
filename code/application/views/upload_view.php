@@ -26,7 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             $.ajax({
                 url: '<?=base_url().'upload/file_upload'?>',
                 type: 'POST',
-                data: new FormData($('#upload_image_form')[0]),
+                data: new FormData($('#upload_file_form')[0]),
                 cache: false,
                 dataType: 'json',
                 processData: false,
@@ -51,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         }
 
         function reset_upload(){
-            $("#upload_image_modal").modal('hide');
+            $("#upload_file_modal").modal('hide');
             $("#upload_message_alert").empty();
             $("#upload_message_alert").hide();
             $("#upload_progress_bar").hide();
@@ -81,7 +81,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             $.post( "<?=site_url().'upload/get_all_files/'?>", function( data ) {
                 var new_data = [
                     {
-                        "text": "Project Name",
+                        "text": "Project Name", "type" : "root",
                         "state": {"opened": true},
                         "children": data
                     }
@@ -100,15 +100,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                             'check_callback': true,
                             'data': [
                                 {
-                                    "text": "Project Name",
+                                    "text": "Project Name", "type" : "root",
                                     "state": {"opened": true},
                                     "children": data
                                 }
                             ]
                         },
                         'plugins': [
-                            "search", "state", "types", "wholerow"
-                        ]
+                            "search", "state", "types", "wholerow", "checkbox"
+                        ],
+                        'checkbox': {
+                            'keep_selected_style': false,
+                            'two_state' : true
+                        }
                     })
                 });
 
@@ -118,19 +122,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         var selectedNode = null;
 
         function deleteFileButtonClicked() {
-            selectedNode = $('#tree').jstree(true).get_selected('full',true)[0];
+            selectedNode = $('#tree').jstree(true).get_selected('full',true);
             $('#fileDeleteModal').modal('show');
         };
 
         function confirmFileDeletion() {
-            $.post( "<?=site_url().'upload/delete_by_fid/'?>"+selectedNode.id, function( data ) {
-                if(data.status=='error'){
-                    alert(data.message);
-                }
-                $('#tree').jstree(true).delete_node(selectedNode);
-                selectedNode = null;
-            });
-
+            for(var i=0; i<selectedNode.length; i++) {
+                $.post("<?=site_url().'upload/delete_by_fid/'?>" + selectedNode[i].id, function (data) {
+                    if (data.status == 'error') {
+                        alert(data.message);
+                    }
+                    $('#tree').jstree(true).delete_node(selectedNode);
+                    selectedNode = null;
+                });
+            }
             disable_file_delete_modal()
         }
 
@@ -156,12 +161,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
 <body onload="init()">
 <div class="container">
-    <a class="btn btn-default" onclick="$('#upload_image_modal').modal('show')">Upload new image</a>
+    <a class="btn btn-default" onclick="$('#upload_file_modal').modal('show')">Upload File</a>
 </div>
 
 <div class="container">
 
-    <div class="modal fade" id="upload_image_modal" data-backdrop="static">
+    <div class="modal fade" id="upload_file_modal" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -170,7 +175,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 <div class="modal-body">
                     <div class="alert alert-info alert-dismissible" role="alert" id="upload_message_alert">
                     </div>
-                    <form name="upload_image_form" id="upload_image_form" method="post" enctype="multipart/form-data" action="<?=base_url().'upload/file_upload'?>">
+                    <form name="upload_file_form" id="upload_file_form" method="post" enctype="multipart/form-data" action="<?=base_url().'upload/file_upload'?>">
                         <div class="form-group">
                             <label for="file_input">Select file</label>
                             <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
@@ -219,8 +224,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     <br><br>
     <div class="row">
         <div class="col-md-4 col-sm-8 col-xs-8">
-             <button type="button"  onclick="open_file();">Open</button>
-           <!-- <button type="button"  onclick="rename_file();">Rename</button> -->
+            <button type="button"  onclick="open_file();">Open</button>
+            <!-- <button type="button"  onclick="rename_file();">Rename</button> -->
             <button type="button"  onclick="deleteFileButtonClicked();">Delete</button>
         </div>
     </div>
