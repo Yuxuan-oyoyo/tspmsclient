@@ -23,4 +23,8 @@ class Phase_model extends CI_Model{
         }
         return null;
     }
+    public function retrieve_all_phases(){
+        $query = $this->db->query("SELECT phase_name from phase");
+        return $query->result_array();
+    }
 }

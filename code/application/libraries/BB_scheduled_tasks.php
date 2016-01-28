@@ -1,28 +1,27 @@
 <?php
 
 /**
- * I assume the user does not need up-to-date result unless he refresh the charts
- * So the data fetching is solely managed by scheduler
  * Created by PhpStorm.
  * User: Alex
  * Date: 1/28/2016
- * Time: 1:23 AM
+ * Time: 2:27 PM
  */
-class Project_overview extends CI_Controller{
+class BB_scheduled_tasks {
     /**
      * @param $project_id
      * @param null $repo_slug
      */
     public function fetch_project_issues($project_id,$repo_slug=null){
         //get reposlug if it's null
+        $CI =& get_instance();
         if($repo_slug ===null){
-            $this->load->model("Project_model");
-            $project_record = $this->Project_model->retrieve_by_id($project_id);
+            $CI->load->model("Project_model");
+            $project_record = $CI->Project_model->retrieve_by_id($project_id);
             $repo_slug = $project_record["bitbucket_repo_name"];
         }
         //retrieve all phase date of this project
-        $this->load->model("Project_phase_model");
-        $project_phase_record = $this->Project_phase_model->retrieve_by_project_id($project_id);
+        $CI->load->model("Project_phase_model");
+        $project_phase_record = $CI->Project_phase_model->retrieve_by_project_id($project_id);
         //convert time to date format
         foreach($project_phase_record as $key=>$phase){
             $phase["start_time"] = strtotime($phase["start_time"]);
@@ -30,9 +29,9 @@ class Project_overview extends CI_Controller{
             $project_phase_record[$key] = $phase;
         }
         //load other entities
-        $this->load->model("logs/Issue_log_model");
-        $this->load->library("BB_issues");
-        $this->load->model("Issue_report_model");
+        $CI->load->model("logs/Issue_log_model");
+        $CI->load->library("BB_issues");
+        $CI->load->model("Issue_report_model");
 
         //define mappings for priority (to numeric)
         $priority_mapping =[
@@ -44,7 +43,7 @@ class Project_overview extends CI_Controller{
         $count = 10000; //total number of issues to be returned
         $issue_list_interim = [];//stores concatenated issues from bb
         while($offset<$count){
-            $issue_list_raw = $this->bb_issues->retrieveIssues(
+            $issue_list_raw = $CI->bb_issues->retrieveIssues(
                 $repo_slug,
                 null,
                 ["start"=>$offset,"limit"=>50,"status"=>"resolved"],
@@ -87,7 +86,7 @@ class Project_overview extends CI_Controller{
             $issue["duration_5"] = 0;
             $issue["date_resolved"] = $issue["utc_last_updated"];
             //retrieve all relevant issue logs
-            $issue_log_records = $this->Issue_log_model->retrieve($repo_slug, $issue["local_id"]);
+            $issue_log_records = $CI->Issue_log_model->retrieve($repo_slug, $issue["local_id"]);
             if($issue_log_records!=null) {
                 for ($i = 0; $i < count($issue_log_records) - 1; $i++) {
                     $start_date = strtotime($issue_log_records[$i]["date_updated"]);
@@ -132,45 +131,6 @@ class Project_overview extends CI_Controller{
             }
             $issue_list[$issue["local_id"]] = $issue;
         }
-        $this->Issue_report_model->insert($issue_list,$project_id);
-    }
-    public function fetch_all_issues(){
-        $this->load->model("Project_model");
-        $project_records = $this->Project_model->retrieveAll();
-        foreach($project_records as $p){
-            $this->fetch_project_issues($p["project_id"],$p["bitbucket_repo_name"]);
-        }
-    }
-    public function get_num_of_issues_per_phase($project_id){
-        $this->load->model("Issue_report_model");
-        $count_list = $this->Issue_report_model->get_num_of_issues_per_phase($project_id);
-        //ajax:
-        echo json_encode($count_list);
-    }
-    public function get_sum_time_spent_per_category($project_id){
-        $categories = ["priority","kind","phase"];
-        $input_raw = $this->input->get($categories, true);
-        $input_clean = [];
-        foreach($input_raw as $key=>$value){
-            if(isset($value)){
-                //verify the inputs
-                $input_clean[$key] = $value;
-            }
-        }
-        $this->load->model("Issue_report_model");
-        $count_list = $this->Issue_report_model->get_sum_time_spent_per_category($project_id,$input_clean);
-        //ajax:
-        echo json_encode($count_list);
-    }
-
-    /**
-     * For issue metrics
-     * @param $project_id
-     */
-    public function get_per_issue_data($project_id){
-        
-        $count_list = $this->Issue_report_model->get_num_of_issues_per_phase($project_id);
-        //ajax:
-        echo json_encode($count_list);
+        $CI->Issue_report_model->insert($issue_list,$project_id);
     }
 }

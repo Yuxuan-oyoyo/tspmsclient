@@ -121,5 +121,12 @@ class Task_model extends CI_Model{
             return $query->result_array();
 
     }
+    public function get_num_of_tasks_per_phase($project_id){
+        $query= $this->db->query(
+            "SELECT count(*) as num, phase_name FROM task t, phase p WHERE p.phase_id=t.phase_id AND project_id = ? GROUP BY phase_name",
+            [$project_id]
+        );
+        return $query->result_array();
+    }
 
 }
