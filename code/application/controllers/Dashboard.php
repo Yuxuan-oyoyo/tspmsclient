@@ -43,13 +43,15 @@ class Dashboard extends CI_Controller
     }
 
     public function fetch_issues($project_id){
-        $this->BB_scheduled_tasks->fetch_project_issues($project_id);
+        $this->bb_scheduled_tasks->fetch_project_issues($project_id);
     }
     public function fetch_all_issues(){
         $this->load->model("Project_model");
         $project_records = $this->Project_model->retrieveAll();
         foreach($project_records as $p){
-            $this->bb_scheduled_tasks->fetch_project_issues($p["project_id"],$p["bitbucket_repo_name"]);
+            if(isset($p["bitbucket_repo_name"]) && !empty($p["bitbucket_repo_name"])){
+                $this->bb_scheduled_tasks->fetch_project_issues($p["project_id"],$p["bitbucket_repo_name"]);
+            }
         }
 
     }
@@ -144,11 +146,11 @@ class Dashboard extends CI_Controller
                 $actual = strtotime($v["date_resolved"])- strtotime($v["date_created"]);
                 $expected = strtotime($v["date_due"])- strtotime($v["date_created"]);
                 $metric = $actual/ $expected;
-                array_push($result,[$v["local_id"],$metric, $v["title55"]])
+                array_push($result,[$v["local_id"],$metric, $v["title"]]);
             }
         }
         //ajax:
-        echo json_encode($count_list);
+        echo json_encode($metric);
     }
 
 

@@ -77,7 +77,7 @@ class BB_scheduled_tasks {
                     break;
                 }
             }
-            var_dump($issue["phase"]);
+            //var_dump($issue["phase"]);
             //retrieve logs for this project
             $issue["duration_1"] = 0;
             $issue["duration_2"] = 0;
@@ -130,6 +130,7 @@ class BB_scheduled_tasks {
                 unset($issue[$a]);
             }
             $issue_list[$issue["local_id"]] = $issue;
+
         }
         $CI->Issue_report_model->insert($issue_list,$project_id);
     }

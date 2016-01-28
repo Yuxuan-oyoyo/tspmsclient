@@ -25,18 +25,19 @@ class BB_Shared {
     }
 
     /**
-     * Force refresh token, if called from outside
-     * @return string token
+     * @param string|null $user_id
+     * @return null
      */
-    public function requestFromServer(){
+    public function requestFromServer($user_id = null){
         /*get user's bb_oauth_key and secret*/
         $CI =& get_instance();
         $CI->load->library('session');
         $CI->load->model('Internal_user_model');
-        $user_id = $CI->session->userdata('internal_uid');
+        if($user_id==null) {
+            $user_id = $CI->session->userdata('internal_uid');
+        }
         $user = $CI->Internal_user_model->retrieve($user_id);
         if(!isset($user['bb_oauth_key'])|| !isset($user['bb_oauth_secret'])){
-            //TODO:elegant error message
             die("User's Bitbucket authentication key or secret is not set yet.".
                 PHP_EOL."Please set it up on user management page");
         }
@@ -82,7 +83,6 @@ class BB_Shared {
         }else{
             die("Error in bitbucket authentication ".$response);
         }
-        return null;
     }
     private  function writeToFile($token, $ttl){
         //TODO: this may not be thread-safe

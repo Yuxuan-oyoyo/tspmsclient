@@ -11,27 +11,34 @@ class Issue_report_model extends CI_Model{
         parent::__construct();
         $this->load->helper("date");
     }
-    public function insert($issue_list,$project_id){
-
+    public function delete($project_id){
         $data_cleaning_period = "1 day";
-
-        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
-        $data_cleaning_threshold = strtotime($date->format('c')." -".$data_cleaning_period);
-
-        if($this->get_time_last_updated() <= $data_cleaning_threshold){
-            $this->db->query("DELETE from issue_report");
-        }else{
+        $data_cleaning_threshold = strtotime((new DateTime())->format("c")." -".$data_cleaning_period);
+        var_dump($data_cleaning_threshold);
+        $time_last_updated = $this->get_time_last_updated();
+        var_dump(strtotime($time_last_updated));
+        if(isset($time_last_updated) && strtotime($time_last_updated) <= $data_cleaning_threshold){
+            var_dump("deleting all");
+            //$this->db->query("DELETE from issue_report");
+        }elseif(isset($time_last_updated)){
+            var_dump("deleting".$project_id);
+            /*
             $this->db->query(
                 "DELETE from issue_report WHERE project_id=?",
                 [$project_id]
             );
+            */
         }
+    }
+    public function insert($issue_list,$project_id){
+        $this->delete($project_id);
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
         //var_dump($issue_list);
         //var_dump($project_id);
         foreach($issue_list as $issue){
             $issue["date_loaded"] = $date->format('c');
             $this->db->insert('issue_report', $issue);
-            var_dump($this->db->error());
+            //var_dump($id);
         }
     }
     private function get_time_last_updated(){
@@ -61,8 +68,6 @@ class Issue_report_model extends CI_Model{
             "phase_name FROM issue_report i, phase p WHERE i.phase =p.phase_id ".
             "  AND ".$condition_clause." project_id=? GROUP BY phase";
         $query = $this->db->query($sql,[$project_id]);
-        var_dump($this->db->error());
-        var_dump($sql);
         return $query->result_array();
     }
     public function get_per_issue_data($project_id){
