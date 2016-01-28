@@ -14,7 +14,7 @@ class File extends CI_Model {
                 'file_key'=>$file_to_upload['file_key'],
                 'filename'=>$file_to_upload['filename'],
                 //NEED TO INTEGRATE WITH PROJECT ID
-                'pid'=>1
+                'pid'=>$file_to_upload['pid'],
             );
 
             $now = new DateTime("now", new DateTimeZone(DATETIMEZONE));
@@ -35,8 +35,10 @@ class File extends CI_Model {
         }
     }
 
-    function retrieveAll(){
-        $query = $this->db->get("upload");
+    function retrieveAll($project_id){
+        if($project_id) {
+            $query = $this->db->get_where("upload",['pid' => $project_id]);
+        }
         return $query->result_array();
     }
 }
