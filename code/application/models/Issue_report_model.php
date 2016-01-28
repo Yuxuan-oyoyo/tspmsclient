@@ -48,19 +48,21 @@ class Issue_report_model extends CI_Model{
         $condition_clause = "";
         foreach($categories as $key=>$value){
             if(in_array($key,["phase","kind","priority"])){
-                $value_clean = mysqli_real_escape_string($value);
-                $condition_clause .=" $key=$value_clean AND ";
+                $value_clean = $value;//do some cleaning here
+                $condition_clause .=" $key='$value_clean' AND ";
             }
         }
-        $query = $this->db->query("SELECT sum(duration_1) AS du1, sum(duration_2) AS du2, ".
-         "sum(duration_3) AS du3, sum(duration_4) AS du4, sum(duration_1) AS du5, ".
+        $sql = "SELECT sum(duration_1) AS du1, sum(duration_2) AS du2, ".
+            "sum(duration_3) AS du3, sum(duration_4) AS du4, sum(duration_1) AS du5, ".
             "phase_name FROM issue_report i, phase p WHERE i.phase =p.phase_id ".
-            "  AND ".$condition_clause." project_id=? GROUP BY phase",[$project_id]);
+            "  AND ".$condition_clause." project_id=? GROUP BY phase";
+        $query = $this->db->query($sql,[$project_id]);
         var_dump($this->db->error());
+        var_dump($sql);
         return $query->result_array();
     }
     public function get_per_issue_data($project_id){
-        $query=$this->db->query("SELECT title, date_created, date_resolved, date_due, ".
+        $query=$this->db->query("SELECT local_id, title, date_created, date_resolved, date_due, ".
             " phase, actual_duration/expected_duration as time_ratio ".
             " FROM issue_report WHERE project_id=? ",[$project_id]);
         return $query->result_array();

@@ -105,12 +105,18 @@ class Dashboard extends CI_Controller
         $issue_time_list = $this->Issue_report_model->get_sum_time_spent_per_category($project_id,$input_clean);
         $result = [];
         foreach($issue_time_list as $i){
+            array_push($result, ["to develop", $i["du1"]]);
+            array_push($result, ["to test", $i["du2"]]);
+            array_push($result, ["ready for deployment", $i["du3"]]);
+            array_push($result, ["to deploy", $i["du4"]]);
+            /*
             $result[$i["phase_name"]] = [
                 "to develop" =>$i["du1"],
                 "to test" =>$i["du2"],
                 "ready for deployment" =>$i["du3"],
                 "to deploy" =>$i["du4"]
             ];
+            */
         }
         //ajax:
         echo json_encode($result);
@@ -122,7 +128,18 @@ class Dashboard extends CI_Controller
      */
     public function get_per_issue_data($project_id){
 
-        $count_list = $this->Issue_report_model->get_num_of_issues_per_phase($project_id);
+        $issue_list = $this->Issue_report_model->get_per_issue_data($project_id);
+        $result = [];
+        foreach($issue_list as $v){
+            $metric = 0;
+            if(isset($v["date_created"]) && isset($v["date_resolved"]) &&isset($v["date_due"])
+                && $v["date_due"]!=$v["date_created"]){
+                $actual = strtotime($v["date_resolved"])- strtotime($v["date_created"]);
+                $expected = strtotime($v["date_due"])- strtotime($v["date_created"]);
+                $metric = $actual/ $expected;
+                array_push($result,[$v["local_id"],$metric, $v["title55"]])
+            }
+        }
         //ajax:
         echo json_encode($count_list);
     }
