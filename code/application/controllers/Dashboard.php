@@ -16,7 +16,9 @@ class Dashboard extends CI_Controller
         $this->load->helper('url');
         $this->load->model("Task_model");
         $this->load->library('BB_scheduled_tasks');
+        $this->load->model("Project_model");
         // $this->load->model('User_log_model');
+
     }
 
     public function index()
@@ -29,10 +31,14 @@ class Dashboard extends CI_Controller
         $tasks_i=$this->Task_model->retrieve_for_esenhower(1000, 7,5,3);
         $tasks_u=$this->Task_model->retrieve_for_esenhower(7, -1000,3,0);
         $tasks_none=$this->Task_model->retrieve_for_esenhower(1000, 7,3,0);
+        $projects = $this->Project_model->retrieve_all_ongoing();
+
+        $data["projects"]= $projects;
         $data["tasks_ui"]= $tasks_ui;
         $data["tasks_i"]= $tasks_i;
         $data["tasks_u"]= $tasks_u;
         $data["tasks_none"]= $tasks_none;
+
         $this->load->view('dashboard/dashboard',$data);
     }
 
@@ -43,8 +49,9 @@ class Dashboard extends CI_Controller
         $this->load->model("Project_model");
         $project_records = $this->Project_model->retrieveAll();
         foreach($project_records as $p){
-            $this->BB_scheduled_tasks->fetch_project_issues($p["project_id"],$p["bitbucket_repo_name"]);
+            $this->bb_scheduled_tasks->fetch_project_issues($p["project_id"],$p["bitbucket_repo_name"]);
         }
+
     }
 
     /**
@@ -126,4 +133,6 @@ class Dashboard extends CI_Controller
         //ajax:
         echo json_encode($count_list);
     }
+
+
 }

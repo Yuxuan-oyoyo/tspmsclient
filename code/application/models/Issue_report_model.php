@@ -12,6 +12,7 @@ class Issue_report_model extends CI_Model{
         $this->load->helper("date");
     }
     public function insert($issue_list,$project_id){
+
         $data_cleaning_period = "1 day";
 
         $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
@@ -25,9 +26,12 @@ class Issue_report_model extends CI_Model{
                 [$project_id]
             );
         }
+        //var_dump($issue_list);
+        //var_dump($project_id);
         foreach($issue_list as $issue){
             $issue["date_loaded"] = $date->format('c');
             $this->db->insert('issue_report', $issue);
+            var_dump($this->db->error());
         }
     }
     private function get_time_last_updated(){

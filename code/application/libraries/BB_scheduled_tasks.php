@@ -46,11 +46,11 @@ class BB_scheduled_tasks {
             $issue_list_raw = $CI->bb_issues->retrieveIssues(
                 $repo_slug,
                 null,
-                ["start"=>$offset,"limit"=>50,"status"=>"resolved"],
+                ["start"=>$offset,"limit"=>50],
                 $try_twice = true
             );
             $count = $issue_list_raw["count"];
-            $issue_list_partial = $issue_list_raw["issues"];
+            $issue_list_partial = isset($issue_list_raw["issues"])?$issue_list_raw["issues"]:[];
             $offset = $offset +$limit;
             $issue_list_interim = array_merge($issue_list_interim,$issue_list_partial);
         }
@@ -58,7 +58,7 @@ class BB_scheduled_tasks {
         //do transformations here
         foreach($issue_list_interim as $key =>$issue){
             //only keep resolved issues
-            if($issue["status"]!="resolved") continue;
+            //if($issue["status"]!="resolved") continue;
             //transform priority
             $issue["priority"] = $priority_mapping[$issue["priority"]];
             //get the phase id
@@ -115,7 +115,7 @@ class BB_scheduled_tasks {
             $unneeded = [
                 "content","utc_created_on","created_on","reported_by","utc_last_updated",
                 "responsible","follower_count","resource_uri","is_spam","metadata",
-                "comment_count"
+                "comment_count","deadline","usecase"
             ];
             $issue["expected_duration"] = -1;
             if(isset($issue["deadline"]) && $date_due = strtotime($issue["deadline"])){
@@ -125,7 +125,7 @@ class BB_scheduled_tasks {
             $issue["date_created"] = date('c',$issue["date_created"]);
             $issue["kind"]=$issue["metadata"]["kind"];
             $issue["project_id"]=$project_id;
-            $issue["date_due"]=isset($issue["deadline"])?$issue["deadline"]:"";
+            $issue["date_due"]=isset($issue["deadline"])?$issue["deadline"]:null;
             foreach($unneeded as $a){
                 unset($issue[$a]);
             }
