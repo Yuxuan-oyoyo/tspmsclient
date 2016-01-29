@@ -188,7 +188,11 @@ class BB_scheduled_tasks {
                 $bb_reply = $CI->bb_issues->retrieveIssues($repo_slug, null,["limit"=>1]);
                 if($bb_reply!==null && isset($bb_reply["count"])){
                     $CI->Project_model->set_issue_count($p["project_id"],$bb_reply["count"] );
-                    $result[$p["project_id"]] = $bb_reply["count"];
+                    array_push($result, [
+                        "id"=>$p["project_id"],
+                        "count"=>$bb_reply["count"]
+                    ]);
+
                 }
             }
         }
