@@ -43,7 +43,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     ['14', 2361]
     ]);
 
-
+/**
     var data3 = google.visualization.arrayToDataTable([
     ['Project', '#Task', '#Issue', 'Avg Issue Metrics'],
     ['P1', 20, 3, 1],
@@ -58,6 +58,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     ['P10', 30, 47, 0.6],
     ['P11', 14, 11, 1.1]
     ]);
+**/
+    var jsonData3 = $.ajax({
+        url: "<?=base_url().'dashboard/num_of_tasks_issue_past_projects'?>",
+        //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
+        dataType: "json",
+        async: false
+    }).responseText;
+
+    var data3 = new google.visualization.DataTable(jsonData3);
 
 
 

@@ -302,7 +302,7 @@ class Dashboard extends CI_Controller
         $tasknumbers = $this ->Task_model->get_num_of_tasks_onging_projects();
         //var_dump($tasknumbers);
 
-        $numberissue = $this->Issue_report_model->get_num_of_tasks_onging_projects();
+        $numberissue = $this->Issue_report_model->get_num_of_issue_onging_projects();
         //var_dump($numberissue);
 
 
@@ -355,6 +355,90 @@ class Dashboard extends CI_Controller
             }
             $rows[] = array('c' => $temp);
         }
+        $table['rows'] = $rows;
+        $jsonTable = json_encode($table);
+        echo $jsonTable;
+
+    }
+
+    public function num_of_tasks_issue_past_projects(){
+        $this->load->model("Task_model");
+        $this->load->model("Issue_report_model");
+        $this->load->model("Project_phase_model");
+        $tasknumbers = $this ->Task_model->get_num_of_tasks_past_projects();
+        //var_dump($tasknumbers);
+
+        $numberissue = $this->Issue_report_model->get_num_of_issue_past_projects();
+        //var_dump($numberissue);
+
+
+        $this->load->model("Project_model");
+
+        $projects = $this->Project_model->retrieve_all_past();
+
+        $container = [];
+        foreach($projects as $value){
+            $container[$value["project_id"]] = ["pn"=>$value["project_id"],"num_tasks"=>0,"num_issues"=>0, "metrics"=>0];
+            $metricsissue = $this->Issue_report_model->get_per_issue_data($value["project_id"]);
+            $matrics = 0;
+            $count = 0;
+
+            foreach($metricsissue as $issue){
+                if(isset($issue["date_resolved"])&&isset($issue["date_due"])){
+                    $matrics+=$issue["time_ratio"];
+                    $count+=1;
+                    //var_dump($count);
+                }
+                $container[$value["project_id"]]["metrics"] = $matrics/$count;
+            }
+
+        }
+
+        foreach($tasknumbers as $value){
+            $container[$value["project_id"]]["num_tasks"] = (int)$value["count"];
+        }
+
+        foreach($numberissue as $value){
+            $container[$value["project_id"]]["num_issues"] = (int)$value["count"];
+        }
+
+
+
+        //echo json_encode($container);
+
+
+//var_dump($container);
+
+
+        $table = array();
+        $table['cols'] = array(
+            // Labels for your chart, these represent the column titles
+            // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
+            array('label' => 'project', 'type' => 'string'),
+            array('label' => '#tasks', 'type' => 'number'),
+            array('label' => '#issues', 'type' => 'number'),
+            array('label' => 'metrics', 'type' => 'number'),
+        );
+
+
+        $rows = array();
+        foreach($container as $v){
+
+            $temp = array();
+            $count = 0;
+            foreach($v as $value){
+                if($count==2 or $count == 1){
+                    $temp[] = array('v' => (int) $value);
+                }else{
+                    $temp[] = array('v' => $value);
+
+                }
+                $count+=1;
+            }
+            //var_dump($v);
+            $rows[] = array('c' => $temp);
+        }
+
         $table['rows'] = $rows;
         $jsonTable = json_encode($table);
         echo $jsonTable;

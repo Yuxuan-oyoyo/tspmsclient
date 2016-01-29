@@ -131,7 +131,14 @@ class Task_model extends CI_Model{
 
     public function get_num_of_tasks_onging_projects(){
         $query= $this->db->query(
-            "select count(*) as count, project_id from task group by project_id;"
+            "select count(task_id) as count, project.project_id from task right join project on project.project_id = task.project_id where is_ongoing = 1 group by project_id;"
+        );
+        return $query->result_array();
+    }
+
+    public function get_num_of_tasks_past_projects(){
+        $query= $this->db->query(
+            "select count(task_id) as count, project.project_id from task right join project on project.project_id = task.project_id where is_ongoing = 0 group by project_id;"
         );
         return $query->result_array();
     }

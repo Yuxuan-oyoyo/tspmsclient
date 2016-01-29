@@ -77,8 +77,13 @@ class Issue_report_model extends CI_Model{
         return $query->result_array();
     }
 
-    public function get_num_of_tasks_onging_projects(){
-        $query=$this->db->query("select count(*) as count , project_id from issue_report group by project_id;");
+    public function get_num_of_issue_onging_projects(){
+        $query=$this->db->query("select count(local_id) as count, project.project_id from issue_report right join project on project.project_id = issue_report.project_id where is_ongoing = 1 group by project_id;");
+        return $query->result_array();
+    }
+
+    public function get_num_of_issue_past_projects(){
+        $query=$this->db->query("select count(local_id) as count, project.project_id from issue_report right join project on project.project_id = issue_report.project_id where is_ongoing = 0 group by project_id;");
         return $query->result_array();
     }
 }
