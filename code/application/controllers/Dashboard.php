@@ -364,18 +364,10 @@ class Dashboard extends CI_Controller
     public function num_of_tasks_issue_past_projects(){
         $this->load->model("Task_model");
         $this->load->model("Issue_report_model");
-        $this->load->model("Project_phase_model");
-        $tasknumbers = $this ->Task_model->get_num_of_tasks_past_projects();
-        //var_dump($tasknumbers);
-
-        $numberissue = $this->Issue_report_model->get_num_of_issue_past_projects();
-        //var_dump($numberissue);
-
-
         $this->load->model("Project_model");
-
+        $tasknumbers = $this ->Task_model->get_num_of_tasks_past_projects();
+        $numberissue = $this->Issue_report_model->get_num_of_issue_past_projects();
         $projects = $this->Project_model->retrieve_all_past();
-
         $container = [];
         foreach($projects as $value){
             $container[$value["project_id"]] = ["pn"=>$value["project_id"],"num_tasks"=>0,"num_issues"=>0, "metrics"=>0];
@@ -389,9 +381,10 @@ class Dashboard extends CI_Controller
                     $count+=1;
                     //var_dump($count);
                 }
+            }
+            if($count!=0){
                 $container[$value["project_id"]]["metrics"] = $matrics/$count;
             }
-
         }
 
         foreach($tasknumbers as $value){
@@ -444,4 +437,17 @@ class Dashboard extends CI_Controller
         echo $jsonTable;
 
     }
+
+    public function phase_past_projects(){
+        $this->load->model("Project_model");
+        $projects = $this->Project_model->retrieve_all_past();
+        $container = [];
+
+        foreach($projects as $value){
+            $container[$value["project_id"]] = ["pid"=>$value["project_id"],"num_tasks"=>0,"num_issues"=>0, "metrics"=>0];
+
+        }
+        var_dump($container);
+    }
+
 }
