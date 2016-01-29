@@ -142,7 +142,6 @@ $this->load->view('common/pm_nav', $class);
 
     <div class="col-lg-7">
     <div class="row">
-<<<<<<< HEAD
         <div class="col-lg-6 ">
             <div class="panel panel-info">
                 <div class="panel-heading">Important but not urgent</div>
@@ -162,7 +161,7 @@ $this->load->view('common/pm_nav', $class);
                             <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><i class="fa fa-eye"></i></a></td>
                         </tr>
                         <?php endforeach; endif?>
-=======
+
         <div class="col-lg-6">
             <div class="panel panel-warning">
                 <div class="panel-heading">Urgent but not Important</div>
@@ -181,7 +180,7 @@ $this->load->view('common/pm_nav', $class);
                                         }?></td>
                                 </tr>
                             <?php endforeach; endif?>
->>>>>>> 67998d4519515bf665ec08e535e90d8392b9c754
+
                     </table>
 
                 </div>
