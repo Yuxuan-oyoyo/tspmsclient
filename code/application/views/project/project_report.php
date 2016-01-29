@@ -43,16 +43,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 ['Importancy', 30]
             ]);
 //5 Level of priority: {1,2,3,4,5} --> {10, 30, 50, 70, 90}
-/**
-            var data3 = google.visualization.arrayToDataTable([
-                ['Phase', '#Task', '#Issue', 'Metrics'],
-                ['Lead', 20, 3, 1],
-                ['Requirement', 15, 14, 0.7],
-                ['Build', 40, 73, 1.5],
-                ['Testing', 30, 47, 0.6],
-                ['Deployment', 14, 11, 1.1]
-            ]);
- **/
+
 
             var jsonData3 = $.ajax({
                 url: "<?=base_url().'dashboard/get_num_issues_tasks_metrics_per_phase/'.$project["project_id"]?>",
@@ -60,10 +51,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 dataType: "json",
                 async: false
             }).responseText;
+/**
+            var data3 = new google.visualization.DataTable();
+            data3.addColumn('string', 'Phase');
+            data3.addColumn('number', '#Task');
+            data3.addColumn('number', '#Issue');
+            data3.addColumn('number', 'Metrics');
+            data3.addRows([
+                ['Lead', 20, 3, 1],
+                ['Requirement', 15, 14, 0.7],
+                ['Build', 40, 73, 1.5],
+                ['Testing', 30, 47, 0.6],
+                ['Deployment', 14, 11, 1.1]
+            ]);
+**/
 
 
-
-            var data3 = new google.visualization.DataTable(jsonData4);
+            var data3 = new google.visualization.DataTable(jsonData3);
 
             // Get JSON table
 
@@ -73,6 +77,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 dataType: "json",
                 async: false
             }).responseText;
+
 
 
 
@@ -113,6 +118,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
 **/
 
+    /**
             var data5 = new google.visualization.DataTable();
             data5.addColumn('string', 'Stage');
             data5.addColumn('number', 'time_spent');
@@ -123,8 +129,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 ['to deploy', 1]
             ]);
 
+**/
+            var jsonData5 = $.ajax({
+                url: "<?=base_url().'dashboard/get_sum_time_spent_per_category/'.$project["project_id"]?>",
+                //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
+                dataType: "json",
+                async: false
+            }).responseText;
 
 
+
+
+            var data5 = new google.visualization.DataTable(jsonData5);
 
             var options = {
                 width: 500,
