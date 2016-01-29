@@ -86,8 +86,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
 
 /**
- *
- *          var data4 = new google.visualization.DataTable();
+          var data4 = new google.visualization.DataTable();
             data4.addColumn('string', 'issue#');
             data4.addColumn('number', 'schedule metric');
 // A column for custom tooltip content
@@ -117,7 +116,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             ]);
 
 **/
-
     /**
             var data5 = new google.visualization.DataTable();
             data5.addColumn('string', 'Stage');

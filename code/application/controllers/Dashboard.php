@@ -200,7 +200,6 @@ class Dashboard extends CI_Controller
     public function get_per_issue_data($project_id){
         $this->load->model("Issue_report_model");
         $issue_list = $this->Issue_report_model->get_per_issue_data($project_id);
-<<<<<<< HEAD
         $result = [];
 
         $table = array();
@@ -215,13 +214,11 @@ class Dashboard extends CI_Controller
         );
 
         $rows = array();
-=======
         //sort array by local id
         usort($issue_list, function($a, $b){
             return $a["local_id"]- $b["local_id"];
         });
         $rows = [];
->>>>>>> 85ec2810de0d660d3197f6a17dd5957db92fdb34
         foreach($issue_list as $v){
             $metric = 0;
             if(isset($v["date_created"]) && isset($v["date_resolved"]) &&isset($v["date_due"])
@@ -240,9 +237,9 @@ class Dashboard extends CI_Controller
             ];
             array_push($rows, $row);
         }
-<<<<<<< HEAD
+
         $table['rows'] = $rows;
-=======
+
         $table = [
             'cols'=>[
                 // Labels for your chart, these represent the column titles
@@ -252,7 +249,7 @@ class Dashboard extends CI_Controller
             ],
             'rows'=>$rows
         ];
->>>>>>> 85ec2810de0d660d3197f6a17dd5957db92fdb34
+
         $jsonTable = json_encode($table);
         echo $jsonTable;
     }
