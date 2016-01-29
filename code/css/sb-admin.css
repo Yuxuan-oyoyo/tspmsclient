@@ -249,9 +249,10 @@ ul.alert-dropdown {
         z-index: 100000;
     }
 
-    #tree{
-        margin-top:10px;
-    }
+   .diy-nav{
+       margin-left:30px;
+       margin-right: 50px;
+   }
 
 
 

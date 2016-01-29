@@ -8,9 +8,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
     <script>
-        $(function () {
+     /*   $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         });
+        $(function() {
+
+            var $sidebar   = $(".sidebar-left"),
+                $window    = $(window),
+                offset     = $sidebar.offset(),
+                topPadding = 0;
+
+            $window.scroll(function() {
+                if ($window.scrollTop() > offset.top) {
+                    $sidebar.stop().animate({
+                        marginTop: $window.scrollTop() - offset.top + topPadding
+                    });
+                } else {
+                    $sidebar.stop().animate({
+                        marginTop: 0
+                    });
+                }
+            });
+
+        });*/
+
         $(document).ready(function(){
             $("#Lead" ).click(function() {
                 // this change title
