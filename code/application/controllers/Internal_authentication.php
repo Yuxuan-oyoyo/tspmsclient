@@ -145,9 +145,9 @@ class Internal_authentication extends CI_Controller {
                         'auto_html' => false,
                         'inline_css' => false,
                     );
-                    $mandrill = new Mandrill(MANDRILL_API_KEY);
+                    $mandrill = new Mandrill('5UwR18-51N_I9OxgD0_btw');
                     $result = $mandrill->messages->send($message);
-                    */
+                 */
                     $this->email->from('donotreply@tspms.com', 'TSPMS');
                     $this->email->to($email);
 

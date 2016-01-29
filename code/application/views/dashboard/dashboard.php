@@ -142,6 +142,7 @@ $this->load->view('common/pm_nav', $class);
 
     <div class="col-lg-7">
     <div class="row">
+<<<<<<< HEAD
         <div class="col-lg-6 ">
             <div class="panel panel-info">
                 <div class="panel-heading">Important but not urgent</div>
@@ -161,7 +162,28 @@ $this->load->view('common/pm_nav', $class);
                             <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><i class="fa fa-eye"></i></a></td>
                         </tr>
                         <?php endforeach; endif?>
+=======
+        <div class="col-lg-6">
+            <div class="panel panel-warning">
+                <div class="panel-heading">Urgent but not Important</div>
+                <div class="panel-body" style="height: 200px;overflow-y:auto;">
+                    <table class="table table-condensed ">
+                        <?php if(isset($tasks_u)):
+                            foreach($tasks_u as $t):?>
+                                <tr>
+                                    <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><?=$t['content']?></a></td>
+                                    <td> <?php if($t['days']<0){
+                                            $t['days'] = 0-$t['days'];
+                                            echo '<span class="badge" style="background-color: indianred">Overdue '.$t['days'].' days</span>';
+
+                                        }else{
+                                            echo '<span class="badge" style="background-color: darkorange">'.$t['days'].' days</span>';
+                                        }?></td>
+                                </tr>
+                            <?php endforeach; endif?>
+>>>>>>> 67998d4519515bf665ec08e535e90d8392b9c754
                     </table>
+
                 </div>
             </div>
         </div>
@@ -174,7 +196,7 @@ $this->load->view('common/pm_nav', $class);
                         <?php if(isset($tasks_ui)):
                             foreach($tasks_ui as $t):?>
                                 <tr>
-                                    <td><?=$t['content']?></td>
+                                    <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><?=$t['content']?></a></td>
                                     <td> <?php if($t['days']<0){
                                             $t['days'] = 0-$t['days'];
                                             echo '<span class="badge" style="background-color: indianred">Overdue'.$t['days'].' days</span>';
@@ -182,7 +204,6 @@ $this->load->view('common/pm_nav', $class);
                                         }else{
                                             echo '<span class="badge" style="background-color: darkorange">'.$t['days'].' days</span>';
                                         }?></td>
-                                    <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><i class="fa fa-eye"></i></a></td>
                                 </tr>
                             <?php endforeach; endif?>
                     </table>
@@ -199,7 +220,7 @@ $this->load->view('common/pm_nav', $class);
                         <?php if(isset($tasks_none)):
                             foreach($tasks_none as $t):?>
                                 <tr>
-                                    <td><?=$t['content']?></td>
+                                    <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><?=$t['content']?></a></td>
                                     <td> <?php if($t['days']<0){
                                             $t['days'] = 0-$t['days'];
                                             echo '<span class="badge" style="background-color: indianred">Overdue '.$t['days'].' days</span>';
@@ -207,7 +228,6 @@ $this->load->view('common/pm_nav', $class);
                                         }else{
                                             echo '<span class="badge" style="background-color: green">'.$t['days'].' days</span>';
                                         }?></td>
-                                      <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><i class="fa fa-eye"></i></a></td>
                                 </tr>
                             <?php endforeach; endif?>
                     </table>
@@ -215,31 +235,29 @@ $this->load->view('common/pm_nav', $class);
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-6">
-            <div class="panel panel-warning">
-                <div class="panel-heading">Urgent but not Important</div>
-                <div class="panel-body" style="height: 200px;overflow-y:auto;">
-                    <table class="table table-condensed ">
-                        <?php if(isset($tasks_u)):
-                            foreach($tasks_u as $t):?>
+        <div class="col-lg-6 ">
+            <div class="panel panel-info">
+                <div class="panel-heading">Important but not urgent</div>
+                <div class="panel-body" style="height: 200px;overflow-y: auto;">
+                    <table class="table table-condensed " >
+                        <?php if(isset($tasks_i)):
+                            foreach($tasks_i as $t):?>
                                 <tr>
-                                    <td><?=$t['content']?></td>
+                                    <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><?=$t['content']?></a></td>
                                     <td> <?php if($t['days']<0){
                                             $t['days'] = 0-$t['days'];
-                                            echo '<span class="badge" style="background-color: indianred">Overdue '.$t['days'].' days</span>';
+                                            echo '<span class="badge" style="background-color: indianred">Overdue'.$t['days'].' days</span>';
 
                                         }else{
-                                            echo '<span class="badge" style="background-color: darkorange">'.$t['days'].' days</span>';
+                                            echo '<span class="badge" style="background-color: green">'.$t['days'].' days</span>';
                                         }?></td>
-                                    <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><i class="fa fa-eye"></i></a></td>
                                 </tr>
                             <?php endforeach; endif?>
                     </table>
-
                 </div>
             </div>
         </div>
+
     </div>
         <br/>
         <div class="col-lg-1" id="chart_div5" style="width: 600px; height: 200px;"></div>
@@ -291,3 +309,5 @@ $this->load->view('common/pm_nav', $class);
     <div class="col-lg-12" id="chart_div3" style="height: 350px;"></div>
 
 </div>
+    </body>
+</html>
