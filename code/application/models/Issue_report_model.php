@@ -76,4 +76,9 @@ class Issue_report_model extends CI_Model{
             " FROM issue_report WHERE status='resolved' AND project_id=? ",[$project_id]);
         return $query->result_array();
     }
+
+    public function get_num_of_tasks_onging_projects(){
+        $query=$this->db->query("select count(*) as count , project_id from issue_report group by project_id;");
+        return $query->result_array();
+    }
 }

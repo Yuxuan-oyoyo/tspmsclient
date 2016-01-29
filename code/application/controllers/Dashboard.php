@@ -31,14 +31,13 @@ class Dashboard extends CI_Controller
         $tasks_i=$this->Task_model->retrieve_for_esenhower(1000, 7,5,3);
         $tasks_u=$this->Task_model->retrieve_for_esenhower(7, -1000,3,0);
         $tasks_none=$this->Task_model->retrieve_for_esenhower(1000, 7,3,0);
-        $projects = $this->Project_model->retrieve_all_ongoing();
+        $projects = $this->Project_model->retrieve_all_with_phase();
 
         $data["projects"]= $projects;
         $data["tasks_ui"]= $tasks_ui;
         $data["tasks_i"]= $tasks_i;
         $data["tasks_u"]= $tasks_u;
         $data["tasks_none"]= $tasks_none;
-
         $this->load->view('dashboard/dashboard',$data);
     }
 
@@ -132,8 +131,6 @@ class Dashboard extends CI_Controller
 
     }
 
-
-
     /**
      * input->get:
      * ["phase"=>1/2/3.., "kind"=>"bug"/"enhancement".., "priority"=>1/2/3/4...]
@@ -200,7 +197,7 @@ class Dashboard extends CI_Controller
     public function get_per_issue_data($project_id){
         $this->load->model("Issue_report_model");
         $issue_list = $this->Issue_report_model->get_per_issue_data($project_id);
-        $result = [];
+
 
         $table = array();
         $table['cols'] = array(
@@ -254,5 +251,113 @@ class Dashboard extends CI_Controller
         echo $jsonTable;
     }
 
+    public function phase_percentage(){
+        $this->load->model("Phase_model");
+        $this->load->model("Project_model");
+        $phases= $this->Phase_model->retrieve_all_phases();
+        $projects = $this->Project_model->retrieve_all_with_phase();
+        $container = [];
+        foreach($projects as $value){
+            $phase = $value['phase_name'];
+            if($phase == null){
+                array_push($container,"Not Started");
+            }else{
+                array_push($container,$phase);
+            }
+        }
 
+
+
+
+        $table = array();
+        $table['cols'] = array(
+            // Labels for your chart, these represent the column titles
+            // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
+            array('label' => 'Phase Name', 'type' => 'string'),
+            array('label' => 'Count', 'type' => 'number')
+
+        );
+        $rows = array();
+
+
+
+        $counts = array_count_values($container);
+        //var_dump($counts);
+        foreach($counts as $key => $value){
+            $temp = array();
+            //var_dump($key);
+            //var_dump($value);
+            $temp[] = array('v' => $key);
+            $temp[] = array('v' => $value);
+            $rows[] = array('c' => $temp);
+        }
+        $table['rows'] = $rows;
+        $jsonTable = json_encode($table);
+        echo $jsonTable;
+    }
+
+    public function num_of_tasks_issue_onging_projects(){
+        $this->load->model("Task_model");
+        $this->load->model("Issue_report_model");
+        $tasknumbers = $this ->Task_model->get_num_of_tasks_onging_projects();
+        //var_dump($tasknumbers);
+
+        $numberissue = $this->Issue_report_model->get_num_of_tasks_onging_projects();
+        //var_dump($numberissue);
+
+
+        $this->load->model("Project_model");
+
+        $projects = $this->Project_model->retrieve_all_ongoing();
+
+        $container = [];
+        foreach($projects as $value){
+            $container[$value["project_id"]] = ["pn"=>$value["project_id"],"num_tasks"=>0,"num_issues"=>0];
+
+        }
+
+        foreach($tasknumbers as $value){
+            $container[$value["project_id"]]["num_issues"] = $value["count"];
+        }
+
+        foreach($numberissue as $value){
+            $container[$value["project_id"]]["num_tasks"] = $value["count"];
+        }
+
+        //echo json_encode($container);
+
+
+
+
+
+
+        $table = array();
+        $table['cols'] = array(
+            // Labels for your chart, these represent the column titles
+            // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
+            array('label' => 'project', 'type' => 'string'),
+            array('label' => '#tasks', 'type' => 'number'),
+            array('label' => '#issues', 'type' => 'number'),
+        );
+
+
+        $rows = array();
+        foreach($container as $v){
+            $temp = array();
+            $count = 0;
+            foreach($v as $value){
+                if($count==2 or $count == 1){
+                    $temp[] = array('v' => (int) $value);
+                }else{
+                    $temp[] = array('v' => $value);
+                }
+                $count+=1;
+            }
+            $rows[] = array('c' => $temp);
+        }
+        $table['rows'] = $rows;
+        $jsonTable = json_encode($table);
+        echo $jsonTable;
+
+    }
 }

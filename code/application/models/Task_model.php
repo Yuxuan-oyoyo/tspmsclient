@@ -129,4 +129,11 @@ class Task_model extends CI_Model{
         return $query->result_array();
     }
 
+    public function get_num_of_tasks_onging_projects(){
+        $query= $this->db->query(
+            "select count(*) as count, project_id from task group by project_id;"
+        );
+        return $query->result_array();
+    }
+
 }
