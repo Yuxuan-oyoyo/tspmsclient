@@ -31,6 +31,16 @@ function drawChart() {
     ]);
 
 
+    // Get JSON table
+
+    var jsonData4 = $.ajax({
+        url: "getData.php",
+        dataType: "json",
+        async: false
+    }).responseText;
+
+
+
     var data4 = new google.visualization.DataTable();
     data4.addColumn('string', 'issue#');
     data4.addColumn('number', 'schedule metric');
