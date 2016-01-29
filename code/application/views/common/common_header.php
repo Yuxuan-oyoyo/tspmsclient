@@ -16,7 +16,7 @@
 
 <link rel="stylesheet" href="<?=base_url() . 'css/font-awesome.min.css'?>">
 <link href="<?=base_url().'css/parsley.css'?>" rel="stylesheet" type="text/css">
-<script src="<?= base_url() . 'js/jquery.min.js' ?>"></script>
+<script src="<?= base_url() . 'js/jquery-2.1.4.min.js' ?>"></script>
 <script src="<?= base_url() . 'js/bootstrap.min.js' ?>"></script>
 <script src="<?= base_url() . 'js/parsley.min.js' ?>"></script>
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>

@@ -200,6 +200,7 @@ class Dashboard extends CI_Controller
     public function get_per_issue_data($project_id){
         $this->load->model("Issue_report_model");
         $issue_list = $this->Issue_report_model->get_per_issue_data($project_id);
+<<<<<<< HEAD
         $result = [];
 
         $table = array();
@@ -214,25 +215,44 @@ class Dashboard extends CI_Controller
         );
 
         $rows = array();
+=======
+        //sort array by local id
+        usort($issue_list, function($a, $b){
+            return $a["local_id"]- $b["local_id"];
+        });
+        $rows = [];
+>>>>>>> 85ec2810de0d660d3197f6a17dd5957db92fdb34
         foreach($issue_list as $v){
-            $temp = array();
             $metric = 0;
             if(isset($v["date_created"]) && isset($v["date_resolved"]) &&isset($v["date_due"])
                 && $v["date_due"]!=$v["date_created"]){
                 $actual = strtotime($v["date_resolved"])- strtotime($v["date_created"]);
                 $expected = strtotime($v["date_due"])- strtotime($v["date_created"]);
                 $metric = $actual/ $expected;
-                $temp[] = array('v' => (string) $v['local_id']);
-                $temp[] = array('v' =>  $metric);
-                $temp[] = array('v' => (string) $v['title']);
-                //echo json_encode($temp);
 
-                //array_push($result,[$v["local_id"],$metric, $v["title"]]);
-                $rows[] = array('c' => $temp);
             }
-
+            $row = [
+                "c"=>[
+                    ['v' => (string) $v['local_id']],
+                    ['v' =>  $metric],
+                    ['v' => (string) $v['title']]
+                ]
+            ];
+            array_push($rows, $row);
         }
+<<<<<<< HEAD
         $table['rows'] = $rows;
+=======
+        $table = [
+            'cols'=>[
+                // Labels for your chart, these represent the column titles
+                ['label' => 'Issue ID', 'type' => 'string'],
+                ['label' => 'Metrics', 'type' => 'number'],
+                ['label' => 'Details', 'type' => 'string',"role"=>'tooltip']
+            ],
+            'rows'=>$rows
+        ];
+>>>>>>> 85ec2810de0d660d3197f6a17dd5957db92fdb34
         $jsonTable = json_encode($table);
         echo $jsonTable;
     }
