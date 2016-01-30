@@ -7,6 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 <head>
     <?php $this->load->view('common/common_header');?>
 <style>
+    .glyphicon-refresh{cursor: pointer;cursor: hand;}
     .glyphicon-refresh-animate {
         -animation: spin .7s infinite linear;
         -webkit-animation: spin2 .7s infinite linear;
@@ -16,7 +17,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         from { -webkit-transform: rotate(0deg);}
         to { -webkit-transform: rotate(360deg);}
     }
-
     @keyframes spin {
         from { transform: scale(1) rotate(0deg);}
         to { transform: scale(1) rotate(360deg);}
@@ -124,9 +124,8 @@ $this->load->view('common/pm_nav', $class);
     </div>
     <script>
         $(document).ready(function(){
-            $('.update-issue-count').unbind().click(function(e){
-                e.preventDefault();
-                var button = $(this);
+            var refreshIssues = function (){
+                var button = $('.update-issue-count');
                 button.addClass("glyphicon-refresh-animate");
                 $.ajax({
                     url:'<?=base_url()."Scheduled_tasks/fetch_issue_counts"?>',
@@ -140,8 +139,9 @@ $this->load->view('common/pm_nav', $class);
                         button.removeClass("glyphicon-refresh-animate");
                     }
                 });
-
-            });
+            };
+            if(Math.random()<0.05){refreshIssues()}
+            $('.update-issue-count').click(function(){refreshIssues();});
         })
     </script>
 

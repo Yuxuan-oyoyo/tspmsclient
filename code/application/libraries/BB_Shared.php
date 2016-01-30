@@ -18,10 +18,11 @@ class BB_Shared {
 
     public function getDefaultOauthToken($user_id=null){
         $CI =& get_instance();
+        $CI->load->model('Oauth_token_model');
         if($user_id===null){
-            $CI->load->model('Oauth_token_model');
             $user_id = $CI->session->userdata('internal_uid');
         }
+        //var_dump($user_id);
         $CI->load->library('session');
         $key_array = $CI->Oauth_token_model->retrieve($user_id);
         if(isset($key_array) && $key_array["ttl"]>time()) return $key_array["token"];

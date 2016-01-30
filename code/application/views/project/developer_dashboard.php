@@ -6,7 +6,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
 <head>
     <?php $this->load->view('common/common_header');?>
+    <style>
+        .glyphicon-refresh{cursor: pointer;cursor: hand;}
+        .glyphicon-refresh-animate {
+            -animation: spin .7s infinite linear;
+            -webkit-animation: spin2 .7s infinite linear;
+        }
 
+        @-webkit-keyframes spin2 {
+            from { -webkit-transform: rotate(0deg);}
+            to { -webkit-transform: rotate(360deg);}
+        }
+        @keyframes spin {
+            from { transform: scale(1) rotate(0deg);}
+            to { transform: scale(1) rotate(360deg);}
+        }
+    </style>
 </head>
 <body>
 <?php
@@ -75,13 +90,7 @@ $this->load->view('common/dev_nav', $class);
                             </tr>
                             <tr>
                                 <td>  <i class="fa fa-clock-o"></i>&nbsp;<strong>Number Of Issues </strong></td>
-                                <td> <?php
-                                    if(isset($no_of_issues[$p['project_id']])){
-                                        echo $no_of_issues[$p['project_id']];
-                                    }else{
-                                        echo "BB repo not set";
-                                    }
-                                    ?></td>
+                                <td> <span class="issue-count-<?=$p["project_id"]?>"><?=isset($p['issue_count'])?$p['issue_count']:"BB repo not set yet"?></span><span class="update-issue-count glyphicon glyphicon-refresh" style="margin-left:8px"></span></td>
                             </tr>
                         </table>
 
@@ -94,7 +103,29 @@ $this->load->view('common/dev_nav', $class);
         }
         ?>
     </div>
-
+    <script>
+        $(document).ready(function(){
+            function refreshIssues(){
+                var button = $('.update-issue-count');
+                button.addClass("glyphicon-refresh-animate");
+                $.ajax({
+                    url:'<?=base_url()."Scheduled_tasks/fetch_issue_counts"?>',
+                    success: function(response){
+                        var data = jQuery.parseJSON(response);
+                        for(var i=0;i<data.length;i++){
+                            var id = data[i].id;
+                            var count = data[i].count;
+                            $(".issue-count-"+id).html(count);
+                        }
+                        button.removeClass("glyphicon-refresh-animate");
+                    }
+                });
+                return false;
+            }
+            if(Math.random()<0.05){refreshIssues();}
+            $('.update-issue-count').on('click',function(){refreshIssues();});
+        })
+    </script>
 
     <!-- /#page-content-wrapper -->
 

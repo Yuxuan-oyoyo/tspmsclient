@@ -13,53 +13,38 @@ class Scheduled_tasks extends CI_Controller{
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->library('BB_issues');
+        $this->load->model('Internal_user_model');
         $this->session->userdata('internal_uid',1);
     }
     /* Calibrates bb milestones with database
      * prints {"added":num_added,"removed":num_removed,"time":time_taken}
      */
     function calibrate_bb_milestones(){
-        $start_time = time();
-        $this->load->model("Milestone_model");
-        $this->load->library("BB_milestones");
-        $db_milestones = $this->Milestone_model->retrieve_all();
-        $m_ids = [];/*reponame=>mid*/
-        $result = ["added"=>[],"deleted"=>[],"time-taken"=>0];
-        foreach($db_milestones as $m) {
-            if(isset($m["bitbucket_repo_name"])) {//make sure there is a repo name
-                if (isset($m_ids[$m["bitbucket_repo_name"]])) {
-                    array_push($m_ids[$m["bitbucket_repo_name"]], $m["milestone_id"]);
-                } else {
-                    $m_ids[$m["bitbucket_repo_name"]] = [];
-                }
+        $authenticated = false;
+        $data = [];
+        if($this->session->userdata('internal_uid')
+                &&$this->session->userdata('internal_type')=="PM"){
+            $authenticated = true;
+        }else{
+            $all_pm_records = $this->Internal_user_model->retrieve_all_pm();
+            if(isset($all_pm_records)&&isset($all_pm_records[0])&&!empty($all_pm_records[0]["bb_username"])){
+                $pm_id = $all_pm_records[0]["u_id"];
+                $this->session->set_userdata('internal_uid',$pm_id);
+                $authenticated = true;
+            }else{
+                die("No project manager found");
             }
         }
-        foreach($m_ids as $repo_slug=>$id_arr){// $id_arr=[id1, id2, id3]
-            //get all ms from BB for current repo
-            $bb_milestones = $this->bb_milestones->getAllMilestones($repo_slug);
-            if ($bb_milestones===null) break;
-            //extract names from the returned result
-            $bb_milestone_names = [];
-            foreach($bb_milestones as $bb_m){//search for extra and remove
-                if(!in_array($bb_m["name"], $id_arr)){
-                    //echo "deleting milestone from bitbucket    ".$bb_m["name"]."<br>";
-                    $delete_outcome = $this->bb_milestones->deleteMilestone($repo_slug, $bb_m["id"]);
-                    if($delete_outcome) array_push($result["deleted"],$bb_m["name"]);
-                }else{
-                    array_push($bb_milestone_names,$bb_m["name"]);
-                }
-            }
-            //send new milestone ids
-            $new_milestones = array_diff($id_arr, $bb_milestone_names);
-            foreach($new_milestones as $m){
-                //echo "adding milestone to bitbucket   ".$m."<br>";
-                $post_outcome = $this->bb_milestones->postMilestone($repo_slug,$m);
-                if($post_outcome) array_push($result["added"],$m);
-            }
+        if($authenticated){
+            $this->load->library("BB_scheduled_tasks");
+            $result = $this->bb_scheduled_tasks->calibrate_bb_milestones();
+            $data["result"] = $result;
+        }else{
+            $data["error"] = "Authentication error";
+            $this->output->set_status_header('401');
         }
-        $end_time = time();
-        $result["time-taken"] = $end_time-$start_time;
-        echo json_encode($result);
+        echo json_encode($data);
+
     }
 
     /**
@@ -70,9 +55,5 @@ class Scheduled_tasks extends CI_Controller{
         $result = $this->bb_scheduled_tasks->fetch_issue_counts();
         echo json_encode($result);
     }
-
-
-
-
 
 }
