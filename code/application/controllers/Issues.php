@@ -19,7 +19,6 @@ class Issues extends CI_Controller {
      * @param null $repo_slug
      */
     public function list_all($repo_slug=null){
-
         $user_id = $this->session->userdata('internal_uid');
         if(isset($user_id)) {
             if(isset($repo_slug)) {

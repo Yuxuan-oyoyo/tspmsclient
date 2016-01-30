@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Interface for scheduler
  * Created by PhpStorm.
  * User: Alex
  * Date: 1/15/2016
