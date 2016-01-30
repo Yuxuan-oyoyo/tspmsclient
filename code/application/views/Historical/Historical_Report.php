@@ -228,20 +228,25 @@ $this->load->view('common/pm_nav', $class);
                         <th>Number of Task</th>
                         <th>Number of Issue</th>
                         <th>Average Issue Metric</th>
-                        <th></th>
                         </thead>
-
+                        <?php
+                        $count = 0;
+                        $total_duration = 0;
+                        ?>
                         <?php if(!false == $projects):?>
                             <?php foreach($projects as $c):?>
+                                <?php
+                                $count+=1;
+                                $total_duration+=(float)$c['project_duration'];
+                                ?>
                                 <tr><td><?=$c['project_id']?></td>
-                                    <td><?=$c['project_title']?></td>
+                                    <td><a href="<?=base_url().'Projects/view_dashboard/'.$c["project_id"]?>"><?=$c['project_title']?></a></td>
                                     <td><?=$c['start_time']?></td>
+                                    <td><?=substr($c['last_updated'], 0 ,10)?></td>
+                                    <td><?=$c['project_duration']?></td>
                                     <td>*pending*</td>
                                     <td>*pending*</td>
                                     <td>*pending*</td>
-                                    <td>*pending*</td>
-                                    <td>*pending*</td>
-                                    <td><a href="<?=base_url().'Projects/view_dashboard/'.$c["project_id"]?>"><i class="fa fa-eye"></i></a></td>
                                 </tr>
                             <?php endforeach?>
                         <?php endif?>
@@ -253,34 +258,26 @@ $this->load->view('common/pm_nav', $class);
 
 
         <div class="col-lg-3">
-            <br/>
-            <br/>
-            <br/>
-            <br/>
+
+            <br/><br/>
+
 
             <table class="table table-striped">
                 <thead>
-                <th>
-                    Measure Name
+                <th colspan="2">
+                    Statistics Summary
+                </th>
 
-                </th>
-                </thead>
-                <thead>
-                <th>
-                    Measure Name
-                </th>
-                <th>
-                    Statistics
-                </th>
                 </thead>
                 <tbody>
                 <tr>
                     <td style="font-style: italic">Total Number of Project</td>
-                    <td>*pending*</td>
+                    <td><?=$count?></td>
                 </tr>
                 <tr>
                     <td style="font-style: italic">Average Time Spent</td>
-                    <td>*pending*</td>
+                    <td><?=number_format($total_duration/$count, 2)?></td>
+
                 </tr>
                 <tr>
                     <td style="font-style: italic">Average Number of Task</td>
@@ -288,10 +285,6 @@ $this->load->view('common/pm_nav', $class);
                 </tr>
                 <tr>
                     <td style="font-style: italic">Average Number of Issue</td>
-                    <td>*pending*</td>
-                </tr>
-                <tr>
-                    <td style="font-style: italic">Total Number of Project</td>
                     <td>*pending*</td>
                 </tr>
                 <tr>

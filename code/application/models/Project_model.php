@@ -124,7 +124,9 @@ left join phase on project_phase.phase_id = phase.phase_id and project.is_ongoin
 
 
     public function retrieve_all_past(){
-        $sql = 'SELECT project.* from  project where project.is_ongoing = 0';
+        $sql = 'SELECT project.*,
+  DATEDIFF(last_updated ,start_time) as project_duration
+from  project where project.is_ongoing = 0;';
         $query=$this->db->query($sql);
         return $query->result_array();
     }

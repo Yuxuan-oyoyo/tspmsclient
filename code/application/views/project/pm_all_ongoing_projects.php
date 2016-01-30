@@ -80,21 +80,20 @@ $this->load->view('common/pm_nav', $class);
                         async: false
                     }).responseText;
                 </script>
+
                 <div class=" col-lg-4">
-                    <div class="panel ongoing-panel">
-                        <div class="panel-heading" style="text-align:center" ><strong>#<?=$p['project_id']?>&nbsp;<?=$p['project_title']?></strong></div>
-                        <div class="panel-body" style="font-size:15px" >
+                    <div class="panel ongoing-panel" >
+                        <div id="project_header" class="panel-heading" style="text-align:center" ><strong>#<?=$p['project_id']?>&nbsp;<?=$p['project_title']?></strong></div>
+                        <div class="panel-body" style="font-size:15px " >
                             <table class="table table-condensed">
                                 <tr>
                                     <td><i class="fa fa-calendar-check-o"></i>&nbsp;<strong>Current Stage </strong></td>
                                     <td><?php
-
                                         if($p['phase_name']){
                                             echo $p['phase_name'];
                                         }else{
                                             echo "not started";
                                         }
-
                                         ?></td>
                                 </tr>
                                 <tr>
