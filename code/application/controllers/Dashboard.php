@@ -32,12 +32,15 @@ class Dashboard extends CI_Controller
         $tasks_u=$this->Task_model->retrieve_for_esenhower(7, -1000,3,0);
         $tasks_none=$this->Task_model->retrieve_for_esenhower(1000, 7,3,0);
         $projects = $this->Project_model->retrieve_all_with_phase();
+        $projects_task_issue_count = $this->num_of_tasks_issue_past_projects_php();
+
 
         $data["projects"]= $projects;
         $data["tasks_ui"]= $tasks_ui;
         $data["tasks_i"]= $tasks_i;
         $data["tasks_u"]= $tasks_u;
         $data["tasks_none"]= $tasks_none;
+        $data["projects_task_issue_count"]= $projects_task_issue_count;
         $this->load->view('dashboard/dashboard',$data);
     }
 
@@ -438,63 +441,98 @@ class Dashboard extends CI_Controller
 
     }
 
-    public function phase_past_projects(){
-        $this->load->model("Project_phase_model");
+    public function num_of_tasks_issue_past_projects_php(){
+        $this->load->model("Task_model");
+        $this->load->model("Issue_report_model");
         $this->load->model("Project_model");
-        $this->load->model("Phase_model");
-        $phases= $this->Phase_model->retrieve_all_phases();
-        $projects_phase = $this->Project_phase_model->get_phase_past_projects();
+        $tasknumbers = $this ->Task_model->get_num_of_tasks_past_projects();
+        $numberissue = $this->Issue_report_model->get_num_of_issue_past_projects();
         $projects = $this->Project_model->retrieve_all_past();
         $container = [];
-
         foreach($projects as $value){
-            $container[$value["project_id"]] = ["pn"=>$value["project_id"]];
-            //var_dump($container);
-            foreach($phases as $phase){
-
-                $container[$value["project_id"]][$phase["phase_name"]] = 0;
-            }
-        }
-        foreach($projects_phase as $value){
-            $container[$value["project_id"]][$value["phase_name"]]=$value["time_spent"];
-        }
-        //var_dump($container);
-
-
-
-        $table = array();
-        $table['cols'] = array(
-            // Labels for your chart, these represent the column titles
-            // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
-            array('label' => 'project', 'type' => 'string')
-        );
-        foreach($phases as $phase){
-            array_push($table['cols'],array('label' => $phase["phase_name"], 'type' => 'number'));
-        }
-
-
-        $rows = array();
-        foreach($container as $v){
-
-            $temp = array();
+            $container[$value["project_id"]] = ["pn"=>$value["project_id"],"num_tasks"=>0,"num_issues"=>0, "metrics"=>0];
+            $metricsissue = $this->Issue_report_model->get_per_issue_data($value["project_id"]);
+            $matrics = 0;
             $count = 0;
-            foreach($v as $value){
-                if($count!=0){
-                    $temp[] = array('v' => (int) $value);
-                }else{
-                    $temp[] = array('v' => $value);
 
+            foreach($metricsissue as $issue){
+                if(isset($issue["date_resolved"])&&isset($issue["date_due"])){
+                    $matrics+=$issue["time_ratio"];
+                    $count+=1;
+                    //var_dump($count);
                 }
-                $count+=1;
             }
-            //var_dump($v);
-            $rows[] = array('c' => $temp);
+            if($count!=0){
+                $container[$value["project_id"]]["metrics"] = $matrics/$count;
+            }
         }
-
-        $table['rows'] = $rows;
-        $jsonTable = json_encode($table);
-        echo $jsonTable;
+        foreach($tasknumbers as $value){
+            $container[$value["project_id"]]["num_tasks"] = (int)$value["count"];
+        }
+        foreach($numberissue as $value){
+            $container[$value["project_id"]]["num_issues"] = (int)$value["count"];
+        }
+        return $container;
     }
+
+    public function phase_past_projects(){
+    $this->load->model("Project_phase_model");
+    $this->load->model("Project_model");
+    $this->load->model("Phase_model");
+    $phases= $this->Phase_model->retrieve_all_phases();
+    $projects_phase = $this->Project_phase_model->get_phase_past_projects();
+    $projects = $this->Project_model->retrieve_all_past();
+    $container = [];
+
+    foreach($projects as $value){
+        $container[$value["project_id"]] = ["pn"=>$value["project_id"]];
+        //var_dump($container);
+        foreach($phases as $phase){
+
+            $container[$value["project_id"]][$phase["phase_name"]] = 0;
+        }
+    }
+    foreach($projects_phase as $value){
+        $container[$value["project_id"]][$value["phase_name"]]=$value["time_spent"];
+    }
+    //var_dump($container);
+
+
+
+    $table = array();
+    $table['cols'] = array(
+        // Labels for your chart, these represent the column titles
+        // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
+        array('label' => 'project', 'type' => 'string')
+    );
+    foreach($phases as $phase){
+        array_push($table['cols'],array('label' => $phase["phase_name"], 'type' => 'number'));
+    }
+
+
+    $rows = array();
+    foreach($container as $v){
+
+        $temp = array();
+        $count = 0;
+        foreach($v as $value){
+            if($count!=0){
+                $temp[] = array('v' => (int) $value);
+            }else{
+                $temp[] = array('v' => $value);
+
+            }
+            $count+=1;
+        }
+        //var_dump($v);
+        $rows[] = array('c' => $temp);
+    }
+
+    $table['rows'] = $rows;
+    $jsonTable = json_encode($table);
+    echo $jsonTable;
+}
+
 
     public function get_total_urgency_score(){
         $this->load->model("Project_model");

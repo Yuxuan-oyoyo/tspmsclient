@@ -304,7 +304,7 @@ class Issues extends CI_Controller {
                 if($dates_left<0){
                     $dates_left=1;
                 }
-                $score = ($value["issue_pr"]/($dates_left+1))*$value["proj_pr"];
+                $score = (sqrt($value["issue_pr"])/($dates_left+1))*sqrt($value["proj_pr"]);
                 $sum += $score;
             }
         }
@@ -327,7 +327,7 @@ class Issues extends CI_Controller {
                 if($dates_left<0){
                     $dates_left=1;
                 }
-                $score = ($value["issue_pr"]/($dates_left+1))*$value["proj_pr"];
+                $score = (sqrt($value["issue_pr"])/($dates_left+1))*sqrt($value["proj_pr"]);
                 $sum += $score;
             }
         }
