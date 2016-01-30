@@ -72,6 +72,14 @@ $this->load->view('common/pm_nav', $class);
         <?php
             foreach($projects as $p){
          ?>
+                <script>
+                    var urgency = $.ajax({
+                        url: "<?=base_url().'issues/get_issue_urgency_score/'.$p["project_id"]?>",
+                        //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
+                        dataType: "float",
+                        async: false
+                    }).responseText;
+                </script>
                 <div class=" col-lg-4">
                     <div class="panel ongoing-panel">
                         <div class="panel-heading" style="text-align:center" ><strong>#<?=$p['project_id']?>&nbsp;<?=$p['project_title']?></strong></div>
@@ -96,6 +104,12 @@ $this->load->view('common/pm_nav', $class);
                                 <tr>
                                     <td>  <i class="fa fa-clock-o"></i>&nbsp;<strong>Number Of Issues </strong></td>
                                     <td> <span class="issue-count-<?=$p["project_id"]?>"><?=isset($p['issue_count'])?$p['issue_count']:"BB repo not set yet"?></span><span class="update-issue-count glyphicon glyphicon-refresh" style="margin-left:8px"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>  <span class="glyphicon glyphicon-fire"></span>&nbsp;<strong>Urgency Score </strong></td>
+                                    <td> <script>
+                                            document.write(urgency);
+                                        </script></td>
                                 </tr>
                             </table>
 

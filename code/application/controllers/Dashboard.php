@@ -496,4 +496,13 @@ class Dashboard extends CI_Controller
         echo $jsonTable;
     }
 
+    public function get_total_urgency_score(){
+        $this->load->model("Project_model");
+        $projects = $this->Project_model->retrieve_all_ongoing();
+        $container = [];
+        foreach($projects as $value){
+
+        }
+    }
+
 }

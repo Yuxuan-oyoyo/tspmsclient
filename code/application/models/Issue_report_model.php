@@ -88,7 +88,18 @@ class Issue_report_model extends CI_Model{
     }
 
     public function get_ongoing_issue_per_project($project_id){
-        $query=$this->db->query("select * from issue_report where status != 'Resolved' and project_id=?",[$project_id]);
+        $query=$this->db->query("select local_id, project.project_id, title, date_due, project.priority as proj_pr, issue_report.priority as issue_pr,
+DATEDIFF(date_due ,NOW()) as days_to_go from issue_report join project
+    on project.project_id = issue_report.project_id
+       and status != 'resolved' and is_ongoing = 1 and project.project_id = ?",[$project_id]);
+        return $query->result_array();
+    }
+
+    public function get_ongoing_issue_across_projects(){
+        $query=$this->db->query("select local_id, project.project_id, title, date_due, project.priority as proj_pr, issue_report.priority as issue_pr,
+DATEDIFF(date_due ,NOW()) as days_to_go from issue_report join project
+    on project.project_id = issue_report.project_id
+       and status != 'resolved' and is_ongoing = 1;");
         return $query->result_array();
     }
 }

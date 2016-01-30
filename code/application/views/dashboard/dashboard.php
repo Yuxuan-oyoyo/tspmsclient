@@ -247,7 +247,16 @@ $this->load->view('common/pm_nav', $class);
             <div class="panel-heading" style="background: #e0e2e5"><Strong>Total Urgency Score</Strong></div>
             <div class="panel-body" style="height: 200px;">
                 <div class="thumbnail calendar-date" >
-                    420
+                    <script>
+                        var total_urgency = $.ajax({
+                            url: "<?=base_url().'issues/get_issue_urgency_score_across_projects'?>",
+                            //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
+                            dataType: "float",
+                            async: false
+                        }).responseText;
+                        //window.alert(urgency);
+                        document.write(total_urgency);
+                    </script>
                 </div>
                 Intension Level: <span class="badge" style="background: #2e9ad0">Low</span>
             </div>
@@ -269,11 +278,21 @@ $this->load->view('common/pm_nav', $class);
 
             <?php if(!false == $projects):?>
                 <?php foreach($projects as $c):?>
+                    <script>
+                        var urgency = $.ajax({
+                            url: "<?=base_url().'issues/get_issue_urgency_score/'.$c["project_id"]?>",
+                            //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
+                            dataType: "float",
+                            async: false
+                        }).responseText;
+                    </script>
                     <tr><td><?=$c['project_id']?></td>
                         <td><a href="<?=base_url().'Projects/view_dashboard/'.$c["project_id"]?>"><?=$c['project_title']?></a></td>
                         <td><?=$c['phase_name']?></td>
-                        <td>*pending*</td>
-                        <td>*pending*</td>
+                        <td><script>
+                                document.write(urgency);
+                            </script></td>
+                        <td>*Pending*</td>
                     </tr>
                 <?php endforeach?>
             <?php endif?>
