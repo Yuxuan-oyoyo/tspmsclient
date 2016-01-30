@@ -86,4 +86,9 @@ class Issue_report_model extends CI_Model{
         $query=$this->db->query("select count(local_id) as count, project.project_id from issue_report right join project on project.project_id = issue_report.project_id where is_ongoing = 0 group by project_id;");
         return $query->result_array();
     }
+
+    public function get_ongoing_issue_per_project($project_id){
+        $query=$this->db->query("select * from issue_report where status != 'Resolved' and project_id=?",[$project_id]);
+        return $query->result_array();
+    }
 }

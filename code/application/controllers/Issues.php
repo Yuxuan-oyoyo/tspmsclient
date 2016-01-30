@@ -293,5 +293,20 @@ class Issues extends CI_Controller {
         return "false";
     }
 
+    public function get_issue_urgency_score($project_id){
+        $this->load->model("Issue_report_model");
+        $issues= $this->Issue_report_model->get_ongoing_issue_per_project($project_id);
+        $sum = 0;
 
+        //calculate the urgency for each pending issue
+        foreach($issues as $value){
+            if(isset($value["date_due"]) && $value["date_due"]!= "0000-00-00"){
+                $date_due=$value["date_due"];
+
+
+            }
+
+        }
+
+    }
 }

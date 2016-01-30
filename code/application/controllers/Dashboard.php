@@ -317,11 +317,11 @@ class Dashboard extends CI_Controller
         }
 
         foreach($tasknumbers as $value){
-            $container[$value["project_id"]]["num_issues"] = $value["count"];
+            $container[$value["project_id"]]["num_tasks"] = $value["count"];
         }
 
         foreach($numberissue as $value){
-            $container[$value["project_id"]]["num_tasks"] = $value["count"];
+            $container[$value["project_id"]]["num_issues"] = $value["count"];
         }
 
         //echo json_encode($container);
