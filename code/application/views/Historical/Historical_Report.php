@@ -120,7 +120,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     var chart3 = new google.visualization.ComboChart(document.getElementById('chart_div3'));
     chart3.draw(data3, options3);
 
-
+/**
     var data5 = new google.visualization.DataTable();
     data5.addColumn('string', 'Project Name');
     data5.addColumn('number', 'Lead');
@@ -142,8 +142,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     ["Project 10", 20, 10,125, 35,3],
     ["Project 11", 20, 10,125, 35,3],
     ]);
+**/
+        var jsonData5 = $.ajax({
+            url: "<?=base_url().'dashboard/phase_past_projects'?>",
+            //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
+            dataType: "json",
+            async: false
+        }).responseText;
 
-
+        var data5 = new google.visualization.DataTable(jsonData5);
 
     var options5 = {
     title: 'Phase Percentile Analysis',

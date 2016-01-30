@@ -119,4 +119,17 @@ class Project_phase_model extends CI_Model {
         $query=$this->db->query($sql,[$project_id]);
         return $query->result_array();
     }
+
+    public function get_phase_past_projects(){
+        $sql = "select project_id, phase.phase_id,phase_name, time_spent from phase join (
+  select project_phase.start_time as start_time, project.project_id, project_title, phase_id,
+    DATEDIFF(end_time, project_phase.start_time) as time_spent
+  from project_phase right join project
+      ON project.project_id = project_phase.project_id and is_ongoing = 0
+  ) as t2 on phase.phase_id=t2.phase_id order by start_time;
+
+";
+        $query=$this->db->query($sql);
+        return $query->result_array();
+    }
 }

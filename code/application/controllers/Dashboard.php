@@ -439,15 +439,61 @@ class Dashboard extends CI_Controller
     }
 
     public function phase_past_projects(){
+        $this->load->model("Project_phase_model");
         $this->load->model("Project_model");
+        $this->load->model("Phase_model");
+        $phases= $this->Phase_model->retrieve_all_phases();
+        $projects_phase = $this->Project_phase_model->get_phase_past_projects();
         $projects = $this->Project_model->retrieve_all_past();
         $container = [];
 
         foreach($projects as $value){
-            $container[$value["project_id"]] = ["pid"=>$value["project_id"],"num_tasks"=>0,"num_issues"=>0, "metrics"=>0];
+            $container[$value["project_id"]] = ["pn"=>$value["project_id"]];
+            //var_dump($container);
+            foreach($phases as $phase){
 
+                $container[$value["project_id"]][$phase["phase_name"]] = 0;
+            }
         }
-        var_dump($container);
+        foreach($projects_phase as $value){
+            $container[$value["project_id"]][$value["phase_name"]]=$value["time_spent"];
+        }
+        //var_dump($container);
+
+
+
+        $table = array();
+        $table['cols'] = array(
+            // Labels for your chart, these represent the column titles
+            // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
+            array('label' => 'project', 'type' => 'string')
+        );
+        foreach($phases as $phase){
+            array_push($table['cols'],array('label' => $phase["phase_name"], 'type' => 'number'));
+        }
+
+
+        $rows = array();
+        foreach($container as $v){
+
+            $temp = array();
+            $count = 0;
+            foreach($v as $value){
+                if($count!=0){
+                    $temp[] = array('v' => (int) $value);
+                }else{
+                    $temp[] = array('v' => $value);
+
+                }
+                $count+=1;
+            }
+            //var_dump($v);
+            $rows[] = array('c' => $temp);
+        }
+
+        $table['rows'] = $rows;
+        $jsonTable = json_encode($table);
+        echo $jsonTable;
     }
 
 }
