@@ -41,10 +41,13 @@ class Notification_model extends CI_Model{
         return false;
     }
 
-    public function add_new_project_notifications($project_id,$change_type,$redirect,$users){
+    public function add_new_project_notifications($project_id,$change_type,$created_by,$redirect,$users){
         $insert_array['change_type']=$change_type;
+        $insert_array['created_by']=$created_by;
         $insert_array['redirect']=$redirect;
         $insert_array['project_id']=$project_id;
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
+        $insert_array['created_datetime'] = $date->format('c');
 
         foreach($users as $u_id){
             $insert_array['user_id']=$u_id['u_id'];
@@ -53,11 +56,14 @@ class Notification_model extends CI_Model{
         return $this->db->insert_id();
     }
 
-    public function add_new_post_notifications($project_id,$post_id,$change_type,$redirect,$users){
+    public function add_new_post_notifications($project_id,$post_id,$change_type,$created_by,$redirect,$users){
         $insert_array['change_type']=$change_type;
+        $insert_array['created_by']=$created_by;
         $insert_array['redirect']=$redirect;
         $insert_array['post_id']=intval($post_id);
         $insert_array['project_id']=intval($project_id);
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
+        $insert_array['created_datetime'] = $date->format('c');
 
         foreach($users as $u_id){
             $insert_array['user_id']=$u_id['u_id'];
@@ -66,4 +72,8 @@ class Notification_model extends CI_Model{
         return $this->db->insert_id();
     }
 
+    public function clear_all($u_id){
+        $this->db->delete('notification', array('user_id' => $u_id));
+        return '<div class="notification-heading"><h4 class="menu-title">No new notifications</h4>';
+    }
 }

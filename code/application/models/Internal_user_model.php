@@ -112,4 +112,11 @@ class Internal_user_model extends CI_Model
         }
         return null;
     }
+    public function retrieve_name($uid){
+        $query = $this->db->query("SELECT name from internal_user where u_id =".$uid);
+        if($query->num_rows()>0){
+            $return_array = $query->result_array();
+            return $return_array[0]['name'];
+        }
+    }
 }

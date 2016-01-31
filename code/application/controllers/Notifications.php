@@ -39,16 +39,25 @@ class Notifications extends CI_Controller{
                 .'<div class="notification-item-green">'
                 .'<h4 class="item-info-large">'
                 .$n['change_type']
+                .'&nbsp <small>by&nbsp'
+                .$n['created_by']
+                .'</small>'
                 .'</h4>'
                 .'<p class="item-title">'
                 .$p['project_title']
-                .'</p>'
+                .'&nbsp <small style="color:#808080;">'
+                .$n['created_datetime']
+                .'</small></p>'
                 .'</div>'
                 .'</a>';
             }
             echo
             '</div>'
-            .'<li class="divider"></li>';
+            .'<li class="divider"></li>'
+            .'<a onclick="clear_all_notification()"'
+            .'>Clear All &nbsp'
+            .'<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>'
+            .'</a>';
         }else{
             echo
             '<div class="notification-heading"><h4 class="menu-title">No new notifications</h4>';
@@ -78,4 +87,7 @@ class Notifications extends CI_Controller{
         redirect('projects/'.$redirect.'/'.$project_id);
     }
 
+    public function clear_all_notification($u_id){
+        $this->Notification_model->clear_all($u_id);
+    }
 }
