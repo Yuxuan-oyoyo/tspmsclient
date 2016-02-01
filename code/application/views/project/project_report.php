@@ -30,19 +30,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         google.charts.setOnLoadCallback(drawChart);
 
 
-        var urg = $.ajax({
-            url: "<?=base_url().'issues/get_issue_urgency_score/'.$project["project_id"]?>",
-            //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
-            dataType: "float",
-            async: false
-        }).responseText;
+
 
 
         function drawChart() {
-
+            /**
             var data = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
-                ['Urgency', urg]
+                ['Urgency', 5]
             ]);
 // Urgency = SUM(pending_issue_priority/days_left)*project_priority
 //Range to be set by admin panel
@@ -53,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             ]);
 //5 Level of priority: {1,2,3,4,5} --> {10, 30, 50, 70, 90}
 
-
+**/
             var jsonData3 = $.ajax({
                 url: "<?=base_url().'dashboard/get_num_issues_tasks_metrics_per_phase/'.$project["project_id"]?>",
                 //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
@@ -148,7 +143,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
 
             var data5 = new google.visualization.DataTable(jsonData5);
-
+/**
             var options = {
                 width: 500,
                 height: 120,
@@ -168,11 +163,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 yellowTo: 80,
                 minorTicks: 5
             };
-
+**/
             var options3 = {
                 title: 'Phase Analysis Chart',
                 //legend:'bottom',
-                chartArea: { width: '90%',left: "5%" , height: '70%'},
+                //chartArea: { width: '90%',left: "5%" , height: '70%'},
                 vAxis: {
                 },
                 hAxis: {
@@ -196,7 +191,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
             var options4 = {
                 'title': 'Issue Metrics Chart',
-                chartArea: { left: "5%"},
+                //chartArea: { left: "5%"},
                 //'height': 300,
                 tooltip: {
                     isHtml: true
@@ -212,12 +207,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             // Set chart options
             var options5 = {
                 'title': 'Stage percentile analysis',
-                chartArea: { width: '100%',left: "15%",height: "80%" },
+                chartArea: {height: "80%"},
+                legend: 'left',
             };
             // Instantiate and draw our chart, passing in some options.
 
 
-
+/**
             var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
 
             chart.draw(data, options);
@@ -226,7 +222,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             var chart2 = new google.visualization.Gauge(document.getElementById('chart_div2'));
 
             chart2.draw(data2, options2);
-
+**/
             var chart3 = new google.visualization.ComboChart(document.getElementById('chart_div3'));
             chart3.draw(data3, options3);
 
@@ -289,15 +285,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         </div>
 
         <!-- /#page-content-wrapper -->
+        <!--
         <div class="col-lg-12 col-md-offset-7 col-md-4" align="right">
 
             <div class="col-sm-4" id="chart_div" style="width: 120px; height: 45px;" align="right"></div>
             <div class="col-sm-4" id="chart_div2" style="width: 120px; height: 35px;" ></div>
             <div class="col-sm=4"></div>
         </div>
+        -->
 
-        <div class="col-lg-12 col-sm-8" id="chart_div3" style="width: 600px; height: 350px;"></div>
-        <div>&nbsp;<br/><br/><br/><br/><br/>
+<!--
+        <div class="col-lg-offset-1 content">&nbsp;<br/>
 
             &nbsp;&nbsp; <select name="select" id="select">
                 <option value="a" selected>All phases</option>
@@ -331,15 +329,37 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             <br/>
             <br/>
         </div>
+        -->
+        <div class="col-sm-4" id="chart_div5" style="width: 60%; height: 250px;"></div>
+        <div class="col-sm-4" style="width: 40%; height: 250px;">
+            <div>
+                <br/><br/>
+            </div>
+            <div class="panel panel-default" style="width:60%;height: 150px" align="center">
+                <div class="panel-heading" style="background: #e0e2e5"><Strong>Total Urgency Score</Strong></div>
+                <div class="panel-body" style="height: 200px;">
+                    <div class="thumbnail calendar-date" >
+                        <script>
+                            var total_urgency = $.ajax({
+                                url: "<?=base_url().'issues/get_issue_urgency_score_across_projects'?>",
+                                //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
+                                dataType: "float",
+                                async: false
+                            }).responseText;
+                            //window.alert(urgency);
+                            document.write(total_urgency);
+                        </script>
+                    </div>
+                    Intension Level: <span class="badge" style="background: #2e9ad0">Low</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12" id="chart_div4" style="width: 100%; height: 300px"></div>
+        <div class="col-lg-12" id="chart_div3" style="width: 100%; height: 300px"></div>
 
 
 
-        <div class="col-lg-12 col-sm-3" id="chart_div5" style="width: 400px; height: 200px;"></div>
-        <div class="col-lg-12" id="chart_div4" style="height: 150px;"></div>
-
-
-
-
+</div>
     </div>
 
 </body>
