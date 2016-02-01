@@ -29,11 +29,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         });
         google.charts.setOnLoadCallback(drawChart);
 
+
+        var urg = $.ajax({
+            url: "<?=base_url().'issues/get_issue_urgency_score/'.$project["project_id"]?>",
+            //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
+            dataType: "float",
+            async: false
+        }).responseText;
+
+
         function drawChart() {
 
             var data = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
-                ['Urgency', 50]
+                ['Urgency', urg]
             ]);
 // Urgency = SUM(pending_issue_priority/days_left)*project_priority
 //Range to be set by admin panel

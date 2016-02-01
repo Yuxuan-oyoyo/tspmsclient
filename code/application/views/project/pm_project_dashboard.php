@@ -236,6 +236,20 @@ function sortTasksByDaysLeft($a, $b) {
                                 <td><strong>Project Code </strong></td>
                                 <td><?=$project['project_code']?></td>
                             </tr>
+                            <script>
+                                var urgency = $.ajax({
+                                    url: "<?=base_url().'issues/get_issue_urgency_score/'.$project["project_id"]?>",
+                                    //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
+                                    dataType: "float",
+                                    async: false
+                                }).responseText;
+                            </script>
+                            <tr>
+                                <td><strong>Urgency Score</strong></td>
+                                <td><script>
+                                        document.write(urgency);
+                                    </script></td>
+                            </tr>
                             <tr>
                                 <td><strong>Bitbucket Repo Name </strong></td>
                                 <td><?=$project['bitbucket_repo_name']?></td>
