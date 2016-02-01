@@ -355,6 +355,5 @@ class Issues extends CI_Controller {
             }
         }
         $this->Issue_report_model->insert_total_urgency_score($sum);
-        var_dump($sum);
     }
 }
