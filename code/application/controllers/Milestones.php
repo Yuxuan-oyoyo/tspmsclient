@@ -24,6 +24,7 @@ class Milestones extends CI_Controller{
     }
 
     public function add_new_milestone($project_id,$current_project_phase_id){
+        $session_uid = $this->session->userdata('internal_uid');
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
             $insert_post_array['header']=$this->input->post("header");
             $insert_post_array['body']=$this->input->post("body");
@@ -49,11 +50,11 @@ class Milestones extends CI_Controller{
                 }else{
                     $this->session->set_userdata('message', 'New milestone created successfully.');
                 }
-
+                $created_by = $this->Internal_user_model->retrieve_name($session_uid);
                 $change_type = "New Milestone Created";
                 $redirect = "view_updates";
                 $users = $this->Internal_user_model->retrieve_all_pm();
-                $this->Notification_model->add_new_post_notifications($project_id,$post_id,$change_type,$redirect,$users);
+                $this->Notification_model->add_new_post_notifications($project_id,$post_id,$change_type,$created_by,$redirect,$users);
                 redirect('projects/view_updates/'.$project_id);
             }else{
                 $this->session->set_userdata('message', 'An error occurred, please contact administrator.');
@@ -94,10 +95,12 @@ class Milestones extends CI_Controller{
             $new_update_array['posted_by']=$this->session->userdata('internal_username');
             $new_update_array['post_id'] =$post_id;
             if($this->Update_model->insert($new_update_array)==1){
+                $session_uid = $this->session->userdata('internal_uid');
+                $created_by = $this->Internal_user_model->retrieve_name($session_uid);
                 $change_type = "Milestone Completed";
                 $redirect = "view_updates";
                 $users = $this->Internal_user_model->retrieve_all_pm();
-                $this->Notification_model->add_new_post_notifications($project_id,$post_id,$change_type,$redirect,$users);
+                $this->Notification_model->add_new_post_notifications($project_id,$post_id,$change_type,$created_by,$redirect,$users);
                 redirect('projects/view_updates/'.$project_id);
             }
         }else{
@@ -111,11 +114,13 @@ class Milestones extends CI_Controller{
             $m = $this->Milestone_model->retrieve_by_id($milestone_id);
             $post_id = $m['post_id'];
             if($this->Milestone_model->delete_($milestone_id)){
+                $session_uid = $this->session->userdata('internal_uid');
                 $this->session->set_userdata('message', 'Milestone deleted successfully.');
+                $created_by = $this->Internal_user_model->retrieve_name($session_uid);
                 $change_type = "Milestone Deleted";
                 $redirect = "view_updates";
                 $users = $this->Internal_user_model->retrieve_all_pm();
-                $this->Notification_model->add_new_post_notifications($project_id,$post_id,$change_type,$redirect,$users);
+                $this->Notification_model->add_new_post_notifications($project_id,$post_id,$change_type,$created_by,$redirect,$users);
                 redirect('projects/view_updates/'.$project_id);
             }else{
                 $this->session->set_userdata('message', 'An error occurred, please contact administrator.');

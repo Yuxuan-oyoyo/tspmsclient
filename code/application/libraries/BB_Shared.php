@@ -9,19 +9,25 @@
 class BB_Shared {
     public  $oauth_endpoint = 'https://bitbucket.org/site/oauth2/access_token';
     public  $file_path = "application/libraries/oauth_token.txt";
-    public  $_save_in_file = true;
+    //public  $_save_in_file = true;
 
     /**
-     * Default method to retrieve token
-     * @return string oauth token
+     * @param int|null $user_id
+     * @return string oauth_key
      */
-    public function getDefaultOauthToken(){
-        if(fopen($this->file_path, "r")!=false && $this->_save_in_file){
-            $contents = file_get_contents($this->file_path);
-            $ctts_a = explode("\t",$contents);
-            if(isset($ctts_a[1])&&$ctts_a[1]>time())  return explode("\t",$contents)[0];
+
+    public function getDefaultOauthToken($user_id=null){
+        $CI =& get_instance();
+        $CI->load->model('Oauth_token_model');
+        if($user_id===null){
+            $user_id = $CI->session->userdata('internal_uid');
         }
-        return $this->requestFromServer();
+        //var_dump($user_id);
+        $CI->load->library('session');
+        $key_array = $CI->Oauth_token_model->retrieve($user_id);
+        if(isset($key_array) && $key_array["ttl"]>time()) return $key_array["token"];
+        $fresh_token = $this->requestFromServer($user_id);
+        return $fresh_token;
     }
 
     /**
@@ -32,6 +38,7 @@ class BB_Shared {
         /*get user's bb_oauth_key and secret*/
         $CI =& get_instance();
         $CI->load->library('session');
+        $CI->load->model('Oauth_token_model');
         $CI->load->model('Internal_user_model');
         if($user_id==null) {
             $user_id = $CI->session->userdata('internal_uid');
@@ -71,7 +78,7 @@ class BB_Shared {
             if (isset($response_array["access_token"])) {
                 $token = $response_array["access_token"];
                 $ttl = $response_array["expires_in"];
-                if($this->_save_in_file) $this->writeToFile($token, $ttl);
+                $CI->Oauth_token_model->update($user_id,$token, time()+$ttl-60);
                 return $token;
             }else{
                 die($response."</br>"."Please make sure to provide valid OAuth key and secret.<br>
@@ -83,12 +90,6 @@ class BB_Shared {
         }else{
             die("Error in bitbucket authentication ".$response);
         }
-    }
-    private  function writeToFile($token, $ttl){
-        //TODO: this may not be thread-safe
-        $buffer_time = 60;
-        file_put_contents($this->file_path, $token."\t".(time()+$ttl-$buffer_time), LOCK_EX);
-        flush();
     }
     public function validate_repo_name_with_bb($repo_name=null){
         if(!isset($repo_name)) return false;

@@ -54,10 +54,12 @@ class Project_phase extends CI_Controller{
                 $update_array_project['current_project_phase_id'] = $next_project_phase_id;
 
                 if($this->Project_model->update($update_array_project)==1){
+                    $session_uid = $this->session->userdata('internal_uid');
+                    $created_by = $this->Internal_user_model->retrieve_name($session_uid);
                     $change_type = "Project Phase Updated";
                     $redirect = "view_dashboard";
                     $users = $this->Internal_user_model->retrieve_all_pm();
-                    $this->Notification_model->add_new_project_notifications($project_id,$change_type,$redirect,$users);
+                    $this->Notification_model->add_new_project_notifications($project_id,$change_type,$created_by,$redirect,$users);
                     redirect('projects/view_updates/'.$project_id);
                 }
 
@@ -70,10 +72,12 @@ class Project_phase extends CI_Controller{
                 $update_array_project = $this->Project_model->retrieve_by_id($project_id);
                 $update_array_project['current_project_phase_id'] = $next_project_phase_id;
                 if($this->Project_model->update($update_array_project)==1){
+                    $session_uid = $this->session->userdata('internal_uid');
+                    $created_by = $this->Internal_user_model->retrieve_name($session_uid);
                     $change_type = "Project Started";
                     $redirect = "view_dashboard";
                     $users = $this->Internal_user_model->retrieve_all_pm();
-                    $this->Notification_model->add_new_project_notifications($project_id,$change_type,$redirect,$users);
+                    $this->Notification_model->add_new_project_notifications($project_id,$change_type,$created_by,$redirect,$users);
                     redirect('projects/view_updates/'.$project_id);
                 }
              }
@@ -93,10 +97,12 @@ class Project_phase extends CI_Controller{
             $update_array_project['is_ongoing'] = 0;
 
             if($this->Project_model->update($update_array_project)==1){
+                $session_uid = $this->session->userdata('internal_uid');
+                $created_by = $this->Internal_user_model->retrieve_name($session_uid);
                 $change_type = "Project Ended";
                 $redirect = "view_dashboard";
                 $users = $this->Internal_user_model->retrieve_all_pm();
-                $this->Notification_model->add_new_project_notifications($project_id,$change_type,$redirect,$users);
+                $this->Notification_model->add_new_project_notifications($project_id,$change_type,$created_by,$redirect,$users);
                 redirect('projects/list_past_projects');
             }
         }else{
