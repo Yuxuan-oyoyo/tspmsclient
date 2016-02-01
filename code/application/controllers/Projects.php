@@ -104,6 +104,7 @@ class Projects extends CI_Controller {
                 $insert_array = array(
                     'c_id' => $c_id,
                     'project_title' => $this->input->post("project_title"),
+                    'project_code' => $this->input->post("project_code"),
                     'project_description' => $this->input->post("project_description"),
                     'tags' => $this->input->post("tags"),
                     'remarks' => $this->input->post("remarks"),
@@ -184,7 +185,7 @@ class Projects extends CI_Controller {
                 $name_array = ["c_id", "project_title"
                     , "project_description", "tags", "remarks"
                     , "file_repo_name", "priority"
-                    , "bitbucket_repo_name", "project_value", "staging_link", "production_link", "customer_preview_link","pm_id"];
+                    , "bitbucket_repo_name", "project_value", "staging_link", "production_link", "customer_preview_link","pm_id", "project_code"];
                 $input = $this->input->post($name_array, true);
                 $customer_option = $this->input->post('customer_option');
 

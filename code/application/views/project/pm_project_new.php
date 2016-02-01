@@ -97,10 +97,16 @@ $this->load->view('common/pm_nav', $class);
         <div class="col-lg-6 project-info">
             <h3>Project Information</h3>
             <hr>
-            <div class="col-lg-12">
+            <div class="col-lg-8">
                 <div class="form-group">
                     <label for="project_title">Title*</label>
                     <input class="form-control" id="project_title" name="project_title" value="<?=set_value("project_title")?>" data-parsley-required>
+                </div>
+            </div>
+            <div class="col-lg-offset-1 col-lg-3">
+                <div class="form-group">
+                    <label for="project_code">Code*</label>
+                    <input class="form-control" id="project_code" name="project_code" value="<?=set_value("project_code")?>" data-parsley-required data-parsley-maxlength="8">
                 </div>
             </div>
             <div class="col-lg-12">

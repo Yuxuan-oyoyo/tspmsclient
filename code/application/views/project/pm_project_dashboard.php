@@ -233,6 +233,10 @@ function sortTasksByDaysLeft($a, $b) {
                                 <td> <a href="<?=base_url().'Customers/update_customer_fproject/'.$customer["c_id"].'/'.$project['project_id']?>"><?=$customer['last_name'].' '.$customer['first_name']?></a> (Click to edit)</td>
                             </tr>
                             <tr>
+                                <td><strong>Project Code </strong></td>
+                                <td><?=$project['project_code']?></td>
+                            </tr>
+                            <tr>
                                 <td><strong>Bitbucket Repo Name </strong></td>
                                 <td><?=$project['bitbucket_repo_name']?></td>
                             </tr>
