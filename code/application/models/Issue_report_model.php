@@ -106,4 +106,9 @@ DATEDIFF(date_due ,NOW()) as days_to_go from issue_report join project
     public function insert_total_urgency_score($score){
         $query=$this->db->query("INSERT INTO urgency_score_record (score) VALUES (?)",[$score]);
     }
+
+    public function retrieve_report_model(){
+        $query=$this->db->query("select * from urgency_score_record;");
+        return $query->result_array();
+    }
 }

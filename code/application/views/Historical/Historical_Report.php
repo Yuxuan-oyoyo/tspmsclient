@@ -25,6 +25,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
+
+
+        var jsonData = $.ajax({
+            url: "<?=base_url().'issues/retrieve_urgency_score'?>",
+            dataType: "json",
+            async: false
+        }).responseText;
+
+        var data = new google.visualization.DataTable(jsonData);
+        /**
     var data = google.visualization.arrayToDataTable([
     ['Week', 'TUS'],
     ['1', 1000],
@@ -42,7 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     ['13', 660],
     ['14', 2361]
     ]);
-
+**/
 /**
     var data3 = google.visualization.arrayToDataTable([
     ['Project', '#Task', '#Issue', 'Avg Issue Metrics'],
@@ -79,7 +89,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     },
     width: '100%',
     hAxis: {
-    title: 'Week',
     titleTextStyle: {
     color: '#333'
     }

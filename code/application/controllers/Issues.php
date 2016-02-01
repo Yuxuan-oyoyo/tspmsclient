@@ -356,4 +356,36 @@ class Issues extends CI_Controller {
         }
         $this->Issue_report_model->insert_total_urgency_score($sum);
     }
+
+    public function retrieve_urgency_score(){
+        $this->load->model("Issue_report_model");
+        $records= $this->Issue_report_model->retrieve_report_model();
+        //var_dump($records);
+
+        $table = array();
+        $table['cols'] = array(
+
+            // Labels for your chart, these represent the column titles
+            // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
+            array('label' => 'Time', 'type' => 'string'),
+            array('label' => 'Urgency Score', 'type' => 'number'),
+        );
+
+        $rows = [];
+        foreach($records as $v){
+
+            $date = substr($v['time'], 5,5);
+            $row = [
+                "c"=>[
+                    ['v' => (string) $date],
+                    ['v' => (float) $v['score']]
+                ]
+            ];
+            array_push($rows, $row);
+        }
+
+        $table['rows'] = $rows;
+        $jsonTable = json_encode($table);
+        echo $jsonTable;
+    }
 }
