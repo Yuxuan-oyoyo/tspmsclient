@@ -356,27 +356,50 @@ class BB_issues {
         return null;
 
     }
+    public function are_statuses_same_type($status1, $status2){
+
+    }
     public function log($issue_array, $repo_slug){
         $ci =&get_instance();
         $ci->load->library('session');
         $ci->load->model('logs/Issue_log_model');
         $ci->load->model("Internal_user_model");
-        $user_id = $ci->session->userdata('internal_uid');
-        $log_array=[
-            "issue_id"=>$issue_array["local_id"],
-            "repo_slug"=>$repo_slug,
-            "updated_by"=>$user_id,
-            "title"=>$issue_array["title"],
-            "status"=>$issue_array["status"],
-            "date_created"=>$issue_array["utc_created_on"]
-        ];
-        //convert assignee from bb username to id
-        $assignee_record = $ci->Internal_user_model->retrieve_by_bb_username($issue_array["responsible"]["username"]);
-        if($assignee_record!==null){
-
-            $log_array["assignee"] = $assignee_record["u_id"];
+        $workflow = isset($issue_array["workflow"])?$issue_array["workflow"]:"default";
+        $keep_workflow = true;
+        $keep_status = true;
+        $past = $ci->Issue_log_model->last_record($issue_array["local_id"], $repo_slug);
+        if(isset($past)){
+            if(isset($past["status"]) && !empty($past["status"]) || $past["status"]==$issue_array["status"]){
+                $keep_status = false;
+            }
+            if(isset($past["workflow"])&& !empty($past["workflow"]) || $past["workflow"]==$workflow){
+                $keep_status = false;
+            }
         }
-        $ci->Issue_log_model->insert($log_array);
+        if($keep_workflow || $keep_status){//there is a need to updata db at all
+            $user_id = $ci->session->userdata('internal_uid');
+            $log_array=[
+                "issue_id"=>$issue_array["local_id"],
+                "repo_slug"=>$repo_slug,
+                "updated_by"=>$user_id,
+                "title"=>$issue_array["title"],
+                "date_created"=>$issue_array["utc_created_on"]
+            ];
+            //convert assignee from bb username to id
+            $assignee_record = $ci->Internal_user_model->retrieve_by_bb_username($issue_array["responsible"]["username"]);
+            if($assignee_record!==null){
+                $log_array["assignee"] = $assignee_record["u_id"];
+            }
+            //write in new status
+            if($keep_status){
+                $log_array["status"] = $issue_array["status"];
+            }
+            //write in new workflow
+            if($keep_workflow){
+                $log_array["workflow"] = $workflow;
+            }
+            $ci->Issue_log_model->insert($log_array);
+        }
 
     }
 

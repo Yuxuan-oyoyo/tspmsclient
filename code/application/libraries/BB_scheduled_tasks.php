@@ -37,6 +37,11 @@ class BB_scheduled_tasks {
         $priority_mapping =[
             "trivial"=>1, "minor"=>2,"major"=>3, "critical"=>4, "blocker"=>5
         ];
+        //define status group
+        $status_group = [
+            "new"=>1,"open"=>1, "on hold"=>2, "resolved"=>3, "invalid"=>2,
+            "duplicate"=>2,"wontfix"=>2,"closed"=>2
+        ];
         //define offsets
         $offset = 0;
         $limit = 50;//a value between 0-50, as specified by bb api
@@ -77,38 +82,47 @@ class BB_scheduled_tasks {
                     break;
                 }
             }
-            //var_dump($issue["phase"]);
-            //retrieve logs for this project
-            $issue["duration_1"] = 0;
-            $issue["duration_2"] = 0;
-            $issue["duration_3"] = 0;
-            $issue["duration_4"] = 0;
-            $issue["duration_5"] = 0;
+            //initialize duration 1 to 5 as 0
+            for ($i=1;$i<=5;$i++){
+                $issue["duration_".$i] = 0;
+            }
+            //initialize data_resolved as utc_last_updated from bb. By right this should be overwritten
             $issue["date_resolved"] = $issue["utc_last_updated"];
-            //retrieve all relevant issue logs
-            $issue_log_records = $CI->Issue_log_model->retrieve($repo_slug, $issue["local_id"]);
-            if($issue_log_records!=null) {
-                for ($i = 0; $i < count($issue_log_records) - 1; $i++) {
-                    $start_date = strtotime($issue_log_records[$i]["date_updated"]);
-                    $end_date   = strtotime($issue_log_records[$i+1]["date_updated"]);
-                    $diff = $end_date-$start_date;
-                    $status = $issue_log_records[$i]["status"];
-                    switch($status){
-                        case "to develop":
-                            $issue["duration_1"]+=$diff;
-                            break;
-                        case "to test":
-                            $issue["duration_2"]+=$diff;
-                            break;
-                        case "ready for deployment":
-                            $issue["duration_3"]+=$diff;
-                            break;
-                        case "to deploy":
-                            $issue["duration_4"]+=$diff;
-                            break;
+            //retrieve all relevant issue logs for this issue. ilr is for Issue Log Records
+            $ilr = $CI->Issue_log_model->retrieve($repo_slug, $issue["local_id"]);
+            if($ilr!==null) {
+                for ($i = 0; $i < count($ilr) - 1; $i++) {
+                    $start_date = strtotime($ilr[$i]["date_updated"]);
+                    $curr_status = $ilr[$i]["status"];
+                    //if the current status is resolved or abnormal, this is not a start of stage
+                    if($status_group[$curr_status]>1) continue;
+                    $curr_workflow = $ilr[$i]["status"]=="default"?"status":$ilr[$i]["workflow"];
+                    $has_changed_stage = false;
+                    //TODO: this may cause error due to diff timezone
+                    //initialize time
+                    $diff = strtotime($issue["date_resolved"])-$start_date;
+                    //find the record that actually changes the stage
+                    $j = $i+1;
+                    while(!$has_changed_stage && $i<count($ilr)){
+                        $next_workflow = $ilr[$j]["workflow"]=="default"?"status":$ilr[$j]["workflow"];
+                        if ($status_group[$ilr[$j]["status"]]!=$status_group[$curr_status]||$curr_workflow!=$next_workflow){
+                            $has_changed_stage = true;
+                            $diff =strtotime($ilr[$j]["date_updated"]) - $start_date;
+                        }
+                        if($status_group[$curr_status]==3){
+                            $issue["date_resolved"] = $ilr[$j]["date_updated"];
+                        }
+                        $j++;
                     }
-                    if($issue_log_records[$i+1]["status"]=="resolved"){
-                        $issue["date_resolved"] = $issue_log_records[$i+1]["date_updated"];
+
+                    if($curr_workflow=="to develop") {
+                        $issue["duration_1"] += $diff;
+                    }elseif($curr_workflow=="to test") {
+                        $issue["duration_2"] += $diff;
+                    }elseif($curr_workflow=="ready for deployment") {
+                        $issue["duration_3"] += $diff;
+                    }elseif($curr_workflow=="to deploy"){
+                        $issue["duration_4"]+=$diff;
                     }
                 }
             }
@@ -175,7 +189,7 @@ class BB_scheduled_tasks {
         }
         return $result;
     }
-    public function fetch_issue_counts($update_db =true){
+    public function fetch_issue_counts(){
         $CI =& get_instance();
         $CI->load->library("BB_issues");
         $CI->load->model("Project_model");

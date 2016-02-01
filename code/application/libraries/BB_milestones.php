@@ -26,6 +26,7 @@ class BB_milestones {
         $url = $endpoint.'?'.http_build_query($parameters);
         /*construct endpoint*/
         $result =  $this->sendGetRequest($url);
+
         if($result===null){
             $parameters["access_token"] = $CI->bb_shared->requestFromServer();
             $url = $endpoint.'?'.http_build_query($parameters);
@@ -75,9 +76,11 @@ class BB_milestones {
         $response = curl_exec($ch);
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        if($code==200 && ($reply_array = json_decode($response,true))!=null){
+        if($code==200 && ($reply_array = json_decode($response,true))!==null){
             if(!isset($reply_array['error'])){
                 return $reply_array;
+            }else{
+                print_r($reply_array);
             }
         }else{
             //die(print_r($response));
