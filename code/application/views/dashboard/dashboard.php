@@ -272,7 +272,6 @@ $this->load->view('common/pm_nav', $class);
             <th>Project Name</th>
             <th>Current Phase</th>
             <th>Urgency Score</th>
-            <th>Next Milestone</th>
             </thead>
             <tbody>
 
@@ -292,7 +291,6 @@ $this->load->view('common/pm_nav', $class);
                         <td><script>
                                 document.write(urgency);
                             </script></td>
-                        <td>*Pending*</td>
                     </tr>
                 <?php endforeach?>
             <?php endif?>

@@ -102,4 +102,8 @@ DATEDIFF(date_due ,NOW()) as days_to_go from issue_report join project
        and status != 'resolved' and is_ongoing = 1;");
         return $query->result_array();
     }
+
+    public function insert_total_urgency_score($score){
+        $query=$this->db->query("INSERT INTO urgency_score_record (score) VALUES (?)",[$score]);
+    }
 }

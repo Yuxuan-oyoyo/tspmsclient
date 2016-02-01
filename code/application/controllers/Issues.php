@@ -338,4 +338,24 @@ class Issues extends CI_Controller {
             echo number_format($sum, 2);
         }
     }
+
+    public function store_issue_urgency_score_across_projects(){
+        $this->load->model("Issue_report_model");
+        $issues= $this->Issue_report_model->get_ongoing_issue_across_projects();
+        $sum = 0;
+        //calculate the urgency for each pending issue
+        //var_dump($issues);
+        foreach($issues as $value){
+            if(isset($value["date_due"]) && $value["date_due"]!= "0000-00-00"){
+                $dates_left=$value["days_to_go"];
+                if($dates_left<0){
+                    $dates_left=1;
+                }
+                $score = (sqrt($value["issue_pr"])/($dates_left+1))*sqrt($value["proj_pr"]);
+                $sum += $score;
+            }
+        }
+        $this->Issue_report_model->insert_total_urgency_score($sum);
+        var_dump($sum);
+    }
 }
