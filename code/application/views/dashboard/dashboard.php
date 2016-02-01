@@ -268,7 +268,7 @@ $this->load->view('common/pm_nav', $class);
     <div class="col-lg-5 tableContainer" align="center" >
         <table class="table table-striped">
             <thead>
-            <th>Project ID</th>
+            <th>Project Code</th>
             <th>Project Name</th>
             <th>Current Phase</th>
             <th>Urgency Score</th>
@@ -285,7 +285,7 @@ $this->load->view('common/pm_nav', $class);
                             async: false
                         }).responseText;
                     </script>
-                    <tr><td><?=$c['project_id']?></td>
+                    <tr><td><?=$c['project_code']?></td>
                         <td><a href="<?=base_url().'Projects/view_dashboard/'.$c["project_id"]?>"><?=$c['project_title']?></a></td>
                         <td><?=$c['phase_name']?></td>
                         <td><script>

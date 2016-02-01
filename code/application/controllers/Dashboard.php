@@ -313,9 +313,10 @@ class Dashboard extends CI_Controller
 
         $projects = $this->Project_model->retrieve_all_ongoing();
 
+        //var_dump($projects);
         $container = [];
         foreach($projects as $value){
-            $container[$value["project_id"]] = ["pn"=>$value["project_id"],"num_tasks"=>0,"num_issues"=>0];
+            $container[$value["project_id"]] = ["pn"=>$value["project_code"],"num_tasks"=>0,"num_issues"=>0];
 
         }
 
