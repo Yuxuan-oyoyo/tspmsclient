@@ -240,22 +240,28 @@ $this->load->view('common/pm_nav', $class);
                         </thead>
                         <?php
                         $count = 0;
-                        $total_duration = 0;
+                        $total_duration=0;
+                        $total_num_tasks=0;
+                        $total_num_issues=0;
+                        $total_issue_metrics=0;
                         ?>
                         <?php if(!false == $projects):?>
                             <?php foreach($projects as $c):?>
                                 <?php
                                 $count+=1;
                                 $total_duration+=(float)$c['project_duration'];
+                                $total_num_tasks+=(float)$issue_task[$c['project_id']]['num_tasks'];
+                                $total_num_issues+=(float)$issue_task[$c['project_id']]['num_issues'];
+                                $total_issue_metrics+=$issue_task[$c['project_id']]['metrics'];
                                 ?>
                                 <tr><td><?=$c['project_id']?></td>
                                     <td><a href="<?=base_url().'Projects/view_dashboard/'.$c["project_id"]?>"><?=$c['project_title']?></a></td>
                                     <td><?=$c['start_time']?></td>
                                     <td><?=substr($c['last_updated'], 0 ,10)?></td>
                                     <td><?=$c['project_duration']?></td>
-                                    <td>*pending*</td>
-                                    <td>*pending*</td>
-                                    <td>*pending*</td>
+                                    <td><?=$issue_task[$c['project_id']]['num_tasks']?></td>
+                                    <td><?=$issue_task[$c['project_id']]['num_issues']?></td>
+                                    <td><?=$issue_task[$c['project_id']]['metrics']?></td>
                                 </tr>
                             <?php endforeach?>
                         <?php endif?>
@@ -290,15 +296,15 @@ $this->load->view('common/pm_nav', $class);
                 </tr>
                 <tr>
                     <td style="font-style: italic">Average Number of Task</td>
-                    <td>*pending*</td>
+                    <td><?=number_format($total_num_tasks/$count, 2)?></td>
                 </tr>
                 <tr>
                     <td style="font-style: italic">Average Number of Issue</td>
-                    <td>*pending*</td>
+                    <td><?=number_format($total_num_issues/$count, 2)?></td>
                 </tr>
                 <tr>
                     <td style="font-style: italic">Average avg Issue Metric</td>
-                    <td>*pending*</td>
+                    <td><?=number_format($total_issue_metrics/$count, 2)?></td>
                 </tr>
                 </tbody>
             </table>

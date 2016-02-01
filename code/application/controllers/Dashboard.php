@@ -32,7 +32,7 @@ class Dashboard extends CI_Controller
         $tasks_u=$this->Task_model->retrieve_for_esenhower(7, -1000,3,0);
         $tasks_none=$this->Task_model->retrieve_for_esenhower(1000, 7,3,0);
         $projects = $this->Project_model->retrieve_all_with_phase();
-        $projects_task_issue_count = $this->num_of_tasks_issue_past_projects_php();
+        //$projects_task_issue_count = $this->num_of_tasks_issue_past_projects_php();
 
 
         $data["projects"]= $projects;
@@ -40,7 +40,7 @@ class Dashboard extends CI_Controller
         $data["tasks_i"]= $tasks_i;
         $data["tasks_u"]= $tasks_u;
         $data["tasks_none"]= $tasks_none;
-        $data["projects_task_issue_count"]= $projects_task_issue_count;
+        //$data["projects_task_issue_count"]= $projects_task_issue_count;
         $this->load->view('dashboard/dashboard',$data);
     }
 
@@ -441,39 +441,7 @@ class Dashboard extends CI_Controller
 
     }
 
-    public function num_of_tasks_issue_past_projects_php(){
-        $this->load->model("Task_model");
-        $this->load->model("Issue_report_model");
-        $this->load->model("Project_model");
-        $tasknumbers = $this ->Task_model->get_num_of_tasks_past_projects();
-        $numberissue = $this->Issue_report_model->get_num_of_issue_past_projects();
-        $projects = $this->Project_model->retrieve_all_past();
-        $container = [];
-        foreach($projects as $value){
-            $container[$value["project_id"]] = ["pn"=>$value["project_id"],"num_tasks"=>0,"num_issues"=>0, "metrics"=>0];
-            $metricsissue = $this->Issue_report_model->get_per_issue_data($value["project_id"]);
-            $matrics = 0;
-            $count = 0;
 
-            foreach($metricsissue as $issue){
-                if(isset($issue["date_resolved"])&&isset($issue["date_due"])){
-                    $matrics+=$issue["time_ratio"];
-                    $count+=1;
-                    //var_dump($count);
-                }
-            }
-            if($count!=0){
-                $container[$value["project_id"]]["metrics"] = $matrics/$count;
-            }
-        }
-        foreach($tasknumbers as $value){
-            $container[$value["project_id"]]["num_tasks"] = (int)$value["count"];
-        }
-        foreach($numberissue as $value){
-            $container[$value["project_id"]]["num_issues"] = (int)$value["count"];
-        }
-        return $container;
-    }
 
     public function phase_past_projects(){
     $this->load->model("Project_phase_model");
