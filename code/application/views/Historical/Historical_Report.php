@@ -83,10 +83,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     var options = {
     title: 'Total Urgency Score Over Time',
     legend: 'none',
-    chartArea: {
-    'width': '78%',
-    'height': '75%'
-    },
     width: '100%',
     hAxis: {
     titleTextStyle: {
@@ -101,12 +97,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     var options3 = {
     title: 'Issue/Task Analysis Chart',
     legend:'top',
-    chartArea: {
-    'width': '78%',
-    'height': '75%'
-    },
-    vAxis: {},
-    hAxis: {},
     seriesType: 'bars',
     series: {
     0: {
@@ -165,15 +155,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     title: 'Phase Percentile Analysis',
     isStacked: true,
         legend:'top',
-    hAxis: {
-
-    },
-    vAxis: {
-
-    },
-    chartArea: {
-    'width': '78%'
-    },
     };
 
     var chart5 = new google.visualization.ColumnChart(document.getElementById('chart_div5'));
@@ -189,6 +170,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             $('#customerTable').dataTable();
         });
     </script>
+
 </head>
 
 <body>
@@ -210,13 +192,10 @@ $this->load->view('common/pm_nav', $class);
         <h1 class="page-header">
             TSPMS-Historical Statistics
         </h1>
-        <div id="chart_div" style="height: 300px;"></div>
-        <div><br/><br/></div>
-        <div class="col-lg-9">
-            <br/>
-            <br/>
-            <div class="row">
-                <div class="col-lg-12">
+<div><br/><div>
+        <div class="col-lg-12" >
+            <div class="row" style="width: 90%; margin-left: 5%">
+                <div class="center" >
                     <?php if($this->session->userdata('message')):?>
                         <div class="form-group">
                             <div class="alert alert-info " role="alert">
@@ -272,13 +251,10 @@ $this->load->view('common/pm_nav', $class);
 
 
 
-        <div class="col-lg-3">
-
-            <br/><br/>
-
-
-            <table class="table table-striped">
-                <thead>
+        <div class="col-sm-4"  style="width: 35%;margin-left: 10%">
+            <br/>
+            <table class="table table-bordered">
+                <thead style="background: #e1e1e8;">
                 <th colspan="2">
                     Statistics Summary
                 </th>
@@ -309,16 +285,32 @@ $this->load->view('common/pm_nav', $class);
                 </tbody>
             </table>
         </div>
-        <div class="col-lg-12">
-            <br/><br/>
+        <div class="col-sm-4"  style="width: 35%;margin-top: 7%;margin-left: 8%">
+            <form  role="form" action="#" method="post">
+                <div class="form-group">
+                    <label for="targeted_start_datetime">Targeted Start Datetime:</label>
+                    <input type="text" name="targeted_start_datetime" id="targeted_start_datetime" class="form-control clsDatePicker" data-parsley-required>
+                </div>
+                <div class="form-group">
+                    <label for="targeted_end_datetime">Targeted End Datetime:</label>
+                    <input  class="form-control clsDatePicker" type="text" name="targeted_end_datetime" id="targeted_end_datetime" data-parsley-required>
+                </div>
+                <div class="pull-right">
+                    <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Change Time Slot">
+                </div>
+            </form>
         </div>
-        <div class="col-lg-12" id="chart_div3" style="height: 300px;"></div>
+        <div class="col-lg-12">
+            <br/>
+        </div>
+        <div class="col-lg-12" id="chart_div3" style="width: 100%; height: 300px;"></div>
 <div class="col-lg-12">
     <br/><br/>
 </div>
-        <div class="col-lg-12" id="chart_div5" style="height: 300px;"></div>
-    </div>
-    </div>
+        <div class="col-lg-12" id="chart_div5" style="width: 100%; height: 300px;"></div>
+        <div class="col-lg-12" id="chart_div" style="width: 100%; height: 300px;"></div>
 
+    </div>
+    </div>
 
 </body>

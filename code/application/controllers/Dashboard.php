@@ -388,6 +388,8 @@ class Dashboard extends CI_Controller
             }
             if($count!=0){
                 $container[$value["project_id"]]["metrics"] = $matrics/$count;
+            }else{
+                $container[$value["project_id"]]["metrics"] = 1;
             }
         }
 
