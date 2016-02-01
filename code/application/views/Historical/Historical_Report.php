@@ -229,7 +229,7 @@ $this->load->view('common/pm_nav', $class);
                     <?php endif;?>
                     <table class="table table-striped" id="customerTable">
                         <thead>
-                        <th>Project ID</th>
+                        <th>Project Code</th>
                         <th>Project Name</th>
                         <th>Start Time</th>
                         <th>End Time</th>
@@ -254,7 +254,7 @@ $this->load->view('common/pm_nav', $class);
                                 $total_num_issues+=(float)$issue_task[$c['project_id']]['num_issues'];
                                 $total_issue_metrics+=$issue_task[$c['project_id']]['metrics'];
                                 ?>
-                                <tr><td><?=$c['project_id']?></td>
+                                <tr><td><?=$c['project_code']?></td>
                                     <td><a href="<?=base_url().'Projects/view_dashboard/'.$c["project_id"]?>"><?=$c['project_title']?></a></td>
                                     <td><?=$c['start_time']?></td>
                                     <td><?=substr($c['last_updated'], 0 ,10)?></td>
@@ -308,6 +308,9 @@ $this->load->view('common/pm_nav', $class);
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="col-lg-12">
+            <br/><br/>
         </div>
         <div class="col-lg-12" id="chart_div3" style="height: 300px;"></div>
 <div class="col-lg-12">

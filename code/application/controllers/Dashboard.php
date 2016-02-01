@@ -374,7 +374,7 @@ class Dashboard extends CI_Controller
         $projects = $this->Project_model->retrieve_all_past();
         $container = [];
         foreach($projects as $value){
-            $container[$value["project_id"]] = ["pn"=>$value["project_id"],"num_tasks"=>0,"num_issues"=>0, "metrics"=>0];
+            $container[$value["project_id"]] = ["pn"=>$value["project_code"],"num_tasks"=>0,"num_issues"=>0, "metrics"=>0];
             $metricsissue = $this->Issue_report_model->get_per_issue_data($value["project_id"]);
             $matrics = 0;
             $count = 0;
@@ -454,7 +454,7 @@ class Dashboard extends CI_Controller
     $container = [];
 
     foreach($projects as $value){
-        $container[$value["project_id"]] = ["pn"=>$value["project_id"]];
+        $container[$value["project_id"]] = ["pn"=>$value["project_code"]];
         //var_dump($container);
         foreach($phases as $phase){
 
