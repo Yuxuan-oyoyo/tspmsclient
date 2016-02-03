@@ -174,7 +174,7 @@ class Issues extends CI_Controller {
         return $issue_details;
     }
     public function input_comment($repo_slug, $issue_id){
-        $comment_id = $this->input->post("comment-id");
+        $comment_id = $this->input->post("comment_id");
         $comment = $this->input->post("content");
         if($comment_id=="new"){
             $comment_id = null;
@@ -183,7 +183,7 @@ class Issues extends CI_Controller {
         redirect(base_url()."Issues/detail/".$repo_slug."/".$issue_id);
     }
     public function delete_comment($repo_slug, $issue_id) {
-        $comment_id = $this->input->post("comment-id");
+        $comment_id = $this->input->post("comment_id");
         $this->bb_issues->deleteCommentForIssue($repo_slug, $issue_id, $comment_id);
         redirect(base_url()."Issues/detail/".$repo_slug."/".$issue_id);
     }

@@ -192,12 +192,12 @@ if($this->session->userdata('internal_type')=='Developer') {
                             <?php if(true):?>
                                 <ul class="comment-actions">
                                     <li style="float:left"><a href="#edit" class="edit-comment-link">Edit</a></li>
-                                    <li style="float:left">
+                                    <!--li style="float:left">
                                         <form style="display:inline" method="post" action="<?=base_url()."Issues/delete_comment/".$repo_slug."/".$i["local_id"]?>">
                                             <a href="#comment-delete" class="comment-delete">Delete</a>
                                             <input hidden name="comment_id" value="<?=$c["comment_id"]?>">
                                         </form>
-                                    </li>
+                                    </li-->
                                 </ul>
                             <?php endif?>
                             </div>
