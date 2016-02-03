@@ -185,6 +185,7 @@ class Issues extends CI_Controller {
     public function delete_comment($repo_slug, $issue_id) {
         $comment_id = $this->input->post("comment-id");
         $this->bb_issues->deleteCommentForIssue($repo_slug, $issue_id, $comment_id);
+        redirect(base_url()."Issues/detail/".$repo_slug."/".$issue_id);
     }
 
     /**

@@ -15,18 +15,23 @@ class Issue_log_model extends CI_Model{
         $this->load->library("session");
 
     }
-    public function last_record($issue_id, $repo_slug){
-        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
-        $insert_array['last_updated'] = $date->format('c');
+    public function last_record_workflow($issue_id, $repo_slug){
         $past_query = $this->db->query(
-            "SELECT status, workflow FROM issue_log WHERE issue_id =? AND repo_slug=? ORDER BY date_updated DESC LIMIT 1",
+            "SELECT status, workflow FROM issue_log WHERE workflow is not null AND issue_id =? AND repo_slug=? ORDER BY date_updated DESC LIMIT 1",
+            [$issue_id, $repo_slug]
+        );
+        return $past_query->row_array();
+    }
+    public function last_record_status($issue_id, $repo_slug){
+        $past_query = $this->db->query(
+            "SELECT status, workflow FROM issue_log WHERE status is not null AND issue_id =? AND repo_slug=? ORDER BY date_updated DESC LIMIT 1",
             [$issue_id, $repo_slug]
         );
         return $past_query->row_array();
     }
     public function insert($issue_array){
         $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
-        $insert_array['last_updated'] = $date->format('c');
+        $issue_array['date_updated'] = $date->format('c');
         $this->db->insert('issue_log', $issue_array);
     }
     public function retrieve($repo_slug, $issue_id){

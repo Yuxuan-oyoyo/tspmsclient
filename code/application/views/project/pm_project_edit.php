@@ -127,10 +127,10 @@ $this->load->view('common/pm_nav', $class);
             </div>
             <script>
                 $("#bitbucket_repo_name").on("focusout",function(){
-                    $(this).attr("disabled",true);
-                    var value = $(this).val();
+                    var field = $(this); field.attr("disabled",true);
+                    var value = field.val();
                     $.ajax({
-                        url:"<?=base_url()."Ajax_validate/bb_repo_name_ajax"?>",
+                        url:"<?=base_url()."Projects/bb_repo_name_ajax"?>",
                         data:{repo_name:value,repo_id:<?=$p['project_id']?>},
                         success: function (result){
                             if(result=="true"){
@@ -139,10 +139,9 @@ $this->load->view('common/pm_nav', $class);
                                 $("#bitbucket_repo_name_group").addClass("has-error");
                                 alert("The input bitbucket repository name is invalid for issue retrieval.");
                             }
-                        }
+                        },complete: function(){field.removeAttr("disabled");}
 
                     });
-                    $(this).removeAttr("disabled");
                 });
             </script>
             <div class="col-lg-5">

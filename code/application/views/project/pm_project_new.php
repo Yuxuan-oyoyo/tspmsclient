@@ -127,6 +127,26 @@ $this->load->view('common/pm_nav', $class);
                     <input class="form-control" name="bitbucket_repo_name" value="<?=set_value("bitbucket_repo_name")?>">
                 </div>
             </div>
+            <script>
+                $("#bitbucket_repo_name").on("focusout",function(){
+                    var field = $(this); field.attr("disabled",true);
+                    var value = field.val();
+                    $.ajax({
+                        url:"<?=base_url()."Projects/bb_repo_name_ajax"?>",
+                        data:{repo_name:value,repo_id:<?=$p['project_id']?>},
+                        success: function (result){
+                            if(result=="true"){
+                                $("#bitbucket_repo_name_group").removeClass("has-error");
+                            }else{
+                                $("#bitbucket_repo_name_group").addClass("has-error");
+                                alert("The input bitbucket repository name is invalid for issue retrieval.");
+                            }
+                        }, complete: function(){field.removeAttr("disabled");}
+                    });
+
+                });
+            </script>
+
             <div class="col-lg-5">
                 <div class="form-group">
                     <label for="priority">Priority(1-5)</label>

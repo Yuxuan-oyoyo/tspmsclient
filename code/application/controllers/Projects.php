@@ -422,5 +422,12 @@ class Projects extends CI_Controller {
             redirect('/internal_authentication/login/');
         }
     }
+    public function bb_repo_name_ajax(){
+        $repo_name =  $this->input->get("repo_name");
+        $repo_id =  $this->input->get("repo_id");
+        $this->load->library("BB_shared");
+        $result =  $this->bb_shared->validate_repo_name_with_bb($repo_name,$repo_id);
+        echo $result? "true":"false";
+    }
 
 }

@@ -350,6 +350,7 @@ class BB_issues {
                 /*process log  =====*/
                 $this->log($reply_array,$repo_slug);
                 /*process log  =====*/
+                //die();
                 return $reply_array;
             }
         }
@@ -364,19 +365,20 @@ class BB_issues {
         $ci->load->library('session');
         $ci->load->model('logs/Issue_log_model');
         $ci->load->model("Internal_user_model");
-        $workflow = isset($issue_array["workflow"])?$issue_array["workflow"]:"default";
-        $keep_workflow = true;
-        $keep_status = true;
-        $past = $ci->Issue_log_model->last_record($issue_array["local_id"], $repo_slug);
-        if(isset($past)){
-            if(isset($past["status"]) && !empty($past["status"]) || $past["status"]==$issue_array["status"]){
-                $keep_status = false;
-            }
-            if(isset($past["workflow"])&& !empty($past["workflow"]) || $past["workflow"]==$workflow){
-                $keep_status = false;
-            }
+        $workflow = !empty($issue_array["workflow"])?$issue_array["workflow"]:"default";
+        $keep_workflow = false;
+        $keep_status = false;
+        $past_workflow = $ci->Issue_log_model->last_record_workflow($issue_array["local_id"], $repo_slug);
+        $past_status = $ci->Issue_log_model->last_record_status($issue_array["local_id"], $repo_slug);
+        if(!isset($past_status["status"]) || empty($past_status["status"])
+                || $past_status["status"]!=$issue_array["status"]){
+            $keep_status = true;
         }
-        if($keep_workflow || $keep_status){//there is a need to updata db at all
+        if(!isset($past_workflow["workflow"]) || empty($past_workflow["workflow"])
+                || $past_workflow["workflow"]!=$workflow){
+            $keep_workflow = true;
+        }
+        if($keep_workflow || $keep_status){//there is a need to update db at all
             $user_id = $ci->session->userdata('internal_uid');
             $log_array=[
                 "issue_id"=>$issue_array["local_id"],

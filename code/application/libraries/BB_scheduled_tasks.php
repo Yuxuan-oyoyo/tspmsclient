@@ -95,7 +95,7 @@ class BB_scheduled_tasks {
                     $start_date = strtotime($ilr[$i]["date_updated"]);
                     $curr_status = $ilr[$i]["status"];
                     //if the current status is resolved or abnormal, this is not a start of stage
-                    if($status_group[$curr_status]>1) continue;
+                    if(isset($curr_status)&&$status_group[$curr_status]>1) continue;
                     $curr_workflow = $ilr[$i]["status"]=="default"?"status":$ilr[$i]["workflow"];
                     $has_changed_stage = false;
                     //TODO: this may cause error due to diff timezone
@@ -105,17 +105,19 @@ class BB_scheduled_tasks {
                     $j = $i+1;
                     while(!$has_changed_stage && $i<count($ilr)){
                         $next_workflow = $ilr[$j]["workflow"]=="default"?"status":$ilr[$j]["workflow"];
-                        if ($status_group[$ilr[$j]["status"]]!=$status_group[$curr_status]||$curr_workflow!=$next_workflow){
+                        if (!isset($ilr[$j]["status"])||!isset($curr_status)
+                                ||$status_group[$ilr[$j]["status"]]!=$status_group[$curr_status]
+                                ||$curr_workflow!=$next_workflow){
                             $has_changed_stage = true;
                             $diff =strtotime($ilr[$j]["date_updated"]) - $start_date;
                         }
-                        if($status_group[$curr_status]==3){
-                            $issue["date_resolved"] = $ilr[$j]["date_updated"];
-                        }
                         $j++;
                     }
+                    if(isset($curr_status)&&$status_group[$curr_status]==3){
+                        $issue["date_resolved"] = $ilr[$j]["date_updated"];
+                    }
 
-                    if($curr_workflow=="to develop") {
+                    if($curr_workflow=="to develop" || $curr_workflow=="default") {
                         $issue["duration_1"] += $diff;
                     }elseif($curr_workflow=="to test") {
                         $issue["duration_2"] += $diff;

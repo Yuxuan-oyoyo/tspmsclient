@@ -91,12 +91,18 @@ class BB_Shared {
             die("Error in bitbucket authentication ".$response);
         }
     }
-    public function validate_repo_name_with_bb($repo_name=null){
-        if(!isset($repo_name)) return false;
+    public function validate_repo_name_with_bb($repo_name=null, $repo_id=null){
         $CI =& get_instance();
         $CI->load->library('BB_issues');
-        $issue = $CI->bb_issues->retrieveIssues($repo_name, null, null, false);
-        return isset($issue)? true:false;
+        $CI->load->model('Project_model');
+        $project_record = $CI->Project_model->retrieve_by_repo_slug($repo_name);
+        if(!isset($project_record) || $project_record['project_id']==$repo_id){
+            $CI->load->library("BB_shared");
+            if(!isset($repo_name)) return false;
+            $issue = $CI->bb_issues->retrieveIssues($repo_name, null, null, false);
+            return isset($issue)? true:false;
+        }
+        return false;
     }
 
 }

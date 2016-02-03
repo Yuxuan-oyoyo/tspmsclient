@@ -44,15 +44,40 @@ class Dashboard extends CI_Controller
         $this->load->view('dashboard/dashboard',$data);
     }
 
+    /**
+     * To get the needed user bb credential from db. IMPORTANT.
+     * @return bool
+     */
+    function _is_authenticated(){
+        $authenticated = false;
+        if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM"){
+            $authenticated = true;
+        }else{
+            $this->load->model("Internal_user_model");
+            $all_pm_records = $this->Internal_user_model->retrieve_all_pm();
+            if(isset($all_pm_records)&&isset($all_pm_records[0])&&!empty($all_pm_records[0]["bb_username"])){
+                $pm_id = $all_pm_records[0]["u_id"];
+                $this->session->set_userdata('internal_uid',$pm_id);
+                $authenticated = true;
+            }else{
+                //die("No project manager found");
+            }
+        }
+        return $authenticated;
+    }
     public function fetch_issues($project_id){
-        $this->bb_scheduled_tasks->fetch_project_issues($project_id);
+        if($this->_is_authenticated()) {
+            $this->bb_scheduled_tasks->fetch_project_issues($project_id);
+        }
     }
     public function fetch_all_issues(){
-        $this->load->model("Project_model");
-        $project_records = $this->Project_model->retrieveAll();
-        foreach($project_records as $p){
-            if(isset($p["bitbucket_repo_name"]) && !empty($p["bitbucket_repo_name"])){
-                $this->bb_scheduled_tasks->fetch_project_issues($p["project_id"],$p["bitbucket_repo_name"]);
+        if($this->_is_authenticated()) {
+            $this->load->model("Project_model");
+            $project_records = $this->Project_model->retrieveAll();
+            foreach ($project_records as $p) {
+                if (isset($p["bitbucket_repo_name"]) && !empty($p["bitbucket_repo_name"])) {
+                    $this->bb_scheduled_tasks->fetch_project_issues($p["project_id"], $p["bitbucket_repo_name"]);
+                }
             }
         }
 

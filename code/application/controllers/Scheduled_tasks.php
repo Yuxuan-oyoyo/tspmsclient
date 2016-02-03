@@ -19,11 +19,9 @@ class Scheduled_tasks extends CI_Controller{
     /* Calibrates bb milestones with database
      * prints {"added":num_added,"removed":num_removed,"time":time_taken}
      */
-    function calibrate_bb_milestones(){
+    function _is_authenticated(){
         $authenticated = false;
-        $data = [];
-        if($this->session->userdata('internal_uid')
-                &&$this->session->userdata('internal_type')=="PM"){
+        if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM"){
             $authenticated = true;
         }else{
             $all_pm_records = $this->Internal_user_model->retrieve_all_pm();
@@ -32,10 +30,14 @@ class Scheduled_tasks extends CI_Controller{
                 $this->session->set_userdata('internal_uid',$pm_id);
                 $authenticated = true;
             }else{
-                die("No project manager found");
+                //die("No project manager found");
             }
         }
-        if($authenticated){
+        return $authenticated;
+    }
+    function calibrate_bb_milestones(){
+        $data = [];
+        if($this->_is_authenticated()){
             $this->load->library("BB_scheduled_tasks");
             $result = $this->bb_scheduled_tasks->calibrate_bb_milestones();
             $data["result"] = $result;
@@ -55,5 +57,6 @@ class Scheduled_tasks extends CI_Controller{
         $result = $this->bb_scheduled_tasks->fetch_issue_counts();
         echo json_encode($result);
     }
+    
 
 }
