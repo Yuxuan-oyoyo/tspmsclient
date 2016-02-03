@@ -1,11 +1,10 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: Alex
- * Date: 10/28/2015
- * Time: 1:21 PM
- */
+require 'vendor/autoload.php';
+use Aws\S3\S3Client;
+use Aws\S3\Exception\S3Exception;
+
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Chat extends CI_Controller {
@@ -179,7 +178,7 @@ class Chat extends CI_Controller {
                 "m_content" => $this->input->get("content", true),
                 "m_to_pm" => $this->input->get("to_the_pm"),
                 "m_pm_id" => $this->input->get("pm_id"),
-                "m_type" => 0,
+                "m_type" => "0",
             ];
 
 
@@ -237,12 +236,14 @@ class Chat extends CI_Controller {
         }
         else
         {
-            $base_file = $_POST['test_data'];
-            $f_name = $_POST['f_name'];
+            $base_file = $_POST['test_data']; // base64 file
+            $f_name = $_POST['f_name']; // file_name
             $ext = $_POST['ext'];
             $full_fn = $f_name;
-            $full_fn .= ".";
-            $full_fn .= $ext;
+            $user_msg = $_POST['user_msg'];
+
+            //$full_fn .= ".";
+            //$full_fn .= $ext;
 
             if(! isset($base_file))
             {
@@ -251,34 +252,77 @@ class Chat extends CI_Controller {
             }
             else
             {
-                // insert into db
-                // msg_id will be unique dir / body will be file name
-                $values = [
-                    "chat_id" => $this->input->post("chatID", true),
-                    "m_author" => $this->input->post("author", true),
-                    "m_content" => $full_fn,
-                    "m_type" => 1,
-                ];
 
+                // Do s3
+                $file_url = "";
+                //ob_end_flush();
+                $s3 = new S3Client([
+                    'credentials' => [
+                        'key'    => 'AKIAJCISFJKSJ7DGAM5A',
+                        'secret' => '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'
+                    ],
+                    'version' => '2006-03-01',
+                    'region'  => 'ap-southeast-1'
+                ]);
 
-                $retrieve_id = $this->Chat_model->write($values);
-
-                // create unique dir
-                $out_path = "./uploads/";
-                $out_path .= $retrieve_id;
-
-                mkdir($out_path, 0777, TRUE);
-
-                // store files in created dir
                 $data = explode(',', $base_file);
                 $content = base64_decode($data[1]);
-                $outfile = $out_path;
-                $outfile .= "/";
-                $outfile .= $f_name;
-                $outfile .= ".";
-                $outfile .= $ext;
-                file_put_contents($outfile, $content);
 
+                $f = finfo_open();
+                $mime_type = addslashes(finfo_buffer($f, $content, FILEINFO_MIME_TYPE));
+                finfo_close($f);
+
+                $mime_type = str_replace('/', '\/', $mime_type);
+                $file_key = substr(md5(time().$full_fn),0,5)."_".$full_fn;
+
+
+
+
+
+
+                try {
+
+                    $file_key = substr(md5(time().$full_fn),0,5)."_".$full_fn;
+                    $result = $s3 -> putObject(
+                        array(
+                            'Bucket'       => 'test-upload-file',
+                            'Key'          => $file_key,
+                            'SourceFile'   => $base_file,
+                            'ContentType'  => $mime_type,
+                            'ACL'          => 'public-read',
+                            'Metadata'     => array(
+                                'filename' => $full_fn
+                            )
+                        )
+                    );
+
+                    $file_url = $result['ObjectURL'];
+
+                    //echo $file_url;
+
+                } catch (S3Exception $e)
+                {
+                    // do nothing maybe print error?
+                    $file_url = "error";
+                }
+
+                if($file_url != "error")
+                {
+                    // Do local DB
+                    $values = [
+                        "chat_id" => $this->input->post("chatID", true),
+                        "m_author" => $this->input->post("author", true),
+                        "m_content" => $user_msg, // content is no longer file name, its the message
+                        "m_type" => $full_fn."^".$file_url,
+                    ];
+
+                    $retrieve_id = $this->Chat_model->write($values);
+
+                }
+                else
+                {
+                    echo "error";
+                }
 
             }
         }

@@ -54,6 +54,7 @@ $this->load->view('common/pm_nav', $class);
                 <thead>
                 <th>Name</th>
                 <th>Username</th>
+                <th>Email</th>
                 <th>BB username</th>
                 <th>Type</th>
                 <th>Status</th>
@@ -64,6 +65,7 @@ $this->load->view('common/pm_nav', $class);
                     <?php foreach($users as $user):?>
                         <tr><td><?=$user['name']?></td>
                             <td><?=$user['username']?></td>
+                            <td><?=$user['email']?></td>
                             <td><?=$user['bb_username']?></td>
                             <td><?=$user['type']?></td>
                             <td>

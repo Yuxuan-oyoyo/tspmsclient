@@ -216,29 +216,39 @@ if($this->session->userdata('Customer_cid')){
             var msg = this.props.msg;
             // @formatter:off
 
-            if(msg.is_file == 1)
+            if(msg.is_file != "0")
             {
-                var url = "<?=base_url()."chat/filesys/"?>";
-                url = url.concat(msg.message_id);
-                url = url.concat("/");
-                url = url.concat(msg.content);
+                console.log("guess who?")
+                console.log(msg);
+
+                // WARNING: abit hackish here we splitted by ^
+
+                var is_file = msg.is_file
+                var file_name = is_file.substring(0, is_file.indexOf('^'))
+                var hyper_link = is_file.substring(is_file.indexOf('^')+1)
+
+                console.log(file_name)
+                console.log(hyper_link)
+
+
 
                  if((UserType == "PM" && this.props.msg.to_pm == 1) || (UserType != "PM" && this.props.msg.to_pm == 0))
                     {
+                        // this message is for me (left side)
                             return (
                                 <div className="media">
                                     <div className="media-body ">
 
                                         <h5 className="media-heading">{this.props.msg.author}&nbsp; <small><i className="fa fa-clock-o"/>{dateString}</small> </h5>
                                         <div className="direct-chat-text ">
-                                          File:<br/>
-                                        <a href={url}> {this.props.msg.content} </a><br/>
-                                        <small>(Click file name to download)</small>
+                                            { msg.content }
+                                            <br/><br/>
+                                          File: <a href={hyper_link}> {file_name} </a><br/>
+                                        <small><i>(Click file name to download)</i></small>
                                         </div>
                                     </div>
                                 </div>
                             );
-                        // this message is for me (left side)
                     }
                     {
                         // else not for me
@@ -248,9 +258,10 @@ if($this->session->userdata('Customer_cid')){
 
                                         <h5 className="media-heading pull-right"> <small><i className="fa fa-clock-o"/>{dateString}</small>&nbsp;{this.props.msg.author}  </h5>
                                         <div className="direct-chat-text pull-right">
-                                        File:<br/>
-                                        <a href={url}> {this.props.msg.content} </a><br/>
-                                        <small>(Click file name to download)</small>
+                                            { msg.content }
+                                            <br/><br/>
+                                          File: <a href={hyper_link}> {file_name} </a><br/>
+                                        <small><i>(Click file name to download)</i></small>
                                         </div>
                                     </div>
                                 </div>
@@ -451,7 +462,7 @@ if($this->session->userdata('Customer_cid')){
                     },
                     error: function()
                     {
-                        console.log("errback");
+                        //console.log("errback");
                     }
 
                 })
@@ -483,18 +494,22 @@ if($this->session->userdata('Customer_cid')){
         },
         render: function(){
 
-            console.log(this.props.filey)
+            //console.log(this.props.filey)
 
             // if user uploaded file
+            //<textarea rows="4" placeholder={up_text} className=" form-control" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled/>
 
             if (this.props.filey !== null)
             {
                 var up_text = "Upload " + this.props.filey;
+                 // TODO: CZ to fix ui -> make <span> look cool again
+                // <textarea rows="4" placeholder={up_text} className=" form-control" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled/>
                 return(
                     <div>
-                        <textarea rows="4" placeholder={up_text} className=" form-control" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled/>
+                        <span> {up_text} </span>
+
                         <div>
-                            <FileForm threadID={this.props.thread.chatID} text_handler={this.textHandler} filey={this.props.filey} fu_handler={this.props.fu_handler}/>
+                            <FileForm threadID={this.props.thread.chatID} text_handler={this.handleText} filey={this.props.filey} fu_handler={this.props.fu_handler} fu_refresher={this.props.fu_refresher} />
                         </div>
 
                     </div>
@@ -509,7 +524,7 @@ if($this->session->userdata('Customer_cid')){
                     <div >
                         <textarea rows="4" placeholder="Type message here" className="form-control" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
                         <div>
-                            <FileForm threadID={this.props.thread.chatID} fu_handler={this.props.fu_handler}/>
+                            <FileForm threadID={this.props.thread.chatID} text_handler={this.handleText} fu_handler={this.props.fu_handler}/>
                         </div>
                         <div>
                             <button  className="col-lg-2 text-right btn btn-primary pull-right" onClick={this.handleWrite} type="button">Reply </button>
@@ -533,7 +548,13 @@ if($this->session->userdata('Customer_cid')){
         handleSubmit: function(e) {
             e.preventDefault();
 
+            // file data test
+            // console.log("opa")
+            // console.log(this.state.data_uri)
 
+            var form = document.getElementById('upload_form')
+            var u_text = document.getElementById('user_text').value
+            //alert(u_text)
 
             var url = "<?=base_url()."chat/write"?>";
             var threadID = this.props.threadID;
@@ -541,6 +562,7 @@ if($this->session->userdata('Customer_cid')){
                 url: url,
                 type: "POST",
                 data: {
+                        user_msg: u_text,
                         test_data:this.state.data_uri,
                         ext: this.state.extension,
                         f_name: this.state.f_name,
@@ -555,7 +577,12 @@ if($this->session->userdata('Customer_cid')){
                     // do stuff
                 }.bind(this)
             });
-            return false;
+
+
+            this.props.text_handler();
+            this.props.fu_refresher();
+
+
         },
         handleFile: function(e)
         {
@@ -563,31 +590,47 @@ if($this->session->userdata('Customer_cid')){
             var reader = new FileReader();
             var file = e.target.files[0];
             var ext = e.target.files[0].name.split('.').pop().toLowerCase()
-            var file_name =      e.target.files[0].name.split('.')[0]
+            //var file_name =      e.target.files[0].name.split('.')[0]
+            var file_name = e.target.files[0].name
 
             this.props.fu_handler(e.target.files[0].name);
+
             console.log("after")
             reader.onload = function(upload) {
+
+                //document.getElementById("image").src = upload.target.result;
+                $('#image')
+                    .attr('src', upload.target.result)
+                    .width(150)
+                    .height(200);
                 self.setState({
                     data_uri: upload.target.result,
                     extension: ext,
                     f_name: file_name
                 });
             }
-
             reader.readAsDataURL(file);
+
         },
+        // TODO: CZ make textarea cool again
         render: function() {
             // @formatter:off
+            //var stylish = "display:none; max-width: 160px; max-height: 120px; border: none;"
+
             if(this.props.filey != null)
             {
+                // TODO: cz make preview nice please
                 return (
-                    <form onSubmit={this.handleSubmit} encType="multipart/form-data">
+                        <div>
+                        <img id="image" />
+                    <form id="upload_form" onSubmit={this.handleSubmit} encType="multipart/form-data">
+                        <input type="text" id="user_text"/>
                        <span className="col-lg-2  btn btn-default pull-left btn-file">
                                 Add File <input type="file" onChange={this.handleFile}/>
                         </span>
                         <input className=" col-lg-2 text-right btn btn-primary pull-right"  type="submit" value="Reply" />
                     </form>
+                    </div>
                 );
             }
             else
@@ -784,7 +827,7 @@ if($this->session->userdata('Customer_cid')){
                             {this.state.msgnodes}
                             </div>
                         </div>
-                        <RightMessageComposerBox fast_msg={this.props.fastMsg} filey={this.props.filey} fu_handler={this.props.fu_handler} thread={this.props.chat} refreshFunc={this.props.refreshFunc} />
+                        <RightMessageComposerBox fast_msg={this.props.fastMsg} filey={this.props.filey} fu_handler={this.props.fu_handler} fu_refresher={this.props.fu_refresher} thread={this.props.chat} refreshFunc={this.props.refreshFunc} />
 
                     </div>
                 )
@@ -887,9 +930,12 @@ if($this->session->userdata('Customer_cid')){
         },
         fileUploadHandler: function(data)
         {
-
             this.setState({file:data})
 
+        },
+        fileUploadRefresher: function()
+        {
+            this.setState({file:null})
         },
         handleUnread:function(data){
 
@@ -923,10 +969,10 @@ if($this->session->userdata('Customer_cid')){
             // console.log("chat id is");
             // console.log(data.chatID);
             //console.log(data);
-
-            console.log("sphere")
+            this.fileUploadRefresher()
+            //console.log("sphere")
             var data = arr["0"]
-            console.log(data)
+            //console.log(data)
 
             var to_pm = 0
             if(UserType == "PM")
@@ -1082,6 +1128,7 @@ if($this->session->userdata('Customer_cid')){
                                         chat_id = {this.state.chatID}
                                         clickFunc={this.handleClickOnLeftUser}
                                         fu_handler={this.fileUploadHandler}
+                                        fu_refresher={this.fileUploadRefresher}
                                         filey={this.state.file}
                                         />
 
