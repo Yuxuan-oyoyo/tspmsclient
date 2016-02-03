@@ -293,7 +293,20 @@ class BB_issues {
         curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
         curl_setopt($ch, CURLOPT_VERBOSE, true);
         curl_exec($ch);
+        /*debug-------------------------------------------
+            curl_setopt($ch, CURLOPT_VERBOSE, true);
+
+            $verbose = fopen('php://temp', 'w+');
+            curl_setopt($ch, CURLOPT_STDERR, $verbose);
+            $response = curl_exec($ch);
+        var_dump($response);
+            rewind($verbose);
+            $verboseLog = stream_get_contents($verbose);
+            echo "Verbose information:\n<pre>", htmlspecialchars($verboseLog), "</pre>\n";
+            /debug --------------------------------------------*/
+        /*process response*/
         curl_close($ch);
+        //die();
     }
     private function sendIssueRequest($repo_slug,$id, $issue_array, $_flag='POST'){
         $CI =& get_instance();
