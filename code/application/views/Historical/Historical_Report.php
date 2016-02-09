@@ -171,6 +171,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         });
     </script>
 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script>
+        $(function() {
+            $( "#datepicker1" ).datepicker({ maxDate: "-1M" });
+        });
+    </script>
+    <script>
+        $(function() {
+            $( "#datepicker2" ).datepicker({ maxDate: -0 });
+        });
+    </script>
+
 </head>
 
 <body>
@@ -285,15 +300,21 @@ $this->load->view('common/pm_nav', $class);
                 </tbody>
             </table>
         </div>
+        <?php
+        $date=strtotime(date('Y-m-d'));
+        $newDate = date('m/d/Y',strtotime('-1 month',$date));
+        ?>
         <div class="col-sm-4"  style="width: 35%;margin-top: 7%;margin-left: 8%">
             <form  role="form" action="#" method="post">
                 <div class="form-group">
-                    <label for="targeted_start_datetime">Targeted Start Datetime:</label>
-                    <input type="text" name="targeted_start_datetime" id="targeted_start_datetime" class="form-control clsDatePicker" data-parsley-required>
+                    <label for="targeted_end_datetime">Targeted Start Datetime:</label>
+                    <input class="form-control clsDatePicker" type="text" id="datepicker1" value="<?php echo $newDate;?>">
+
                 </div>
+
                 <div class="form-group">
                     <label for="targeted_end_datetime">Targeted End Datetime:</label>
-                    <input  class="form-control clsDatePicker" type="text" name="targeted_end_datetime" id="targeted_end_datetime" data-parsley-required>
+                    <input class="form-control clsDatePicker" type="text" id="datepicker2" value="<?php echo date("m/d/Y");?>">
                 </div>
                 <div class="pull-right">
                     <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Change Time Slot">
