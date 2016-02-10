@@ -99,13 +99,13 @@ class Internal_user_model extends CI_Model
     }
 
     public function retrieve_all_pm(){
-        $query = $this->db->query("SELECT * FROM internal_user where type='PM'");
+        $query = $this->db->query("SELECT * FROM internal_user where type='PM' and is_active=1");
         return $query->result_array();
     }
     public function retrieve_by_type($type){
 
         if(isset($type)){
-            $query = $this->db->get_where("internal_user",["type"=>$type]);
+            $query = $this->db->get_where("internal_user",["type"=>$type, "is_active"=>1]);
             if($query->num_rows()>0){
                 return $query->result_array();
             }
