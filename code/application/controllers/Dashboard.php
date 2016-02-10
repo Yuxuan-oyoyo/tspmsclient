@@ -169,49 +169,40 @@ class Dashboard extends CI_Controller
         $input_raw = $this->input->get($categories, true);
         $input_clean = [];
         foreach($input_raw as $key=>$value){
-            if(isset($value)){
-                //verify the inputs
+            if($key=="priority" && in_array($value,[1,2,3,4,5])){
+                $input_clean[$key] = $value;
+            }
+            if($key=="kind" && in_array($value,["bug","enhancement","proposal","task"])){
+                $input_clean[$key] = $value;
+            }
+            if($key=="phase" && in_array($value,[1,2,3,4,5])){
                 $input_clean[$key] = $value;
             }
         }
         $this->load->model("Issue_report_model");
-        $issue_time_list = $this->Issue_report_model->get_sum_time_spent_per_category($project_id,$input_clean);
+        $i = $this->Issue_report_model->get_sum_time_spent_per_category($project_id,$input_clean);
+        //echo '{"cols":[{"label":"Stage","type":"string"},{"label":"Time Spent","type":"number"}],"rows":[{"c":[{"v":"to develop"},{"v":30}]},{"c":[{"v":"to test"},{"v":30}]},{"c":[{"v":"ready for deployment"},{"v":20}]},{"c":[{"v":"to deploy"},{"v":10}]}]}';
         $result = [];
         //var_dump($issue_time_list);
-        foreach($issue_time_list as $i){
-            array_push($result, ["to develop", (int)$i["du1"]]);
-            array_push($result, ["to test", (int)$i["du2"]]);
-            array_push($result, ["ready for deployment", (int)$i["du3"]]);
-            array_push($result, ["to deploy", (int)$i["du4"]]);
-            /*
-            $result[$i["phase_name"]] = [
-                "to develop" =>$i["du1"],
-                "to test" =>$i["du2"],
-                "ready for deployment" =>$i["du3"],
-                "to deploy" =>$i["du4"]
-            ];
-            */
-        }
-        //ajax:
-        //echo json_encode($result);
-
-
-        $table = array();
-        $table['cols'] = array(
-            // Labels for your chart, these represent the column titles
-            // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
-            array('label' => 'Stage', 'type' => 'string'),
-            array('label' => 'Time Spent', 'type' => 'number')
-        );
+        array_push($result, ["to develop", (int)$i["du1"]]);
+        array_push($result, ["to test", (int)$i["du2"]]);
+        array_push($result, ["ready for deployment", (int)$i["du3"]]);
+        array_push($result, ["to deploy", (int)$i["du4"]]);
+        $table= [
+            'cols'=>
+                [
+                    ['label' => 'Stage', 'type' => 'string'],
+                    ['label' => 'Time Spent', 'type' => 'number']
+                ]
+        ];
 
         $rows = array();
         foreach($result as $v){
-            $temp = array();
-
+            $v_list = array();
             foreach($v as $detail){
-                $temp[] = array('v' => $detail);
+                $v_list[] = ['v' => $detail];
             }
-            $rows[] = array('c' => $temp);
+            $rows[] = ['c' => $v_list];
         }
         $table['rows'] = $rows;
         $jsonTable = json_encode($table);

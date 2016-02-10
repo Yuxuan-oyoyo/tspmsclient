@@ -66,9 +66,10 @@ class Issue_report_model extends CI_Model{
         $sql = "SELECT sum(duration_1) AS du1, sum(duration_2) AS du2, ".
             "sum(duration_3) AS du3, sum(duration_4) AS du4, sum(duration_1) AS du5, ".
             "phase_name FROM issue_report i, phase p WHERE status='resolved' AND i.phase =p.phase_id ".
-            "  AND ".$condition_clause." project_id=? GROUP BY phase";
+            "  AND ".$condition_clause." project_id=?";
+        //var_dump($sql);
         $query = $this->db->query($sql,[$project_id]);
-        return $query->result_array();
+        return $query->row_array();
     }
     public function get_per_issue_data($project_id){
         $query=$this->db->query("SELECT local_id, title, date_created, date_resolved, date_due, ".

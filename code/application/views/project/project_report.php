@@ -28,47 +28,60 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             'packages': ['corechart', 'gauge']
         });
         google.charts.setOnLoadCallback(drawChart);
+        var options3 = {
+            title: 'Phase Analysis Chart',
+            //legend:'bottom',
+            //chartArea: { width: '90%',left: "5%" , height: '70%'},
+            vAxis: {
+            },
+            hAxis: {
+            },
+            seriesType: 'bars',
+            series: {
+                0: {
+                    type: "bars",
+                    targetAxisIndex: 0
+                },
+                2: {
+                    type: "line",
+                    targetAxisIndex: 1
+                }
+            },
+            colors: ['#1b9e77', '#d95f02', '#7570b3']
 
+        };
+
+
+
+        var options4 = {
+            'title': 'Issue Metrics Chart',
+            //chartArea: { left: "5%"},
+            //'height': 300,
+            tooltip: {
+                isHtml: true
+            },
+            legend: 'none',
+            vAxis: {
+                'max': 3
+            }
+        };
+
+        var options5 = {
+            'title': 'Stage percentile analysis',
+            chartArea: {height: "80%"},
+            legend: 'left'
+        };
 
 
 
 
         function drawChart() {
-            /**
-            var data = google.visualization.arrayToDataTable([
-                ['Label', 'Value'],
-                ['Urgency', 5]
-            ]);
-// Urgency = SUM(pending_issue_priority/days_left)*project_priority
-//Range to be set by admin panel
-
-            var data2 = google.visualization.arrayToDataTable([
-                ['Label', 'Value'],
-                ['Importancy', 30]
-            ]);
-//5 Level of priority: {1,2,3,4,5} --> {10, 30, 50, 70, 90}
-
-**/
             var jsonData3 = $.ajax({
                 url: "<?=base_url().'dashboard/get_num_issues_tasks_metrics_per_phase/'.$project["project_id"]?>",
                 //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
                 dataType: "json",
                 async: false
             }).responseText;
-/**
-            var data3 = new google.visualization.DataTable();
-            data3.addColumn('string', 'Phase');
-            data3.addColumn('number', '#Task');
-            data3.addColumn('number', '#Issue');
-            data3.addColumn('number', 'Metrics');
-            data3.addRows([
-                ['Lead', 20, 3, 1],
-                ['Requirement', 15, 14, 0.7],
-                ['Build', 40, 73, 1.5],
-                ['Testing', 30, 47, 0.6],
-                ['Deployment', 14, 11, 1.1]
-            ]);
-**/
 
 
             var data3 = new google.visualization.DataTable(jsonData3);
@@ -81,148 +94,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 dataType: "json",
                 async: false
             }).responseText;
-
-
-
-
             var data4 = new google.visualization.DataTable(jsonData4);
 
-
-
-/**
-          var data4 = new google.visualization.DataTable();
-            data4.addColumn('string', 'issue#');
-            data4.addColumn('number', 'schedule metric');
-// A column for custom tooltip content
-            data4.addColumn({
-                type: 'string',
-                role: 'tooltip'
-            });
-//tooltip will show , issue titile, start date, the days planned, days actually spent, metric
-            data4.addRows([
-                ['1', 0.8, 'tooltip pending'],
-                ['3', 1.6, 'tooltip pending'],
-                ['4', 0.5, 'tooltip pending'],
-                ['5', 0.8, 'tooltip pending'],
-                ['11', 0.8, 'tooltip pending'],
-                ['13', 1.6, 'tooltip pending'],
-                ['14', 0.5, 'tooltip pending'],
-                ['15', 0.8, 'tooltip pending'],
-                ['17', 1.5, 'tooltip pending'],
-                ['23', 1.6, 'tooltip pending'],
-                ['24', 0.5, 'tooltip pending'],
-                ['25', 0.8, 'tooltip pending'],
-                ['31', 0.8, 'tooltip pending'],
-                ['33', 1.6, 'tooltip pending'],
-                ['34', 0.5, 'tooltip pending'],
-                ['35', 0.8, 'tooltip pending'],
-                ['37', 1.5, 'tooltip pending']
-            ]);
-
-**/
-    /**
-            var data5 = new google.visualization.DataTable();
-            data5.addColumn('string', 'Stage');
-            data5.addColumn('number', 'time_spent');
-            data5.addRows([
-                ['to develop', 3],
-                ['to test', 1],
-                ['ready for deploy', 1],
-                ['to deploy', 1]
-            ]);
-
-**/
             var jsonData5 = $.ajax({
                 url: "<?=base_url().'dashboard/get_sum_time_spent_per_category/'.$project["project_id"]?>",
                 //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
                 dataType: "json",
                 async: false
             }).responseText;
-
-
-
-
             var data5 = new google.visualization.DataTable(jsonData5);
-/**
-            var options = {
-                width: 500,
-                height: 120,
-                redFrom: 80,
-                redTo: 100,
-                yellowFrom: 60,
-                yellowTo: 80,
-                minorTicks: 5
-            };
-
-            var options2 = {
-                width: 100,
-                height: 120,
-                redFrom: 80,
-                redTo: 100,
-                yellowFrom: 60,
-                yellowTo: 80,
-                minorTicks: 5
-            };
-**/
-            var options3 = {
-                title: 'Phase Analysis Chart',
-                //legend:'bottom',
-                //chartArea: { width: '90%',left: "5%" , height: '70%'},
-                vAxis: {
-                },
-                hAxis: {
-                },
-                seriesType: 'bars',
-                series: {
-                    0: {
-                        type: "bars",
-                        targetAxisIndex: 0
-                    },
-                    2: {
-                        type: "line",
-                        targetAxisIndex: 1
-                    }
-                },
-                colors: ['#1b9e77', '#d95f02', '#7570b3']
-
-            };
-
-
-
-            var options4 = {
-                'title': 'Issue Metrics Chart',
-                //chartArea: { left: "5%"},
-                //'height': 300,
-                tooltip: {
-                    isHtml: true
-                },
-                legend: 'none',
-                vAxis: {
-                    'max': 3
-                }
-            };
-
-
-
-            // Set chart options
-            var options5 = {
-                'title': 'Stage percentile analysis',
-                chartArea: {height: "80%"},
-                legend: 'left',
-            };
-            // Instantiate and draw our chart, passing in some options.
-
-
-/**
-            var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
-
-            chart.draw(data, options);
-
-
-            var chart2 = new google.visualization.Gauge(document.getElementById('chart_div2'));
-
-            chart2.draw(data2, options2);
-**/
             var chart3 = new google.visualization.ComboChart(document.getElementById('chart_div3'));
             chart3.draw(data3, options3);
 
@@ -232,8 +112,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
             var chart5 = new google.visualization.PieChart(document.getElementById('chart_div5'));
             chart5.draw(data5, options5);
-
-
         }
 
 
@@ -284,52 +162,54 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             </h1>
         </div>
 
-        <!-- /#page-content-wrapper -->
-        <!--
-        <div class="col-lg-12 col-md-offset-7 col-md-4" align="right">
-
-            <div class="col-sm-4" id="chart_div" style="width: 120px; height: 45px;" align="right"></div>
-            <div class="col-sm-4" id="chart_div2" style="width: 120px; height: 35px;" ></div>
-            <div class="col-sm=4"></div>
-        </div>
-        -->
-
-<!--
         <div class="col-lg-offset-1 content">&nbsp;<br/>
-
-            &nbsp;&nbsp; <select name="select" id="select">
-                <option value="a" selected>All phases</option>
-                <option value="b" >Lead</option>
-                <option value="c" >Requirement</option>
-                <option value="d" >Build</option>
-                <option value="e" >Testing</option>
-                <option value="f" >Deploying</option>
+            &nbsp;&nbsp; <select name="phase" id="phase-selection" class="filter-criterion">
+                <option value="" selected>All phases</option>
+                <option value="1" >Lead</option>
+                <option value="2" >Requirement</option>
+                <option value="3" >Build</option>
+                <option value="4" >Testing</option>
+                <option value="5" >Deploying</option>
             </select>
             &nbsp;
-            <select name="select" id="select2">
-                <option value="a" selected>All kinds</option>
-                <option value="b" >kind1</option>
-                <option value="c" >kind2</option>
-                <option value="d" >kind3</option>
-                <option value="e" >kind4</option>
-                <option value="f" >kind5</option>
+            <select name="kind" id="kind-selection" class="filter-criterion">
+                <option value="" selected>All kinds</option>
+                <option value="bug" >Bug</option>
+                <option value="enhancement" >Enhancement</option>
+                <option value="proposal" >Proposal</option>
+                <option value="task" >Task</option>
             </select>
             &nbsp;
-            <select name="select" id="select3">
-                <option value="a" selected>All priorities</option>
-                <option value="b" >priority1</option>
-                <option value="c" >priority2</option>
-                <option value="d" >priority3</option>
-                <option value="e" >priority4</option>
-                <option value="f" >priority5</option>
+            <select name="priority" id="priority-selection" class="filter-criterion">
+                <option value="" selected>All priorities</option>
+                <option value="1" >trivial</option>
+                <option value="2" >minor</option>
+                <option value="3" >major</option>
+                <option value="4" >critical</option>
+                <option value="5" >blocker</option>
             </select>
-
             &nbsp;
-            <input type="submit" value="Filter">
             <br/>
             <br/>
+            <script>
+                $(".filter-criterion").on("change",function(){
+                    $.ajax({
+                        url: "<?=base_url().'dashboard/get_sum_time_spent_per_category/'.$project["project_id"]?>",
+                        dataType: "json",
+                        data: {
+                            priority:$("#priority-selection").val(),
+                            phase:$("#phase-selection").val(),
+                            kind: $("#kind-selection").val()
+                        },
+                        success: function(res){
+                            var data5 = new google.visualization.DataTable(res);
+                            var chart5 = new google.visualization.PieChart(document.getElementById('chart_div5'));
+                            chart5.draw(data5, options5);
+                        }
+                    });
+                });
+            </script>
         </div>
-        -->
         <div class="col-sm-4" id="chart_div5" style="width: 60%; height: 250px;"></div>
         <div class="col-sm-4" style="width: 40%; height: 250px;">
             <div>
