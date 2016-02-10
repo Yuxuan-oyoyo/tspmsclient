@@ -130,7 +130,7 @@ class Projects extends CI_Controller {
                     }else{
                         $this->session->set_userdata('message', 'New project and  has been created successfully.Error when creating chat thread.');
                     }
-                    redirect('projects/list_all');
+                    redirect('Projects/list_all');
                 } else {
                     $this->session->set_userdata('message', 'Cannot create new project,please contact administrator.');
                     $this->load->view('project/pm_project_new', $data = ["customers" => $this->Customer_model->retrieveAll(),

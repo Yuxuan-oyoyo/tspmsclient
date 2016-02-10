@@ -46,6 +46,7 @@ class Internal_users extends CI_Controller
                 $update_array["bb_oauth_key"] = $this->input->post("bb_oauth_key");
                 $update_array["bb_oauth_secret"] = $this->input->post("bb_oauth_secret");
                 $update_array["type"] = $this->input->post("type");
+                $update_array["email"] = $this->input->post("email");
                 $update_array["is_active"] = 1;
                 $update_array["password_hash"] = password_hash($this->input->post("password"), PASSWORD_DEFAULT);
                 //echo var_dump($update_array);
@@ -96,6 +97,7 @@ class Internal_users extends CI_Controller
                     $update_array["bb_oauth_key"] = $this->input->post("bb_oauth_key");
                     $update_array["bb_oauth_secret"] = $this->input->post("bb_oauth_secret");
                     $update_array["type"]=$this->input->post("type");
+                    $update_array["email"] = $this->input->post("email");
                     $update_array["is_active"]=$this->input->post("is_active");
                     if ($this->Internal_user_model->update($update_array)==1) {
                         $this->session->set_userdata('message', 'User profile has been updated.');
