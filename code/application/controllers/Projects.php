@@ -378,6 +378,9 @@ class Projects extends CI_Controller {
                 }else{
                     $this->customer_view($customer_project[0]['project_id']);
                 }
+            }else{
+                $this->session->set_userdata('message','This account has no project associated with us. please check with administrator. ');
+                redirect('/customer_authentication/login/');
             }
         }else{
             $this->session->set_userdata('message','Please login first.');
