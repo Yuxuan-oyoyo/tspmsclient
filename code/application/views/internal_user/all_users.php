@@ -52,8 +52,8 @@ $this->load->view('common/pm_nav', $class);
             <?php endif;?>
             <table class="table table-striped" id="userTable">
                 <thead>
-                <th>Name</th>
                 <th>Username</th>
+                <th>Name</th>
                 <th>Email</th>
                 <th>BB username</th>
                 <th>Type</th>
@@ -63,8 +63,9 @@ $this->load->view('common/pm_nav', $class);
 
                 <?php if(!false == $users):?>
                     <?php foreach($users as $user):?>
-                        <tr><td><?=$user['name']?></td>
+                        <tr>
                             <td><?=$user['username']?></td>
+                            <td><?=$user['name']?></td>
                             <td><?=$user['email']?></td>
                             <td><?=$user['bb_username']?></td>
                             <td><?=$user['type']?></td>

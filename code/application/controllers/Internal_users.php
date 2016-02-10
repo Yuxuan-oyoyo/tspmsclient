@@ -52,8 +52,8 @@ class Internal_users extends CI_Controller
                 //echo var_dump($update_array);
                 $affected_rows = $this->Internal_user_model->insert($update_array);
                 if($affected_rows==1){
-                    $this->session->userdata('message','new user added successfully');
-                    redirect('internal_users/list_all');
+                    $this->session->set_userdata('message', 'User profile has been created.');
+                    redirect("internal_users/list_all");
                 }else{
                     $this->session->userdata('message','cannot create new user.');
                     $this->load->view('internal_user/new_user');
