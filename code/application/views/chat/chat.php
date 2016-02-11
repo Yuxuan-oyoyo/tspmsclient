@@ -57,8 +57,9 @@ if($this->session->userdata('Customer_cid')){
 
         },
         render: function() {
-            //console.log("hoo")
-            //console.log(CurrentUser)
+            console.log("hooman")
+            console.log(UserType)
+
             var DisplayName = ""
             if(UserType == "PM")
             {
@@ -66,7 +67,7 @@ if($this->session->userdata('Customer_cid')){
             }else
             {
 
-                DisplayName = (this.props.data.user1 == C_UserName) ? this.props.data.user2 : this.props.data.user1;
+                DisplayName = (this.props.data.user1.toLowerCase() == C_UserName.toLowerCase()) ? this.props.data.user2 : this.props.data.user1;
             }
 
 
@@ -83,6 +84,7 @@ if($this->session->userdata('Customer_cid')){
             //console.log(this.props.data)
             var counter = 0;
             var messages = this.props.data["messages"]
+
             for(var msg in messages)
             {
                 //console.log(messages)
@@ -97,14 +99,28 @@ if($this->session->userdata('Customer_cid')){
                 }
             }
             //console.log("puzzy")
-            var img_url = '<?=base_url()?>'+'img/avatars/'+(DisplayName.substring(0, 1)).toUpperCase()+'.png'
+            var img_url = '<?=base_url()?>'+'img/avatars/'+DisplayName.substring(0, 1)+'.png'
+
+
             var left_side_message = this.props.data.lastMessage;
-            if((this.props.data.lastMessage).length>=35){
+
+            console.log("puzzy")
+            console.log(this.props.data)
+
+
+            if((this.props.data.lastMessage == ""))
+            {
+                var is_file = this.props.data.is_file
+                var file_name = is_file.substring(0, is_file.indexOf('^'))
+                left_side_message = file_name
+            }
+            else((this.props.data.lastMessage).length>=35)
+            {
+
                 left_side_message = left_side_message.substring(0,33) +' ...';
             }
 
 
-            // TODO (if messages too long cut it short..)
 
             if(c_id == this.props.data.chatID)
             {
@@ -218,8 +234,8 @@ if($this->session->userdata('Customer_cid')){
 
             if(msg.is_file != "0")
             {
-                console.log("guess who?")
-                console.log(msg);
+                //console.log("guess who?")
+                //console.log(msg);
 
                 // WARNING: abit hackish here we splitted by ^
 
@@ -227,8 +243,8 @@ if($this->session->userdata('Customer_cid')){
                 var file_name = is_file.substring(0, is_file.indexOf('^'))
                 var hyper_link = is_file.substring(is_file.indexOf('^')+1)
 
-                console.log(file_name)
-                console.log(hyper_link)
+                //console.log(file_name)
+                //console.log(hyper_link)
 
 
 
@@ -446,6 +462,7 @@ if($this->session->userdata('Customer_cid')){
                 }
 
 
+
                 this.props.fast_msg(text)
 
                 var datetime = new Date() / 1000;
@@ -599,10 +616,13 @@ if($this->session->userdata('Customer_cid')){
             reader.onload = function(upload) {
 
                 //document.getElementById("image").src = upload.target.result;
+
+                /*
                 $('#image')
                     .attr('src', upload.target.result)
                     .width(150)
                     .height(200);
+                */
                 self.setState({
                     data_uri: upload.target.result,
                     extension: ext,
@@ -1017,29 +1037,32 @@ if($this->session->userdata('Customer_cid')){
         },
         fast_msg: function(data){
 
-            var fast_thread = this.state.theThreadIWantToPass
-            var last_msg_length = fast_thread["messages"].length - 1
 
-            //var fast_msg = fast_thread["messages"][last_msg_length]
-            var fast_msg = $.extend(true,{}, fast_thread["messages"][last_msg_length])
 
-            if(UserType == "PM") {
-                fast_msg.author = UserName;
+            if(this.state.theThreadIWantToPass == "0") {
+                var fast_thread = this.state.theThreadIWantToPass
+                var last_msg_length = fast_thread["messages"].length - 1
+
+                //var fast_msg = fast_thread["messages"][last_msg_length]
+                var fast_msg = $.extend(true, {}, fast_thread["messages"][last_msg_length])
+
+                if (UserType == "PM") {
+                    fast_msg.author = UserName;
+                }
+                else {
+                    fast_msg.author = C_UserName;
+                }
+                fast_msg.content = data
+                fast_msg.timestamp = fast_msg.timestamp + 2
+                fast_msg.msgID = fast_msg.msgID + 2
+
+                console.log(fast_msg["msgID"])
+
+                fast_thread["messages"].push(fast_msg);
+                //this.setState({theThreadIWantToPass: fast_thread})
+
+                this.setState({theThreadIWantToPass: fast_thread})
             }
-            else{
-                fast_msg.author = C_UserName;
-            }
-            fast_msg.content = data
-            fast_msg.timestamp = fast_msg.timestamp + 2
-            fast_msg.msgID = fast_msg.msgID + 2
-
-            console.log(fast_msg["msgID"])
-
-            fast_thread["messages"].push(fast_msg);
-            //this.setState({theThreadIWantToPass: fast_thread})
-
-            this.setState({theThreadIWantToPass: fast_thread})
-
 
 
         },
