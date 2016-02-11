@@ -100,7 +100,6 @@ if($this->session->userdata('Customer_cid')){
             }
             //console.log("puzzy")
             var img_url = '<?=base_url()?>'+'img/avatars/'+(DisplayName.substring(0, 1)).toUpperCase()+'.png'
-            var img_url = '<?=base_url()?>'+'img/avatars/'+DisplayName.substring(0, 1)+'.png'
 
 
             var left_side_message = this.props.data.lastMessage;

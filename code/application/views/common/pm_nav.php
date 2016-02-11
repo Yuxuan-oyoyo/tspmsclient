@@ -31,7 +31,7 @@
             <a href="<?=base_url().'internal_users/list_all'?>"><i class="fa fa-fw fa-users"></i>Internal Users</a>
         </li>
         <li class="<?=$analytics_class?>">
-            <a href="#"><i class="fa fa-fw fa-line-chart"></i>Historical Statistics</a>
+            <a href="<?=base_url().'historical'?>"><i class="fa fa-fw fa-line-chart"></i>Historical Statistics</a>
         </li>
 
         <!---
