@@ -311,7 +311,7 @@ class Projects extends CI_Controller {
             }
             $newTasks = array();
             foreach($tasks as $t){
-                $days_left = substr($this->Task_model->get_days_left($t['task_id']),1);
+                $days_left = $this->Task_model->get_days_left($t['task_id']);
                 $t['days_left'] = $days_left;
                 array_push($newTasks,$t);
             }

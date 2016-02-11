@@ -193,23 +193,32 @@ function sortTasksByDaysLeft($a, $b) {
                             usort($tasks, 'sortTasksByDaysLeft');
                             $color =[""];
                             foreach ($tasks as $t){
+                                $days_left;
+                                if(substr($t['days_left'],0,1)==="+"){
+                                    $days_left = substr($t['days_left'],1);
+                                }else{
+                                    $days_left = "Overdue ".substr($t['days_left'],1);
+                                }
                         ?>
                             <tr id="1">
-                                <td><span class="badge" style="background-color: indianred"><?=$t['days_left']?> days</span></td>
+                                <td><span class="badge" style="background-color: indianred"><?=$days_left?> days</span></td>
                                 <td><?=$t['content']?></td>
                                 <?php
                                     if(!isset($t['start_datetime'])){
                                 ?>
                                         <td><button class="btn btn-sm" onclick="startTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-play"></button></td>
                                 <?php
-                                    }else{
-                                ?>
-                                        <td></td>
-                                <?php
                                     }
                                 ?>
                                 <td><a href="<?=base_url().'Tasks/edit_task/'.$project['project_id'].'/'.$t["task_id"]?>" class="btn btn-sm  btn-primary" type="button" ><i class="fa fa-pencil-square-o"></i></a></td>
-                                <td><button class="btn btn-sm btn-success" onclick="completeTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-check"></i></button></td>
+
+                                <?php
+                                    if(isset($t['start_datetime'])){
+                                ?>
+                                    <td><button class="btn btn-sm btn-success" onclick="completeTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-check"></i></button></td>
+                                <?php
+                                    }
+                                ?>
                                 <td><button class="btn btn-sm  btn-danger" onclick="deleteTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-trash"></i></button></td>
                             </tr>
                         <?php
