@@ -48,7 +48,7 @@
     </ul>
     <ul class="nav navbar-right top-nav">
         <li class="dropdown">
-            <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
+            <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html" onclick="showNotification()">
                 <i class="fa fa-fw fa-bell"></i>Notifications&nbsp;<span class="badge" style="background-color:red" id="n_number"></span>
             </a>
 
@@ -98,30 +98,42 @@
     }
 
     notification_polling()
-    /* commented out on 25th Jan by ln
-    function showNotification() {
+
+    function getNotificationNumber() {
+        var n_number = new XMLHttpRequest();
+        n_number.onreadystatechange = function() {
+            if (n_number.readyState == 4 && n_number.status == 200) {
+                document.getElementById("n_number").innerHTML = n_number.responseText;
+
+            }
+            resource_timer = setTimeout(showNotification, 10000);
+        };
+        n_number.open("GET", "<?=base_url().'Notifications/get_notification_number/'.$this->session->userdata('internal_uid')?>", true);
+        n_number.send();
+    }
+
+    function showNotification(){
         var n_message = new XMLHttpRequest();
-        var n_umber = new XMLHttpRequest();
         n_message.onreadystatechange = function() {
             if (n_message.readyState == 4 && n_message.status == 200) {
                 document.getElementById("n_message").innerHTML = n_message.responseText;
-
             }
-            resource_timer = setTimeout(showNotification, 20000);
-        };
-        n_umber.onreadystatechange = function() {
-            if (n_umber.readyState == 4 && n_umber.status == 200) {
-                document.getElementById("n_number").innerHTML = n_umber.responseText;
-
-            }
-            resource_timer = setTimeout(showNotification, 20000);
-        };
+        }
         n_message.open("GET", "<?=base_url().'Notifications/check_unread_notification/'.$this->session->userdata('internal_uid')?>", true);
-        n_umber.open("GET", "<?=base_url().'Notifications/get_notification_number/'.$this->session->userdata('internal_uid')?>", true);
         n_message.send();
-        n_umber.send();
     }
-    */
 
-    //$(document).ready(showNotification());
+    function clear_all_notification(){
+        var n_nil = new XMLHttpRequest();
+        n_nil.onreadystatechange = function() {
+            if (n_nil.readyState == 4 && n_nil.status == 200) {
+                document.getElementById("n_message").innerHTML = n_nil.responseText;
+                document.getElementById("n_number").innerHTML = null;
+            }
+        }
+        n_nil.open("GET", "<?=base_url().'Notifications/clear_all_notification/'.$this->session->userdata('internal_uid')?>", true);
+        n_nil.send();
+    }
+
+    $(document).ready(getNotificationNumber());
 </script>
