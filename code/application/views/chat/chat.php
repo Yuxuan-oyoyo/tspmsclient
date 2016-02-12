@@ -258,7 +258,6 @@ if($this->session->userdata('Customer_cid')){
                                         <h5 className="media-heading">{this.props.msg.author}&nbsp; <small><i className="fa fa-clock-o"/>{dateString}</small> </h5>
                                         <div className="direct-chat-text ">
                                             { msg.content }
-                                            <br/><br/>
                                           File: <a href={hyper_link}> {file_name} </a><br/>
                                         <small><i>(Click file name to download)</i></small>
                                         </div>
@@ -275,7 +274,6 @@ if($this->session->userdata('Customer_cid')){
                                         <h5 className="media-heading pull-right"> <small><i className="fa fa-clock-o"/>{dateString}</small>&nbsp;{this.props.msg.author}  </h5>
                                         <div className="direct-chat-text pull-right">
                                             { msg.content }
-                                            <br/><br/>
                                           File: <a href={hyper_link}> {file_name} </a><br/>
                                         <small><i>(Click file name to download)</i></small>
                                         </div>
@@ -523,8 +521,7 @@ if($this->session->userdata('Customer_cid')){
                 // <textarea rows="4" placeholder={up_text} className=" form-control" value={this.state.text} onChange={this.handleChange} onKeyDown={this.handleKeyDown} disabled/>
                 return(
                     <div>
-                        <span> {up_text} </span>
-
+                        <textarea rows="4" placeholder={up_text} className=" form-control" disabled/>
                         <div>
                             <FileForm threadID={this.props.thread.chatID} text_handler={this.handleText} filey={this.props.filey} fu_handler={this.props.fu_handler} fu_refresher={this.props.fu_refresher} />
                         </div>
@@ -644,7 +641,7 @@ if($this->session->userdata('Customer_cid')){
                         <div>
                         <img id="image" />
                     <form id="upload_form" onSubmit={this.handleSubmit} encType="multipart/form-data">
-                        <input type="text" id="user_text"/>
+                        <input type="hidden" id="user_text"/>
                        <span className="col-lg-2  btn btn-default pull-left btn-file">
                                 Add File <input type="file" onChange={this.handleFile}/>
                         </span>
