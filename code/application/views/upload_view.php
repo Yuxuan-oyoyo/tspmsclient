@@ -104,6 +104,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                         'plugins': [
                             "search", "state", "types", "wholerow"
                         ]
+                    }).on("dblclick", ".jstree-anchor", function(e) {
+                        var selectedNode = $('#tree').jstree(true).get_selected('full',true)[0];
+                        var link = selectedNode['original']['a_attr']['href'];
+
+                        if(link != '#'){
+                            window.open(link);
+                        }
                     })
                 });
 
