@@ -149,10 +149,10 @@ $this->load->view('common/pm_nav', $class);
                     <label for="priority">Priority</label>
                     <select class="form-control" id="priority" name="priority">
                         <option value="1" <?=set_select("priority",1,$p['priority']==1)?>>1</option>
-                        <option value="2" <?=set_select("priority",1,$p['priority']==2)?>>2</option>
-                        <option value="3" <?=set_select("priority",1,$p['priority']==3)?>>3</option>
-                        <option value="4" <?=set_select("priority",1,$p['priority']==4)?>>4</option>
-                        <option value="5" <?=set_select("priority",1,$p['priority']==5)?>>5</option>
+                        <option value="2" <?=set_select("priority",2,$p['priority']==2)?>>2</option>
+                        <option value="3" <?=set_select("priority",3,$p['priority']==3)?>>3</option>
+                        <option value="4" <?=set_select("priority",4,$p['priority']==4)?>>4</option>
+                        <option value="5" <?=set_select("priority",5,$p['priority']==5)?>>5</option>
                     </select>
                 </div>
             </div>
