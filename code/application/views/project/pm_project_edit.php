@@ -146,7 +146,7 @@ $this->load->view('common/pm_nav', $class);
             </script>
             <div class="col-lg-5">
                 <div class="form-group">
-                    <label for="priority">Priority(1-5)</label>
+                    <label for="priority">Priority</label>
                     <select class="form-control" id="priority" name="priority">
                         <option value="1" <?=set_select("priority",1,$p['priority']==1)?>>1</option>
                         <option value="2" <?=set_select("priority",1,$p['priority']==2)?>>2</option>
@@ -158,7 +158,7 @@ $this->load->view('common/pm_nav', $class);
             </div>
             <div class="col-lg-offset-1 col-lg-6">
                 <div class="form-group">
-                    <label for="project_value">Project value(S$)</label>
+                    <label for="project_value">Project value (S$)</label>
                     <input class="form-control" name="project_value" value="<?=$p['project_value']?>" data-parsley-type="number" min="0">
                 </div>
             </div>
