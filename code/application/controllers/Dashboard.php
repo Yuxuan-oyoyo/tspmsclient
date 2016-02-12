@@ -104,6 +104,7 @@ class Dashboard extends CI_Controller
         foreach($count_list_issue as $value){
             $container[$value["phase_name"]]["num_issues"] = $value["num"];
         }
+        //var_dump($count_list_issue);
         //get tasks
         $count_list_task = $this->Task_model->get_num_of_tasks_per_phase($project_id);
         foreach($count_list_task as $value){

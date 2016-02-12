@@ -72,7 +72,7 @@ class BB_scheduled_tasks {
             foreach($project_phase_record as $phase){
                 if(isset($phase["end_time"])) {
                     if ($phase["start_time"] <= $issue["date_created"]
-                        && $phase["end_time"] > $issue["date_created"]
+                        && ($phase["end_time"] > $issue["date_created"]||$phase["end_time"]==null)
                     ) {
                         $issue["phase"] = $phase["phase_id"];
                         break;
