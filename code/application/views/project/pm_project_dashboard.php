@@ -195,13 +195,23 @@ function sortTasksByDaysLeft($a, $b) {
                             foreach ($tasks as $t){
                                 $days_left;
                                 if(substr($t['days_left'],0,1)==="+"){
-                                    $days_left = substr($t['days_left'],1);
+                                    $days_left = substr($t['days_left'],1)+1;
                                 }else{
                                     $days_left = "Overdue ".substr($t['days_left'],1);
                                 }
                         ?>
                             <tr id="1">
-                                <td><span class="badge" style="background-color: indianred"><?=$days_left?> days</span></td>
+                            <?php
+                                $color;
+                                if(substr($t['days_left'],0,1)==="-"){
+                                    $color = "indianred";
+                                }elseif($days_left<=7){
+                                    $color = "darkorange";
+                                }else{
+                                    $color = "green";
+                                }
+                            ?>
+                                <td><span class="badge" style="background-color: <?=$color?>"><?=$days_left?> days</span></td>
                                 <td><?=$t['content']?></td>
                                 <?php
                                     if(!isset($t['start_datetime'])){
@@ -264,8 +274,8 @@ function sortTasksByDaysLeft($a, $b) {
                                 <td><?=$project['bitbucket_repo_name']?></td>
                             </tr>
                             <tr>
-                                <td><strong>File Repo Name </strong></td>
-                                <td><?=$project['file_repo_name']?></td>
+                                <td><strong>Project Value </strong></td>
+                                <td>$<?=$project['project_value']?></td>
                             </tr>
                             <tr>
                                 <td><strong>Priority </strong></td>

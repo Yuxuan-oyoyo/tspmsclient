@@ -47,7 +47,7 @@ class Issue_report_model extends CI_Model{
 
     }
     public function get_num_of_issues_per_phase($project_id){
-        $record = $this->db->query("SELECT count(*) AS num, phase_name FROM issue_report i, phase p WHERE status='resolved' AND i.phase =p.phase_id AND  project_id=? GROUP BY phase",[$project_id]);
+        $record = $this->db->query("SELECT count(*) AS num, phase_name FROM issue_report i, phase p WHERE status!='resolved' AND i.phase =p.phase_id AND  project_id=? GROUP BY phase",[$project_id]);
         return $record->result_array();
     }
 

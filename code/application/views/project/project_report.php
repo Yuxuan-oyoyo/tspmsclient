@@ -221,7 +221,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     <div class="thumbnail calendar-date" >
                         <script>
                             var total_urgency = $.ajax({
-                                url: "<?=base_url().'issues/get_issue_urgency_score_across_projects'?>",
+                                url: "<?=base_url().'issues/get_issue_urgency_score/'.$project['project_id']?>",
                                 //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
                                 dataType: "float",
                                 async: false
