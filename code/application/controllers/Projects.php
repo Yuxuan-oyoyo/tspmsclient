@@ -207,6 +207,7 @@ class Projects extends CI_Controller {
                     $new_customer_input = $this->input->post($customer_name_array, true);
                     $new_customer_input['password_hash'] = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
                     $new_customer_id = $this->Customer_model->insert($new_customer_input);
+
                     if ($new_customer_id == false) {
                         echo "something wrong happen when creating customer";
                     } else {
@@ -222,11 +223,13 @@ class Projects extends CI_Controller {
                 }
 
                 foreach ($input as $key => $value) {
-                    if ($value != null) {
+                    if ($value !== null) {
                         $original_array[$key] = $value;
                     }
                 }
+                //var_dump($original_array);
                 if ($this->Project_model->update($original_array) == 1) {
+                    //var_dump($original_array);
                     $this->session->set_userdata('message', 'Project has been edited successfully.');
                     $session_uid = $this->session->userdata('internal_uid');
                     $created_by = $this->Internal_user_model->retrieve_name($session_uid);
