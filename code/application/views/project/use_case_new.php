@@ -47,8 +47,12 @@ $this->load->view('common/pm_nav', $class);
         <form  data-parsley-validate role="form" action="<?=base_url().'Usecases/new_use_case/'.$project['project_id']?>" method="post">
             <div class="col-lg-12">
                 <div class="form-group">
-                    <label for="title">Title:</label>
+                    <label for="title">Title*:</label>
                     <input name="title" id="title"  type="text" class="form-control" data-parsley-required>
+                </div>
+                <div class="form-group">
+                    <label for="stakeholders">Stakeholders:</label>
+                    <textarea class="form-control" name="stakeholders" id="stakeholders" rows="2" ></textarea>
                 </div>
                 <div class="form-group">
                     <label for="flow">Flow:</label>
@@ -57,10 +61,7 @@ $this->load->view('common/pm_nav', $class);
                         CKEDITOR.replace( 'flow' );
                     </script>
                 </div>
-                <div class="form-group">
-                    <label for="stakeholders">Stakeholders:</label>
-                    <textarea class="form-control" name="stakeholders" id="stakeholders" rows="2" ></textarea>
-                </div>
+
             </div>
                 <div class="col-lg-6">
                 <div class="form-group">
