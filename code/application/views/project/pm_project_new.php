@@ -26,22 +26,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 '<option value="Ms.">Ms.</option>'+
                 '<option value="Dr.">Dr.</option>'+
                     '</select>'+
-                    '</div> </div> <div class="col-lg-4"> <div class="form-group "> <label for="first_name">First name</label>'+
+                    '</div> </div> <div class="col-lg-4"> <div class="form-group "> <label for="first_name">First name*</label>'+
                      '<input type="text" class="form-control" name="first_name" id="first_name" value="<?=set_value("first_name")?>" data-parsley-required>'+
-                '</div> </div> <div class="col-lg-4"> <div class="form-group"> <label for="last_name">Last name</label>'+
+                '</div> </div> <div class="col-lg-4"> <div class="form-group"> <label for="last_name">Last name*</label>'+
                 '<input type="text" class="form-control"  name="last_name" id="last_name"value="<?=set_value("last_name")?>" data-parsley-required> </div>'+
-                '</div> <div class="col-lg-6"> <div class="form-group"> <label for="company_name">Company name</label>'+
+                '</div> <div class="col-lg-6"> <div class="form-group"> <label for="company_name">Company name*</label>'+
                 '<input type="text" class="form-control" name="company_name" id="company_name" value="<?=set_value("company_name")?>" data-parsley-required>'+
-                '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="email">Email</label>'+
-                '<input type="email" class="form-control" name="email" id="email" data-parsley-type="email" value="<?=set_value("email")?>" data-parsley-required>'+
-                '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="hp_number">Contact Number</label>'+
+                '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="email">Email*</label>'+
+                '<input type="email" class="form-control" name="email" id="email" data-parsley-type="email" value="<?=set_value("email")?>" data-parsley-email data-parsley-required>'+
+                '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="hp_number">Contact Number*</label>'+
                 '<input type="text" class="form-control" name="hp_number" id="hp_number" value="<?=set_value("hp_number")?>" data-parsley-required>'+
                 '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="other_number">Other Number</label>'+
                 '<input type="text" class="form-control" name="other_number" value="<?=set_value("other_number")?>" id="other_number">'+
-                '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="c_username">Username</label>'+
+                '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="c_username">Username*</label>'+
                 '<input type="text" class="form-control" name="c_username" id="c_username" value="<?=set_value("c_username")?>" data-parsley-required>'+
-                '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="password">Password</label>'+
-                '<input type="password" class="form-control" name="password" id="password" value="<?=DEFAULT_PASSWORD?>" >'+
+                '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="password">Password*</label>'+
+                '<input type="password" class="form-control" name="password" id="password" value="<?=DEFAULT_PASSWORD?>" data-parsley-required>'+
                 '</div> </div>';
                 $('#new_customer').append(htmlText2);
             }
@@ -149,13 +149,19 @@ $this->load->view('common/pm_nav', $class);
 
             <div class="col-lg-5">
                 <div class="form-group">
-                    <label for="priority">Priority(1-5)</label>
-                    <input class="form-control" name="priority" value="<?=set_value("priority")?>" data-parsley-type="number" min="1" max="5">
+                    <label for="priority">Priority</label>
+                    <select class="form-control" id="priority" name="priority">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
                 </div>
             </div>
             <div class="col-lg-offset-1 col-lg-6">
                 <div class="form-group">
-                    <label for="project_value">Project value(S$)</label>
+                    <label for="project_value">Project value (S$)</label>
                     <input class="form-control" name="project_value" value="<?=set_value("project_value")?>" data-parsley-type="number" min="0">
                 </div>
             </div>
@@ -215,7 +221,7 @@ $this->load->view('common/pm_nav', $class);
             <hr>
                 <div class="col-lg-12">
                     <div class="form-group">
-                        <label for="pm_option"> PM in charge</label>
+                        <label for="pm_option"> PM in charge*</label>
                         <table class="table table-condensed">
                             <?php foreach($pms as $pm):?>
                             <tr>

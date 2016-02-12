@@ -65,6 +65,10 @@ $this->load->view('common/pm_nav', $class);
                     <input class="form-control" type="text" id="name" name="name"  value="<?=$u['name']?>" data-parsley-required >
                 </div>
                 <div class="form-group">
+                    <label for="email">Email*</label>
+                    <input class="form-control" type="email" id="email" name="email" value="<?=$u['email']?>" data-parsley-required data-parsley-email>
+                </div>
+                <div class="form-group">
                     <label for="bb_username">BB username</label>
                     <input class="form-control" type="text" id="bb_username" name="bb_username"  value="<?=$u['bb_username']?>" >
                 </div>

@@ -21,24 +21,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 $('#existing_customer').append(htmlText1);
             }else{
                 $('#existing_customer').text('');
-                var htmlText2 ='<div class="col-lg-4"> <div class="form-group"> <label for="title">Title</label>'+
+                var htmlText2 ='<div class="col-lg-4"> <div class="form-group"> <label for="title">Title*</label>'+
                     '<input type="text" class="form-control" name="title" id="title" data-parsley-required>'+
-                    '</div> </div> <div class="col-lg-4"> <div class="form-group "> <label for="first_name">First name</label>'+
+                    '</div> </div> <div class="col-lg-4"> <div class="form-group "> <label for="first_name">First name*</label>'+
                     '<input type="text" class="form-control" name="first_name" id="first_name" data-parsley-required>'+
-                    '</div> </div> <div class="col-lg-4"> <div class="form-group"> <label for="last_name">Last name</label>'+
+                    '</div> </div> <div class="col-lg-4"> <div class="form-group"> <label for="last_name">Last name*</label>'+
                     '<input type="text" class="form-control"  name="last_name" id="last_name" data-parsley-required>'+
                     '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="company_name">Company name</label>'+
                     '<input type="text" class="form-control" name="company_name" id="company_name" data-parsley-required>'+
-                    '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="email">Email</label>'+
-                    '<input type="email" class="form-control" name="email" id="email" data-parsley-type="email" data-parsley-required>'+
-                    '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="hp_number">Contact Number</label>'+
+                    '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="email">Email*</label>'+
+                    '<input type="email" class="form-control" name="email" id="email" data-parsley-type="email" data-parsley-email data-parsley-required>'+
+                    '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="hp_number">Contact Number*</label>'+
                     '<input type="text" class="form-control" name="hp_number" id="hp_number" data-parsley-required>'+
                     '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="other_number">Other Number</label>'+
                     '<input type="text" class="form-control" name="other_number" id="other_number" >'+
-                    '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="username">Username</label>'+
+                    '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="username">Username*</label>'+
                     '<input type="text" class="form-control" name="username" id="username" data-parsley-required>'+
-                    '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="password">Password</label>'+
-                    '<input type="password" class="form-control" name="password" id="passwor" value="<?=DEFAULT_PASSWORD?>">'+
+                    '</div> </div> <div class="col-lg-6"> <div class="form-group"> <label for="password">Password*</label>'+
+                    '<input type="password" class="form-control" name="password" id="password" data-parsley-required value="<?=DEFAULT_PASSWORD?>">'+
                     '</div> </div>';
                 $('#new_customer').append(htmlText2);
             }
@@ -127,7 +127,8 @@ $this->load->view('common/pm_nav', $class);
             </div>
             <script>
                 $("#bitbucket_repo_name").on("focusout",function(){
-                    var field = $(this); field.attr("disabled",true);
+                    var field = $(this);
+                    field.attr("disabled",true);
                     var value = field.val();
                     $.ajax({
                         url:"<?=base_url()."Projects/bb_repo_name_ajax"?>",
@@ -139,20 +140,27 @@ $this->load->view('common/pm_nav', $class);
                                 $("#bitbucket_repo_name_group").addClass("has-error");
                                 alert("The input bitbucket repository name is invalid for issue retrieval.");
                             }
-                        },complete: function(){field.removeAttr("disabled");}
+                        }
+                        complete: function(){field.removeAttr("disabled");}
 
                     });
                 });
             </script>
             <div class="col-lg-5">
                 <div class="form-group">
-                    <label for="priority">Priority(1-5)</label>
-                    <input class="form-control" name="priority" value="<?=$p['priority']?>" data-parsley-type="number" min="1" max="5">
+                    <label for="priority">Priority</label>
+                    <select class="form-control" id="priority" name="priority">
+                        <option value="1" <?=set_select("priority",1,$p['priority']==1)?>>1</option>
+                        <option value="2" <?=set_select("priority",2,$p['priority']==2)?>>2</option>
+                        <option value="3" <?=set_select("priority",3,$p['priority']==3)?>>3</option>
+                        <option value="4" <?=set_select("priority",4,$p['priority']==4)?>>4</option>
+                        <option value="5" <?=set_select("priority",5,$p['priority']==5)?>>5</option>
+                    </select>
                 </div>
             </div>
             <div class="col-lg-offset-1 col-lg-6">
                 <div class="form-group">
-                    <label for="project_value">Project value(S$)</label>
+                    <label for="project_value">Project value (S$)</label>
                     <input class="form-control" name="project_value" value="<?=$p['project_value']?>" data-parsley-type="number" min="0">
                 </div>
             </div>
@@ -214,7 +222,7 @@ $this->load->view('common/pm_nav', $class);
                 <hr>
                 <div class="col-lg-12">
                     <div class="form-group">
-                        <label for="pm_option"> PM in charge</label>
+                        <label for="pm_option"> PM in charge*</label>
                         <table class="table table-condensed">
                             <?php foreach($pms as $pm):?>
                                 <tr>

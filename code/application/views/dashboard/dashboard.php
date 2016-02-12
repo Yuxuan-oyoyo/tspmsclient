@@ -258,7 +258,7 @@ $this->load->view('common/pm_nav', $class);
                         document.write(total_urgency);
                     </script>
                 </div>
-                Intension Level: <span class="badge" style="background: #2e9ad0">Low</span>
+                Urgency Level: <span class="badge" style="background: #2e9ad0">Low</span>
             </div>
         </div>
     </div>

@@ -24,7 +24,7 @@ class Customer_authentication extends CI_Controller {
             $this->session->unset_userdata('Customer_cid');
             $this->session->unset_userdata('Customer_username');
             $this->session->sess_destroy();
-            $this->session->set_userdata('message','You have been logged out.');
+            //$this->session->set_userdata('message','You have been logged out.');
         }
 
         $this->load->library('form_validation');

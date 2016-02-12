@@ -51,6 +51,25 @@ class Chat extends CI_Controller {
 
     }
 
+    public function notifications()
+    {
+
+        header('Content-type: application/json');
+        header("Access-Control-Allow-Origin: *");
+
+        session_write_close();
+
+        $user = $this->getUserInfo();
+
+        $notify = $this->Chat_model->get_notifications($user["user_id"], $user["user_type"]);
+
+        session_write_close();
+
+        echo $notify;
+
+
+    }
+
     public function get(){
         // @formatter:off
         header('Content-type: application/json');
@@ -160,6 +179,7 @@ class Chat extends CI_Controller {
         force_download($name, $data);
 
     }
+
 
 
     public function write(){

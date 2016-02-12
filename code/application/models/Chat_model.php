@@ -279,6 +279,36 @@ class Chat_model extends CI_Model{
         return $this->db->insert_id();
     }
 
+
+    public function get_notifications($u_id, $u_type)
+    {
+
+        $sql = "";
+
+        if( strcmp($u_type, "pm" == 0))
+        {
+            // equal pm
+            $sql = "select count(*) as counter from message where pm_id = ? and to_pm = 1 and seen is null";
+        }
+        else
+        {
+            // not pm
+            $sql = "select count(*) as counter from message where customer_id = ? AND to_pm = 0 and seen IS null";
+        }
+        $query = $this->db->query($sql, array([$u_id]));
+
+        $num_notify = 0;
+
+        if( $query -> num_rows() > 0)
+        {
+            $row = $query -> row_array();
+            $num_notify = $row["counter"];
+        }
+
+        return $num_notify;
+
+    }
+
     public function is_user_online($u_id, $u_type)
     {
         //echo $u_id;
