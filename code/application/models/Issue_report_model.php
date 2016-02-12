@@ -14,14 +14,14 @@ class Issue_report_model extends CI_Model{
     public function delete($project_id){
         $data_cleaning_period = "1 day";
         $data_cleaning_threshold = strtotime((new DateTime())->format("c")." -".$data_cleaning_period);
-        var_dump($data_cleaning_threshold);
+        //var_dump($data_cleaning_threshold);
         $time_last_updated = $this->get_time_last_updated();
-        var_dump(strtotime($time_last_updated));
+        //var_dump(strtotime($time_last_updated));
         if(isset($time_last_updated) && strtotime($time_last_updated) <= $data_cleaning_threshold){
-            var_dump("deleting all");
+            //var_dump("deleting all");
             $this->db->query("DELETE from issue_report");
         }elseif(isset($time_last_updated)){
-            var_dump("deleting".$project_id);
+            //var_dump("deleting".$project_id);
 
             $this->db->query(
                 "DELETE from issue_report WHERE project_id=?",

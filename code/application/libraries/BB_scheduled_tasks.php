@@ -70,10 +70,12 @@ class BB_scheduled_tasks {
             $issue["date_created"] = strtotime($issue["utc_created_on"]);
             $issue["phase"] = -1;
             foreach($project_phase_record as $phase){
-                if(isset($phase["end_time"])) {
+                //var_dump($phase["end_time"]);
+                //var_dump($issue["date_created"]);
+                //var_dump($phase["start_time"]);
+                if($phase["end_time"]) {
                     if ($phase["start_time"] <= $issue["date_created"]
-                        && $phase["end_time"] > $issue["date_created"]
-                    ) {
+                         && $phase["end_time"] > $issue["date_created"]) {
                         $issue["phase"] = $phase["phase_id"];
                         break;
                     }
@@ -82,6 +84,7 @@ class BB_scheduled_tasks {
                     break;
                 }
             }
+            //if($issue["phase"]==-1)var_dump("Here's a minus one!!!!!!!!!");
             //initialize duration 1 to 5 as 0
             for ($i=1;$i<=5;$i++){
                 $issue["duration_".$i] = 0;
