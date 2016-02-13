@@ -32,7 +32,7 @@ $this->load->view('common/customer_nav', $class);
     <div class="sidebar-links">
         <a class="link-blue" href="<?=base_url().'projects/customer_view/'.$project['project_id']?>"><i class="fa fa-flag"></i>Update & Milestone</a>
         <a class="link-blue selected" href="#"><i class="fa fa-list"></i>Use Case List</a>
-        <a class="link-blue " href="#"><i class="fa fa-folder"></i>File Repository</a>
+        <a class="link-blue " href="<?=base_url().'Upload/customer_repo/'.$project["project_id"]?>"><i class="fa fa-folder"></i>File Repository</a>
     </div>
 
 </aside>

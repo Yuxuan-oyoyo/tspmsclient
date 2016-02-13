@@ -20,8 +20,24 @@ class Upload extends CI_Controller {
     {
     }
     public function upload($project_id){
-        $project = $this->Project_model->retrieve_by_id($project_id);
-        $this->load->view('upload_view',$data=['project'=>$project]);
+        if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
+            $project = $this->Project_model->retrieve_by_id($project_id);
+            $this->load->view('file_repo/upload_view', $data = ['project' => $project]);
+        }else{
+            $this->session->set_userdata('message','You have not login / have no access rights. ');
+            redirect('/internal_authentication/login/');
+        }
+    }
+
+    public function customer_repo($project_id){
+
+        if($this->session->userdata('Customer_cid')) {
+            $project = $this->Project_model->retrieve_by_id($project_id);
+            $this->load->view('file_repo/customer_repo', $data = ['project' => $project]);
+        }else{
+            $this->session->set_userdata('message','Please login first.');
+            redirect('/customer_authentication/login/');
+        }
     }
 
     public function file_upload($project_id){
