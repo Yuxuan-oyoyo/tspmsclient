@@ -64,7 +64,7 @@ $this->load->view('common/customer_nav', $class);
                         <?php if($p['customer_preview_link']):?>
                         <tr>
                             <td> <i class="fa fa-link"></i>&nbsp;<strong>Preview </strong></td>
-                            <td> <a href="<?=$p['customer_preview_link']?>">Click here</a></td>
+                            <td> <a href="<?=$p['customer_preview_link']?>" target="_blank">Click here</a></td>
                         </tr>
                         <?php endif?>
 

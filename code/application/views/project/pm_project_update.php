@@ -239,7 +239,7 @@ $this->load->view('common/pm_nav', $class);
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
-            <?='#'.$project['project_id'].'. '.$project['project_title']?>
+            <?=$project['project_title']?>
             <?php
             if($project['is_ongoing']==1) {
                 $if_completed = 1;

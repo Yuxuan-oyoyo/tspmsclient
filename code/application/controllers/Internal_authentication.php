@@ -172,7 +172,7 @@ class Internal_authentication extends CI_Controller {
                     }
 
                 } else {
-
+                    $this->session->set_userdata('message','Email does not exist');
                 }
                 redirect('internal_authentication/login');
             }
