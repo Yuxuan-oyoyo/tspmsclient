@@ -89,7 +89,6 @@ function sortTasksByDaysLeft($a, $b) {
 }
 
 ?>
-
 <aside class="sidebar-left">
     <div class="sidebar-links">
         <a class="link-blue selected" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Project Overview</a>
@@ -111,7 +110,8 @@ function sortTasksByDaysLeft($a, $b) {
     </div>
 </aside>
 
-<div class="col-lg-offset-1 content">
+
+<div class="col-lg-11 content">
     <!-- Page Content -->
     <div class="col-lg-12">
         <h1 class="page-header">
