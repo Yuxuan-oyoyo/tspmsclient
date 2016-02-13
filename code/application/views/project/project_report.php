@@ -158,7 +158,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     <!-- Page Content -->
         <div class="col-lg-12">
             <h1 class="page-header">
-                <?='#'.$project['project_id'].'. '.$project['project_title']?>&nbsp;
+                <?=$project['project_title']?>&nbsp;
             </h1>
         </div>
 

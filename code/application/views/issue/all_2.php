@@ -67,7 +67,6 @@ if($this->session->userdata('internal_type')=='Developer') {
     <!-- Page Content -->
     <div class="col-xs-12">
         <h1 class="page-header">
-            <span style="color: gray;margin-right: 10px">#<?=$project["project_id"]?>.</span>
             <span><?=$project["project_title"]?></span>
             <small> - Issues</small>
         </h1>
