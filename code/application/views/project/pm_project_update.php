@@ -342,6 +342,9 @@ $this->load->view('common/pm_nav', $class);
                     ?>
                 </h3>
                 <hr>
+                <?php
+                if (!empty($updates)):?>
+
                 <ul class="timeline" id="timeline">
                 <?php
                 foreach ($updates as $u){
@@ -368,6 +371,7 @@ $this->load->view('common/pm_nav', $class);
                     ?>
 
                 </ul>
+                <?php endif?>
             </div>
             <div class="col-lg-4">
 
