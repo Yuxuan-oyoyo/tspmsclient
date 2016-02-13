@@ -31,7 +31,7 @@ class Dashboard extends CI_Controller
         $tasks_i=$this->Task_model->retrieve_for_esenhower(1000, 7,5,3);
         $tasks_u=$this->Task_model->retrieve_for_esenhower(7, -1000,3,0);
         $tasks_none=$this->Task_model->retrieve_for_esenhower(1000, 7,3,0);
-        $projects = $this->Project_model->retrieve_all_with_phase();
+        $projects = $this->Project_model->retrieve_all_ongoing();
         //$projects_task_issue_count = $this->num_of_tasks_issue_past_projects_php();
 
 
