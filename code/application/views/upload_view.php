@@ -200,7 +200,7 @@ $this->load->view('common/pm_nav', $class);
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">File Upload - <?=$project['project_id']?></h4>
+                    <h4 class="modal-title">Upload File</h4>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-info alert-dismissible" role="alert" id="upload_message_alert">
@@ -254,14 +254,14 @@ $this->load->view('common/pm_nav', $class);
 
     </form>
 
-  <div class="col-lg-9" style="margin-top:10px;">
+    <div class="col-lg-9" style="margin-top:10px;">
         <div style ="margin-left=5px">
             <button class="btn btn-sm btn-primary" onclick="$('#upload_file_modal').modal('show')"><i class="fa fa-plus"></i>&nbsp;Upload</button>
             <button type="button" class="btn btn-success btn-sm"  onclick="open_file();"><i class="fa fa-folder"></i>&nbsp;Open</button>
             <!-- <button type="button"  onclick="rename_file();">Rename</button> -->
             <button type="button" class="btn btn-warning btn-sm" onclick="deleteFileButtonClicked();"><i class="fa fa-trash"></i>&nbsp;Delete</button>
         </div>
-    <div id="tree" style="background-color: #f5f5f5"></div>
+        <div id="tree" style="background-color: #f5f5f5"></div>
     </div>
 
 
