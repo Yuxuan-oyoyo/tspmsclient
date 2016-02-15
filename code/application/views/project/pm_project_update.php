@@ -8,29 +8,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
     <script>
-     /*   $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-        $(function() {
-
-            var $sidebar   = $(".sidebar-left"),
-                $window    = $(window),
-                offset     = $sidebar.offset(),
-                topPadding = 0;
-
-            $window.scroll(function() {
-                if ($window.scrollTop() > offset.top) {
-                    $sidebar.stop().animate({
-                        marginTop: $window.scrollTop() - offset.top + topPadding
-                    });
-                } else {
-                    $sidebar.stop().animate({
-                        marginTop: 0
-                    });
-                }
-            });
-
-        });*/
 
         $(document).ready(function(){
             $("#Lead" ).click(function() {
@@ -83,21 +60,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 refillUpdates(project_phase_id,"Deploy");
                 refillMilestones(project_phase_id,"Deploy");
             });
+            $('.clsDatePicker').datepicker({
+                dateFormat: 'dd-mm-yy',minDate: '+0d',changeMonth: true,changeYear: true,altFormat: "yy-mm-dd"
+            });
 
-            $('#deadlinePicker').datepicker({
-                dateFormat: 'dd-mm-yy',
-                minDate: '+0d',
-                changeMonth: true,
-                changeYear: true,
-                altFormat: "yy-mm-dd"
-            });
-            $('#estimated_end_time').datepicker({
-                dateFormat: 'dd-mm-yy',
-                minDate: '+0d',
-                changeMonth: true,
-                changeYear: true,
-                altFormat: "yy-mm-dd"
-            });
 
         });
 
@@ -500,12 +466,10 @@ $this->load->view('common/pm_nav', $class);
                     </div>
                     <div class="form-group">
                         <label for="title">Deadline:</label>
-                        <!--div class="input-group clsDatePicker">
-                        <input type="text" name="deadlinePicker" id="deadlinePicker" class="form-control clsDatePicker" data-parsley-required>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        <!--div class="input-group"-->
+                            <input type="text" name="deadlinePicker" id="deadlinePicker" class="form-control clsDatePicker" data-parsley-required>
+                            <!--span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                         </div-->
-                        <input type="text" name="deadlinePicker" id="deadlinePicker" class="form-control clsDatePicker" data-parsley-required>
-
                     </div>
                     <div class="form-group">
                         <label for="milestone_description">Description:</label>
@@ -560,8 +524,11 @@ $this->load->view('common/pm_nav', $class);
                         </div>
                         <div class="form-group">
                             <label for="estimated_end_time">Estimated End Date:</label>
-                            <input type="text" name="estimated_end_time" id="estimated_end_time"
+                            <!--div class="input-group"-->
+                                <input type="text" name="estimated_end_time" id="estimated_end_time"
                                    class="form-control clsDatePicker" data-parsley-required>
+                                <!--span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            </div-->
                         </div>
                     </div>
                     <div class="modal-footer">

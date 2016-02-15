@@ -132,7 +132,7 @@ $this->load->view('common/pm_nav', $class);
                 </div>
             </div>
             <script>
-                $("#bitbucket_repo_name").on("focusout",function(){
+                /*$("#bitbucket_repo_name").on("focusout",function(){
                     var field = $(this);
                     field.attr("disabled",true);
                     var value = field.val();
@@ -144,13 +144,13 @@ $this->load->view('common/pm_nav', $class);
                                 $("#bitbucket_repo_name_group").removeClass("has-error");
                             }else{
                                 $("#bitbucket_repo_name_group").addClass("has-error");
-                                alert("The input bitbucket repository name is invalid for issue retrieval.");
+                                //alert("The input bitbucket repository name is invalid for issue retrieval.");
                             }
                         },
                         complete: function(){field.removeAttr("disabled");}
 
                     });
-                });
+                });*/
             </script>
             <div class="col-lg-5">
                 <div class="form-group">
@@ -188,6 +188,7 @@ $this->load->view('common/pm_nav', $class);
                             for(var i=0;i<tags.length;i++){
                                 var tag = tags[i];
                                 if(i==15) break;
+                                if(tag.length>40) continue;
                                 tagOuterDiv.append("<span class='tag'>"+tag+"</span>");
                             }
                         }

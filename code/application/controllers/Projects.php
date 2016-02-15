@@ -187,6 +187,7 @@ class Projects extends CI_Controller {
     public function process_edit($project_id=null){
         if(!isset($project_id)) {show_404();die();}
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
+            $has_error = false;
             $this->load->library('form_validation');
             $this->form_validation->set_rules('username', 'Customer Username', 'is_unique[customer.username]');
             if ($this->form_validation->run()) {
@@ -238,6 +239,11 @@ class Projects extends CI_Controller {
                 //var_dump($input["bitbucket_repo_name"]);
                 //var_dump($repo_name_valid);
                 $input["repo_name_valid"] = $repo_name_valid?1:0;
+                if(!$repo_name_valid){
+                    $this->session->set_userdata('message', 'The Bibucket repo name is invalid. Please check it again');
+                    $has_error = true;
+                }
+
                 foreach ($input as $key => $value) {
                     if ($value !== null) {
                         $original_array[$key] = $value;
@@ -246,7 +252,7 @@ class Projects extends CI_Controller {
 
                 if ($this->Project_model->update($original_array) == 1) {
 
-                    $this->session->set_userdata('message', 'Project has been edited successfully.');
+                    if(!$has_error)$this->session->set_userdata('message', 'Project has been edited successfully.');
                     $session_uid = $this->session->userdata('internal_uid');
                     $created_by = $this->Internal_user_model->retrieve_name($session_uid);
                     $change_type = "Project Details Edited";
