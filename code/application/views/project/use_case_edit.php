@@ -35,7 +35,8 @@ $this->load->view('common/pm_nav', $class);
         <?php
         }
         ?>
-        <a class="link-blue  selected" href="#"><i class="fa fa-list"></i>Use Case List</a>
+        <a class="link-blue" href="<?=base_url().'Usecases/list_all/'.$project["project_id"]?>"><i class="fa fa-list"></i>Use Case List</a>
+        <a class="link-blue" href="<?=base_url().'Projects/view_report/'.$project["project_id"]?>"><i class="fa fa-bar-chart"></i>Analytics</a>
         <a class="link-blue " href="<?=base_url().'upload/upload/'.$project['project_id']?>"><i class="fa fa-folder"></i>File Repository</a>
     </div>
 </aside>
