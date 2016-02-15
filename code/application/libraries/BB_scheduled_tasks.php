@@ -203,7 +203,7 @@ class BB_scheduled_tasks {
         $result = [];
         foreach($project_records as $p){
             $repo_slug = $p["bitbucket_repo_name"];
-            if(!empty($repo_slug) && $p["repo_name_valid"]){
+            if(!empty($repo_slug) && $p["repo_name_valid"]==1){
                 $bb_reply = $CI->bb_issues->retrieveIssues($repo_slug, null,["limit"=>1]);
                 if($bb_reply!==null && isset($bb_reply["count"])){
                     $CI->Project_model->set_issue_count($p["project_id"],$bb_reply["count"] );
@@ -213,6 +213,8 @@ class BB_scheduled_tasks {
                     ]);
 
                 }
+            //}else{
+            //    $CI->Project_model->set_issue_count($p["project_id"],null );
             }
         }
         return $result;

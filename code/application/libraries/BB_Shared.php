@@ -92,17 +92,21 @@ class BB_Shared {
         }
     }
     public function validate_repo_name_with_bb($repo_name=null, $repo_id=null){
+        if(!isset($repo_name)) return false;
         $CI =& get_instance();
         $CI->load->library('BB_issues');
-        $CI->load->model('Project_model');
-        $project_record = $CI->Project_model->retrieve_by_repo_slug($repo_name);
-        if(!isset($project_record) || $project_record['project_id']==$repo_id){
-            $CI->load->library("BB_shared");
-            if(!isset($repo_name)) return false;
-            $issue = $CI->bb_issues->retrieveIssues($repo_name, null, null, false);
-            return isset($issue)? true:false;
+        if(isset($repo_id)){
+            $CI->load->model('Project_model');
+            $project_record = $CI->Project_model->retrieve_by_repo_slug($repo_name);
+            if($project_record!==null && $project_record['project_id']!==$repo_id){
+                //there is a project with this repo name but isn't this project
+                return false;
+            }
         }
-        return false;
+        //$CI->load->library("BB_shared");
+        $issue = $CI->bb_issues->retrieveIssues($repo_name, null, null, false);
+        return isset($issue)? true:false;
+
     }
 
 }

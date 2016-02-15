@@ -7,7 +7,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 <head>
     <?php $this->load->view('common/common_header');?>
     <link rel="stylesheet" href="<?=base_url().'css/sidebar-left.css'?>">
-
+    <style>.tag{    border-radius: 4px;
+            border: 1px black;
+            padding: 2px 8px;
+            background-color: #c5e5ed;
+            margin-right: 3px;
+            cursor:pointer;
+        }.tag:hover{background-color: #b7dfed;}</style>
     <script>
         function cus_option(){
             if($("#customer_option").val()=="from-existing"){
@@ -140,7 +146,7 @@ $this->load->view('common/pm_nav', $class);
                                 $("#bitbucket_repo_name_group").addClass("has-error");
                                 alert("The input bitbucket repository name is invalid for issue retrieval.");
                             }
-                        }
+                        },
                         complete: function(){field.removeAttr("disabled");}
 
                     });
@@ -166,10 +172,37 @@ $this->load->view('common/pm_nav', $class);
             </div>
             <div class="col-lg-12">
                 <div class="form-group">
-                    <label for="tags">Tags</label>
-                    <input class="form-control " id="tokenfield" name="tags" value="<?=$p['tags']?>">
+                    <label for="tags-input">Tags</label>
+                    <input class="form-control " id="tags-input" name="tags" value="<?=$p['tags']?>">
+                    <div id="tag-outer"></div>
                 </div>
+
             </div>
+            <script>
+                $(document).ready(function(){
+                    var tagOuterDiv = $("#tag-outer");
+                    $.ajax({
+                        url:"<?=base_url()."Projects/ajax_retrieve_all_tags"?>",
+                        success: function (result){
+                            var tags = jQuery.parseJSON(result);
+                            for(var i=0;i<tags.length;i++){
+                                var tag = tags[i];
+                                if(i==15) break;
+                                tagOuterDiv.append("<span class='tag'>"+tag+"</span>");
+                            }
+                        }
+                    });
+                });
+                $("#tag-outer").on("click",".tag",function() {
+                    var inputField = $("#tags-input");
+                    var original = inputField.val();
+                    var tag = $(this).text();
+                    if ($.inArray(tag, original.split(";"))==-1) {
+                        if (original.length > 0)original = original + ";";
+                        inputField.val(original +tag);
+                    }
+                });
+            </script>
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="staging_link">Staging Link</label>

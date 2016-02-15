@@ -80,18 +80,19 @@ class Project_model extends CI_Model {
      */
     public function getTags($project_id=null){
         $tag_array = [];
-        $delimiter = ",";
+        $delimiter = ";";
         if($project_id==null){
             $query = $this->db->query("select tags, last_updated from project order by last_updated desc");
         }else{
             $query = $this->db->query("select tags, last_updated from project where project_id=? order by last_updated desc",[$project_id]);
         }
-
+        $counter = 1;
         foreach ($query->result_array() as $row) {
-            $tag_array = array_merge($tag_array, explode($delimiter,$row['tags']));
+            if(!empty($row['tags'])){
+                $tag_array = array_merge($tag_array,explode($delimiter,$row['tags']));
+            }
         }
-        //echo var_dump($tag_array);
-        return array_unique($tag_array);
+        return array_values(array_unique($tag_array));
     }
 
     /*

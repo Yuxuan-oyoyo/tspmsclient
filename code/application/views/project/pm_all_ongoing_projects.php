@@ -102,7 +102,15 @@ $this->load->view('common/pm_nav', $class);
                                 </tr>
                                 <tr>
                                     <td>  <i class="fa fa-clock-o"></i>&nbsp;<strong>Number Of Issues </strong></td>
-                                    <td> <span class="issue-count-<?=$p["project_id"]?>"><?=isset($p['issue_count'])?$p['issue_count']:"BB repo not set yet"?></span><span class="update-issue-count glyphicon glyphicon-refresh" style="margin-left:8px"></span></td>
+                                    <?php
+                                        if(empty($p['bitbucket_repo_name'])) $issue_count = "BB repo not set";
+                                        elseif($p['repo_name_valid']!=1) $issue_count = "Invalid BB repo";
+                                        else $issue_count = $p['issue_count'];
+
+                                    ?>
+                                    <td>
+                                        <span class="issue-count-<?=$p["project_id"]?>"><?=$issue_count?></span>
+                                        <span class="update-issue-count glyphicon glyphicon-refresh" style="margin-left:8px"></span></td>
                                 </tr>
                                 <tr>
                                     <td>  <span class="glyphicon glyphicon-fire"></span>&nbsp;<strong>Urgency Score </strong></td>

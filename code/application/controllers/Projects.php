@@ -35,9 +35,8 @@ class Projects extends CI_Controller {
         $this->load->library('BB_issues');
     }
 
-    public function index()
-    {
-
+    public function index(){
+        redirect('list_all/');
     }
 
     public function list_all(){
@@ -70,6 +69,10 @@ class Projects extends CI_Controller {
         $this->Notification_model->add_new_project_notifications($new_project_id,$change_type,$created_by,$redirect,$users);
         return $new_project_id;
         //$this->Project_phase_model->create_phases_upon_new_project($project_id);
+    }
+    public function ajax_retrieve_all_tags(){
+        //$this->output->set_content_type('application/json');
+        echo json_encode($this->Project_model->getTags());
     }
 
     public function create_new_project()
@@ -123,6 +126,12 @@ class Projects extends CI_Controller {
                     "pm_id" => $this->input->post("pm_id"),
                     "body" => "Hi, I am the project manager for your project [".$this->input->post("project_title")."]. Please contact me if you have any problem."
                 ];
+                //convert bb repo name to lower case
+                $insert_array["bitbucket_repo_name"] = strtolower($insert_array["bitbucket_repo_name"]);
+                //update if the given repo name is valid
+                $this->load->library("BB_Shared");
+                $repo_name_valid = $this->bb_shared->validate_repo_name_with_bb($insert_array["bitbucket_repo_name"]);
+                $insert_array["repo_name_valid"] = $repo_name_valid?1:0;
 
                 if ($this->insert($insert_array)) {
                     if($this->Chat_model->initialize_new($initial_chat)>0) {
@@ -165,7 +174,7 @@ class Projects extends CI_Controller {
             $this->load->view('project/pm_project_edit',
                 $data = ["project" => $this->Project_model->retrieve_by_id($project_id),
                     "customers" => $this->Customer_model->retrieveAll(),
-                    "tags" => json_encode($this->Project_model->getTags()),
+                    //"tags" => json_encode($this->Project_model->getTags()),
                     "phases" => $this->Project_phase_model->retrievePhaseDef(),
                     "pms" => $this->Internal_user_model->retrieve_by_type("PM")
                 ]);
@@ -199,7 +208,7 @@ class Projects extends CI_Controller {
                         ];
                         $this->Chat_model->initialize_new($initial_chat);
                     }
-                } else {
+                } else {//create new customer
                     $customer_name_array = ["title", "first_name"
                         , "last_name", "company_name", "hp_number"
                         , "other_number", "email", "username", "password_hash"];
@@ -221,15 +230,22 @@ class Projects extends CI_Controller {
                     }
 
                 }
-
+                //convert bb repo name to lower case
+                $input["bitbucket_repo_name"] = strtolower($input["bitbucket_repo_name"]);
+                //update if the given repo name is valid
+                $this->load->library("BB_Shared");
+                $repo_name_valid = $this->bb_shared->validate_repo_name_with_bb($input["bitbucket_repo_name"]);
+                //var_dump($input["bitbucket_repo_name"]);
+                //var_dump($repo_name_valid);
+                $input["repo_name_valid"] = $repo_name_valid?1:0;
                 foreach ($input as $key => $value) {
                     if ($value !== null) {
                         $original_array[$key] = $value;
                     }
                 }
-                //var_dump($original_array);
+
                 if ($this->Project_model->update($original_array) == 1) {
-                    //var_dump($original_array);
+
                     $this->session->set_userdata('message', 'Project has been edited successfully.');
                     $session_uid = $this->session->userdata('internal_uid');
                     $created_by = $this->Internal_user_model->retrieve_name($session_uid);
@@ -242,12 +258,14 @@ class Projects extends CI_Controller {
                     $this->session->set_userdata('message', 'Cannot edit project,please contact administrator.');
                     $this->edit($project_id);
                 }
+
             }
         }else{
             $this->session->set_userdata('message','You have not login / have no access rights. ');
             redirect('/internal_authentication/login/');
         }
     }
+    /*
     public function project_by_id($project_id=null){
         if(!isset($project_id)) {show_404();die();}
         if($this->session->userdata('internal_uid')&&$this->session->userdata('internal_type')=="PM") {
@@ -259,6 +277,7 @@ class Projects extends CI_Controller {
             redirect('/internal_authentication/login/');
         }
     }
+    */
 /*
     public function project_update($project_id){
         $this->load->view('project/project_update',$data=["project"=>$this->Project_model->retrieve_by_id($project_id),

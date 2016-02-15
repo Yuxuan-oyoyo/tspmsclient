@@ -61,6 +61,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             -webkit-box-shadow: 0 1px 12px rgba(0, 0, 0, 0.175);
             box-shadow: 0 1px 12px rgba(0, 0, 0, 0.175);
         }
+        .collapsed-field{
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -93,17 +96,11 @@ function sortTasksByDaysLeft($a, $b) {
     <div class="sidebar-links">
         <a class="link-blue selected" href="<?=base_url().'Projects/view_dashboard/'.$project["project_id"]?>"><i class="fa fa-tasks"></i>Project Overview</a>
         <a class="link-blue " href="<?=base_url().'Projects/view_updates/'.$project["project_id"]?>"><i class="fa fa-flag"></i>Update & Milestone</a>
-        <?php
-        if($project['bitbucket_repo_name']==null){
-            ?>
+        <?php if($project['bitbucket_repo_name']==null):?>
             <a class="link-grey"><i class="fa fa-wrench"></i>Issues</a>
-            <?php
-        }else {
-            ?>
+        <?php else :?>
             <a class="link-blue " href="<?= base_url() . 'Issues/list_all/' . $project["bitbucket_repo_name"] ?>"><i class="fa fa-wrench"></i>Issues</a>
-            <?php
-        }
-        ?>
+        <?php endif;?>
         <a class="link-blue" href="<?=base_url().'Usecases/list_all/'.$project["project_id"]?>"><i class="fa fa-list"></i>Use Case List</a>
         <a class="link-blue" href="<?=base_url().'Projects/view_report/'.$project["project_id"]?>"><i class="fa fa-bar-chart"></i>Analytics</a>
         <a class="link-blue " href="<?=base_url().'upload/upload/'.$project['project_id']?>"><i class="fa fa-folder"></i>File Repository</a>
@@ -111,9 +108,9 @@ function sortTasksByDaysLeft($a, $b) {
 </aside>
 
 
-<div class="col-lg-11 content">
+<div class="col-xs-11 content">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-xs-12">
         <h1 class="page-header">
             <?=$project['project_title']?>&nbsp;
             <?php
@@ -133,7 +130,7 @@ function sortTasksByDaysLeft($a, $b) {
 
     <!-- /.row -->
     <div class="row">
-        <div class="col-lg-offset-1 no-gutter">
+        <div class="col-xs-offset-1 no-gutter">
             <?php
             foreach($phases as $phase){
                 $phase_end_time = $phase['end_time'];
@@ -152,7 +149,7 @@ function sortTasksByDaysLeft($a, $b) {
                 data-placement="bottom" title="'.$phase['start_time'].' to '.$phase_end_time.'">'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
                     }
                 }else{
-                    echo' <div  class="test col-sm-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
+                    echo' <div  class="test col-xs-2" align="center" >'.$phase['phase_name'].'<br><img src="'.base_url().$img_tag.'" class="img-responsive"></div>';
                 }
             }
             ?>
@@ -161,7 +158,7 @@ function sortTasksByDaysLeft($a, $b) {
     </div>
     <hr>
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-xs-12">
             <?php if($this->session->userdata('message')):?>
                 <div class="form-group">
                     <div class="alert alert-info " role="alert">
@@ -174,7 +171,7 @@ function sortTasksByDaysLeft($a, $b) {
             <?php endif;?>
 
 <!--Task CRUD-->
-            <div class="col-lg-offset-1 col-lg-4">
+            <div class="col-xs-offset-1 col-xs-4">
                 <div class="panel info-panel" >
                     <div class="panel-heading">
                         Task List
@@ -187,22 +184,21 @@ function sortTasksByDaysLeft($a, $b) {
                         ?>
 
                     </div>
-                    <div class="panel-body" style="height: 380px;overflow-y: scroll;" >
+                    <div class="panel-body" style="height: 360px;overflow-y: hidden;" >
+                        <div style="overflow: auto;width: 100%;height: 100%;">
                     <table class="table table-condensed">
                         <?php
                             usort($tasks, 'sortTasksByDaysLeft');
                             $color =[""];
                             foreach ($tasks as $t){
-                                $days_left;
                                 if(substr($t['days_left'],0,1)==="+"){
-                                    $days_left = substr($t['days_left'],1)+1;
+                                    $days_left = (int)substr($t['days_left'],1)+1;
                                 }else{
                                     $days_left = "Overdue ".substr($t['days_left'],1);
                                 }
                         ?>
                             <tr id="1">
                             <?php
-                                $color;
                                 if(substr($t['days_left'],0,1)==="-"){
                                     $color = "indianred";
                                 }elseif($days_left<=7){
@@ -213,23 +209,20 @@ function sortTasksByDaysLeft($a, $b) {
                             ?>
                                 <td><span class="badge" style="background-color: <?=$color?>"><?=$days_left?> days</span></td>
                                 <td><?=$t['content']?></td>
-                                <?php
-                                    if(!isset($t['start_datetime'])){
-                                ?>
-                                        <td><button class="btn btn-sm" onclick="startTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-play"></button></td>
-                                <?php
-                                    }
-                                ?>
-                                <td><a href="<?=base_url().'Tasks/edit_task/'.$project['project_id'].'/'.$t["task_id"]?>" class="btn btn-sm  btn-primary" type="button" ><i class="fa fa-pencil-square-o"></i></a></td>
-
-                                <?php
-                                    if(isset($t['start_datetime'])){
-                                ?>
-                                    <td><button class="btn btn-sm btn-success" onclick="completeTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-check"></i></button></td>
-                                <?php
-                                    }
-                                ?>
-                                <td><button class="btn btn-sm  btn-danger" onclick="deleteTaskButtonClicked(<?=$t['task_id']?>)"><i class="fa fa-trash"></i></button></td>
+                                <?php if(!isset($t['start_datetime'])):?>
+                                    <td><button class="btn btn-sm" onclick="startTaskButtonClicked(<?=$t['task_id']?>)" title="Start task now"><i class="fa fa-play"></i></button>
+                                    </td>
+                                <?php endif;?>
+                                <td><a href="<?=base_url().'Tasks/edit_task/'.$project['project_id'].'/'.$t["task_id"]?>"
+                                       class="btn btn-sm  btn-primary" type="button" title="Edit this task" ><i class="fa fa-pencil-square-o"></i></a></td>
+                                <?php if(isset($t['start_datetime'])):?>
+                                    <td><button class="btn btn-sm btn-success" onclick="completeTaskButtonClicked(<?=$t['task_id']?>)" title="Task completed">
+                                            <i class="fa fa-check"></i></button>
+                                    </td>
+                                <?php  endif;?>
+                                <td><button class="btn btn-sm  btn-danger" onclick="deleteTaskButtonClicked(<?=$t['task_id']?>)">
+                                        <i class="fa fa-trash"></i></button>
+                                </td>
                             </tr>
                         <?php
                         }
@@ -237,19 +230,21 @@ function sortTasksByDaysLeft($a, $b) {
 
                     </table>
                         </div>
+                        </div>
                 </div>
             </div>
 
 <!--End of Task Box-->
 
-            <div class="col-lg-4">
+            <div class="col-xs-4">
                 <div class="panel info-panel">
                     <div class="panel-heading">Project Detail</div>
-                    <div class="panel-body" style="font-size:15px" >
+                    <div class="panel-body" id="right-panel-body" style="height: 360px;font-size:15px" >
                         <table class="table table-condensed">
                             <tr>
                                 <td><strong>Customer </strong></td>
-                                <td> <a href="<?=base_url().'Customers/update_customer_fproject/'.$customer["c_id"].'/'.$project['project_id']?>"><?=$customer['last_name'].' '.$customer['first_name']?></a> (Click to edit)</td>
+                                <td> <a href="<?=base_url().'Customers/update_customer_fproject/'.$customer["c_id"].'/'.$project['project_id']?>"><?=$customer['last_name'].' '.$customer['first_name']?></a>
+                                </td>
                             </tr>
                             <tr>
                                 <td><strong>Project Code </strong></td>
@@ -258,19 +253,15 @@ function sortTasksByDaysLeft($a, $b) {
                             <script>
                                 var urgency = $.ajax({
                                     url: "<?=base_url().'issues/get_issue_urgency_score/'.$project["project_id"]?>",
-                                    //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
-                                    dataType: "float",
-                                    async: false
+                                    dataType: "float",async: false
                                 }).responseText;
                             </script>
                             <tr>
                                 <td><strong>Urgency Score</strong></td>
-                                <td><script>
-                                        document.write(urgency);
-                                    </script></td>
+                                <td><script>document.write(urgency);</script></td>
                             </tr>
                             <tr>
-                                <td><strong>Bitbucket Repo Name </strong></td>
+                                <td><strong>BB. Repo Name </strong></td>
                                 <td><?=$project['bitbucket_repo_name']?></td>
                             </tr>
                             <tr>
@@ -285,41 +276,40 @@ function sortTasksByDaysLeft($a, $b) {
                                 <td><strong>No. of Use Cases </strong></td>
                                 <td><?=$no_of_usecases?></td>
                             </tr>
-                            <tr>
+                            <tr class="collapsed-field">
                                 <td><strong>Status </strong></td>
-                                <td><?php
-                                    if($project['is_ongoing']==1){
-                                        ?>
-                                        Ongoing
-                                        <?php
-                                    }else{
-                                        ?>
-                                        Closed
-                                        <?php
-                                    }
-                                    ?></td>
+                                <td>
+                                    <?=$project['is_ongoing']==1?"Ongoing":"Closed"?>
+                                </td>
                             </tr>
                             <tr>
                                 <td><strong>Tags </strong></td>
                                 <td><?=$project['tags']?></td>
                             </tr>
-                            <tr>
+                            <tr class="collapsed-field">
                                 <td><strong>Description </strong></td>
                                 <td><?=$project['project_description']?></td>
                             </tr>
-                            <tr>
+                            <tr class="collapsed-field">
                                 <td><strong>Remarks </strong></td>
                                 <td><?=$project['remarks']?></td>
                             </tr>
                         </table>
-
+                        <a href="#" id="collapse-toggle" is-hidden="1">Expand..</a>
                         <a href="<?=base_url().'Projects/edit/'.$project["project_id"]?>" class="btn pull-right btn-primary"><i class="fa fa-pencil-square-o"></i> &nbsp;Edit</a>
 
                     </div>
                 </div>
             </div>
         </div>
-
+        <script>
+            $("#collapse-toggle").on("click",function(){
+                var button = $(this);var isHidden = button.attr("is-hidden");
+                if(isHidden=="1") {$(".collapsed-field").show("slow",function(){$("#right-panel-body").css("height","auto");});button.text("Collapse..");button.attr("is-hidden","0");}
+                else{$(".collapsed-field").hide("slow",function(){$("#right-panel-body").css("height","360px");});button.text("Expand..");button.attr("is-hidden","1");}
+                return false;
+            });
+        </script>
 
     </div>
 <!--new task modal-->
