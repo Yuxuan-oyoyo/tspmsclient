@@ -13,6 +13,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             background-color: #c5e5ed;
             margin-right: 3px;
             cursor:pointer;
+            margin-top: 3px;
+            display:inline-block
         }.tag:hover{background-color: #b7dfed;}</style>
     <script>
         function cus_option(){
@@ -189,7 +191,7 @@ $this->load->view('common/pm_nav', $class);
                                 var tag = tags[i];
                                 if(i==15) break;
                                 if(tag.length>40) continue;
-                                tagOuterDiv.append("<span class='tag'>"+tag+"</span>");
+                                tagOuterDiv.append("<div class='tag'>"+tag+"</div>");
                             }
                         }
                     });

@@ -11,7 +11,7 @@
 /* The left sidebar */
 
 .sidebar-left {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	background-color: #f5f5f5;
@@ -38,14 +38,21 @@
 }
 
 .sidebar-left .sidebar-links {
-	margin: 20px auto;
+	margin: 15px auto;
+	height:95%
+}
+@media screen and (max-height: 550px){
+	.nav-text{
+		display:none;
+	}
 }
 
 .sidebar-left .sidebar-links a {
 	display: block;
 	text-decoration: none;
 	margin: 0 auto 2px auto;
-	padding: 20px 0;
+	padding: 15px 5px;
+	line-height: 1;
 	background-color: #f5f5f5;
 	text-align: center;
 	color:  darkgrey;
@@ -53,6 +60,7 @@
 	font-weight: bold;
 	border-left-width: 5px;
 	border-left-style: solid;
+	height:16.666666%;
 }
 
 .sidebar-left .sidebar-links a i.fa {

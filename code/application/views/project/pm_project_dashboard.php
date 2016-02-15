@@ -99,7 +99,7 @@ function sortTasksByDaysLeft($a, $b) {
         <?php if($project['bitbucket_repo_name']==null):?>
             <a class="link-grey"><i class="fa fa-wrench"></i>Issues</a>
         <?php else :?>
-            <a class="link-blue " href="<?= base_url() . 'Issues/list_all/' . $project["bitbucket_repo_name"] ?>"><i class="fa fa-wrench"></i>Issues</a>
+            <a class="link-blue " href="<?= base_url() . 'Issues/list_all/' . $project["bitbucket_repo_name"] ?>"><i class="fa fa-wrench"></i><span class="nav-text">Issues</span></a>
         <?php endif;?>
         <a class="link-blue" href="<?=base_url().'Usecases/list_all/'.$project["project_id"]?>"><i class="fa fa-list"></i>Use Case List</a>
         <a class="link-blue" href="<?=base_url().'Projects/view_report/'.$project["project_id"]?>"><i class="fa fa-bar-chart"></i>Analytics</a>
@@ -305,7 +305,7 @@ function sortTasksByDaysLeft($a, $b) {
         <script>
             $("#collapse-toggle").on("click",function(){
                 var button = $(this);var isHidden = button.attr("is-hidden");
-                if(isHidden=="1") {$(".collapsed-field").show("slow",function(){$("#right-panel-body").css("height","auto");});button.text("Collapse..");button.attr("is-hidden","0");}
+                if(isHidden=="1") {$(".collapsed-field").show("slow");button.text("Collapse..");button.attr("is-hidden","0");$("#right-panel-body").css("height","auto");}
                 else{$(".collapsed-field").hide("slow",function(){$("#right-panel-body").css("height","360px");});button.text("Expand..");button.attr("is-hidden","1");}
                 return false;
             });
