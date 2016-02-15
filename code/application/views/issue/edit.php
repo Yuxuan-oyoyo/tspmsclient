@@ -36,7 +36,8 @@ function _ago($tm,$rcs = 0) {
 ?>
 <head lang="en">
     <?php $this->load->view('common/common_header');?>
-    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+    <script src="<?= base_url() . 'js/markdown/markdown.js' ?>"></script>
+    <!--link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"-->
     <link rel="stylesheet" href="<?= base_url() . 'css/sidebar-left.css' ?>">
     <link rel="stylesheet" href="<?= base_url() . 'css/issues.css' ?>">
 
@@ -94,9 +95,31 @@ if($this->session->userdata('internal_type')=='Developer') {
         <div class="form-part">
             <div class="form-label">Description</div>
             <div class="form-input">
-                <textarea name="content" class="form-control" ><?=$i["content"]?></textarea>
+                <ul class="nav nav-pills">
+                    <li class="active"><a href="#desc-input-pane" data-toggle="tab" aria-expanded="true">Input</a></li>
+                    <li class=""><a href="#desc-preview-pane" data-toggle="tab" aria-expanded="false">Preview</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade active in" id="desc-input-pane">
+                        <textarea name="content" class="form-control" id="input-description"><?=$i["content"]?></textarea>
+                    </div>
+                    <div class="tab-pane fade" id="desc-preview-pane">
+                        <div class="well" style="min-height:34px;padding:6px 12px" id="description-preview"></div>
+                    </div>
+                </div>
             </div>
         </div>
+            <script>
+                $("#input-description").on("input",function(){
+                    this.editor.update();
+                });
+                function Editor(input, preview) {
+                    this.update = function () {preview.html( markdown.toHTML(input.value));};
+                    input.editor = this;
+                    this.update();
+                }
+                new Editor(document.getElementById("input-description"), $("#description-preview"));
+            </script>
         <div class="form-part">
             <div class="form-label">Reporter</div>
             <div class="form-input">
@@ -240,13 +263,8 @@ if($this->session->userdata('internal_type')=='Developer') {
             <div class="form-part">
                 <div class="form-label">Deadline <span class="cmpl"></span></div>
                 <script>
-                    $(document).ready(function() {
-                        $('.datepicker').datepicker({
-                            dateFormat: 'yy-mm-dd',
-                            minDate: '+0d',
-                            changeYear: true,
-                            changeMonth: true
-                        });
+                    $('.datepicker').datepicker({
+                        dateFormat: 'yy-mm-dd',minDate: '+0d',changeYear: true,changeMonth: true
                     });
                 </script>
                 <div class="form-input">

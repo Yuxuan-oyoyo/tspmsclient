@@ -115,7 +115,7 @@ class BB_milestones {
             $response = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
-            /*debug-------------------------------------------
+            //debug-------------------------------------------
            curl_setopt($ch, CURLOPT_VERBOSE, true);
 
            $verbose = fopen('php://temp', 'w+');
@@ -124,7 +124,7 @@ class BB_milestones {
            rewind($verbose);
            $verboseLog = stream_get_contents($verbose);
            echo "Verbose information:\n<pre>", htmlspecialchars($verboseLog), "</pre>\n";
-           debug --------------------------------------------*/
+           //debug --------------------------------------------*/
             if ($code == 200 || $code== 400) break;/*IMPORTANT*/
             else {
                 $data['access_token'] = $CI->bb_shared->requestFromServer();

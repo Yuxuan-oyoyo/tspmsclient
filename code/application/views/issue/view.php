@@ -35,8 +35,10 @@ $project = $ci->Project_model->retrieve_by_repo_slug($repo_slug);
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.3.0/showdown.min.js"></script>
     <script src="<?= base_url() . 'js/profile_factory.js' ?>"></script>
+    <script src="<?= base_url() . 'js/markdown/markdown.js' ?>"></script>
     <link rel="stylesheet" href="<?= base_url() . 'css/sidebar-left.css' ?>">
     <link rel="stylesheet" href="<?= base_url() . 'css/issues.css' ?>">
+
 
 </head>
 <body>
@@ -73,11 +75,7 @@ if($this->session->userdata('internal_type')=='Developer') {
     <?php
 }
 ?>
-<script>
-    $(document).ready(function() {
 
-    });
-</script>
 
 <div class="col-sm-offset-1 content" style="margin-left:10%">
     <div class="row">
@@ -113,7 +111,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                 </div>
                 <div class="issue-description">
                     <?php if($i["content"]):?>
-                        <span style="font: 16px serif"></spam><?=htmlspecialchars($i["content"])?></span>
+                        <span style="font: 16px serif" class="markdown-content"></spam><?=htmlspecialchars($i["content"])?></span>
                     <?php else:?>
                         <em>No description provided.</em>
                     <?php endif?>
@@ -154,7 +152,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                             <form class="aui top-label editor" method="post" action="<?=base_url()."Issues/input_comment/".$repo_slug."/".$i["local_id"]?>">
                                 <input hidden name="comment_id" value="new">
                                 <div class="field-group">
-                                    <textarea id="new-comment" name="content" class="bb-mention-input input-comment-content" placeholder="What do you want to say?"></textarea>
+                                    <textarea id="new-comment" name="content" class="bb-mention-input markdown-content input-comment-content" placeholder="What do you want to say?"></textarea>
                                     <div class="preview-container"><!-- loaded via ajax --></div>
                                     <div class="error"></div>
                                 </div>
@@ -189,7 +187,7 @@ if($this->session->userdata('internal_type')=='Developer') {
                             </div>
 
                             <div class="comment-body">
-                            <div class="comment-content"><?=$c["content"]?></div>
+                            <div class="comment-content markdown-content"><?=$c["content"]?></div>
                             <?php if(true):?>
                                 <ul class="comment-actions">
                                     <li style="float:left"><a href="#edit" class="edit-comment-link">Edit</a></li>
@@ -386,6 +384,15 @@ if($this->session->userdata('internal_type')=='Developer') {
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+        $(".markdown-content").each(function(){
+            console.log(markdown.toHTML( $(this).text()));
+            $(this).html(markdown.toHTML( $(this).text()));
+        });
+    });
+
+</script>
 <div style="display: none">
     <form class="input-form-proto" style="padding-left:42px;margin: 12px 0" method="post"
           action="<?=base_url()."Issues/input_comment/".$repo_slug."/".$i["local_id"]?>">

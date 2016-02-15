@@ -13,7 +13,7 @@ a {
     text-decoration: none;
 }
 #issues .icon.icon-bug {
-    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiP¡­w2LjAwMkMxMi42ODksMjIuMDAyLDkuOTk5LDE5LjMxMSw5Ljk5OSwxNnoiLz4KPC9zdmc+Cg==);
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPï¿½ï¿½w2LjAwMkMxMi42ODksMjIuMDAyLDkuOTk5LDE5LjMxMSw5Ljk5OSwxNnoiLz4KPC9zdmc+Cg==);
 }
 .aui-lozenge {
     background: #FFFFFF;
@@ -29,6 +29,17 @@ a {
     text-align: center;
     text-decoration: none;
     text-transform: uppercase;
+}
+
+
+
+
+
+.nav>li>a {
+    padding: 2px 10px;
+}
+.nav-pills{
+    margin-bottom: 10px;
 }
 img {
     border: none;
