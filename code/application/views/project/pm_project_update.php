@@ -187,7 +187,7 @@ $this->load->view('common/pm_nav', $class);
         <?php
         if($project['bitbucket_repo_name']==null){
             ?>
-            <a class="link-grey"><i class="fa fa-wrench"></i>Issues</a>
+            <a class="link-grey"><i class="fa fa-wrench"></i><span class="nav-text">Issues</span></a>
             <?php
         }else {
             ?>

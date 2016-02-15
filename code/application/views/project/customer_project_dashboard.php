@@ -132,9 +132,9 @@ $this->load->view('common/customer_nav', $class);
 ?>
 <aside class="sidebar-left">
     <div class="sidebar-links">
-        <a class="link-blue selected" href="#"><i class="fa fa-flag"></i>Update & Milestone</a>
-        <a class="link-blue" href="<?=base_url().'Usecases/customer_usecases/'.$project["project_id"]?>"><i class="fa fa-list"></i>Use Case List</a>
-        <a class="link-blue " href="<?=base_url().'Upload/customer_repo/'.$project["project_id"]?>"><i class="fa fa-folder"></i>File Repository</a>
+        <a class="link-blue selected" href="#"><i class="fa fa-flag"></i><span class="nav-text">Update & Milestone</span></a>
+        <a class="link-blue" href="<?=base_url().'Usecases/customer_usecases/'.$project["project_id"]?>"><i class="fa fa-list"></i><span class="nav-text">Use Case List</span></a>
+        <a class="link-blue " href="<?=base_url().'Upload/customer_repo/'.$project["project_id"]?>"><i class="fa fa-folder"></i><span class="nav-text">File Repository</span></a>
     </div>
 
 </aside>
