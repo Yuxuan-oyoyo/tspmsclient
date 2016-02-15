@@ -171,7 +171,7 @@ function sortTasksByDaysLeft($a, $b) {
             <?php endif;?>
 
 <!--Task CRUD-->
-            <div class="col-xs-offset-1 col-xs-4">
+            <div class="col-xs-offset-1 col-xs-4" style="width:40%;margin-left:6%;">
                 <div class="panel info-panel" >
                     <div class="panel-heading">
                         Task List
@@ -194,7 +194,7 @@ function sortTasksByDaysLeft($a, $b) {
                                 if(substr($t['days_left'],0,1)==="+"){
                                     $days_left = (int)substr($t['days_left'],1)+1;
                                 }else{
-                                    $days_left = "Overdue ".substr($t['days_left'],1);
+                                    $days_left = "Overdue <br>".substr($t['days_left'],1);
                                 }
                         ?>
                             <tr id="1">
@@ -207,8 +207,8 @@ function sortTasksByDaysLeft($a, $b) {
                                     $color = "green";
                                 }
                             ?>
-                                <td><span class="badge" style="background-color: <?=$color?>"><?=$days_left?> days</span></td>
-                                <td><?=$t['content']?></td>
+                                <!--td></td-->
+                                <td><b><?=$t['content']?></b> <span class="badge" style="font-weight:400;background-color: <?=$color?>"><?=$days_left?> days</span></td>
                                 <?php if(!isset($t['start_datetime'])):?>
                                     <td><button class="btn btn-sm" onclick="startTaskButtonClicked(<?=$t['task_id']?>)" title="Start task now"><i class="fa fa-play"></i></button>
                                     </td>
@@ -220,7 +220,7 @@ function sortTasksByDaysLeft($a, $b) {
                                             <i class="fa fa-check"></i></button>
                                     </td>
                                 <?php  endif;?>
-                                <td><button class="btn btn-sm  btn-danger" onclick="deleteTaskButtonClicked(<?=$t['task_id']?>)">
+                                <td><button class="btn btn-sm  btn-danger" title="Delete task" onclick="deleteTaskButtonClicked(<?=$t['task_id']?>)">
                                         <i class="fa fa-trash"></i></button>
                                 </td>
                             </tr>
@@ -236,13 +236,13 @@ function sortTasksByDaysLeft($a, $b) {
 
 <!--End of Task Box-->
 
-            <div class="col-xs-4">
+            <div class="col-xs-4" style="width:40%">
                 <div class="panel info-panel">
                     <div class="panel-heading">Project Detail</div>
                     <div class="panel-body" id="right-panel-body" style="height: 360px;font-size:15px" >
                         <table class="table table-condensed">
                             <tr>
-                                <td><strong>Customer </strong></td>
+                                <td style="width: 45%"><strong>Customer </strong></td>
                                 <td> <a href="<?=base_url().'Customers/update_customer_fproject/'.$customer["c_id"].'/'.$project['project_id']?>"><?=$customer['last_name'].' '.$customer['first_name']?></a>
                                 </td>
                             </tr>

@@ -54,7 +54,7 @@ class Notifications extends CI_Controller{
             echo
             '</div>'
             .'<li class="divider"></li>'
-            .'<a onclick="clear_all_notification()"'
+            .'<a style="padding-left:5px" onclick="clear_all_notification()"'
             .'>Clear All &nbsp'
             .'<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>'
             .'</a>';
