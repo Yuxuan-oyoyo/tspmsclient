@@ -86,7 +86,14 @@
             success: function (data) {
                 console.log("success")
                 console.log(data)
-                document.getElementById("msg").innerHTML = data
+                if(data==0){
+                    $('#msg').hide();
+                }else{
+                    $('#msg').show();
+                    document.getElementById("msg").innerHTML = data
+
+                }
+
                 setTimeout(this.notification_polling, 3000)
             }.bind(this),
             error: function(e)

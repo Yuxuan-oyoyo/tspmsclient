@@ -57,7 +57,6 @@ if($this->session->userdata('Customer_cid')){
 
         },
         render: function() {
-            console.log("hooman")
             console.log(UserType)
 
             var DisplayName = ""
@@ -98,13 +97,12 @@ if($this->session->userdata('Customer_cid')){
                     counter = counter + 1
                 }
             }
-            //console.log("puzzy")
+
             var img_url = '<?=base_url()?>'+'img/avatars/'+(DisplayName.substring(0, 1)).toUpperCase()+'.png'
 
 
             var left_side_message = this.props.data.lastMessage;
 
-            console.log("puzzy")
             console.log(this.props.data)
 
 
