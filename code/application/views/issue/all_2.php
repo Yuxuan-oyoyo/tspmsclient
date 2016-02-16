@@ -3,7 +3,7 @@
 <?php
     $repo_slug = $repo_slug;
     function _ago($tm,$rcs = 0) {
-        $cur_tm = time(); $dif = $cur_tm-$tm;
+        $cur_tm = time(); $dif = $cur_tm+60-$tm;
         $pds = array('sec','min','hr','day','wk','mth','yr','decade');
         $lngh = array(1,60,3600,86400,604800,2630880,31570560,315705600);
         for($v = sizeof($lngh)-1; ($v >= 0)&&(($no = $dif/$lngh[$v])<=1); $v--); if($v < 0) $v = 0; $_tm = $cur_tm-($dif%$lngh[$v]);
