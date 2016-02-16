@@ -42,7 +42,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="wrap">
                 <div class="row">
                     <?php if($this->session->userdata('message')):?>
-                        <div class="alert alert-info col-lg-offset-4 col-lg-4" role="alert">
+                        <div class="alert alert-info col-md-offset-4 col-md-4" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
                             </button>
                             <?=$this->session->userdata('message')?>
@@ -52,7 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <br>
                     <?php if(validation_errors()):?>
                         <div class="form-group">
-                            <div class="alert alert-info col-lg-offset-4 col-lg-4" role="alert">
+                            <div class="alert alert-info col-md-offset-4 col-md-4" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
                                 </button>
                                 <?=validation_errors();?>
@@ -71,16 +71,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <input type="submit" value="Sign In" class="btn btn-primary btn-sm">
                     <div class="remember-forgot">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" />
-                                        Remember Me
-                                    </label>
-                                </div>
-                            </div>
                             <div class="col-md-6 forgot-pass-content">
-                                <a href="javascription:void(0)" class="forgot-pass">Forgot Password</a>
+                                <a href="#" class="forgot-pass">Forgot Password</a>
                             </div>
                         </div>
                     </div>

@@ -29,9 +29,9 @@ $class = [
 $this->load->view('common/pm_nav', $class);
 ?>
 
-<div class="col-lg-offset-1 col-lg-10">
+<div class="col-md-offset-1 col-md-10">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-md-12">
         <h1 class="page-header">
             Internal Users&nbsp;
             <a href="<?=base_url('internal_users/add')?>" class=" btn btn-primary"><i class="fa fa-plus"></i>&nbsp; New User</a>
@@ -39,7 +39,7 @@ $this->load->view('common/pm_nav', $class);
     </div>
 
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-md-12">
             <?php if($this->session->userdata('message')):?>
                 <div class="form-group">
                     <div class="alert alert-info " role="alert">

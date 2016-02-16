@@ -21,9 +21,9 @@ $class = [
 $this->load->view('common/pm_nav', $class);
 ?>
 
-<div class="col-lg-offset-1 content">
+<div class="col-md-offset-1 content">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-md-12">
         <h1 class="page-header">
             Projects
             <a href="<?=base_url().'Projects/create_new_project'?>" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Project</a>
@@ -40,7 +40,7 @@ $this->load->view('common/pm_nav', $class);
         }else{
             foreach($projects as $p){
                 ?>
-                <div class=" col-lg-4">
+                <div class=" col-md-4">
                     <div class="panel past-panel">
                         <div class="panel-heading" style="text-align:center" ><strong><?=$p['project_title']?></strong></div>
                         <div class="panel-body" style="font-size:15px" >

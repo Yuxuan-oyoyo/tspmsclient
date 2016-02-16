@@ -206,13 +206,13 @@ $this->load->view('common/pm_nav', $class);
 ?>
 
 
-<div class="col-lg-offset-1 col-lg-10 content">
-    <div class="col-lg-12">
+<div class="col-md-offset-1 col-md-10 content">
+    <div class="col-md-12">
         <h1 class="page-header">
             TSPMS-Historical Statistics
         </h1>
 <div><br/><div>
-        <div class="col-lg-12" >
+        <div class="col-md-12" >
             <div class="row" style="width: 90%; margin-left: 5%">
                 <div class="center" >
                     <?php if($this->session->userdata('message')):?>
@@ -333,15 +333,15 @@ $this->load->view('common/pm_nav', $class);
                 }
             </script>
         </div>
-        <div class="col-lg-12">
+        <div class="col-md-12">
             <br/>
         </div>
-        <div class="col-lg-12" id="chart_div3" style="width: 100%; height: 300px;"></div>
-<div class="col-lg-12">
+        <div class="col-md-12" id="chart_div3" style="width: 100%; height: 300px;"></div>
+<div class="col-md-12">
     <br/><br/>
 </div>
-        <div class="col-lg-12" id="chart_div5" style="width: 100%; height: 300px;"></div>
-        <div class="col-lg-12" id="chart_div" style="width: 100%; height: 300px;"></div>
+        <div class="col-md-12" id="chart_div5" style="width: 100%; height: 300px;"></div>
+        <div class="col-md-12" id="chart_div" style="width: 100%; height: 300px;"></div>
 
     </div>
     </div>

@@ -154,15 +154,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         </div>
     </aside>
 
-    <div class="col-lg-offset-1 content">
+    <div class="col-md-offset-1 content">
     <!-- Page Content -->
-        <div class="col-lg-12">
+        <div class="col-md-12">
             <h1 class="page-header">
                 <?=$project['project_title']?>&nbsp;
             </h1>
         </div>
 
-        <div class="col-lg-offset-1 content">&nbsp;<br/>
+        <div class="col-md-offset-1 content">&nbsp;<br/>
             &nbsp;&nbsp; <select name="phase" id="phase-selection" class="filter-criterion">
                 <option value="" selected>All phases</option>
                 <option value="1" >Lead</option>
@@ -234,8 +234,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 </div>
             </div>
         </div>
-        <div class="col-lg-12" id="chart_div4" style="width: 100%; height: 300px"></div>
-        <div class="col-lg-12" id="chart_div3" style="width: 100%; height: 300px"></div>
+        <div class="col-md-12" id="chart_div4" style="width: 100%; height: 300px"></div>
+        <div class="col-md-12" id="chart_div3" style="width: 100%; height: 300px"></div>
 
 
 

@@ -26,13 +26,13 @@ if($this->session->userdata('internal_type')=='Developer') {
 ?>
 <div class="container content">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-md-12">
         <h1 class="page-header">
            Change Password
             <small style="color:darkgrey; font-size: 18px">Enter your old and new password to proceed. </small>
         </h1>
     </div>
-    <div class="col-lg-offset-1 col-lg-6">
+    <div class="col-md-offset-1 col-md-6">
 
         <form class="form-horizontal" id="form" method="post" data-parsley-validate action="<?=base_url('internal_authentication/change_password')?>">
             <?php if($this->session->userdata('message')):?>

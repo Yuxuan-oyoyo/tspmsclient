@@ -57,7 +57,8 @@ if($this->session->userdata('Customer_cid')){
 
         },
         render: function() {
-            console.log(UserType)
+            //console.log("hooman")
+            //console.log(UserType)
 
             var DisplayName = ""
             if(UserType == "PM")
@@ -97,13 +98,14 @@ if($this->session->userdata('Customer_cid')){
                     counter = counter + 1
                 }
             }
-
+            //console.log("puzzy")
             var img_url = '<?=base_url()?>'+'img/avatars/'+(DisplayName.substring(0, 1)).toUpperCase()+'.png'
 
 
             var left_side_message = this.props.data.lastMessage;
 
-            console.log(this.props.data)
+            //console.log("puzzy")
+            //console.log(this.props.data)
 
 
             if((this.props.data.lastMessage == ""))
@@ -457,9 +459,10 @@ if($this->session->userdata('Customer_cid')){
                     get_pm_id = this.props.thread["messages"][0]["pm_id"];
                 }
 
-
-
                 this.props.fast_msg(text)
+
+
+
 
                 var datetime = new Date() / 1000;
                 var url = "<?=base_url()."chat/write"?>";
@@ -521,7 +524,7 @@ if($this->session->userdata('Customer_cid')){
                     <div>
                         <textarea rows="4" placeholder={up_text} className=" form-control" disabled/>
                         <div>
-                            <FileForm threadID={this.props.thread.chatID} text_handler={this.handleText} filey={this.props.filey} fu_handler={this.props.fu_handler} fu_refresher={this.props.fu_refresher} />
+                            <FileForm fast_msg={this.props.fast_msg} threadID={this.props.thread.chatID} text_handler={this.handleText} filey={this.props.filey} fu_handler={this.props.fu_handler} fu_refresher={this.props.fu_refresher} />
                         </div>
 
                     </div>
@@ -539,7 +542,7 @@ if($this->session->userdata('Customer_cid')){
                             <FileForm threadID={this.props.thread.chatID} text_handler={this.handleText} fu_handler={this.props.fu_handler}/>
                         </div>
                         <div>
-                            <button  className="col-lg-2 text-right btn btn-primary pull-right" onClick={this.handleWrite} type="button">Reply </button>
+                            <button  className="col-md-2 text-right btn btn-primary pull-right" onClick={this.handleWrite} type="button">Reply </button>
                         </div>
                     </div>
 
@@ -568,11 +571,14 @@ if($this->session->userdata('Customer_cid')){
             var u_text = document.getElementById('user_text').value
             //alert(u_text)
 
+            //this.props.fast_msg("File: "+this.state.f_name+this.state.extension)
+
             var url = "<?=base_url()."chat/write"?>";
             var threadID = this.props.threadID;
             $.ajax({
                 url: url,
                 type: "POST",
+                asyn: true,
                 data: {
                         user_msg: u_text,
                         test_data:this.state.data_uri,
@@ -581,16 +587,18 @@ if($this->session->userdata('Customer_cid')){
                         author: CurrentUser,
                         chatID:threadID,
                       },
-                success: function() {
+                success: function(data) {
                     // do stuff
                     this.props.text_handler();
                 }.bind(this),
                 error: function() {
                     // do stuff
+
                 }.bind(this)
             });
 
-
+            //this.props.fast_msg(this.state.f_name+"^https://s3-ap-southeast-1.amazonaws.com/test-upload-file/7f27d_wujing.jpg")
+            this.props.fast_msg("uploading file..")
             this.props.text_handler();
             this.props.fu_refresher();
 
@@ -640,10 +648,10 @@ if($this->session->userdata('Customer_cid')){
                         <img id="image" />
                     <form id="upload_form" onSubmit={this.handleSubmit} encType="multipart/form-data">
                         <input type="hidden" id="user_text"/>
-                       <span className="col-lg-2  btn btn-default pull-left btn-file">
+                       <span className="col-md-2  btn btn-default pull-left btn-file">
                                 Add File <input type="file" onChange={this.handleFile}/>
                         </span>
-                        <input className=" col-lg-2 text-right btn btn-primary pull-right"  type="submit" value="Reply" />
+                        <input className=" col-md-2 text-right btn btn-primary pull-right"  type="submit" value="Reply" />
                     </form>
                     </div>
                 );
@@ -652,10 +660,10 @@ if($this->session->userdata('Customer_cid')){
             {
                 return (
                     <form onSubmit={this.handleSubmit} encType="multipart/form-data">
-                        <span className="col-lg-2  btn btn-default pull-left btn-file">
+                        <span className="col-md-2  btn btn-default pull-left btn-file">
                                 Add File <input type="file" onChange={this.handleFile}/>
                         </span>
-                        <input className=" col-lg-2 text-right btn btn-primary pull-right" type="hidden" value="Reply" />
+                        <input className=" col-md-2 text-right btn btn-primary pull-right" type="hidden" value="Reply" />
                     </form>
                 );
             }
@@ -777,7 +785,7 @@ if($this->session->userdata('Customer_cid')){
                 // New Message
 
                 return(
-                     <div className="col-lg-10">
+                     <div className="col-md-10">
                         <div>
                             <h3 className="message-thread-heading">New Message</h3>
                         </div>
@@ -831,14 +839,14 @@ if($this->session->userdata('Customer_cid')){
                     msgNodes = "not selected yet"
                 }
                 return(
-                    <div  className="col-lg-8">
+                    <div  className="col-md-8">
                         <div>
                             <h3 className="message-thread-heading">{j}</h3>
 
                         </div>
 
                         <div className="msg-wrap-right" ref="messageList">
-                           <div className="col-lg-12">
+                           <div className="col-md-12">
                             {this.state.msgnodes}
                             </div>
                         </div>
@@ -930,12 +938,12 @@ if($this->session->userdata('Customer_cid')){
                         this.setState({chats: data, unread:counter })
                     }
 
-                    setTimeout(this.getInitialData, 3000)
+                    setTimeout(this.getInitialData, 1000)
                 }.bind(this),
                 error: function(XMLHttpRequest,textStatus, errorThrown)
                 {
                     console.log("Polling error")
-                    setTimeout(this.getInitialData, 5000);
+                    setTimeout(this.getInitialData, 1000);
                 }.bind(this)
             })
 
@@ -1034,9 +1042,14 @@ if($this->session->userdata('Customer_cid')){
 
 
 
-            if(this.state.theThreadIWantToPass == "0") {
+            //if(this.state.theThreadIWantToPass == "0") {
+                console.log("in fast")
                 var fast_thread = this.state.theThreadIWantToPass
                 var last_msg_length = fast_thread["messages"].length - 1
+
+
+                console.log("happy")
+                console.log(fast_thread["messages"][last_msg_length])
 
                 //var fast_msg = fast_thread["messages"][last_msg_length]
                 var fast_msg = $.extend(true, {}, fast_thread["messages"][last_msg_length])
@@ -1050,14 +1063,16 @@ if($this->session->userdata('Customer_cid')){
                 fast_msg.content = data
                 fast_msg.timestamp = fast_msg.timestamp + 2
                 fast_msg.msgID = fast_msg.msgID + 2
+                fast_msg.is_file = "0"
 
-                console.log(fast_msg["msgID"])
+                //console.log(fast_msg["msgID"])
 
                 fast_thread["messages"].push(fast_msg);
                 //this.setState({theThreadIWantToPass: fast_thread})
 
+
                 this.setState({theThreadIWantToPass: fast_thread})
-            }
+
 
 
         },
@@ -1089,10 +1104,10 @@ if($this->session->userdata('Customer_cid')){
                 // dead function fml
                 //console.log("new_message")
                 return (
-                     <div className="col-lg-offset-1 col-lg-10 ">
+                     <div className="col-md-offset-1 col-md-10 ">
                     <h1 className="page-header top-header">Chat Box - {user_name}</h1>
                        <div className="row">
-                           <div className="col-lg-3">
+                           <div className="col-md-3">
 
                                     <div className="thread-count">
                                         {unread}
@@ -1103,7 +1118,7 @@ if($this->session->userdata('Customer_cid')){
                                         clickFunc={this.handleClickOnLeftUser} // ***important
                                         />
                                 </div>
-                                <div  className="col-lg-9">
+                                <div  className="col-md-9">
                                     <RightMessageBox
                                         chat="new_message"
                                         refreshFunc={this.getInitialData}
@@ -1123,10 +1138,10 @@ if($this->session->userdata('Customer_cid')){
                 //console.log("render the thread I want to pass")
                 //console.log(this.state.theThreadIWantToPass)
                 return (
-                     <div className="col-lg-offset-1 col-lg-10 ">
+                     <div className="col-md-offset-1 col-md-10 ">
                     <h1 className="page-header top-header">Chat Box - {user_name}</h1>
                          <div className="row">
-                                <div className="col-lg-3">
+                                <div className="col-md-3">
                                     <div className="thread-count">
                                         {unread}
                                     </div>

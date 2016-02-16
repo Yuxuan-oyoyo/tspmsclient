@@ -75,7 +75,6 @@ $this->load->view('common/pm_nav', $class);
                 <script>
                     var urgency = $.ajax({
                         url: "<?=base_url().'issues/get_issue_urgency_score/'.$p["project_id"]?>",
-                        //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
                         dataType: "float",
                         async: false
                     }).responseText;
@@ -84,6 +83,7 @@ $this->load->view('common/pm_nav', $class);
                 <div class=" col-xs-4">
                     <div class="panel ongoing-panel" >
                         <div id="project_header" class="panel-heading" style="text-align:center" ><strong>&nbsp;<?=$p['project_title']?></strong>&nbsp;&nbsp;<br><sub>[<?=$p['project_code']?>]</sub></div>
+
                         <div class="panel-body" style="font-size:15px " >
                             <table class="table table-condensed">
                                 <tr>
@@ -126,6 +126,18 @@ $this->load->view('common/pm_nav', $class);
                         </div>
                     </div>
                 </div>
+
+                 <script>
+                    console.log(id);
+                    if(urgency >20 ){
+                        document.getElementById(id).style.backgroundColor = "rgba(200,50,50, 0.7)";
+                    }else if(urgency >5 && urgency<= 20){
+                        document.getElementById(id).style.backgroundColor = "rgba(250,120,0,0.7)";
+                    }else{
+                        document.getElementById(id).style.backgroundColor = "rgba(44,74,215,0.7)";
+                    }
+
+                </script>
         <?php
             }
         ?>

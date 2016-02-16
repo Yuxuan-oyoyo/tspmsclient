@@ -27,12 +27,12 @@ $this->load->view('common/pm_nav', $class);
 ?>
 <div class="container content">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-md-12">
         <h1 class="page-header">
            New User
         </h1>
     </div>
-    <div class="col-lg-offset-1 col-lg-6">
+    <div class="col-md-offset-1 col-md-6">
 
         <form class="form-horizontal" id="form" method="post" data-parsley-validate action="<?=base_url('internal_users/insert')?>">
             <?php if($this->session->userdata('message')):?>

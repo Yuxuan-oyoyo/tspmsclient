@@ -130,9 +130,9 @@ $class = [
 ];
 $this->load->view('common/pm_nav', $class);
 ?>
-<div class="col-lg-offset-1 col-lg-10">
+<div class="col-md-offset-1 col-md-10">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-md-12">
         <h1 class="page-header">
             TSPMS-Dashboard
         </h1>
@@ -140,9 +140,9 @@ $this->load->view('common/pm_nav', $class);
 
 
 
-    <div class="col-lg-7">
+    <div class="col-md-7">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-md-6">
                 <div class="panel panel-danger">
                     <div class="panel-heading">Important and Urgent</div>
                     <div class="panel-body" style="height: 200px;overflow-y: auto;">
@@ -164,7 +164,7 @@ $this->load->view('common/pm_nav', $class);
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-md-6">
                 <div class="panel panel-warning">
                     <div class="panel-heading">Urgent but not Important</div>
                     <div class="panel-body" style="height: 200px;overflow-y:auto;">
@@ -190,7 +190,7 @@ $this->load->view('common/pm_nav', $class);
 
         </div>
         <div class="row">
-            <div class="col-lg-6 ">
+            <div class="col-md-6 ">
                 <div class="panel panel-success">
                     <div class="panel-heading">NOT Important OR Urgent</div>
                     <div class="panel-body" style="height: 200px;overflow-y: auto;">
@@ -213,7 +213,7 @@ $this->load->view('common/pm_nav', $class);
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 ">
+            <div class="col-md-6 ">
                 <div class="panel panel-info">
                     <div class="panel-heading">Important but not urgent</div>
                     <div class="panel-body" style="height: 200px;overflow-y: auto;">
@@ -239,10 +239,10 @@ $this->load->view('common/pm_nav', $class);
         </div>
 
         <br/>
-        <div class="col-lg-1" id="chart_div5" style="width: 600px; height: 200px;"></div>
+        <div class="col-md-1" id="chart_div5" style="width: 600px; height: 200px;"></div>
     </div>
 
-    <div class="col-lg-5" align="center">
+    <div class="col-md-5" align="center">
         <div class="panel panel-default" style="width: 200px;height: 150px">
             <div class="panel-heading" style="background: #e0e2e5"><Strong>Total Urgency Score</Strong></div>
             <div class="panel-body" style="height: 200px;">
@@ -265,7 +265,7 @@ $this->load->view('common/pm_nav', $class);
 <div><br/>
     <br/></div>
 
-    <div class="col-lg-5 tableContainer" align="center" >
+    <div class="col-md-5 tableContainer" align="center" >
         <table class="table table-striped">
             <thead>
             <th>Project Code</th>
@@ -302,7 +302,7 @@ $this->load->view('common/pm_nav', $class);
 
 
 
-    <div class="col-lg-12" id="chart_div3" style="height: 350px;"></div>
+    <div class="col-md-12" id="chart_div3" style="height: 350px;"></div>
 
 </div>
     </body>

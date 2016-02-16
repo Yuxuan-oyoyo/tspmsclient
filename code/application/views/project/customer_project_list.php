@@ -24,7 +24,7 @@ $this->load->view('common/customer_nav', $class);
 ?>
 <div class="container content">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-md-12">
         <h1 class="page-header">
             MY PROJECTS
         </h1>
@@ -34,7 +34,7 @@ $this->load->view('common/customer_nav', $class);
     <!-- /.row -->
     <div class="row">
        <?php foreach($projects as $p):?>
-        <div class=" col-lg-4">
+        <div class=" col-md-4">
             <?php
             if($p['is_ongoing']==1){
             ?>

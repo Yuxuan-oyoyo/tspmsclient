@@ -48,7 +48,7 @@ $this->load->view('common/pm_nav', $class);
             <a href="<?= base_url() . 'Usecases/list_all/'.$project['project_id'] ?>" class="btn btn-primary"><i class="fa fa-backward"></i>&nbsp;Back</a>
         </h1>
         <form  data-parsley-validate role="form" action="<?=base_url().'Usecases/edit_use_case/'.$usecase['usecase_id']?>" method="post">
-            <div class="col-lg-12">
+            <div class="col-md-12">
                 <div class="form-group">
                     <label for="title">Title*:</label>
                     <input name="title" id="title"  type="text" class="form-control" value="<?=$usecase['title']?>" data-parsley-required>
@@ -66,7 +66,7 @@ $this->load->view('common/pm_nav', $class);
                 </div>
 
             </div>
-            <div class="col-lg-6">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label for="importance">Importance:</label>
                     <select class="form-control" id="importance" name="importance" data-parsley-required>
@@ -76,7 +76,7 @@ $this->load->view('common/pm_nav', $class);
                     </select>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label for="type">Type:</label>
                     <select class="form-control" id="type" name="type" data-parsley-required>
@@ -86,7 +86,7 @@ $this->load->view('common/pm_nav', $class);
                 </div>
             </div>
 
-            <div class="col-lg-12 pull-right">
+            <div class="col-md-12 pull-right">
                 <input type="submit" name="submit" id="submit" class="btn btn-primary" value="Submit">
                 <!--<a href="//?base_url().'Customers/edit/'.$c["c_id"]?" class="btn btn-primary">Submit</a>-->
                 <a href="<?= base_url() . 'Usecases/list_all/'.$project['project_id'] ?>" class="btn btn-default">Cancel</a>
