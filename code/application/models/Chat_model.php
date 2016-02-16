@@ -285,7 +285,7 @@ class Chat_model extends CI_Model{
 
         $sql = "";
 
-        if( strcmp($u_type, "pm" == 0))
+        if($u_type === "pm")
         {
             // equal pm
             $sql = "select count(*) as counter from message where pm_id = ? and to_pm = 1 and seen is null";
@@ -293,7 +293,7 @@ class Chat_model extends CI_Model{
         else
         {
             // not pm
-            $sql = "select count(*) as counter from message where customer_id = ? AND to_pm = 0 and seen IS null";
+            $sql = "select count(*) as counter from message where customer_id = ? AND to_pm = 0 and seen is null";
         }
         $query = $this->db->query($sql, array([$u_id]));
 
