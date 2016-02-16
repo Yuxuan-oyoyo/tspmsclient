@@ -32,9 +32,9 @@ $class = [
 $this->load->view('common/dev_nav', $class);
 ?>
 
-<div class="col-lg-offset-1 content">
+<div class="col-md-offset-1 content">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-md-12">
         <h1 class="page-header">
             Projects
         </h1>
@@ -49,7 +49,7 @@ $this->load->view('common/dev_nav', $class);
             <?php $this->session->unset_userdata('message') ?>
         <?php endif;?>
         <br>
-        <div class="col-lg-12">
+        <div class="col-md-12">
 
             <?php if($this->session->userdata('message')):?>
                 <div class="alert alert-info " role="alert">
@@ -63,7 +63,7 @@ $this->load->view('common/dev_nav', $class);
         <?php
         foreach($projects as $p){
             ?>
-            <div class=" col-lg-4">
+            <div class=" col-md-4">
                 <div class="panel ongoing-panel">
                     <div class="panel-heading" style="text-align:center" ><strong><?=$p['project_title']?></strong></div>
                     <div class="panel-body" style="font-size:15px" >

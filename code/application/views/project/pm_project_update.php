@@ -114,9 +114,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     var day = ddl.getDate();
                     var month=monthNames[ddl.getMonth()];
                     var year=ddl.getFullYear();
-                    var htmlText = ' <div class="row"> <div class="col-lg-4"> <div class="panel panel-default calendar"> ' +
+                    var htmlText = ' <div class="row"> <div class="col-md-4"> <div class="panel panel-default calendar"> ' +
                         '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'-'+year+'</strong></div>'+
-                        '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-lg-7">'+
+                        '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-md-7">'+
                         '<strong>'+element.header+'</strong>'+
                             <?php if($project['is_ongoing']==1){?>
                         '<i class="fa fa-close pull-right" style="cursor: pointer;color:darkgray" onclick="deleteMilestoneButtonClicked('+element.milestone_id+')"></i>'+
@@ -201,9 +201,9 @@ $this->load->view('common/pm_nav', $class);
     </div>
 </aside>
 
-<div class="col-lg-offset-1 content">
+<div class="col-md-offset-1 content">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-md-12">
         <h1 class="page-header">
             <?=$project['project_title']?>
             <?php
@@ -238,7 +238,7 @@ $this->load->view('common/pm_nav', $class);
 
     <!-- /.row -->
     <div class="row">
-        <div class="col-lg-offset-1 no-gutter">
+        <div class="col-md-offset-1 no-gutter">
 
             <?php
             $current_phase;
@@ -282,7 +282,7 @@ $this->load->view('common/pm_nav', $class);
         }else{
     ?>
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-md-12">
             <?php if($this->session->userdata('message')):?>
                 <div class="form-group">
                     <div class="alert alert-info " role="alert">
@@ -293,7 +293,7 @@ $this->load->view('common/pm_nav', $class);
                 </div>
                 <?php $this->session->unset_userdata('message')?>
             <?php endif;?>
-            <div class="col-lg-7">
+            <div class="col-md-7">
 
                 <h3>Client Updates -
                     <small class="phase"><?= $current_phase['phase_name'] ?></small>
@@ -339,7 +339,7 @@ $this->load->view('common/pm_nav', $class);
                 </ul>
                 <?php endif?>
             </div>
-            <div class="col-lg-4">
+            <div class="col-md-4">
 
                 <h3>Milestones -
                     <small class="phase"><?= $current_phase['phase_name'] ?></small>
@@ -362,7 +362,7 @@ $this->load->view('common/pm_nav', $class);
                         $year = date('Y', strtotime($m['deadline']));
                         ?>
                         <div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-md-4">
                                 <div class="panel panel-default calendar">
                                     <div class="panel-heading calendar-month">
                                         <strong><?= $monthName . "-" . $year ?></strong></div>
@@ -373,7 +373,7 @@ $this->load->view('common/pm_nav', $class);
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-7">
+                            <div class="col-md-7">
                                 <strong><?= $m['header'] ?></strong>
                                 <?php
                                 if($project['is_ongoing']==1) {

@@ -41,7 +41,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="wrap">
                 <div class="row">
                     <?php if($this->session->userdata('message')):?>
-                        <div class="alert alert-info col-lg-offset-4 col-lg-4" role="alert">
+                        <div class="alert alert-info col-md-offset-4 col-md-4" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
                             </button>
                             <?=$this->session->userdata('message')?>

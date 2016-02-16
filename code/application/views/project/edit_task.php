@@ -44,9 +44,9 @@ $class = [
 ];
 $this->load->view('common/pm_nav', $class);
 ?>
-<div class="col-lg-offset-1 col-lg-10 content">
+<div class="col-md-offset-1 col-md-10 content">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-md-12">
         <h1 class="page-header">
             Edit Task
         </h1>
@@ -55,7 +55,7 @@ $this->load->view('common/pm_nav', $class);
     <?php $t=$task;?>
     <div class="container">
         <form  role="form" action="<?=base_url().'Tasks/edit/'.$project_id.'/'.$t["task_id"]?>" method="post">
-            <div class="col-lg-10 customer-info">
+            <div class="col-md-10 customer-info">
                 <div class="form-group">
                     <label for="content">Content:</label>
                     <textarea name="content" rows="2" id="content" class="form-control" data-parsley-required><?=$t['content']?></textarea>

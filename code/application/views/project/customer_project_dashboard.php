@@ -104,9 +104,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     }else{
                         append='';
                     }
-                    var htmlText = ' <div class="row"> <div class="col-lg-4"> <div class="panel panel-default calendar"> ' +
+                    var htmlText = ' <div class="row"> <div class="col-md-4"> <div class="panel panel-default calendar"> ' +
                         '<div class="panel-heading calendar-month" style="text-align:center;background:#EA9089;color:white"><strong>'+month+'-'+year+'</strong></div>'+
-                        '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-lg-7">'+
+                        '<div class="panel-body"> <div class="thumbnail calendar-date" >'+day+' </div> </div> </div> </div> <div class="col-md-7">'+
                         '<strong>'+element.header+'</strong>'+
                         '<br>'+element.body+append+
                         ' </div> </div>';
@@ -138,9 +138,9 @@ $this->load->view('common/customer_nav', $class);
     </div>
 
 </aside>
-<div class="col-lg-offset-1 content">
+<div class="col-md-offset-1 content">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-md-12">
         <h1 class="page-header">
            <?=$project['project_title']?>&nbsp;
             <?php if($project['customer_preview_link']):?>
@@ -152,7 +152,7 @@ $this->load->view('common/customer_nav', $class);
 
     <!-- /.row -->
     <div class="row">
-    <div class="col-lg-offset-1 no-gutter">
+    <div class="col-md-offset-1 no-gutter">
         <?php
         $current_phase;
         foreach($phases as $phase){
@@ -196,8 +196,8 @@ $this->load->view('common/customer_nav', $class);
     ?>
     <div class="row">
 
-        <div class="col-lg-12">
-            <div class="col-lg-7">
+        <div class="col-md-12">
+            <div class="col-md-7">
                 <h3>Recent Updates - <small class="phase"><?=$current_phase['phase_name']?></small></h3><hr>
                 <ul class="timeline" id="timeline">
                     <?php foreach($updates as $update):?>
@@ -218,7 +218,7 @@ $this->load->view('common/customer_nav', $class);
                     <?php endforeach?>
                 </ul>
             </div>
-            <div class="col-lg-4">
+            <div class="col-md-4">
 
                 <h3>Milestones - <small class="phase"><?=$current_phase['phase_name']?></small></h3><hr>
                 <div id="milestone">
@@ -228,7 +228,7 @@ $this->load->view('common/customer_nav', $class);
                         $year =  date('Y',strtotime($milestone['deadline']));
                     ?>
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-md-4">
                         <div class="panel panel-default calendar">
                             <div class="panel-heading calendar-month"><strong><?=$month."-".$year?></strong></div>
                             <div class="panel-body">
@@ -239,7 +239,7 @@ $this->load->view('common/customer_nav', $class);
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-7">
+                    <div class="col-md-7">
                         <strong><?=$milestone['header']?></strong><br>
                         <?=$milestone['body']?>
                         <?php

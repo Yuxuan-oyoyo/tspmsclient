@@ -213,7 +213,8 @@ ul.alert-dropdown {
     }
     .ongoing-panel{
         margin-top: 10px;
-        border: 2px solid #1abc9c;
+        border: 0px solid #020202;
+        box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
         border-radius: 0;
     }
 
@@ -222,15 +223,17 @@ ul.alert-dropdown {
         font-size: 15px;
     }
     .ongoing-panel >.panel-heading {
-        background: #1abc9c;
-        color: #FFFFFF;
         height:72px;
         font-size:18px;
+        text-align: center;
+        background: rgba(44,74,215,0.7);
 
     }
+
     .past-panel{
         margin-top: 10px;
-        border: 2px solid #7f8c8d;
+        border: 0px solid #020202;
+        box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
         border-radius: 0;
     }
 

@@ -28,9 +28,9 @@ $class = [
 ];
 $this->load->view('common/pm_nav', $class);
 ?>
-<div class="col-lg-offset-1 col-lg-10 content">
+<div class="col-md-offset-1 col-md-10 content">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-md-12">
         <h1 class="page-header">
             Edit Customer
         </h1>
@@ -39,7 +39,7 @@ $this->load->view('common/pm_nav', $class);
     <?php $c=$customer;?>
     <div class="container">
         <form  role="form" action="<?=base_url().'Customers/edit/'.$c["c_id"]?>" method="post">
-        <div class="col-lg-5 customer-info">
+        <div class="col-md-5 customer-info">
                 <div class="form-group">
                     <label for="username">Username:</label>
                     <input name="username" id="username" disabled type="text" class="form-control" value=<?=$c['username']?>>
@@ -67,7 +67,7 @@ $this->load->view('common/pm_nav', $class);
                 </div>
 
             </div>
-            <div class="col-lg-offset-1 col-lg-5 customer-info">
+            <div class="col-md-offset-1 col-md-5 customer-info">
                 <div class="form-group">
                     <label for="hp_number">Contact number:</label>
                     <input name="hp_number" id="hp_number" type="text" class="form-control" value="<?=$c['hp_number']?>" data-parsley-required>

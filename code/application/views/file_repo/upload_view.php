@@ -190,9 +190,9 @@ $this->load->view('common/pm_nav', $class);
 </aside>
 
 
-<div class="col-lg-offset-1 content">
+<div class="col-md-offset-1 content">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-md-12">
         <h1 class="page-header"> File Repository - <?=$project['project_title']?></h1>
     </div>
 
@@ -245,16 +245,16 @@ $this->load->view('common/pm_nav', $class);
     </div>
 
     <form id="search">
-        <div class="col-lg-3">
+        <div class="col-md-3">
             <input class="form-control" type="search" id="query"/>
         </div>
-        <div class="col-lg-9">
+        <div class="col-md-9">
             <button class="btn btn-default" type="submit"><i class="fa fa-search"></i>&nbsp;Search</button>
         </div>
 
     </form>
 
-    <div class="col-lg-9" style="margin-top:10px;">
+    <div class="col-md-9" style="margin-top:10px;">
         <div style ="margin-left=5px">
             <button class="btn btn-sm btn-primary" onclick="$('#upload_file_modal').modal('show')"><i class="fa fa-plus"></i>&nbsp;Upload</button>
             <button type="button" class="btn btn-success btn-sm"  onclick="open_file();"><i class="fa fa-folder"></i>&nbsp;Open</button>

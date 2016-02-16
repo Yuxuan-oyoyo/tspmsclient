@@ -36,12 +36,13 @@ $class = [
 $this->load->view('common/pm_nav', $class);
 ?>
 
-<div class="col-lg-offset-1 content">
+<div class="col-md-offset-1 content">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-md-12">
         <h1 class="page-header">
             Projects
             <a href="<?=base_url().'projects/create_new_project'?>" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Project</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img  src="<?=base_url().'img/Legend.png'?>" alt ="legend">
         </h1>
         <?php if($this->session->userdata('message')):?>
             <div class="form-group">
@@ -58,7 +59,7 @@ $this->load->view('common/pm_nav', $class);
             <li><a href="<?=base_url().'Projects/list_past_projects'?>">Past Projects</a></li>
         </ul>
         <br>
-        <div class="col-lg-12">
+        <div class="col-md-12">
 
             <?php if($this->session->userdata('message')):?>
                 <div class="alert alert-info " role="alert">
@@ -72,18 +73,9 @@ $this->load->view('common/pm_nav', $class);
         <?php
             foreach($projects as $p){
          ?>
-                <script>
-                    var urgency = $.ajax({
-                        url: "<?=base_url().'issues/get_issue_urgency_score/'.$p["project_id"]?>",
-                        //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
-                        dataType: "float",
-                        async: false
-                    }).responseText;
-                </script>
-
-                <div class=" col-lg-4">
-                    <div class="panel ongoing-panel" >
-                        <div id="project_header" class="panel-heading" style="text-align:center" ><strong>&nbsp;<?=$p['project_title']?></strong>&nbsp;&nbsp;<br><sub>[<?=$p['project_code']?>]</sub></div>
+                <div class=" col-md-4">
+                    <div class="panel ongoing-panel  " >
+                        <div id="project_header<?=$p['project_id']?>" class="panel-heading" style="text-align:center" ><strong>&nbsp;<?=$p['project_title']?></strong>&nbsp;&nbsp;<br><sub>[<?=$p['project_code']?>]</sub></div>
                         <div class="panel-body" style="font-size:15px " >
                             <table class="table table-condensed">
                                 <tr>
@@ -126,6 +118,24 @@ $this->load->view('common/pm_nav', $class);
                         </div>
                     </div>
                 </div>
+                <script>
+                    var urgency = $.ajax({
+                        url: "<?=base_url().'issues/get_issue_urgency_score/'.$p["project_id"]?>",
+                        //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
+                        dataType: "float",
+                        async: false
+                    }).responseText;
+                    var id = "project_header"+<?=$p["project_id"]?>;
+                    console.log(id);
+                    if(urgency >20 ){
+                        document.getElementById(id).style.backgroundColor = "rgba(200,50,50, 0.7)";
+                    }else if(urgency >5 && urgency<= 20){
+                        document.getElementById(id).style.backgroundColor = "rgba(250,120,0,0.7)";
+                    }else{
+                        document.getElementById(id).style.backgroundColor = "rgba(44,74,215,0.7)";
+                    }
+
+                </script>
         <?php
             }
         ?>

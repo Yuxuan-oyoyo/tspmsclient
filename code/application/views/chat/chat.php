@@ -539,7 +539,7 @@ if($this->session->userdata('Customer_cid')){
                             <FileForm threadID={this.props.thread.chatID} text_handler={this.handleText} fu_handler={this.props.fu_handler}/>
                         </div>
                         <div>
-                            <button  className="col-lg-2 text-right btn btn-primary pull-right" onClick={this.handleWrite} type="button">Reply </button>
+                            <button  className="col-md-2 text-right btn btn-primary pull-right" onClick={this.handleWrite} type="button">Reply </button>
                         </div>
                     </div>
 
@@ -640,10 +640,10 @@ if($this->session->userdata('Customer_cid')){
                         <img id="image" />
                     <form id="upload_form" onSubmit={this.handleSubmit} encType="multipart/form-data">
                         <input type="hidden" id="user_text"/>
-                       <span className="col-lg-2  btn btn-default pull-left btn-file">
+                       <span className="col-md-2  btn btn-default pull-left btn-file">
                                 Add File <input type="file" onChange={this.handleFile}/>
                         </span>
-                        <input className=" col-lg-2 text-right btn btn-primary pull-right"  type="submit" value="Reply" />
+                        <input className=" col-md-2 text-right btn btn-primary pull-right"  type="submit" value="Reply" />
                     </form>
                     </div>
                 );
@@ -652,10 +652,10 @@ if($this->session->userdata('Customer_cid')){
             {
                 return (
                     <form onSubmit={this.handleSubmit} encType="multipart/form-data">
-                        <span className="col-lg-2  btn btn-default pull-left btn-file">
+                        <span className="col-md-2  btn btn-default pull-left btn-file">
                                 Add File <input type="file" onChange={this.handleFile}/>
                         </span>
-                        <input className=" col-lg-2 text-right btn btn-primary pull-right" type="hidden" value="Reply" />
+                        <input className=" col-md-2 text-right btn btn-primary pull-right" type="hidden" value="Reply" />
                     </form>
                 );
             }
@@ -777,7 +777,7 @@ if($this->session->userdata('Customer_cid')){
                 // New Message
 
                 return(
-                     <div className="col-lg-10">
+                     <div className="col-md-10">
                         <div>
                             <h3 className="message-thread-heading">New Message</h3>
                         </div>
@@ -831,14 +831,14 @@ if($this->session->userdata('Customer_cid')){
                     msgNodes = "not selected yet"
                 }
                 return(
-                    <div  className="col-lg-8">
+                    <div  className="col-md-8">
                         <div>
                             <h3 className="message-thread-heading">{j}</h3>
 
                         </div>
 
                         <div className="msg-wrap-right" ref="messageList">
-                           <div className="col-lg-12">
+                           <div className="col-md-12">
                             {this.state.msgnodes}
                             </div>
                         </div>
@@ -1089,10 +1089,10 @@ if($this->session->userdata('Customer_cid')){
                 // dead function fml
                 //console.log("new_message")
                 return (
-                     <div className="col-lg-offset-1 col-lg-10 ">
+                     <div className="col-md-offset-1 col-md-10 ">
                     <h1 className="page-header top-header">Chat Box - {user_name}</h1>
                        <div className="row">
-                           <div className="col-lg-3">
+                           <div className="col-md-3">
 
                                     <div className="thread-count">
                                         {unread}
@@ -1103,7 +1103,7 @@ if($this->session->userdata('Customer_cid')){
                                         clickFunc={this.handleClickOnLeftUser} // ***important
                                         />
                                 </div>
-                                <div  className="col-lg-9">
+                                <div  className="col-md-9">
                                     <RightMessageBox
                                         chat="new_message"
                                         refreshFunc={this.getInitialData}
@@ -1123,10 +1123,10 @@ if($this->session->userdata('Customer_cid')){
                 //console.log("render the thread I want to pass")
                 //console.log(this.state.theThreadIWantToPass)
                 return (
-                     <div className="col-lg-offset-1 col-lg-10 ">
+                     <div className="col-md-offset-1 col-md-10 ">
                     <h1 className="page-header top-header">Chat Box - {user_name}</h1>
                          <div className="row">
-                                <div className="col-lg-3">
+                                <div className="col-md-3">
                                     <div className="thread-count">
                                         {unread}
                                     </div>

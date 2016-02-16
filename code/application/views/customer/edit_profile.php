@@ -23,13 +23,13 @@ $this->load->view('common/customer_nav', $class);
 ?>
 <div class="container content">
     <!-- Page Content -->
-    <div class="col-lg-12">
+    <div class="col-md-12">
         <h1 class="page-header">
             Edit Profile
             <small style="color:darkgrey; font-size: 18px">Fill in all the compulsary fields(*) to proceed. </small>
         </h1>
     </div>
-    <div class="col-lg-offset-1 col-lg-6">
+    <div class="col-md-offset-1 col-md-6">
 
         <form role="form" id="form" data-parsley-validate class="form-horizontal" method="post"  action="<?=base_url('customers/edit_profile')?>">
             <?php if($this->session->userdata('message')):?>
