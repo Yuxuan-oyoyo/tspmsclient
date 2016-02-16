@@ -73,6 +73,15 @@ $this->load->view('common/pm_nav', $class);
         <?php
             foreach($projects as $p){
          ?>
+            <script>
+                var urgency = $.ajax({
+                    url: "<?=base_url().'issues/get_issue_urgency_score/'.$p["project_id"]?>",
+                    //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
+                    dataType: "float",
+                    async: false
+                }).responseText;
+                var id = "project_header"+<?=$p["project_id"]?>;
+            </script>
                 <div class=" col-md-4">
                     <div class="panel ongoing-panel  " >
                         <div id="project_header<?=$p['project_id']?>" class="panel-heading" style="text-align:center" ><strong>&nbsp;<?=$p['project_title']?></strong>&nbsp;&nbsp;<br><sub>[<?=$p['project_code']?>]</sub></div>
@@ -118,14 +127,8 @@ $this->load->view('common/pm_nav', $class);
                         </div>
                     </div>
                 </div>
-                <script>
-                    var urgency = $.ajax({
-                        url: "<?=base_url().'issues/get_issue_urgency_score/'.$p["project_id"]?>",
-                        //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
-                        dataType: "float",
-                        async: false
-                    }).responseText;
-                    var id = "project_header"+<?=$p["project_id"]?>;
+
+                 <script>
                     console.log(id);
                     if(urgency >20 ){
                         document.getElementById(id).style.backgroundColor = "rgba(200,50,50, 0.7)";
