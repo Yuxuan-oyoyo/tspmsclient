@@ -60,16 +60,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <input type="submit" value="Sign In" class="btn btn-primary btn-sm">
                     <div class="remember-forgot">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" />
-                                        Remember Me
-                                    </label>
-                                </div>
-                            </div>
                             <div class="col-md-6 forgot-pass-content">
-                                <a href="javascription:void(0)" class="forgot-pass">Forgot Password</a>
+                                <a href="#" class="forgot-pass">Forgot Password</a>
                             </div>
                         </div>
                     </div>
