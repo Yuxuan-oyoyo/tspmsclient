@@ -61,12 +61,17 @@ $this->load->view('common/customer_nav', $class);
 
                                 ?></td>
                         </tr>
-                        <?php if($p['customer_preview_link']):?>
+                        <?php if($p['customer_preview_link']){?>
                         <tr>
                             <td> <i class="fa fa-link"></i>&nbsp;<strong>Preview </strong></td>
                             <td> <a href="<?=$p['customer_preview_link']?>" target="_blank">Click here</a></td>
                         </tr>
-                        <?php endif?>
+                        <?php }else{?>
+                        <tr>
+                            <td> <i class="fa fa-link"></i>&nbsp;<strong>Preview </strong></td>
+                            <td> Not Set Yet</td>
+                        </tr>
+                        <?php }?>
 
                     </table>
                     <a href="<?=base_url("projects/customer_view/".$p['project_id'])?>" class="btn pull-right btn-info"><i class="fa fa-eye"></i> &nbsp;View</a>
