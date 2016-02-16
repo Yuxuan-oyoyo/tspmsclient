@@ -65,7 +65,7 @@ $this->load->view('common/dev_nav', $class);
             ?>
             <div class=" col-lg-4">
                 <div class="panel ongoing-panel">
-                    <div class="panel-heading" style="text-align:center" ><strong>#<?=$p['project_id']?>&nbsp;<?=$p['project_title']?></strong></div>
+                    <div class="panel-heading" style="text-align:center" ><strong><?=$p['project_title']?></strong></div>
                     <div class="panel-body" style="font-size:15px" >
                         <table class="table table-condensed">
                             <tr>
