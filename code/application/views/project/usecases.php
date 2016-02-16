@@ -68,7 +68,7 @@ $this->load->view('common/dev_nav', $class);
             }
             ?>
             <a class="link-blue  selected" href="#"><i class="fa fa-list"></i><span class="nav-text">Use Case List</span></a>
-            <a class="link-blue" href="<?=base_url().'Projects/view_report/'.$project["project_id"]?>"><i class="fa fa-bar-chart"></i>Analytics</a>
+            <a class="link-blue" href="<?=base_url().'Projects/view_report/'.$project["project_id"]?>"><i class="fa fa-bar-chart"></i><span class="nav-text">Analytics</span></a>
             <a class="link-blue " href="<?=base_url().'upload/upload/'.$project['project_id']?>"><i class="fa fa-folder"></i><span class="nav-text">File Repository</span></a>
         </div>
     </aside>

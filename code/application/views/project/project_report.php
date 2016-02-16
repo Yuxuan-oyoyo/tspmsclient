@@ -149,7 +149,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
             }
             ?>
             <a class="link-blue" href="<?=base_url().'Usecases/list_all/'.$project["project_id"]?>"><i class="fa fa-list"></i><span class="nav-text">Use Case List</span></a>
-            <a class="link-blue  selected" href="#"><i class="fa fa-bar-chart"></i>Analytics</a>
+            <a class="link-blue  selected" href="#"><i class="fa fa-bar-chart"></i><span class="nav-text">Analytics</span></a>
             <a class="link-blue " href="<?=base_url().'upload/upload/'.$project['project_id']?>"><i class="fa fa-folder"></i><span class="nav-text">File Repository</span></a>
         </div>
     </aside>
