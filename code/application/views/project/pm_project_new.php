@@ -180,7 +180,7 @@ $this->load->view('common/pm_nav', $class);
             <div class="col-lg-12">
                 <div class="form-group">
                     <label for="tags">Tags</label>
-                    <input class="form-control tokenfield" name="tags" value="<?=set_value("tags")?>">
+                    <input class="form-control tokenfield" name="tags" id="tags-input" value="<?=set_value("tags")?>">
                     <div id="tag-outer"></div>
                 </div>
             </div>
