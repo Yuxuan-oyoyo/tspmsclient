@@ -151,12 +151,17 @@ $this->load->view('common/pm_nav', $class);
                                 foreach($tasks_ui as $t):?>
                                     <tr>
                                         <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><?=$t['content']?></a></td>
-                                        <td> <?php if($t['days']<0){
+                                        <td> <?php
+                                            $day = " days";
+                                            if($t['days']==0 || $t['days']==1 || $t['days']==-1){
+                                                $day = " day";
+                                            }
+                                            if($t['days']<0){
                                                 $t['days'] = 0-$t['days'];
-                                                echo '<span class="badge" style="background-color: indianred">Overdue'.$t['days'].' days</span>';
+                                                echo '<span class="badge" style="background-color: indianred">Overdue'.$t['days'].$day.'</span>';
 
                                             }else{
-                                                echo '<span class="badge" style="background-color: darkorange">'.$t['days'].' days</span>';
+                                                echo '<span class="badge" style="background-color: darkorange">'.$t['days'].$day.'</span>';
                                             }?></td>
                                     </tr>
                                 <?php endforeach; endif?>
@@ -173,12 +178,17 @@ $this->load->view('common/pm_nav', $class);
                                 foreach($tasks_u as $t):?>
                                     <tr>
                                         <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><?=$t['content']?></a></td>
-                                        <td> <?php if($t['days']<0){
+                                        <td> <?php
+                                            $day = " days";
+                                            if($t['days']==0 || $t['days']==1 || $t['days']==-1){
+                                                $day = " day";
+                                            }
+                                            if($t['days']<0){
                                                 $t['days'] = 0-$t['days'];
-                                                echo '<span class="badge" style="background-color: indianred">Overdue '.$t['days'].' days</span>';
+                                                echo '<span class="badge" style="background-color: indianred">Overdue '.$t['days'].$day.'</span>';
 
                                             }else{
-                                                echo '<span class="badge" style="background-color: darkorange">'.$t['days'].' days</span>';
+                                                echo '<span class="badge" style="background-color: darkorange">'.$t['days'].$day.'</span>';
                                             }?></td>
                                     </tr>
                                 <?php endforeach; endif?>
@@ -199,12 +209,17 @@ $this->load->view('common/pm_nav', $class);
                                 foreach($tasks_none as $t):?>
                                     <tr>
                                         <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><?=$t['content']?></a></td>
-                                        <td> <?php if($t['days']<0){
+                                        <td> <?php
+                                            $day = " days";
+                                            if($t['days']==0 || $t['days']==1 || $t['days']==-1){
+                                                $day = " day";
+                                            }
+                                            if($t['days']<0){
                                                 $t['days'] = 0-$t['days'];
-                                                echo '<span class="badge" style="background-color: indianred">Overdue '.$t['days'].' days</span>';
+                                                echo '<span class="badge" style="background-color: indianred">Overdue '.$t['days'].$day.'</span>';
 
                                             }else{
-                                                echo '<span class="badge" style="background-color: green">'.$t['days'].' days</span>';
+                                                echo '<span class="badge" style="background-color: green">'.$t['days'].$day.'</span>';
                                             }?></td>
                                     </tr>
                                 <?php endforeach; endif?>
@@ -222,12 +237,17 @@ $this->load->view('common/pm_nav', $class);
                                 foreach($tasks_i as $t):?>
                                     <tr>
                                         <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><?=$t['content']?></a></td>
-                                        <td> <?php if($t['days']<0){
+                                        <td> <?php
+                                            $day = " days";
+                                            if($t['days']==0 || $t['days']==1 || $t['days']==-1){
+                                                $day = " day";
+                                            }
+                                            if($t['days']<0){
                                                 $t['days'] = 0-$t['days'];
-                                                echo '<span class="badge" style="background-color: indianred">Overdue'.$t['days'].' days</span>';
+                                                echo '<span class="badge" style="background-color: indianred">Overdue'.$t['days'].$day.'</span>';
 
                                             }else{
-                                                echo '<span class="badge" style="background-color: green">'.$t['days'].' days</span>';
+                                                echo '<span class="badge" style="background-color: green">'.$t['days'].$day.'</span>';
                                             }?></td>
                                     </tr>
                                 <?php endforeach; endif?>

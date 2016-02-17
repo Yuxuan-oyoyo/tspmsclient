@@ -295,10 +295,10 @@ $this->load->view('common/pm_nav', $class);
                     <td style="font-style: italic">Average Number of Issue</td>
                     <td><?=number_format($total_num_issues/$count, 2)?></td>
                 </tr>
-                <tr>
+               <!-- <tr>
                     <td style="font-style: italic">Average avg Issue Metric</td>
                     <td><?=number_format($total_issue_metrics/$count, 2)?></td>
-                </tr>
+                </tr>-->
                 </tbody>
             </table>
         </div>
