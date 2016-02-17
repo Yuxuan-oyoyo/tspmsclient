@@ -29,7 +29,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         });
         google.charts.setOnLoadCallback(drawChart);
         var options3 = {
-            title: 'Phase Analysis Chart',
+            title: 'Phase Analysis Chart (X-axis: Phase, Left: Count, Right: Actual Duration/Expected Duration)',
             //legend:'bottom',
             //chartArea: { width: '90%',left: "5%" , height: '70%'},
             vAxis: {
@@ -54,7 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
 
         var options4 = {
-            'title': 'Issue Metrics Chart',
+            'title': 'Issue Metrics Chart (X-axis: Issue ID, Y-axis: Actual Duration/Expected Duration)',
             //chartArea: { left: "5%"},
             //'height': 300,
             tooltip: {
@@ -67,7 +67,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         };
 
         var options5 = {
-            'title': 'Stage percentile analysis',
+            title: 'Stage percentile analysis',
             chartArea: {height: "80%"},
             legend: 'left'
         };
