@@ -188,6 +188,7 @@ ul.alert-dropdown {
         text-align: center;
         font-size: 18px;
         border-bottom: solid 2px;
+        overflow:hidden;
     }
     #issueTable{
         font-family: arial-black;
@@ -227,6 +228,7 @@ ul.alert-dropdown {
         font-size:18px;
         text-align: center;
         background: rgba(44,74,215,0.7);
+        overflow:hidden;
 
     }
 

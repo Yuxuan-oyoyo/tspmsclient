@@ -70,7 +70,7 @@ class BB_issues {
     private function decode_workflow_status_from_title($issue_array){
         $new_array = $issue_array;
         $new_array["workflow"] = "";
-        if(isset($issue_array["content"])){
+        if(isset($issue_array["title"])){
             if(preg_match("/^\s*\[(.*?)\]/",$issue_array["title"],$display)){
                 $new_array["workflow"] = $display[1];
                 $new_array["title"] = explode($display[0], $issue_array["title"])[1];
