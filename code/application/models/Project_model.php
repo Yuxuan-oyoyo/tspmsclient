@@ -110,7 +110,7 @@ class Project_model extends CI_Model {
     public function retrieve_all_with_phase(){
         $sql = 'SELECT project.*, phase.phase_name from  project left join project_phase
 on project.current_project_phase_id=project_phase.project_phase_id
-left join phase on project_phase.phase_id = phase.phase_id and project.is_ongoing = 1';
+left join phase on project_phase.phase_id = phase.phase_id where project.is_ongoing = 1';
         $query=$this->db->query($sql);
         return $query->result_array();
     }
