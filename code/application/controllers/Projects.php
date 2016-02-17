@@ -129,7 +129,7 @@ class Projects extends CI_Controller {
                 //convert bb repo name to lower case
                 $insert_array["bitbucket_repo_name"] = strtolower($insert_array["bitbucket_repo_name"]);
                 //update if the given repo name is valid
-                $this->load->library("BB_Shared");
+                $this->load->library("BB_shared");
                 $repo_name_valid = $this->bb_shared->validate_repo_name_with_bb($insert_array["bitbucket_repo_name"]);
                 $insert_array["repo_name_valid"] = $repo_name_valid?1:0;
 
@@ -234,7 +234,7 @@ class Projects extends CI_Controller {
                 //convert bb repo name to lower case
                 $input["bitbucket_repo_name"] = strtolower($input["bitbucket_repo_name"]);
                 //update if the given repo name is valid
-                $this->load->library("BB_Shared");
+                $this->load->library("BB_shared");
                 $repo_name_valid = $this->bb_shared->validate_repo_name_with_bb($input["bitbucket_repo_name"]);
                 //var_dump($input["bitbucket_repo_name"]);
                 //var_dump($repo_name_valid);

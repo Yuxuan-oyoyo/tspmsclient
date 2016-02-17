@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 define('DEFAULT_PASSWORD',"000000");
 
-define('BB_ACCOUNT_NAME',isset($_SERVER["BB_ACCOUNT_NAME"])?$_SERVER["BB_ACCOUNT_NAME"]:"smuremix");
+define('BB_ACCOUNT_NAME',isset($_SERVER["BB_ACCOUNT_NAME"])?$_SERVER["BB_ACCOUNT_NAME"]:"theshipyardsg");
 
 /*
 |--------------------------------------------------------------------------

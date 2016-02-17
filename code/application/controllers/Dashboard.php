@@ -18,7 +18,7 @@ class Dashboard extends CI_Controller
         $this->load->library('BB_scheduled_tasks');
         $this->load->model("Project_model");
         // $this->load->model('User_log_model');
-
+        set_time_limit(600);
     }
 
     public function index()
@@ -71,6 +71,7 @@ class Dashboard extends CI_Controller
         }
     }
     public function fetch_all_issues(){
+        set_time_limit(600);
         if($this->_is_authenticated()) {
             $this->load->model("Project_model");
             $project_records = $this->Project_model->retrieveAll();
