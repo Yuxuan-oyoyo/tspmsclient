@@ -152,7 +152,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         var data5 = new google.visualization.DataTable(jsonData5);
 
     var options5 = {
-    title: 'Phase Percentile Analysis',
+    title: 'Phase Duration Analysis (Days/phase VS project name)',
     isStacked: true,
         legend:'top',
     };
