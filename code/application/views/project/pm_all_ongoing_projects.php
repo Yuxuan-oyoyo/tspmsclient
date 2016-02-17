@@ -99,7 +99,11 @@ $this->load->view('common/pm_nav', $class);
                             </tr>
                             <tr>
                                 <td> <i class="fa fa-link"></i>&nbsp;<strong>Staging link </strong></td>
+                                <?php if($p['staging_link']){?>
                                 <td> <a href="<?=$p['staging_link']?>" target="_blank">Click here</a></td>
+                                <?php }else{?>
+                                <td> Not set yet</td>
+                                <?php }?>
                             </tr>
                             <tr>
                                 <td>  <i class="fa fa-clock-o"></i>&nbsp;<strong>Number Of Issues </strong></td>
