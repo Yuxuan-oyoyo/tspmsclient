@@ -434,7 +434,7 @@ class Dashboard extends CI_Controller
             array('label' => 'project', 'type' => 'string'),
             array('label' => '#tasks', 'type' => 'number'),
             array('label' => '#issues', 'type' => 'number'),
-            array('label' => 'metrics', 'type' => 'number'),
+
         );
 
 

@@ -234,7 +234,6 @@ $this->load->view('common/pm_nav', $class);
                         <th>Total Time Spent</th>
                         <th>Number of Task</th>
                         <th>Number of Issue</th>
-                        <th>Average Issue Metric</th>
                         </thead>
                         <?php
                         $count = 0;
@@ -259,7 +258,6 @@ $this->load->view('common/pm_nav', $class);
                                     <td><?=$c['project_duration']?></td>
                                     <td><?=$issue_task[$c['project_id']]['num_tasks']?></td>
                                     <td><?=$issue_task[$c['project_id']]['num_issues']?></td>
-                                    <td><?=$issue_task[$c['project_id']]['metrics']?></td>
                                 </tr>
                             <?php endforeach?>
                         <?php endif?>
