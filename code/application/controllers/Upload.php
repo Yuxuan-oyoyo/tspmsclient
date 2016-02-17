@@ -153,4 +153,20 @@ class Upload extends CI_Controller {
         }
         $this->output->set_content_type('application/json')->set_output(json_encode($file_array));
     }
+
+    public function rename_file(){
+        $fid=$this->input->post('fid');
+        $file=$this->File->get_by_fid($fid);
+
+        $updated_file=array(
+            'fid'=>$fid,
+            'file_url'=>$file['file_url'],
+            'file_key'=>$file['file_key'],
+            'filename'=>$this->input->post('new_name').strrchr($file['filename'], '.'),
+            'last_updated'=>$file['last_updated'],
+            'pid'=>$file['pid']
+        );
+
+        $this->File->rename_by_fid($updated_file);
+    }
 }

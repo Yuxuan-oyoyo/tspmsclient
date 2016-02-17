@@ -22,32 +22,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 $("#new_customer").text('');
                 var htmlText1 ='<div class="form-group"> <label >Choose Customer:</label> ' +
                     '<select class="form-control" name="c_id">'+
-                 <?php foreach($customers as $c) {if($c["is_active"]==1) {?>
-                '<option value="<?= $c["c_id"] ?>"　<?=set_select("c_id",$c["c_id"],($project["c_id"]==$c["c_id"]))?>   ><?= $c["first_name"] ?>'+
-                '&nbsp;<?= $c["last_name"] ?></option>'+
+                    <?php foreach($customers as $c) {if($c["is_active"]==1) {?>
+                    '<option value="<?= $c["c_id"] ?>"　<?=set_select("c_id",$c["c_id"],($project["c_id"]==$c["c_id"]))?>   ><?= $c["first_name"] ?>'+
+                    '&nbsp;<?= $c["last_name"] ?></option>'+
                     <?php }}?>' </select> </div>';
                 $('#existing_customer').append(htmlText1);
             }else{
                 $('#existing_customer').text('');
-<<<<<<< HEAD
-                var htmlText2 ='<div class="col-xs-4"> <div class="form-group"> <label for="title">Title*</label>'+
-                    '<input type="text" class="form-control" name="title" id="title" data-parsley-required>'+
-                    '</div> </div> <div class="col-xs-4"> <div class="form-group "> <label for="first_name">First name*</label>'+
-                    '<input type="text" class="form-control" name="first_name" id="first_name" data-parsley-required>'+
-                    '</div> </div> <div class="col-xs-4"> <div class="form-group"> <label for="last_name">Last name*</label>'+
-                    '<input type="text" class="form-control"  name="last_name" id="last_name" data-parsley-required>'+
-                    '</div> </div> <div class="col-xs-6"> <div class="form-group"> <label for="company_name">Company name</label>'+
-                    '<input type="text" class="form-control" name="company_name" id="company_name" data-parsley-required>'+
-                    '</div> </div> <div class="col-xs-6"> <div class="form-group"> <label for="email">Email*</label>'+
-                    '<input type="email" class="form-control" name="email" id="email" data-parsley-type="email" data-parsley-email data-parsley-required>'+
-                    '</div> </div> <div class="col-xs-6"> <div class="form-group"> <label for="hp_number">Contact Number*</label>'+
-                    '<input type="text" class="form-control" name="hp_number" id="hp_number" data-parsley-required>'+
-                    '</div> </div> <div class="col-xs-6"> <div class="form-group"> <label for="other_number">Other Number</label>'+
-                    '<input type="text" class="form-control" name="other_number" id="other_number" >'+
-                    '</div> </div> <div class="col-xs-6"> <div class="form-group"> <label for="username">Username*</label>'+
-                    '<input type="text" class="form-control" name="username" id="username" data-parsley-required>'+
-                    '</div> </div> <div class="col-xs-6"> <div class="form-group"> <label for="password">Password*</label>'+
-=======
                 var htmlText2 ='<div class="col-md-4"> <div class="form-group"> <label for="title">Title*</label>'+
                     '<input type="text" class="form-control" name="title" id="title" data-parsley-required>'+
                     '</div> </div> <div class="col-md-4"> <div class="form-group "> <label for="first_name">First name*</label>'+
@@ -65,7 +46,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     '</div> </div> <div class="col-md-6"> <div class="form-group"> <label for="username">Username*</label>'+
                     '<input type="text" class="form-control" name="username" id="username" data-parsley-required>'+
                     '</div> </div> <div class="col-md-6"> <div class="form-group"> <label for="password">Password*</label>'+
->>>>>>> e2d1f1d05e5737e94d80a5b72bd0e49786f8f695
                     '<input type="password" class="form-control" name="password" id="password" data-parsley-required value="<?=DEFAULT_PASSWORD?>">'+
                     '</div> </div>';
                 $('#new_customer').append(htmlText2);
@@ -91,11 +71,7 @@ $this->load->view('common/pm_nav', $class);
 
 <div class="container content">
     <form class="form-horizontal" data-parsley-validate id="form" method="post" action="<?=base_url()."Projects/process_edit/".$p["project_id"]?>">
-<<<<<<< HEAD
-        <div class="col-xs-12">
-=======
         <div class="col-md-12">
->>>>>>> e2d1f1d05e5737e94d80a5b72bd0e49786f8f695
             <h1 class="page-header">
                 Edit Project&nbsp;
                 <a href="<?=base_url().'Projects/view_dashboard/'.$p["project_id"]?>" class="btn btn-default" id="cancel">Cancel</a>&nbsp;
@@ -123,29 +99,35 @@ $this->load->view('common/pm_nav', $class);
             </div>
         </div>
 
-        <div class="col-xs-6 project-info">
+        <div class="col-md-6 project-info">
             <h3>Project Information</h3>
             <hr>
 
-            <div class="col-xs-8">
+            <div class="col-md-8">
                 <div class="form-group">
                     <label for="project_title">Title*</label>
                     <input class="form-control" id="project_title" name="project_title" value="<?=$p['project_title']?>" data-parsley-required>
                 </div>
             </div>
-            <div class="col-xs-offset-1 col-xs-3">
+            <div class="col-md-offset-1 col-md-3">
                 <div class="form-group">
                     <label for="project_code">Code*</label>
                     <input class="form-control" id="project_code" name="project_code" value="<?=$p['project_code']?>" data-parsley-required data-parsley-maxlength="8">
                 </div>
             </div>
-            <div class="col-xs-12">
+            <div class="col-md-12">
                 <div class="form-group">
                     <label for="project_description">Description</label>
                     <textarea class="form-control" id="project_description" name="project_description" ><?=$p['project_description']?></textarea>
                 </div>
             </div>
-            <div class="col-xs-12">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="file_repo_name">File repo name</label>
+                    <input class="form-control" name="file_repo_name" value="<?=$p['file_repo_name']?>">
+                </div>
+            </div>
+            <div class="col-md-offset-1 col-md-6">
                 <div class="form-group" id="bitbucket_repo_name_group">
                     <label for="bitbucket_repo_name">Bitbucket repo name</label>
                     <input class="form-control" id="bitbucket_repo_name" name="bitbucket_repo_name" value="<?=$p['bitbucket_repo_name']?>">
@@ -153,30 +135,26 @@ $this->load->view('common/pm_nav', $class);
             </div>
             <script>
                 /*$("#bitbucket_repo_name").on("focusout",function(){
-                    var field = $(this);
-                    field.attr("disabled",true);
-                    var value = field.val();
-                    $.ajax({
-                        url:"<?=base_url()."Projects/bb_repo_name_ajax"?>",
-                        data:{repo_name:value,repo_id:<?=$p['project_id']?>},
-                        success: function (result){
-                            if(result=="true"){
-                                $("#bitbucket_repo_name_group").removeClass("has-error");
-                            }else{
-                                $("#bitbucket_repo_name_group").addClass("has-error");
-                                //alert("The input bitbucket repository name is invalid for issue retrieval.");
-                            }
-                        },
-                        complete: function(){field.removeAttr("disabled");}
+                 var field = $(this);
+                 field.attr("disabled",true);
+                 var value = field.val();
+                 $.ajax({
+                 url:"<?=base_url()."Projects/bb_repo_name_ajax"?>",
+                 data:{repo_name:value,repo_id:<?=$p['project_id']?>},
+                 success: function (result){
+                 if(result=="true"){
+                 $("#bitbucket_repo_name_group").removeClass("has-error");
+                 }else{
+                 $("#bitbucket_repo_name_group").addClass("has-error");
+                 //alert("The input bitbucket repository name is invalid for issue retrieval.");
+                 }
+                 },
+                 complete: function(){field.removeAttr("disabled");}
 
-                    });
-                });*/
+                 });
+                 });*/
             </script>
-<<<<<<< HEAD
-            <div class="col-xs-5">
-=======
             <div class="col-md-5">
->>>>>>> e2d1f1d05e5737e94d80a5b72bd0e49786f8f695
                 <div class="form-group">
                     <label for="priority">Priority</label>
                     <select class="form-control" id="priority" name="priority">
@@ -188,21 +166,13 @@ $this->load->view('common/pm_nav', $class);
                     </select>
                 </div>
             </div>
-<<<<<<< HEAD
-            <div class="col-xs-offset-1 col-xs-6">
-=======
             <div class="col-md-offset-1 col-md-6">
->>>>>>> e2d1f1d05e5737e94d80a5b72bd0e49786f8f695
                 <div class="form-group">
                     <label for="project_value">Project value (S$)</label>
                     <input class="form-control" name="project_value" value="<?=$p['project_value']?>" data-parsley-type="number" min="0">
                 </div>
             </div>
-<<<<<<< HEAD
-            <div class="col-xs-12">
-=======
             <div class="col-md-12">
->>>>>>> e2d1f1d05e5737e94d80a5b72bd0e49786f8f695
                 <div class="form-group">
                     <label for="tags-input">Tags</label>
                     <input class="form-control " id="tags-input" name="tags" value="<?=$p['tags']?>">
@@ -236,41 +206,25 @@ $this->load->view('common/pm_nav', $class);
                     }
                 });
             </script>
-<<<<<<< HEAD
-            <div class="col-xs-12">
-=======
             <div class="col-md-12">
->>>>>>> e2d1f1d05e5737e94d80a5b72bd0e49786f8f695
                 <div class="form-group">
                     <label for="staging_link">Staging Link</label>
                     <input class="form-control" name="staging_link" value="<?=$p['staging_link']?>" data-parsley-type="url">
                 </div>
             </div>
-<<<<<<< HEAD
-            <div class="col-xs-12">
-=======
             <div class="col-md-12">
->>>>>>> e2d1f1d05e5737e94d80a5b72bd0e49786f8f695
                 <div class="form-group">
                     <label for="production_link">Production Link</label>
                     <input class="form-control" name="production_link" value="<?=$p['production_link']?>" data-parsley-type="url">
                 </div>
             </div>
-<<<<<<< HEAD
-            <div class="col-xs-12">
-=======
             <div class="col-md-12">
->>>>>>> e2d1f1d05e5737e94d80a5b72bd0e49786f8f695
                 <div class="form-group">
                     <label for="customer_preview_link">Customer Preview Link</label>
                     <input class="form-control" name="customer_preview_link" value="<?=$p['customer_preview_link']?>" data-parsley-type="url">
                 </div>
             </div>
-<<<<<<< HEAD
-            <div class="col-xs-12">
-=======
             <div class="col-md-12">
->>>>>>> e2d1f1d05e5737e94d80a5b72bd0e49786f8f695
                 <div class="form-group">
                     <label for="remarks">Remarks</label>
                     <input class="form-control" name="remarks" value="<?=$p['remarks']?>">
@@ -278,17 +232,10 @@ $this->load->view('common/pm_nav', $class);
             </div>
             <hr>
         </div>
-<<<<<<< HEAD
-        <div class="col-xs-5 customer-info">
-            <h3>Customer Information</h3>
-            <hr>
-            <div class="col-xs-12">
-=======
         <div class="col-md-5 customer-info">
             <h3>Customer Information</h3>
             <hr>
             <div class="col-md-12">
->>>>>>> e2d1f1d05e5737e94d80a5b72bd0e49786f8f695
                 <div class="form-group">
                     <label for="customer-option"> Customer</label>
                     <select class="form-control" id="customer_option" name="customer_option" onchange="cus_option()">
@@ -309,11 +256,7 @@ $this->load->view('common/pm_nav', $class);
                 <hr>
                 <h3>PM Information</h3>
                 <hr>
-<<<<<<< HEAD
-                <div class="col-xs-12">
-=======
                 <div class="col-md-12">
->>>>>>> e2d1f1d05e5737e94d80a5b72bd0e49786f8f695
                     <div class="form-group">
                         <label for="pm_option"> PM in charge*</label>
                         <table class="table table-condensed">

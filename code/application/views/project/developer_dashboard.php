@@ -80,14 +80,28 @@ $this->load->view('common/dev_nav', $class);
 
                                     ?></td>
                             </tr>
+                            <?php if($p['staging_link']){?>
                             <tr>
                                 <td> <i class="fa fa-link"></i>&nbsp;<strong>Staging link </strong></td>
                                 <td> <a href="<?=$p['staging_link']?>" target="_blank">Click here</a></td>
                             </tr>
+                            <?php }else{?>
+                            <tr>
+                                <td> <i class="fa fa-link"></i>&nbsp;<strong>Staging link </strong></td>
+                                <td> Not set yet</td>
+                            </tr>
+                            <?php }?>
+                            <?php if($p['production_link']){?>
                             <tr>
                                 <td> <i class="fa fa-link"></i>&nbsp;<strong>Production link</strong></td>
                                 <td> <a href="<?=$p['production_link']?>" target="_blank">Click here</a></td>
                             </tr>
+                            <?php }else{?>
+                                <tr>
+                                    <td> <i class="fa fa-link"></i>&nbsp;<strong>Production link</strong></td>
+                                    <td> Not set yet</td>
+                                </tr>
+                            <?php }?>
                             <tr>
                                 <td>  <i class="fa fa-clock-o"></i>&nbsp;<strong>Number Of Issues </strong></td>
                                 <td> <span class="issue-count-<?=$p["project_id"]?>"><?=isset($p['issue_count'])?$p['issue_count']:"BB repo not set yet"?></span><span class="update-issue-count glyphicon glyphicon-refresh" style="margin-left:8px"></span></td>
