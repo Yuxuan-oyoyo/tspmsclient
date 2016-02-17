@@ -150,6 +150,15 @@ if($this->session->userdata('internal_type')=='Developer') {
                 <b>Showing issues (<?=$num_per_page * ($current_page -1)+1?>-<?=min($count,$num_per_page*$current_page)?> of <?=$count?>) </b>
                 <?php if(!empty($filter_arr)):?>|
                     <?php foreach($filter_arr as $key=>$value):?>
+                        <?php
+                        if($key=='title') {
+                            if(preg_match("/\[(.*?)\]/",$value,$displayrrr)){
+                                $value = $displayrrr[1];
+                                $key = 'workflow';
+                            }
+                        }elseif ($key=='kind'){$key='type';}elseif ($key=='responsible'){$key='assignee';}
+                        if(substr($value,0,1)=="!")$value ="not ". substr($value,1);
+                        ?>
                         <span style="color: grey"><b><?=$key?></b>: "<?=$value?>"</span>
                     <?php endforeach?>
                     <a href="<?=explode("?",$_SERVER['REQUEST_URI'])[0]?>">Clear</a>
