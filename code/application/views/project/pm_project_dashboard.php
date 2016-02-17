@@ -10,14 +10,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     <script>
         $(document).ready(function(){
             $('#targeted_start_datetime').datepicker({
-                dateFormat: 'yy-mm-dd 00:00:00',
+                dateFormat: 'yy-mm-dd',
                 minDate: '+0d',
                 changeMonth: true,
                 changeYear: true,
                 altFormat: "yy-mm-dd"
             });
             $('#targeted_end_datetime').datepicker({
-                dateFormat: 'yy-mm-dd 00:00:00',
+                dateFormat: 'yy-mm-dd',
                 minDate: '+0d',
                 changeMonth: true,
                 changeYear: true,
@@ -329,7 +329,11 @@ function sortTasksByDaysLeft($a, $b) {
                         </div>
                         <div class="form-group">
                             <label for="importance">Task Importance:</label>
-                            <input type="number" name="importance" id="importance" class="form-control" data-parsley-required min="1" max="5">
+                            <select type="number" name="importance" id="importance" class="form-control" data-parsley-required min="1" max="5">
+                                <?php for($v=1;$v<=5;$v++):?>
+                                <option value="<?=$v?>"><?=$v?></option>
+                                <?php endfor;?>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="phase_id">Corresponding Project Phase:</label>

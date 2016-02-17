@@ -9,21 +9,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     <script>
         $(document).ready(function(){
             $('#targeted_start_datetime').datepicker({
-                dateFormat: 'yy-mm-dd 00:00:00',
+                dateFormat: 'yy-mm-dd',
                 minDate: '+0d',
                 changeMonth: true,
                 changeYear: true,
                 altFormat: "yy-mm-dd"
             });
             $('#targeted_end_datetime').datepicker({
-                dateFormat: 'yy-mm-dd 00:00:00',
+                dateFormat: 'yy-mm-dd',
                 minDate: '+0d',
                 changeMonth: true,
                 changeYear: true,
                 altFormat: "yy-mm-dd"
             });
             $('#start_datetime').datepicker({
-                dateFormat: 'yy-mm-dd 00:00:00',
+                dateFormat: 'yy-mm-dd',
                 minDate: '+0d',
                 changeMonth: true,
                 changeYear: true,

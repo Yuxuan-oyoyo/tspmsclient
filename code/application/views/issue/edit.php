@@ -262,15 +262,16 @@ if($this->session->userdata('internal_type')=='Developer') {
             </div>
             <div class="form-part">
                 <div class="form-label">Deadline <span class="cmpl"></span></div>
+
+                <div class="form-input">
+                    <input name="deadline" required class="form-control datepicker" data-parsley-pattern="/^(19|20)\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/"
+                           placeholder="yy-mm-dd" value="<?=isset($i["deadline"])? $i["deadline"]:""?>">
+                </div>
                 <script>
                     $('.datepicker').datepicker({
                         dateFormat: 'yy-mm-dd',minDate: '+0d',changeYear: true,changeMonth: true
                     });
                 </script>
-                <div class="form-input">
-                    <input name="deadline" required class="form-control datepicker" data-parsley-pattern="/^(19|20)\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/"
-                           placeholder="yy-mm-dd" value="<?=isset($i["deadline"])? $i["deadline"]:""?>">
-                </div>
             </div>
             <div class="form-part">
                 <div class="form-label">Comment</div>

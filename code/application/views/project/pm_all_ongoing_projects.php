@@ -165,7 +165,7 @@ $this->load->view('common/pm_nav', $class);
                     }
                 });
             };
-            if(Math.random()<0.05){refreshIssues()}
+            //if(Math.random()<0.05){refreshIssues()}
             $('.update-issue-count').click(function(){refreshIssues();});
         })
     </script>

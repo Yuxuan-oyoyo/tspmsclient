@@ -24,11 +24,12 @@ class Issue_report_model extends CI_Model{
             //$this->db->query("DELETE from issue_report");
         }elseif(isset($time_last_updated)){
             //var_dump("deleting".$project_id);
-
+            /*
             $this->db->query(
                 "DELETE from issue_report WHERE project_id=?",
                 [$project_id]
             );
+            */
 
         }
     }
