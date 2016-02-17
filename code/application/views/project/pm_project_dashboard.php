@@ -193,15 +193,18 @@ function sortTasksByDaysLeft($a, $b) {
                             foreach ($tasks as $t){
                                 if(substr($t['days_left'],0,1)==="+"){
                                     $days_left = (int)substr($t['days_left'],1)+1;
+                                }elseif($t['days_left']==0){
+                                    $days_left = (int)substr($t['days_left'],1);
                                 }else{
                                     $days_left = "Overdue <br>".substr($t['days_left'],1);
                                 }
                         ?>
                             <tr id="1">
                             <?php
-                                if(substr($t['days_left'],0,1)==="-"){
+                                if(substr($t['days_left'],0,1)==="-" && $days_left!="Overdue <br>0" ){
                                     $color = "indianred";
                                 }elseif($days_left<=7){
+
                                     $color = "darkorange";
                                 }else{
                                     $color = "green";
