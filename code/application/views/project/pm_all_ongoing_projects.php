@@ -84,7 +84,7 @@ $this->load->view('common/pm_nav', $class);
             </script>
             <div class=" col-md-4">
                 <div class="panel ongoing-panel  " >
-                    <div id="project_header<?=$p['project_id']?>" class="panel-heading" style="text-align:center" ><strong>&nbsp;<?=$p['project_title']?></strong>&nbsp;&nbsp;<br><sub>[<?=$p['project_code']?>]</sub></div>
+                    <div id="project_header<?=$p['project_id']?>" class="panel-heading" style="text-align:center" ><strong>&nbsp;<?=$p['project_title']?></strong>&nbsp;&nbsp;<p><sub>[<?=$p['project_code']?>]</sub></p></div>
                     <div class="panel-body" style="font-size:15px " >
                         <table class="table table-condensed">
                             <tr>
