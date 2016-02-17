@@ -308,8 +308,6 @@ $this->load->view('common/pm_nav', $class);
                     ?>
                 </h3>
                 <hr>
-                <?php
-                if (!empty($updates)):?>
 
                 <ul class="timeline" id="timeline">
                 <?php
@@ -337,7 +335,6 @@ $this->load->view('common/pm_nav', $class);
                     ?>
 
                 </ul>
-                <?php endif?>
             </div>
             <div class="col-md-4">
 
