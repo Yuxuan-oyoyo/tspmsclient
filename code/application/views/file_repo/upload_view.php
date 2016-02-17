@@ -111,6 +111,43 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                         if(link != '#'){
                             window.open(link);
                         }
+                    }).on("rename_node.jstree", function(event, data) {
+
+                        jQuery.ajax({
+                            type: "POST",
+                            url: '<?=base_url().'upload/rename_file/'?>',
+                            dataType: 'json',
+                            data: {'new_name':data.text, 'fid':data.node.id},
+                            success: function(res) {
+
+                            }
+                        });
+
+
+                        /*$.ajax({
+                            url: '<?=base_url().'upload/rename_file/'?>',
+                            type: 'POST',
+                            data: {'new_name':data.text, 'fid':data.node.id},
+                            cache: false,
+                            dataType: 'json',
+                            processData: false,
+                            contentType: false,
+                            success: function(data)
+                            {
+                                console.log(data);
+                                if(data.status==="success"){
+                                    //refreshTree();
+                                }else{
+                                    //display_upload_form_error(data.message)
+                                }
+                            },
+                            error: function(jqXHR, textStatus)
+                            {
+                                //display_upload_form_error('Ajax Error:'+textStatus);
+                                console.log('ERRORS: ' + textStatus);
+                            }
+                        });*/
+
                     })
                 });
 
@@ -258,7 +295,7 @@ $this->load->view('common/pm_nav', $class);
         <div style ="margin-left=5px">
             <button class="btn btn-sm btn-primary" onclick="$('#upload_file_modal').modal('show')"><i class="fa fa-plus"></i>&nbsp;Upload</button>
             <button type="button" class="btn btn-success btn-sm"  onclick="open_file();"><i class="fa fa-folder"></i>&nbsp;Open</button>
-            <!-- <button type="button"  onclick="rename_file();">Rename</button> -->
+            <button type="button"  onclick="rename_file();">Rename</button>
             <button type="button" class="btn btn-warning btn-sm" onclick="deleteFileButtonClicked();"><i class="fa fa-trash"></i>&nbsp;Delete</button>
         </div>
         <div id="tree" style="background-color: #f5f5f5"></div>

@@ -41,4 +41,11 @@ class File extends CI_Model {
         }
         return $query->result_array();
     }
+
+    function rename_by_fid($update_array){
+        $date = new DateTime("now",new DateTimeZone(DATETIMEZONE));
+        $update_array['last_updated'] = $date->format('c');
+        $this->db->update('upload', $update_array, array('fid' => $update_array['fid']));
+        return $this->db->affected_rows();
+    }
 }
