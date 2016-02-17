@@ -191,10 +191,11 @@ function sortTasksByDaysLeft($a, $b) {
                             usort($tasks, 'sortTasksByDaysLeft');
                             $color =[""];
                             foreach ($tasks as $t){
+                                $day =" days";
                                 if(substr($t['days_left'],0,1)==="+"){
                                     $days_left = (int)substr($t['days_left'],1)+1;
                                 }elseif($t['days_left']==0){
-                                    $days_left = (int)substr($t['days_left'],1);
+                                    $days_left = substr($t['days_left'],1)." day";
                                 }else{
                                     $days_left = "Overdue <br>".substr($t['days_left'],1);
                                 }
@@ -209,9 +210,12 @@ function sortTasksByDaysLeft($a, $b) {
                                 }else{
                                     $color = "green";
                                 }
+                                if( $days_left=="Overdue <br>0" || $days_left == 1 || $days_left=="Overdue <br>1"){
+                                    $day = " day";
+                                }
                             ?>
                                 <!--td></td-->
-                                <td><b><?=$t['content']?></b> <span class="badge" style="font-weight:400;background-color: <?=$color?>"><?=$days_left?> days</span></td>
+                                <td><b><?=$t['content']?></b> <span class="badge" style="font-weight:400;background-color: <?=$color?>"><?=$days_left.$day?></span></td>
                                 <?php if(!isset($t['start_datetime'])):?>
                                     <td><button class="btn btn-sm" onclick="startTaskButtonClicked(<?=$t['task_id']?>)" title="Start task now"><i class="fa fa-play"></i></button>
                                     </td>
