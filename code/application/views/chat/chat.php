@@ -67,7 +67,7 @@ if($this->session->userdata('Customer_cid')){
             }else
             {
 
-                DisplayName = (this.props.data.user1.toLowerCase() == C_UserName.toLowerCase()) ? this.props.data.user2 : this.props.data.user1;
+                DisplayName = (this.props.data.user1.toLowerCase() == C_UserName.toLowerCase()) ? this.props.data.user1 : this.props.data.user2
             }
 
 
