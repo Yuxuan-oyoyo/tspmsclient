@@ -265,7 +265,7 @@ $this->load->view('common/pm_nav', $class);
                                 <tr><td><?=$c['project_code']?></td>
                                     <td><a href="<?=base_url().'Projects/view_dashboard/'.$c["project_id"]?>"><?=$c['project_title']?></a></td>
                                     <td><?=$c['start_time']?></td>
-                                    <td><?=substr($c['last_updated'], 0 ,10)?></td>
+                                    <td><?=$c['end_time']?></td>
                                     <td><?=$c['project_duration']?></td>
                                     <td><?=$issue_task[$c['project_id']]['num_tasks']?></td>
                                     <td><?=$issue_task[$c['project_id']]['num_issues']?></td>
