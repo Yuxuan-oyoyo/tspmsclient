@@ -279,7 +279,7 @@ $this->load->view('common/pm_nav', $class);
 
 
 
-        <div class="col-sm-4"  style="width: 35%;margin-left: 10%">
+        <div class="col-sm-4"  style="width: 50%;margin-left: 25%; ">
             <br/>
             <table class="table table-bordered">
                 <thead style="background: #e1e1e8;">
@@ -313,10 +313,9 @@ $this->load->view('common/pm_nav', $class);
                 </tbody>
             </table>
         </div>
-        <?php
-        $date=strtotime(date('Y-m-d'));
-        $newDate = date('m/d/Y',strtotime('-1 month',$date));
-        ?>
+
+
+        <!--
         <div class="col-sm-4"  style="width: 35%;margin-top: 7%;margin-left: 8%">
             <form  role="form" action="#" method="post">
                 <div class="form-group">
@@ -342,6 +341,7 @@ $this->load->view('common/pm_nav', $class);
                 }
             </script>
         </div>
+        -->
         <div class="col-md-12">
             <br/>
         </div>
