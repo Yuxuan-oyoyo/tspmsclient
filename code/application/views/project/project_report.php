@@ -39,10 +39,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 0: {
                     type: "bars",
                     targetAxisIndex: 0
-                },
-                2: {
-                    type: "line",
-                    targetAxisIndex: 1
                 }
             },
             colors: ['#1b9e77', '#d95f02', '#7570b3']

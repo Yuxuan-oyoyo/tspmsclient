@@ -112,6 +112,7 @@ class Dashboard extends CI_Controller
             $container[$value["phase_name"]]["num_tasks"] = $value["num"];
         }
         //get metric
+        /**
         $count_list_phase = $this->Project_phase_model->get_times_per_phase($project_id);
         foreach($count_list_phase as $value){
             if(isset($value["start_time"]) && isset($value["end_time"])
@@ -121,6 +122,7 @@ class Dashboard extends CI_Controller
                 $container[$value["phase_name"]]["metric"] = $actual_duration / $estimated_duration;
             }
         }
+         **/
 
 
         //ajax:
@@ -135,7 +137,7 @@ class Dashboard extends CI_Controller
             array('label' => 'Phase', 'type' => 'string'),
             array('label' => 'num of tasks', 'type' => 'number'),
             array('label' => 'num of issues', 'type' => 'number'),
-            array('label' => 'metrics', 'type' => 'number')
+            //array('label' => 'metrics', 'type' => 'number')
         );
         $keys = ["Lead","Requirement","Build","Testing","Deploy"];
         $rows = [];
@@ -363,6 +365,7 @@ class Dashboard extends CI_Controller
             array('label' => 'project', 'type' => 'string'),
             array('label' => 'num of tasks', 'type' => 'number'),
             array('label' => 'num of issues', 'type' => 'number'),
+
         );
 
         $keys = ["Lead","Requirement","Build","Testing","Deploy"];
@@ -435,6 +438,8 @@ class Dashboard extends CI_Controller
             // Labels for your chart, these represent the column titles
             // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
             array('label' => 'project', 'type' => 'string'),
+
+
             array('label' => 'num of tasks', 'type' => 'number'),
             array('label' => 'num of issues', 'type' => 'number'),
             array('label' => 'metrics', 'type' => 'number'),
@@ -488,9 +493,6 @@ class Dashboard extends CI_Controller
         $container[$value["project_id"]][$value["phase_name"]]=$value["time_spent"];
     }
     //var_dump($container);
-
-
-
     $table = array();
     $table['cols'] = array(
         // Labels for your chart, these represent the column titles
@@ -500,8 +502,6 @@ class Dashboard extends CI_Controller
     foreach($phases as $phase){
         array_push($table['cols'],array('label' => $phase["phase_name"], 'type' => 'number'));
     }
-
-
     $rows = array();
     foreach($container as $v){
 
