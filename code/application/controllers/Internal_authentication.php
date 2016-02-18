@@ -44,6 +44,8 @@ class Internal_authentication extends CI_Controller {
                         $this->session->set_userdata('internal_uid', $user['u_id']);
                         $this->session->set_userdata('internal_username', $user['username']);
                         $this->session->set_userdata('internal_type', $user['type']);
+                        $real_name = $this->Internal_user_model->retrieve_name($user['u_id']);
+                        $this->session->set_userdata('internal_realname', $real_name);
                         //redirect to successpage
                         if($user['type']=='PM') {
                             redirect('/dashboard');
@@ -172,7 +174,7 @@ class Internal_authentication extends CI_Controller {
                     }
 
                 } else {
-                    $this->session->set_userdata('message','Email does not exist');
+
                 }
                 redirect('internal_authentication/login');
             }

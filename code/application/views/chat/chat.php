@@ -46,8 +46,11 @@ if($this->session->userdata('Customer_cid')){
     var UserType = <?php echo json_encode($this->session->userdata('internal_type')); ?>;
     var UserId = <?php echo json_encode($this->session->userdata('internal_uid')); ?>;
     var C_UserName = <?php echo json_encode($this->session->userdata('Customer_username')); ?>;
+    var RealName = <?php echo json_encode($this->session->userdata('internal_realname')); ?>;
+    var C_RealName = <?php echo json_encode($this->session->userdata('Customer_realname')); ?>;
+    //console.log("x")
+    //console.log(RealName)
 
-    //console.log(UserType)
 
     var get_data = [];
     var LeftUser = React.createClass({
@@ -66,8 +69,13 @@ if($this->session->userdata('Customer_cid')){
                 DisplayName = (this.props.data.user1 == UserName) ? this.props.data.user2 : this.props.data.user1;
             }else
             {
+                console.log("hoomanin")
+                console.log(this.props.data)
+                console.log(this.props.data.user1)
+                //console.log(this.props.data.user2)
+                //console.log(C_UserName.toLowerCase())
 
-                DisplayName = (this.props.data.user1.toLowerCase() == C_UserName.toLowerCase()) ? this.props.data.user1 : this.props.data.user2
+                DisplayName = (this.props.data.user1.toLowerCase() == C_RealName) ? this.props.data.user1 : this.props.data.user2;
             }
 
 
@@ -171,6 +179,14 @@ if($this->session->userdata('Customer_cid')){
 
     // WORKINGON
     var LeftUserList = React.createClass({
+        componentDidUpdate: function(){
+            if(this.props.first_load == 1)
+            {
+                //console.log("LUL")
+                //console.log(this.props.chats)
+                this.props.chatIDHandler(0, this.props.chats)
+            }
+        },
         render: function() {
             //console.log("= = = LeftUserList Render = = =")
             var current_id = this.props.chat_id
@@ -188,6 +204,8 @@ if($this->session->userdata('Customer_cid')){
 
                 return j - y
             });
+
+
 
 
             var userNodes = this.props.chats.map(function(data){
@@ -458,7 +476,7 @@ if($this->session->userdata('Customer_cid')){
                     get_to_the_pm = 1;
                     get_pm_id = this.props.thread["messages"][0]["pm_id"];
                 }
-
+                this.props.scroller(1)
                 this.props.fast_msg(text)
 
 
@@ -524,7 +542,7 @@ if($this->session->userdata('Customer_cid')){
                     <div>
                         <textarea rows="4" placeholder={up_text} className=" form-control" disabled/>
                         <div>
-                            <FileForm fast_msg={this.props.fast_msg} threadID={this.props.thread.chatID} text_handler={this.handleText} filey={this.props.filey} fu_handler={this.props.fu_handler} fu_refresher={this.props.fu_refresher} />
+                            <FileForm scroller={this.props.scroller} fast_msg={this.props.fast_msg} threadID={this.props.thread.chatID} text_handler={this.handleText} filey={this.props.filey} fu_handler={this.props.fu_handler} fu_refresher={this.props.fu_refresher} />
                         </div>
 
                     </div>
@@ -596,7 +614,7 @@ if($this->session->userdata('Customer_cid')){
 
                 }.bind(this)
             });
-
+            this.props.scroller(1)
             //this.props.fast_msg(this.state.f_name+"^https://s3-ap-southeast-1.amazonaws.com/test-upload-file/7f27d_wujing.jpg")
             this.props.fast_msg("uploading file..")
             this.props.text_handler();
@@ -845,31 +863,47 @@ if($this->session->userdata('Customer_cid')){
 
                         </div>
 
-                        <div className="msg-wrap-right" ref="messageList">
+                        <div className="msg-wrap-right" onScroll={this.handleScroll} id="msglist" ref="messageList">
                            <div className="col-md-12">
                             {this.state.msgnodes}
                             </div>
                         </div>
-                        <RightMessageComposerBox fast_msg={this.props.fastMsg} filey={this.props.filey} fu_handler={this.props.fu_handler} fu_refresher={this.props.fu_refresher} thread={this.props.chat} refreshFunc={this.props.refreshFunc} />
+                        <RightMessageComposerBox scroller={this.props.scroller} fast_msg={this.props.fastMsg} filey={this.props.filey} fu_handler={this.props.fu_handler} fu_refresher={this.props.fu_refresher} thread={this.props.chat} refreshFunc={this.props.refreshFunc} />
 
                     </div>
                 )
 
             }
         },
+        handleScroll:function(event: Object){
+            /*
+            console.log("dance")
+            var ul=this.refs.messageList;
+            var sh = ul.scrollHeight
+            console.log(scrollTop)
+            //console.log(sh)
+            //console.log(event.nativeEvent.contentOffset.y);
+            */
+        },
         componentDidUpdate: function() {
-            if(this.props.chat != "new_message")
+            //console.log("jig")
+            //console.log(this.props.scroll)
+            if(this.props.scroll == 1)
             {
+                //console.log("hre")
                 this._scrollToBottom();
             }
+            //preventDefault();
         },
         _scrollToBottom: function() {
-            if(this.props.chat != "new_message")
-            {
-                //var ul = this.refs.messageList.getDOMNode();
-                var ul = this.refs.messageList;
-                ul.scrollTop = ul.scrollHeight;
-            }
+
+            //var ul = this.refs.messageList.getDOMNode();
+            var ul = this.refs.messageList;
+            ul.scrollTop = ul.scrollHeight;
+            this.props.scroller(0)
+            //console.log("xxx")
+            //console.log(ul.scrollHeight)
+
         },
     })
 
@@ -910,6 +944,8 @@ if($this->session->userdata('Customer_cid')){
                     if(UserType == "PM")
                         am_i_pm = 1;
 
+
+
                     for(var thread in data)
                     {
                         var messages = data[thread]["messages"]
@@ -931,6 +967,7 @@ if($this->session->userdata('Customer_cid')){
 
                     if(this.state.just_on == true)
                     {
+
                         this.setState({unread:counter, just_on: false, chats: data, chatID: data[0].chatID, just_on: false})
                     }
                     else
@@ -955,6 +992,19 @@ if($this->session->userdata('Customer_cid')){
         {
             this.setState({file:data})
 
+        },
+        scroller:function(data)
+        {
+            //console.log("scroller function")
+            this.setState({scroll:data})
+        },
+        chatIDHandler:function(data, data1)
+        {
+            //console.log("scroller function")
+            //console.log("love")
+            //console.log(data)
+            //console.log(data1)
+            this.setState({firstload:0, chatID:data1[0].chatID})
         },
         fileUploadRefresher: function()
         {
@@ -984,6 +1034,8 @@ if($this->session->userdata('Customer_cid')){
                 file: null,
                 theThreadIWantToPass: {},
                 just_on: true,
+                scroll: 1,
+                firstload: 1,
                 //chats: this.props.chats
             };
         },
@@ -1001,7 +1053,7 @@ if($this->session->userdata('Customer_cid')){
             if(UserType == "PM")
                 to_pm = 1
 
-
+            this.scroller(1)
 
             if(arr[1] > 0)
             {
@@ -1033,6 +1085,9 @@ if($this->session->userdata('Customer_cid')){
             }
             else
             {
+                console.log("rahs")
+                console.log(data)
+                console.log(data.chatID)
                 var unread_count = this.state.unread - arr[1]
                 this.setState({chatID: data.chatID, unread:unread_count});
             }
@@ -1042,7 +1097,7 @@ if($this->session->userdata('Customer_cid')){
 
 
 
-            //if(this.state.theThreadIWantToPass == "0") {
+            //if(this.state.theThreadIWantToPass == "0asdads") {
                 console.log("in fast")
                 var fast_thread = this.state.theThreadIWantToPass
                 var last_msg_length = fast_thread["messages"].length - 1
@@ -1055,16 +1110,18 @@ if($this->session->userdata('Customer_cid')){
                 var fast_msg = $.extend(true, {}, fast_thread["messages"][last_msg_length])
 
                 if (UserType == "PM") {
-                    fast_msg.author = UserName;
+                    fast_msg.author = RealName;
                 }
                 else {
-                    fast_msg.author = C_UserName;
+                    fast_msg.author = C_RealName;
                 }
                 fast_msg.content = data
                 fast_msg.timestamp = fast_msg.timestamp + 2
                 fast_msg.msgID = fast_msg.msgID + 2
                 fast_msg.is_file = "0"
 
+                //console.log("hererinhito")
+                console.log(fast_msg)
                 //console.log(fast_msg["msgID"])
 
                 fast_thread["messages"].push(fast_msg);
@@ -1116,6 +1173,8 @@ if($this->session->userdata('Customer_cid')){
                                         chat_id={this.state.chatID}
                                         chats={this.state.chats}
                                         clickFunc={this.handleClickOnLeftUser} // ***important
+                                        first_load={this.state.firstload}
+
                                         />
                                 </div>
                                 <div  className="col-md-9">
@@ -1150,11 +1209,15 @@ if($this->session->userdata('Customer_cid')){
                                         chats={this.state.chats}
                                         unreadFunc={this.handleUnread}
                                         clickFunc={this.handleClickOnLeftUser} // ***important
+                                        first_load={this.state.firstload}
+                                        chatIDHandler={this.chatIDHandler}
                                         />
 
                                 </div>
 
                                     <RightMessageBox
+                                        scroll = {this.state.scroll}
+                                        scroller = {this.scroller}
                                         chat={this.state.theThreadIWantToPass}
                                         fastMsg={this.fast_msg}
                                         refreshFunc={this.getInitialData}
