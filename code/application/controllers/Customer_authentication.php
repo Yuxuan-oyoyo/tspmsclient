@@ -23,6 +23,7 @@ class Customer_authentication extends CI_Controller {
             //if there is, log the user out first.
             $this->session->unset_userdata('Customer_cid');
             $this->session->unset_userdata('Customer_username');
+            $this->session->unset_userdata('Customer_realname');
             $this->session->sess_destroy();
             //$this->session->set_userdata('message','You have been logged out.');
         }
@@ -41,7 +42,9 @@ class Customer_authentication extends CI_Controller {
                         //set session data
                         $this->session->set_userdata('Customer_cid', $user['c_id']);
                         $this->session->set_userdata('Customer_username', $user['username']);
-                        //redirect to successpage
+                        $real_name = $this->Customer_model->retrieve($user['c_id']);
+                        $this->session->set_userdata('Customer_realname', $real_name);
+
                          redirect('/projects/customer_overview/'.$user['c_id']);
 
                     } else {
