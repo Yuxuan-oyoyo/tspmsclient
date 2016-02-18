@@ -112,6 +112,7 @@ class Dashboard extends CI_Controller
             $container[$value["phase_name"]]["num_tasks"] = $value["num"];
         }
         //get metric
+        /**
         $count_list_phase = $this->Project_phase_model->get_times_per_phase($project_id);
         foreach($count_list_phase as $value){
             if(isset($value["start_time"]) && isset($value["end_time"])
@@ -121,6 +122,7 @@ class Dashboard extends CI_Controller
                 $container[$value["phase_name"]]["metric"] = $actual_duration / $estimated_duration;
             }
         }
+         **/
 
 
         //ajax:
@@ -135,7 +137,7 @@ class Dashboard extends CI_Controller
             array('label' => 'Phase', 'type' => 'string'),
             array('label' => 'num of tasks', 'type' => 'number'),
             array('label' => 'num of issues', 'type' => 'number'),
-            array('label' => 'metrics', 'type' => 'number')
+            //array('label' => 'metrics', 'type' => 'number')
         );
         $keys = ["Lead","Requirement","Build","Testing","Deploy"];
         $rows = [];
