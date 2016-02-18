@@ -85,17 +85,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     legend: 'none',
     width: '100%',
     hAxis: {
+        title: 'Date',
     titleTextStyle: {
     color: '#333'
     }
     },
     vAxis: {
+        title: 'Total Urgency Score',
     minValue: 0
     }
     };
 
     var options3 = {
     title: 'Issue/Task Analysis Chart',
+        hAxis: {
+            title: 'Company',
+        },
+        vAxis: {
+            title: 'Number of task/issue',
+        },
     legend:'top',
     seriesType: 'bars',
     series: {
@@ -103,10 +111,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
     type: "bars",
     targetAxisIndex: 0
     },
-    2: {
-    type: "line",
-    targetAxisIndex: 1
-    }
+
     },
     colors: ['#1b9e77', '#d95f02', '#7570b3']
 
@@ -153,6 +158,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
     var options5 = {
     title: 'Phase Duration Analysis (Days/phase VS project name)',
+        hAxis: {
+            title: 'Company',
+        },
+        vAxis: {
+            title: 'Days spent',
+        },
     isStacked: true,
         legend:'top',
     };

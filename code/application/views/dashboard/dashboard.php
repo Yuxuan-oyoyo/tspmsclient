@@ -84,8 +84,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     //legend:'bottom',
                     chartArea: { width: '90%',left: "5%" , height: '70%'},
                     vAxis: {
+                        title: 'Number of Task/Issue'
                     },
                     hAxis: {
+                        title: 'Project Code'
                     },
                     seriesType: 'bars',
                     colors: ['#1b9e77', '#d95f02']

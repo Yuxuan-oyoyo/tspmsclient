@@ -398,11 +398,11 @@ class Dashboard extends CI_Controller
         $projects = $this->Project_model->retrieve_all_past();
         $container = [];
         foreach($projects as $value){
-            $container[$value["project_id"]] = ["pn"=>$value["project_code"],"num_tasks"=>0,"num_issues"=>0, "metrics"=>0];
+            $container[$value["project_id"]] = ["pn"=>$value["project_code"],"num_tasks"=>0,"num_issues"=>0];
             $metricsissue = $this->Issue_report_model->get_per_issue_data($value["project_id"]);
             $matrics = 0;
             $count = 0;
-
+            /**
             foreach($metricsissue as $issue){
                 if(isset($issue["date_resolved"])&&isset($issue["date_due"])){
                     $matrics+=$issue["time_ratio"];
@@ -410,11 +410,13 @@ class Dashboard extends CI_Controller
                     //var_dump($count);
                 }
             }
+
             if($count!=0){
                 $container[$value["project_id"]]["metrics"] = $matrics/$count;
             }else{
                 $container[$value["project_id"]]["metrics"] = 1;
             }
+             **/
         }
 
         foreach($tasknumbers as $value){
@@ -442,7 +444,7 @@ class Dashboard extends CI_Controller
 
             array('label' => 'num of tasks', 'type' => 'number'),
             array('label' => 'num of issues', 'type' => 'number'),
-            array('label' => 'metrics', 'type' => 'number'),
+            //array('label' => 'metrics', 'type' => 'number'),
         );
 
 

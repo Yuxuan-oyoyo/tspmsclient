@@ -31,8 +31,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         var options3 = {
             title: 'Phase Analysis Chart (X-axis: Phase, Left: Count, Right: Actual Duration/Expected Duration)',
             vAxis: {
+                title: 'Number of Issue/Task',
             },
             hAxis: {
+                title: 'Phase',
             },
             seriesType: 'bars',
             series: {
@@ -48,18 +50,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
 
         var options4 = {
-            'title': 'Issue Metrics Chart (X-axis: Issue ID, Y-axis: Actual Duration/Expected Duration)',
+            'title': 'Issue Metrics Chart (Y-axis: Actual Duration/Expected Duration)',
+            hAxis: {
+                title: 'Issue ID',
+            },
+            /**
+            vAxis: {
+
+            },
+             **/
             tooltip: {
                 isHtml: true
             },
             legend: 'none',
             vAxis: {
+                title: 'Metrics Score',
                 'max': 3
             }
         };
 
         var options5 = {
             title: 'Stage percentile analysis',
+
             chartArea: {height: "80%"},
             tooltip: {
                 isHtml: true
