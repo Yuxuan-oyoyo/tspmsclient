@@ -10,6 +10,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                 padding-left: 1px;
                 padding-right: 0;
             }
+            .panel-heading-eh{
+                font-weight: 700;
+                text-align: center;
+                text-transform: uppercase;
+            }
         </style>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script>
@@ -144,7 +149,7 @@ $this->load->view('common/pm_nav', $class);
         <div class="row">
             <div class="col-md-6">
                 <div class="panel panel-danger">
-                    <div class="panel-heading">Important and Urgent</div>
+                    <div class="panel-heading-eh panel-heading">Important and Urgent</div>
                     <div class="panel-body" style="height: 200px;overflow-y: auto;">
                         <table class="table table-condensed ">
                             <?php if(isset($tasks_ui)):
@@ -158,7 +163,7 @@ $this->load->view('common/pm_nav', $class);
                                             }
                                             if($t['days']<0){
                                                 $t['days'] = 0-$t['days'];
-                                                echo '<span class="badge" style="background-color: indianred">Overdue'.$t['days'].$day.'</span>';
+                                                echo '<span class="badge" style="background-color: indianred">Overdue  <br>'.$t['days'].$day.'</span>';
 
                                             }else{
                                                 echo '<span class="badge" style="background-color: darkorange">'.$t['days'].$day.'</span>';
@@ -171,7 +176,7 @@ $this->load->view('common/pm_nav', $class);
             </div>
             <div class="col-md-6">
                 <div class="panel panel-warning">
-                    <div class="panel-heading">Urgent but not Important</div>
+                    <div class="panel-heading-eh panel-heading">Urgent but not Important</div>
                     <div class="panel-body" style="height: 200px;overflow-y:auto;">
                         <table class="table table-condensed ">
                             <?php if(isset($tasks_u)):
@@ -185,7 +190,7 @@ $this->load->view('common/pm_nav', $class);
                                             }
                                             if($t['days']<0){
                                                 $t['days'] = 0-$t['days'];
-                                                echo '<span class="badge" style="background-color: indianred">Overdue '.$t['days'].$day.'</span>';
+                                                echo '<span class="badge" style="background-color: indianred">Overdue  <br>'.$t['days'].$day.'</span>';
 
                                             }else{
                                                 echo '<span class="badge" style="background-color: darkorange">'.$t['days'].$day.'</span>';
@@ -200,37 +205,10 @@ $this->load->view('common/pm_nav', $class);
 
         </div>
         <div class="row">
-            <div class="col-md-6 ">
-                <div class="panel panel-success">
-                    <div class="panel-heading">NOT Important OR Urgent</div>
-                    <div class="panel-body" style="height: 200px;overflow-y: auto;">
-                        <table class="table table-condensed " >
-                            <?php if(isset($tasks_none)):
-                                foreach($tasks_none as $t):?>
-                                    <tr>
-                                        <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><?=$t['content']?></a></td>
-                                        <td> <?php
-                                            $day = " days";
-                                            if($t['days']==0 || $t['days']==1 || $t['days']==-1){
-                                                $day = " day";
-                                            }
-                                            if($t['days']<0){
-                                                $t['days'] = 0-$t['days'];
-                                                echo '<span class="badge" style="background-color: indianred">Overdue '.$t['days'].$day.'</span>';
 
-                                            }else{
-                                                echo '<span class="badge" style="background-color: green">'.$t['days'].$day.'</span>';
-                                            }?></td>
-                                    </tr>
-                                <?php endforeach; endif?>
-                        </table>
-
-                    </div>
-                </div>
-            </div>
             <div class="col-md-6 ">
                 <div class="panel panel-info">
-                    <div class="panel-heading">Important but not urgent</div>
+                    <div class="panel-heading-eh panel-heading">Important but not urgent</div>
                     <div class="panel-body" style="height: 200px;overflow-y: auto;">
                         <table class="table table-condensed " >
                             <?php if(isset($tasks_i)):
@@ -244,7 +222,7 @@ $this->load->view('common/pm_nav', $class);
                                             }
                                             if($t['days']<0){
                                                 $t['days'] = 0-$t['days'];
-                                                echo '<span class="badge" style="background-color: indianred">Overdue'.$t['days'].$day.'</span>';
+                                                echo '<span class="badge" style="background-color: indianred">Overdue  <br>'.$t['days'].$day.'</span>';
 
                                             }else{
                                                 echo '<span class="badge" style="background-color: green">'.$t['days'].$day.'</span>';
@@ -252,6 +230,34 @@ $this->load->view('common/pm_nav', $class);
                                     </tr>
                                 <?php endforeach; endif?>
                         </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 ">
+                <div class="panel panel-success">
+                    <div class="panel-heading-eh panel-heading">Not Important or Urgent</div>
+                    <div class="panel-body" style="height: 200px;overflow-y: auto;">
+                        <table class="table table-condensed " >
+                            <?php if(isset($tasks_none)):
+                                foreach($tasks_none as $t):?>
+                                    <tr>
+                                        <td><a href="<?=base_url().'projects/view_dashboard/'.$t['project_id']?>"><?=$t['content']?></a></td>
+                                        <td> <?php
+                                            $day = " days";
+                                            if($t['days']==0 || $t['days']==1 || $t['days']==-1){
+                                                $day = " day";
+                                            }
+                                            if($t['days']<0){
+                                                $t['days'] = 0-$t['days'];
+                                                echo '<span class="badge" style="background-color: indianred">Overdue <br>'.$t['days'].$day.'</span>';
+
+                                            }else{
+                                                echo '<span class="badge" style="background-color: green">'.$t['days'].$day.'</span>';
+                                            }?></td>
+                                    </tr>
+                                <?php endforeach; endif?>
+                        </table>
+
                     </div>
                 </div>
             </div>
