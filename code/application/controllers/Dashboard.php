@@ -133,8 +133,8 @@ class Dashboard extends CI_Controller
             // Labels for your chart, these represent the column titles
             // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
             array('label' => 'Phase', 'type' => 'string'),
-            array('label' => '#tasks', 'type' => 'number'),
-            array('label' => '#issues', 'type' => 'number'),
+            array('label' => 'No. of Tasks', 'type' => 'number'),
+            array('label' => 'No. of Issues', 'type' => 'number'),
             array('label' => 'metrics', 'type' => 'number')
         );
 
@@ -358,8 +358,8 @@ class Dashboard extends CI_Controller
             // Labels for your chart, these represent the column titles
             // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
             array('label' => 'project', 'type' => 'string'),
-            array('label' => '#tasks', 'type' => 'number'),
-            array('label' => '#issues', 'type' => 'number'),
+            array('label' => 'No. of Tasks', 'type' => 'number'),
+            array('label' => 'No. of Tasks', 'type' => 'number'),
         );
 
 
@@ -432,8 +432,8 @@ class Dashboard extends CI_Controller
             // Labels for your chart, these represent the column titles
             // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
             array('label' => 'project', 'type' => 'string'),
-            array('label' => '#tasks', 'type' => 'number'),
-            array('label' => '#issues', 'type' => 'number'),
+            array('label' => 'No. of Tasks', 'type' => 'number'),
+            array('label' => 'No. of Issues', 'type' => 'number'),
 
         );
 
@@ -485,9 +485,6 @@ class Dashboard extends CI_Controller
         $container[$value["project_id"]][$value["phase_name"]]=$value["time_spent"];
     }
     //var_dump($container);
-
-
-
     $table = array();
     $table['cols'] = array(
         // Labels for your chart, these represent the column titles
@@ -497,8 +494,6 @@ class Dashboard extends CI_Controller
     foreach($phases as $phase){
         array_push($table['cols'],array('label' => $phase["phase_name"], 'type' => 'number'));
     }
-
-
     $rows = array();
     foreach($container as $v){
 
