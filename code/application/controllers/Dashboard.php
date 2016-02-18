@@ -173,6 +173,7 @@ class Dashboard extends CI_Controller
         $input_raw = $this->input->get($categories, true);
         $input_clean = [];
         foreach($input_raw as $key=>$value){
+            //$value = $value/3600;
             if($key=="priority" && in_array($value,[1,2,3,4,5])){
                 $input_clean[$key] = $value;
             }
@@ -188,10 +189,10 @@ class Dashboard extends CI_Controller
         //echo '{"cols":[{"label":"Stage","type":"string"},{"label":"Time Spent","type":"number"}],"rows":[{"c":[{"v":"to develop"},{"v":30}]},{"c":[{"v":"to test"},{"v":30}]},{"c":[{"v":"ready for deployment"},{"v":20}]},{"c":[{"v":"to deploy"},{"v":10}]}]}';
         $result = [];
         //var_dump($issue_time_list);
-        array_push($result, ["to develop", (int)$i["du1"]]);
-        array_push($result, ["to test", (int)$i["du2"]]);
-        array_push($result, ["ready for deployment", (int)$i["du3"]]);
-        array_push($result, ["to deploy", (int)$i["du4"]]);
+        array_push($result, ["to develop", (double)($i["du1"]/3600)]);
+        array_push($result, ["to test", (double)($i["du2"]/3600)]);
+        array_push($result, ["ready for deployment", (double)($i["du3"]/3600)]);
+        array_push($result, ["to deploy", (double)($i["du4"]/3600)]);
         $table= [
             'cols'=>
                 [

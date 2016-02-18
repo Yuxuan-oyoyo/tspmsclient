@@ -30,8 +30,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         google.charts.setOnLoadCallback(drawChart);
         var options3 = {
             title: 'Phase Analysis Chart (X-axis: Phase, Left: Count, Right: Actual Duration/Expected Duration)',
-            //legend:'bottom',
-            //chartArea: { width: '90%',left: "5%" , height: '70%'},
             vAxis: {
             },
             hAxis: {
@@ -55,8 +53,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
 
         var options4 = {
             'title': 'Issue Metrics Chart (X-axis: Issue ID, Y-axis: Actual Duration/Expected Duration)',
-            //chartArea: { left: "5%"},
-            //'height': 300,
             tooltip: {
                 isHtml: true
             },
@@ -69,6 +65,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         var options5 = {
             title: 'Stage percentile analysis',
             chartArea: {height: "80%"},
+            tooltip: {
+                isHtml: true
+            },
             legend: 'left'
         };
 
@@ -78,7 +77,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         function drawChart() {
             var jsonData3 = $.ajax({
                 url: "<?=base_url().'dashboard/get_num_issues_tasks_metrics_per_phase/'.$project["project_id"]?>",
-                //url: "http://localhost/tspms/code/dashboard/get_per_issue_data/1",
                 dataType: "json",
                 async: false
             }).responseText;
