@@ -278,8 +278,23 @@ $this->load->view('common/pm_nav', $class);
                         document.write(total_urgency);
                     </script>
                 </div>
-                Urgency Level: <span class="badge" style="background: #2e9ad0">Low</span>
+                Urgency Level: <span id = "bage" class="badge" ></span>
             </div>
+
+            <script>
+                console.log(total_urgency);
+                if(total_urgency >60 ){
+                    document.getElementById("bage").style.backgroundColor = "rgba(200,50,50, 0.7)";
+                    $('#bage').append("High");
+                }else if(total_urgency >15 && total_urgency<= 60){
+                    document.getElementById("bage").style.backgroundColor = "rgba(250,120,0,0.7)";
+                    $('#bage').append("Medium");
+                }else{
+                    document.getElementById("bage").style.backgroundColor = "rgba(44,74,215,0.7)";
+                    $('#bage').append("Low");
+                }
+
+            </script>
         </div>
     </div>
 <div><br/>
