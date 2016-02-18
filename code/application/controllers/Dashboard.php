@@ -133,26 +133,33 @@ class Dashboard extends CI_Controller
             // Labels for your chart, these represent the column titles
             // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
             array('label' => 'Phase', 'type' => 'string'),
+<<<<<<< HEAD
             array('label' => 'No. of Tasks', 'type' => 'number'),
             array('label' => 'No. of Issues', 'type' => 'number'),
+=======
+            array('label' => 'num of tasks', 'type' => 'number'),
+            array('label' => 'num of issues', 'type' => 'number'),
+>>>>>>> a61a757fc949c6e0afba10d86a17c79c4164fbc4
             array('label' => 'metrics', 'type' => 'number')
         );
-
-
-        $rows = array();
-        foreach($container as $v){
-            $temp = array();
-            $count = 0;
-            foreach($v as $value){
-                if($count==2 or $count == 1){
-                    $temp[] = array('v' => (int) $value);
-                }else{
-                    $temp[] = array('v' => $value);
+        $keys = ["Lead","Requirement","Build","Testing","Deploy"];
+        $rows = [];
+        foreach($keys as $key){
+            if(isset($container[$key])){
+                $temp = array();
+                $count = 0;
+                foreach($container[$key] as $value){
+                    if($count==2 or $count == 1){
+                        $temp[] = array('v' => (int) $value);
+                    }else{
+                        $temp[] = array('v' => $value);
+                    }
+                    $count+=1;
                 }
-                $count+=1;
+                $rows[] = array('c' => $temp);
             }
-            $rows[] = array('c' => $temp);
         }
+
         $table['rows'] = $rows;
         $jsonTable = json_encode($table);
         echo $jsonTable;
@@ -287,9 +294,6 @@ class Dashboard extends CI_Controller
             }
         }
 
-
-
-
         $table = array();
         $table['cols'] = array(
             // Labels for your chart, these represent the column titles
@@ -304,13 +308,16 @@ class Dashboard extends CI_Controller
 
         $counts = array_count_values($container);
         //var_dump($counts);
-        foreach($counts as $key => $value){
-            $temp = array();
-            //var_dump($key);
-            //var_dump($value);
-            $temp[] = array('v' => $key);
-            $temp[] = array('v' => $value);
-            $rows[] = array('c' => $temp);
+        $keys = ["Lead","Requirement","Build","Testing","Deploy"];
+        foreach($keys as $key){
+            if(isset($counts[$key])){
+                $temp = array();
+                //var_dump($key);
+                //var_dump($value);
+                $temp[] = array('v' => $key);
+                $temp[] = array('v' => $counts[$key]);
+                $rows[] = array('c' => $temp);
+            }
         }
         $table['rows'] = $rows;
         $jsonTable = json_encode($table);
@@ -358,11 +365,16 @@ class Dashboard extends CI_Controller
             // Labels for your chart, these represent the column titles
             // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
             array('label' => 'project', 'type' => 'string'),
+<<<<<<< HEAD
             array('label' => 'No. of Tasks', 'type' => 'number'),
             array('label' => 'No. of Tasks', 'type' => 'number'),
+=======
+            array('label' => 'num of tasks', 'type' => 'number'),
+            array('label' => 'num of issues', 'type' => 'number'),
+>>>>>>> a61a757fc949c6e0afba10d86a17c79c4164fbc4
         );
 
-
+        $keys = ["Lead","Requirement","Build","Testing","Deploy"];
         $rows = array();
         foreach($container as $v){
             $temp = array();
@@ -432,9 +444,15 @@ class Dashboard extends CI_Controller
             // Labels for your chart, these represent the column titles
             // Note that one column is in "string" format and another one is in "number" format as pie chart only required "numbers" for calculating percentage and string will be used for column title
             array('label' => 'project', 'type' => 'string'),
+<<<<<<< HEAD
             array('label' => 'No. of Tasks', 'type' => 'number'),
             array('label' => 'No. of Issues', 'type' => 'number'),
 
+=======
+            array('label' => 'num of tasks', 'type' => 'number'),
+            array('label' => 'num of issues', 'type' => 'number'),
+            array('label' => 'metrics', 'type' => 'number'),
+>>>>>>> a61a757fc949c6e0afba10d86a17c79c4164fbc4
         );
 
 
