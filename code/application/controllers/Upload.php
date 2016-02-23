@@ -1,6 +1,5 @@
 <?php
 
-//require APPPATH.'libraries/vendor/autoload.php';
 require 'vendor/autoload.php';
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
@@ -146,6 +145,87 @@ class Upload extends CI_Controller {
             $file=array();
             $file['id'] = $value['fid'];
             $file['text'] = $value['filename'];
+            $file['type'] = 'default';
+
+            switch (strrchr($value['filename'], '.')){
+                case '.png':
+                case '.jpg':
+                case '.jpeg':
+                case '.tif':
+                case '.tiff':
+                case '.gif':
+                    $file['type'] = 'image';
+                    break;
+                case '.pdf':
+                    $file['type'] = 'pdf';
+                    break;
+                case '.doc':
+                case '.docx':
+                case ".pages":
+                    $file['type'] = 'word';
+                    break;
+                case '.ppt':
+                case '.pptx':
+                case '.pps':
+                case '.ppsx':
+                case ".key":
+                    $file['type'] = 'ppt';
+                    break;
+                case '.zip':
+                case '.rar':
+                    $file['type'] = 'archive';
+                    break;
+                case '.xlsx':
+                case '.xlsb':
+                case '..xltx':
+                case '.xls':
+                case '.xlt':
+                    $file['type'] = 'excel';
+                    break;
+                case '.mkv':
+                case '.flv':
+                case '.avi':
+                case '.mov':
+                case '.wmv':
+                case '.rm':
+                case '.rmvb':
+                case '.mpg':
+                case '.mp4':
+                    $file['type'] = 'video';
+                    break;
+                case '.aac':
+                case '.m4a':
+                case '.m4b':
+                case '.mp3':
+                case '.wav':
+                case '.wma':
+                case ".iff":
+                case ".m3u":
+                    $file['type'] = 'audio';
+                    break;
+                case '.txt':
+                case ".log":
+                case ".csv":
+                case ".xml":
+                    $file['type'] = 'text';
+                    break;
+                case ".java":
+                case ".js":
+                case ".php":
+                case ".css":
+                case ".html":
+                case ".py":
+                case ".bat":
+                case ".cpp":
+                case ".tex":
+                case ".sql":
+                case ".swift":
+                    $file['type'] = 'code';
+                    break;
+                default:
+                    break;
+            }
+
             $file['a_attr'] = array(
               'href' => $value['file_url']
             );
@@ -156,17 +236,20 @@ class Upload extends CI_Controller {
 
     public function rename_file(){
         $fid=$this->input->post('fid');
+        $name=$this->input->post('new_name');
         $file=$this->File->get_by_fid($fid);
 
-        $updated_file=array(
-            'fid'=>$fid,
-            'file_url'=>$file['file_url'],
-            'file_key'=>$file['file_key'],
-            'filename'=>$this->input->post('new_name').strrchr($file['filename'], '.'),
-            'last_updated'=>$file['last_updated'],
-            'pid'=>$file['pid']
-        );
+        if($file['filename'] != $name){
+            $updated_file=array(
+                'fid'=>$fid,
+                'file_url'=>$file['file_url'],
+                'file_key'=>$file['file_key'],
+                'filename'=>$name.strrchr($file['filename'], '.'),
+                'last_updated'=>$file['last_updated'],
+                'pid'=>$file['pid']
+            );
 
-        $this->File->rename_by_fid($updated_file);
+            $this->File->rename_by_fid($updated_file);
+        }
     }
 }

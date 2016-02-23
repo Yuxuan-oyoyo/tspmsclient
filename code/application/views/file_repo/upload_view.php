@@ -36,7 +36,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                         display_upload_form_error(data.message)
                     }
                 },
-                error: function(jqXHR, textStatus, errorThrown)
+                error: function(jqXHR, textStatus)
                 {
                     display_upload_form_error('Ajax Error:'+textStatus);
                     console.log('ERRORS: ' + textStatus);
@@ -78,6 +78,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                     {
                         "text": "<?=$project['project_title']?>",
                         "state": {"opened": true},
+                        "icon": "fa fa-folder-open-o",
                         "children": data
                     }
                 ]
@@ -97,12 +98,73 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                                 {
                                     "text": "<?=$project['project_title']?>",
                                     "state": {"opened": true},
+                                    "icon": "fa fa-folder-open-o",
                                     "children": data
                                 }
                             ]
                         },
+                        "types" : {
+                            "default" : {
+                                "icon" : "fa fa-file-o"
+                            },
+                            "image" : {
+                                "icon" : "fa fa-picture-o"
+                            },
+                            "pdf" : {
+                                "icon" : "fa fa-file-pdf-o"
+                            },
+                            "word" : {
+                                "icon" : "fa fa-file-word-o"
+                            },
+                            "ppt" : {
+                                "icon" : "fa fa-file-powerpoint-o"
+                            },
+                            "archive" : {
+                                "icon" : "fa fa-file-archive-o"
+                            },
+                            "excel" : {
+                                "icon" : "fa fa-file-excel-o"
+                            },
+                            "video" : {
+                                "icon" : "fa fa-file-video-o"
+                            },
+                            "audio" : {
+                                "icon" : "fa fa-file-audio-o"
+                            },
+                            "text" : {
+                                "icon" : "fa fa-file-text-o"
+                            },
+                            "code" : {
+                                "icon" : "fa fa-file-code-o"
+                            }
+                        },
+                        contextmenu : {
+                            "items" : function () {
+                                return {
+                                    "view" : {
+                                        label: "Open",
+                                        action: function() {
+                                            open_file();
+                                        }
+                                    },
+                                    "rename" : {
+                                        label: "Rename",
+                                        action: function() {
+                                            rename_file();
+                                        }
+                                    },
+                                    "delete" : {
+                                        label: "Delete",
+                                        action: function() {
+                                            deleteFileButtonClicked();
+                                        },
+                                        separator_before: true
+                                    }
+                                }
+                            }
+                        },
                         'plugins': [
-                            "search", "state", "types", "wholerow"
+                            "search", "state", "types", "wholerow", "contextmenu"
                         ]
                     }).on("dblclick", ".jstree-anchor", function(e) {
                         var selectedNode = $('#tree').jstree(true).get_selected('full',true)[0];
@@ -112,42 +174,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                             window.open(link);
                         }
                     }).on("rename_node.jstree", function(event, data) {
-
+                        //var newName = data.text + data.old.substring(data.old.lastIndexOf("."));
+                        var newName = data.text;
                         jQuery.ajax({
                             type: "POST",
                             url: '<?=base_url().'upload/rename_file/'?>',
                             dataType: 'json',
-                            data: {'new_name':data.text, 'fid':data.node.id},
-                            success: function(res) {
-
-                            }
-                        });
-
-
-                        /*$.ajax({
-                            url: '<?=base_url().'upload/rename_file/'?>',
-                            type: 'POST',
-                            data: {'new_name':data.text, 'fid':data.node.id},
+                            data: {'new_name':newName, 'fid':data.node.id},
                             cache: false,
-                            dataType: 'json',
-                            processData: false,
-                            contentType: false,
-                            success: function(data)
-                            {
-                                console.log(data);
-                                if(data.status==="success"){
-                                    //refreshTree();
-                                }else{
-                                    //display_upload_form_error(data.message)
-                                }
+                            success: function(res) {
+                                console.log(res);
                             },
-                            error: function(jqXHR, textStatus)
-                            {
+                            error: function(jqXHR, textStatus) {
                                 //display_upload_form_error('Ajax Error:'+textStatus);
                                 console.log('ERRORS: ' + textStatus);
                             }
-                        });*/
-
+                        });
                     })
                 });
 
