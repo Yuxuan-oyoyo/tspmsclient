@@ -22,6 +22,32 @@ class Issues extends CI_Controller {
         $user_id = $this->session->userdata('internal_uid');
         if(isset($user_id)) {
             if(isset($repo_slug)) {
+                /*Get user bb_username to pass on to the page*/
+                $this->load->model("Internal_user_model");
+                $this->load->model("Project_model");
+                $project = $this->Project_model->retrieve_by_repo_slug($repo_slug);
+                if(!isset($project)) {
+                    show_404();
+                    die();
+                }
+                $this->load->view("issue/all", [
+                    "repo_slug"=>$repo_slug,
+                    "project"=>$project,
+                ]);
+
+            }else{
+                show_404();die();
+            }
+        }else{
+            $this->session->set_userdata('message','Please login first.');
+            redirect('/internal_authentication/login/');
+        }
+
+    }
+    public function list_all_inner($repo_slug=null){
+        $user_id = $this->session->userdata('internal_uid');
+        if(isset($user_id)) {
+            if(isset($repo_slug)) {
                 /*define constants*/
                 $num_per_page = 25;
                 /*params expected*/
@@ -82,7 +108,7 @@ class Issues extends CI_Controller {
                 //var_dump($data);
                 //die(var_dump($data["issues"]));
                 $this->session->set_userdata('issue_list'.$repo_slug, $response["issues"]);
-                $this->load->view("issue/all_2", $data);
+                $this->load->view("issue/all_inner", $data);
             }else{
                 show_404();die();
             }
